@@ -1,7 +1,33 @@
+@font-face {
+  font-family: apercu;
+  src: url(/src/assets/fonts/ApercuMono.ttf);
+  font-display: swap;
+}
+
+* {
+  font-family: 'apercu', Arial, sans-serif;
+  /* color: var(--color-text); */
+}
+
 #app {
   width: 100vw;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+button {
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+
+input[type="text"], input[type="password"] {
+  border: none;
+  outline: none;
+  background-color: #ddd;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 0.4rem;
 }
