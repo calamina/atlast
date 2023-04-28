@@ -6,12 +6,12 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import('../views/HomeView.vue')
+      component: () => import('@/views/HomeView.vue')
     },
     {
       path: '/user',
       name: 'user',
-      component: () => import('../views/Authview.vue')
+      component: () => import('@/views/Authview.vue')
     }
   ]
 })
