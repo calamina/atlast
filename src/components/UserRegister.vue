@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { useUserService } from '@/services/user.service'
+import { useUserStore } from '@/stores/user'
 import { ref, type Ref } from 'vue'
 
-const { getUsers, registerUser } = useUserService()
-getUsers()
+const user = useUserStore()
 
 const login: Ref<string> = ref('cala')
 const password: Ref<string> = ref('gbelliere@gmail.com')
@@ -16,7 +15,7 @@ const email: Ref<string> = ref('gbelliere@gmail.com')
       <input v-model="login" type="text" name="login" id="login" />
       <input v-model="password" type="password" name="pass" id="pass" />
       <input v-model="email" type="text" name="mail" id="mail" />
-      <button type="submit" @click="registerUser(login, email, password)">auth</button>
+      <button type="submit" @click="user.registerUser(login, email, password)">auth</button>
     </form>
   </div>
 </template>
