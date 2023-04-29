@@ -21,7 +21,7 @@ export const useUserStore = defineStore('users', () => {
 
   async function getUsers(): Promise<any> {
     return http
-      .get<Array<any>>('peeps')
+      .get<Array<any>>('users')
       .then((response) => {
         return response
       })

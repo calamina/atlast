@@ -12,3 +12,9 @@ Personnal Knowledge Database made with Vue3 and Strapi
 - [x] messages
 - [x] alerts
 - [x] autoclear after delay
+
+## services
+- [ ] add user service
+
+## links
+- [ ] add tags linked to categ
