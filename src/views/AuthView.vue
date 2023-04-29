@@ -30,24 +30,26 @@ main {
 nav {
   display: flex;
   align-items: center;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
 
   & button {
     padding: 1rem 2rem;
     background-color: transparent;
     outline: none;
     border: none;
-    color: #ccc;
+    border-bottom: 2px solid #ddd;
+    color: #aaa;
   }
   & .active {
     color: #000;
-    background-color: #ccc;
+    border-color: #c0a6cd;
   }
 }
 
 @keyframes notification-in {
   0% {
     opacity: 0;
+    transform: translateY(2rem);
   }
   100% {
     opacity: 1;

@@ -1,19 +1,23 @@
 <script setup lang="ts">
-import { useUserStore } from '@/stores/user'
 import { ref, type Ref } from 'vue'
+import { useUserStore } from '@/stores/user'
 
 const user = useUserStore()
 
-const login: Ref<string> = ref('cala')
-const password: Ref<string> = ref('gbelliere@gmail.com')
-const email: Ref<string> = ref('gbelliere@gmail.com')
+const login: Ref<string> = ref('')
+const password: Ref<string> = ref('')
+const email: Ref<string> = ref('')
 </script>
 <template>
   <div>
-    <h1>Register</h1>
     <form action="" @submit.prevent>
+      <label for="login">login</label>
       <input v-model="login" type="text" name="login" id="login" />
+
+      <label for="password">password</label>
       <input v-model="password" type="password" name="pass" id="pass" />
+
+      <label for="email">email</label>
       <input v-model="email" type="text" name="mail" id="mail" />
       <button type="submit" @click="user.registerUser(login, email, password)">auth</button>
     </form>

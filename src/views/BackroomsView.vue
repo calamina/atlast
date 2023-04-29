@@ -2,7 +2,7 @@
 
 <template>
   <main>
-    <h1>Hello :)</h1>
+    <h1>You shouldn't be there :(</h1>
   </main>
 </template>
 

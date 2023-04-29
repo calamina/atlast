@@ -14,6 +14,16 @@ const router = createRouter({
       path: '/auth',
       name: 'auth',
       component: () => import('../views/AuthView.vue')
+    },
+    {
+      path: '/library',
+      name: 'library',
+      component: () => import('../views/UserView.vue')
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'Backrooms',
+      component: () => import('../views/BackroomsView.vue')
     }
   ]
 })
@@ -21,8 +31,8 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const publicPages = ['/auth']
   const authRequired = !publicPages.includes(to.path)
-  const authStore = useUserStore()
-  if (authRequired && !authStore.connectedUser) {
+  const userStore = useUserStore()
+  if (authRequired && !userStore.connectedUser) {
     const notification = useNotificationStore()
     notification.error('Login to see this page')
     return '/auth'

@@ -8,6 +8,7 @@ const notification = useNotificationStore()
   <transition>
     <div
       v-if="notification.message"
+      :key="notification.message"
       class="notification"
       :class="notification.type"
       @click="notification.clear()"
@@ -48,7 +49,7 @@ const notification = useNotificationStore()
   background-color: rgb(219, 157, 157);
 }
 .alert {
-  background-color: rgb(196, 219, 157);
+  background-color: #c0a6cd;
 }
 
 @keyframes notification-in {

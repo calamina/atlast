@@ -1,22 +1,28 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user'
+import IconClose from './icons/IconClose.vue'
 
 const user = useUserStore()
 </script>
+
 <template>
   <nav>
     <div>
       <router-link to="/">home</router-link>
-      <router-link to="auth">auth</router-link>
+      <router-link v-if="!user.connectedUser" to="auth">auth</router-link>
+      <router-link v-if="user.connectedUser" to="library">library</router-link>
     </div>
     <Suspense>
-      <div v-if="user.connectedUser">
+      <div class="user" v-if="user.connectedUser">
         <button type="button">{{ user.connectedUser.username }}</button>
-        <button type="button" @click="user.logoutUser()">logout</button>
+        <button class="user__disconnect" type="button" @click="user.logoutUser()">
+          <IconClose />
+        </button>
       </div>
     </Suspense>
   </nav>
 </template>
+
 <style lang="scss" scoped>
 nav {
   position: absolute;
@@ -43,6 +49,22 @@ nav {
     &.router-link-active {
       color: black;
     }
+  }
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__disconnect {
+    position: absolute;
+    right: 2rem;
+    width: 2rem;
+    height: 2rem;
+    background-color: transparent;
+    border: none;
+    outline: none;
   }
 }
 </style>

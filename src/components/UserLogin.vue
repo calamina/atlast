@@ -3,16 +3,19 @@ import { ref, type Ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 
 const user = useUserStore()
-const login: Ref<string> = ref('Kapman')
-const password: Ref<string> = ref('Password')
+
+const login: Ref<string> = ref('cala')
+const password: Ref<string> = ref('password')
 </script>
 <template>
   <div>
-    <!-- VIF USER then LOGOUT or hide -->
-    <h1>Login</h1>
     <form action="" @submit.prevent>
+      <label for="login">login</label>
       <input v-model="login" type="text" name="login" id="login" />
+
+      <label for="password">password</label>
       <input v-model="password" type="password" name="pass" id="pass" />
+
       <button type="submit" @click="user.loginUser(login, password)">auth</button>
     </form>
   </div>

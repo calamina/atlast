@@ -1,14 +1,23 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import router from '@/router'
 import http from '@/utils/http-common'
 import { useNotificationStore } from '@/stores/notification'
 
 export const useUserStore = defineStore('users', () => {
-  const connectedUser: any = ref(null)
+  const storedUser: string | null = localStorage.getItem('user')
+  const connectedUser: Ref<any> = ref(
+    typeof storedUser === 'string' ? JSON.parse(storedUser) : null
+  )
   const connectedUserToken = ref('')
 
   const notification = useNotificationStore()
+
+  function welcomeUser() {
+    connectedUser.value
+      ? notification.alert(`Welcome back ${connectedUser.value.username}`!)
+      : console.log('no user yet')
+  }
 
   async function getUsers(): Promise<any> {
     return http
@@ -29,9 +38,9 @@ export const useUserStore = defineStore('users', () => {
         password
       })
       .then((response) => {
-        // console.log('User profile', response.data.user)
         // console.log('User token', response.data.jwt)
         connectedUser.value = response.data.user
+        localStorage.setItem('user', JSON.stringify(connectedUser.value))
         notification.alert('User created: ' + connectedUser.value.username)
         router.push('/')
       })
@@ -48,6 +57,7 @@ export const useUserStore = defineStore('users', () => {
       })
       .then((response) => {
         connectedUser.value = response.data.user
+        localStorage.setItem('user', JSON.stringify(connectedUser.value))
         notification.alert('User connected: ' + connectedUser.value.username)
         router.push('/')
       })
@@ -58,9 +68,18 @@ export const useUserStore = defineStore('users', () => {
 
   function logoutUser() {
     connectedUser.value = null
+    localStorage.removeItem('user')
     notification.alert('User disconnected')
     router.push('auth')
   }
 
-  return { connectedUser, connectedUserToken, getUsers, loginUser, logoutUser, registerUser }
+  return {
+    connectedUser,
+    connectedUserToken,
+    getUsers,
+    loginUser,
+    logoutUser,
+    registerUser,
+    welcomeUser
+  }
 })
