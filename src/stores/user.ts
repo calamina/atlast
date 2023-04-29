@@ -9,7 +9,6 @@ export const useUserStore = defineStore('users', () => {
   const connectedUserToken = ref('')
 
   const notification = useNotificationStore()
-  const user = useUserStore()
 
   async function getUsers(): Promise<any> {
     return http
@@ -32,8 +31,8 @@ export const useUserStore = defineStore('users', () => {
       .then((response) => {
         // console.log('User profile', response.data.user)
         // console.log('User token', response.data.jwt)
-        user.connectedUser = response.data.user
-        notification.alert('User created: ' + user.connectedUser.username)
+        connectedUser.value = response.data.user
+        notification.alert('User created: ' + connectedUser.value.username)
         router.push('/')
       })
       .catch((error) => {
@@ -48,8 +47,8 @@ export const useUserStore = defineStore('users', () => {
         password
       })
       .then((response) => {
-        user.connectedUser = response.data.user
-        notification.alert('User connected: ' + user.connectedUser.username)
+        connectedUser.value = response.data.user
+        notification.alert('User connected: ' + connectedUser.value.username)
         router.push('/')
       })
       .catch((error) => {
@@ -58,10 +57,10 @@ export const useUserStore = defineStore('users', () => {
   }
 
   function logoutUser() {
-    user.connectedUser = null
+    connectedUser.value = null
     notification.alert('User disconnected')
     router.push('auth')
   }
 
-  return { connectedUser, connectedUserToken, loginUser, logoutUser, registerUser }
+  return { connectedUser, connectedUserToken, getUsers, loginUser, logoutUser, registerUser }
 })
