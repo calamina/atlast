@@ -25,6 +25,11 @@ function toggleLoginRegister() {
 
 <style lang="scss" scoped>
 main {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  width: 20rem;
+  margin: 0 auto;
   height: 30rem;
 }
 nav {

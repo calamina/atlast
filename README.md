@@ -14,7 +14,19 @@ Personnal Knowledge Database made with Vue3 and Strapi
 - [x] autoclear after delay
 
 ## services
-- [ ] add user service
+- [x] add user service
+- [x] add link service
+
+## stores
+- [x] add link store
 
 ## links
+- [x] add filters
+- [x] add categ select
 - [ ] add tags linked to categ
+
+# models
+- [ ] add user model
+- [ ] add link model
+- [ ] add media model
+- [ ] add note model

@@ -1,7 +1,9 @@
 <script setup lang="ts">
+// import { useUserService } from '@/services/user.service'
 import { useUserStore } from '@/stores/user'
 import IconClose from './icons/IconClose.vue'
 
+// const userService = useUserService()
 const user = useUserStore()
 </script>
 
@@ -15,9 +17,10 @@ const user = useUserStore()
     <Suspense>
       <div class="user" v-if="user.connectedUser">
         <button type="button">{{ user.connectedUser.username }}</button>
-        <button class="user__disconnect" type="button" @click="user.logoutUser()">
+        to fix :((((
+        <!-- <button class="user__disconnect" type="button" @click="userService.logoutUser()">
           <IconClose />
-        </button>
+        </button> -->
       </div>
     </Suspense>
   </nav>

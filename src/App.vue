@@ -2,13 +2,6 @@
 import { RouterView } from 'vue-router'
 import NotificationBar from '@/components/NotificationBar.vue'
 import MenuBar from '@/components/MenuBar.vue'
-import { onMounted } from 'vue'
-import { useUserStore } from './stores/user'
-
-onMounted(() => {
-  const user = useUserStore()
-  user.welcomeUser()
-})
 </script>
 
 <template>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
-import { useUserStore } from '@/stores/user'
+import { useUserService } from '@/services/user.service'
 
-const user = useUserStore()
+const { registerUser } = useUserService()
 
 const login: Ref<string> = ref('')
 const password: Ref<string> = ref('')
@@ -19,7 +19,7 @@ const email: Ref<string> = ref('')
 
       <label for="email">email</label>
       <input v-model="email" type="text" name="mail" id="mail" />
-      <button type="submit" @click="user.registerUser(login, email, password)">auth</button>
+      <button type="submit" @click="registerUser(login, email, password)">auth</button>
     </form>
   </div>
 </template>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
-import { useUserStore } from '@/stores/user'
+import { useUserService } from '@/services/user.service'
 
-const user = useUserStore()
+const { loginUser } = useUserService()
 
 const login: Ref<string> = ref('cala')
 const password: Ref<string> = ref('password')
@@ -10,13 +10,13 @@ const password: Ref<string> = ref('password')
 <template>
   <div>
     <form action="" @submit.prevent>
-      <label for="login">login</label>
+      <label for="login">username</label>
       <input v-model="login" type="text" name="login" id="login" />
 
       <label for="password">password</label>
       <input v-model="password" type="password" name="pass" id="pass" />
 
-      <button type="submit" @click="user.loginUser(login, password)">auth</button>
+      <button type="submit" @click="loginUser(login, password)">login</button>
     </form>
   </div>
 </template>
