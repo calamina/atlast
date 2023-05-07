@@ -118,8 +118,8 @@ const filteredLinks: ComputedRef<linkModel[]> = computed(() => {
           <p>{{ linkstore.list.length }}</p>
         </div>
         <div
+          v-for="(categ, index) in filteredCategs as any"
           @click="filterCategs(categ.name)"
-          v-for="(categ, index) in filteredCategs"
           :key="index"
           class="filters__category"
         >
