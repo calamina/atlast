@@ -58,7 +58,6 @@ function addLink(link: any) {
 
 function checkCategPresent(categ: string) {
   return linkstore.list.find((link: any) => {
-    console.log(link.category === categ)
     return link.attributes.category === categ
   })
 }
