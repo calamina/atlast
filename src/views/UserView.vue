@@ -103,7 +103,7 @@ const filteredLinks: ComputedRef<linkModel[]> = computed(() => {
 
 <template>
   <main>
-    <div class="filters">
+    <div class="filters" @click="show = null">
       <button type="button" class="button--main" @click="toggleNewModal = true">New link</button>
       <div class="filters__search">
         <input v-model="filterSearch" type="text" name="" id="" />
@@ -118,7 +118,7 @@ const filteredLinks: ComputedRef<linkModel[]> = computed(() => {
           <p>{{ linkstore.list.length }}</p>
         </div>
         <div
-          v-for="(categ, index) in filteredCategs as any"
+          v-for="(categ, index) in filteredCategs"
           @click="filterCategs(categ.name)"
           :key="index"
           class="filters__category"
