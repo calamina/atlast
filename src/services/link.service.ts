@@ -35,9 +35,25 @@ async function addUserLink(link: any): Promise<any> {
     .then((response) => {
       notification.alert('Link added !')
       getLinksByUser(user.connectedUser.username)
+      return response.data
     })
     .catch((error) => {
-      notification.error(error.response)
+      notification.error('Incorrect data')
+      return error.response
+    })
+}
+
+async function editUserLink(link: any): Promise<any> {
+  return http
+    .put(`links/${link.id}`, { data: link })
+    .then((response) => {
+      notification.alert('Link updated !')
+      getLinksByUser(user.connectedUser.username)
+      return response.data
+    })
+    .catch((error) => {
+      notification.error('Incorrect data')
+      return error.response
     })
 }
 
@@ -57,7 +73,8 @@ export function useLinkService() {
   return {
     getLinks,
     getLinksByUser,
-    deleteUserLink,
-    addUserLink
+    addUserLink,
+    editUserLink,
+    deleteUserLink
   }
 }

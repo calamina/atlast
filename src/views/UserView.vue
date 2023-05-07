@@ -1,28 +1,24 @@
 <script setup lang="ts">
 import { useLinkService } from '@/services/link.service'
-import { computed, ref, watchEffect, type Ref } from 'vue'
-import { useDateFormat } from '@vueuse/core'
-import IconBook from '@/components/icons/iconBook.vue'
-import IconWiki from '@/components/icons/iconWiki.vue'
-import IconQuestion from '@/components/icons/iconQuestion.vue'
-import IconTech from '@/components/icons/iconTech.vue'
-import IconLike from '@/components/icons/iconLike.vue'
-import IconEdit from '@/components/icons/iconEdit.vue'
-import IconDelete from '@/components/icons/iconDelete.vue'
-import IconLink from '@/components/icons/iconLink.vue'
-import IconCheck from '@/components/icons/iconCheck.vue'
+import { computed, ref, watchEffect, type ComputedRef, type Ref } from 'vue'
+
 import IconCancel from '@/components/icons/iconCancel.vue'
-import IconClose from '@/components/icons/IconClose.vue'
+
 import { useUserStore } from '@/stores/user'
 import { useLinkStore } from '@/stores/link'
 
-const { getLinksByUser, deleteUserLink, addUserLink } = useLinkService()
+import type { linkModel } from '@/models/link.model'
+
+import LinkComponent from '@/components/links/LinkComponent.vue'
+import LinkEditComponent from '@/components/links/LinkEditComponent.vue'
+import categs from '@/utils/link-categs'
+import IconClose from '@/components/icons/IconClose.vue'
+
+const { getLinksByUser, addUserLink, editUserLink } = useLinkService()
 const linkstore = useLinkStore()
 
 const show: Ref<number | null> = ref(null)
 const user = useUserStore()
-
-const newlink: Ref<any> = ref({})
 
 const filterCateg = ref('')
 const filterSearch = ref('')
@@ -35,192 +31,147 @@ watchEffect(() => {
   })
 })
 
-function editLink(id: number, send?: boolean) {
-  if (show.value === id) {
+function editLink(index: number, link?: any) {
+  if (link) {
+    link.tags = link.tagstring ? link.tagstring.split(' ') : null
+    editUserLink(link).then((response) => {
+      if (!response.data.error) {
+        show.value = null
+      }
+    })
+  } else if (show.value === index) {
     show.value = null
   } else {
-    show.value = id
+    show.value = index
   }
 }
 
-function deleteLink(id: number) {
-  deleteUserLink(id)
-  linkstore.list.splice(linkstore.list.findIndex(matchesEl), 1)
+function addLink(link: any) {
+  link.tags = link.tagstring ? link.tagstring.split(' ') : null
+  link.user = user.connectedUser.username
+  addUserLink(link).then((response) => {
+    if (!response.data.error) {
+      toggleNewModal.value = false
+    }
+  })
 }
 
-function matchesEl(el: any, id: number) {
-  return el.attributes.id === id
+function checkCategPresent(categ: string) {
+  return linkstore.list.find((link: any) => {
+    console.log(link.category === categ)
+    return link.attributes.category === categ
+  })
 }
 
-function addLink() {
-  newlink.value.tags = newlink.value.tags ? newlink.value.tags.split(' ') : null
-  newlink.value.user = user.connectedUser.username
-  addUserLink(newlink.value)
-  newlink.value = {}
-  toggleNewModal.value = false
+const filteredCategs: ComputedRef<any> = computed(() => {
+  return categs.filter((categ) => checkCategPresent(categ.name))
+})
+
+function countCategLinks(categ: string): number {
+  let count = 0
+  linkstore.list.forEach((link: any) => {
+    if (link.attributes.category === categ) count++
+  })
+  return count
 }
 
 function filterCategs(type: string) {
-  filterCateg.value = type
+  return (filterCateg.value = filterCateg.value === type ? '' : type)
 }
 
-const getLinks = computed(() => {
-  let filteredLinks = linkstore.list
+const filteredLinks: ComputedRef<linkModel[]> = computed(() => {
+  let list: any[] = linkstore.list
   if (filterCateg.value !== '') {
-    filteredLinks = filteredLinks.filter(
-      (link: any) => link.attributes.category === filterCateg.value
-    )
+    list = list.filter((link: any) => link.attributes.category === filterCateg.value)
   }
   if (filterSearch.value !== '') {
-    filteredLinks = filteredLinks.filter(
+    list = list.filter(
       (link: any) =>
         link.attributes.title.includes(filterSearch.value) ||
         (link.attributes.description && link.attributes.description.includes(filterSearch.value)) ||
         (link.attributes.url && link.attributes.url.includes(filterSearch.value))
     )
   }
-  return filteredLinks
+  list = list.map((link) => {
+    const id = link.id
+    link = link.attributes
+    link.id = id
+    return link
+  })
+  return list
 })
 </script>
 
 <template>
   <main>
     <div class="filters">
-      <button type="button" class="button--main" @click="toggleNewModal = true">Add link +</button>
-      <div class="filterSearch">
+      <button type="button" class="button--main" @click="toggleNewModal = true">New link</button>
+      <div class="filters__search">
         <input v-model="filterSearch" type="text" name="" id="" />
+        <button type="button" class="button-icon" @click="filterSearch = ''"><IconCancel /></button>
       </div>
-      <div class="filters__categ">
-        <button type="button" class="button-icon" @click="filterCategs('')"><IconClose /></button>
-        <button type="button" class="button-icon" @click="filterCategs('etc')">
-          <IconQuestion />
-        </button>
-        <button type="button" class="button-icon" @click="filterCategs('tech')">
-          <IconTech />
-        </button>
-        <button type="button" class="button-icon" @click="filterCategs('wiki')">
-          <IconWiki />
-        </button>
-        <button type="button" class="button-icon" @click="filterCategs('media')">
-          <IconBook />
-        </button>
+      <div class="filters__categories">
+        <div @click="filterCategs('')" class="filters__category">
+          <button type="button" :class="{ filtersactive: filterCateg === '' }" class="button-icon">
+            <IconClose />
+          </button>
+          <p>All</p>
+          <p>{{ linkstore.list.length }}</p>
+        </div>
+        <div
+          @click="filterCategs(categ.name)"
+          v-for="(categ, index) in filteredCategs"
+          :key="index"
+          class="filters__category"
+        >
+          <button
+            type="button"
+            :class="{ filtersactive: filterCateg === categ.name }"
+            class="button-icon"
+          >
+            <component :is="categ.component" />
+          </button>
+          <p>{{ categ.name }}</p>
+          <p>{{ countCategLinks(categ.name) }}</p>
+        </div>
       </div>
-      <!-- <div class="filterLike">
-        <button type="button" class="button-icon"><IconLike /></button>
-      </div> -->
     </div>
-    <div class="links">
-      <div class="link-wrapper" v-for="(link, index) of getLinks" :key="index">
-        <div class="categ">
-          <button type="button" class="button-icon">
-            <IconQuestion v-if="link.attributes?.category === 'etc'" />
-            <IconBook v-if="link.attributes?.category === 'media'" />
-            <IconWiki v-if="link.attributes?.category === 'wiki'" />
-            <IconTech v-if="link.attributes?.category === 'tech'" />
-          </button>
-        </div>
-        <div v-if="show !== index" class="link">
-          <div class="link__header">
-            <a class="link__link" :href="link.attributes?.url">
-              <p class="link__title">{{ link.attributes?.title }}</p>
-              <p class="link__url"><IconLink class="text-icon" /> {{ link.attributes?.url }}</p>
-            </a>
-            <p class="link__date">
-              {{ useDateFormat(link.attributes?.date, 'DD/MM/YY').value }}
-            </p>
-          </div>
-          <p v-if="link.attributes?.description" class="link__description">
-            {{ link.attributes?.description }}
-          </p>
-          <div v-if="link.attributes?.tags" class="link__footer">
-            <button class="link__tags" v-for="tag in link.attributes?.tags" :key="tag">
-              {{ tag }}
-            </button>
-          </div>
-        </div>
-        <div v-else class="link link-edit">
-          <div class="link__header">
-            <div class="link__link">
-              <input type="text" v-model="link.attributes.title" />
-              <input type="text" v-model="link.attributes.url" />
-            </div>
-            <input type="date" v-model="link.attributes.date" />
-          </div>
-          <div class="link__description">
-            <textarea ref="textarea" v-model="link.attributes.description" name="description" />
-          </div>
-          <div class="link__footer">
-            <input type="text" v-model="link.attributes.tags" />
-          </div>
-        </div>
-        <div v-if="show !== index" class="actions">
-          <button type="button" class="button-icon"><IconLike /></button>
-          <button type="button" class="button-icon" @click="editLink(index)">
-            <IconEdit />
-          </button>
-          <button type="button" class="button-icon" @click="deleteLink(link.id)">
-            <IconDelete />
-          </button>
-        </div>
-        <div v-else class="actions">
-          <button type="button" class="button-icon" @click="editLink(index, true)">
-            <IconEdit />
-          </button>
-          <button type="button" class="button-icon" @click="editLink(index)">
-            <IconDelete />
-          </button>
-        </div>
+    <div class="links" v-if="linkstore.list.length !== 0">
+      <div v-for="(link, index) of filteredLinks" :key="index">
+        <LinkComponent
+          v-if="show !== index"
+          :link="link"
+          :key="link.id"
+          @enableEdit="editLink(index)"
+        />
+        <LinkEditComponent
+          v-else
+          :link="link"
+          :key="link.title"
+          @cancelEdit="editLink(index)"
+          @confirmEdit="(link: linkModel) => editLink(index, link)"
+        />
+        <!-- @confirmEdit="editLink(index)" -->
       </div>
-      <Teleport to="body">
-        <div class="modal-wrapper" v-if="toggleNewModal">
-          <div class="link-wrapper link-new">
-            <div class="categ">
-              <button type="button" class="button-icon"><IconBook /></button>
-              <button type="button" class="button-icon"><IconBook /></button>
-              <button type="button" class="button-icon"><IconBook /></button>
-              <button type="button" class="button-icon"><IconBook /></button>
-              <button type="button" class="button-icon"><IconBook /></button>
-            </div>
-            <div class="link">
-              <div class="link__header">
-                <div class="link__link">
-                  <input type="text" v-model="newlink.title" placeholder="title" />
-                  <input type="text" v-model="newlink.url" placeholder="url" />
-                </div>
-                <input type="date" v-model="newlink.date" />
-              </div>
-              <div class="link__description">
-                <textarea
-                  ref="textarea"
-                  v-model="newlink.description"
-                  name="description"
-                  placeholder="description"
-                  class="resize-none"
-                />
-              </div>
-              <div class="link__footer">
-                <input type="text" v-model="newlink.tags" placeholder="tags" />
-              </div>
-              <select v-model="newlink.category">
-                <option value="">etc</option>
-                <option>tech</option>
-                <option>wiki</option>
-                <option>media</option>
-              </select>
-              <!-- <button type="submit" @submit.prevent @click="addLink()">create</button> -->
-            </div>
-            <div class="actions">
-              <button type="button" class="button-icon" @click="addLink()">
-                <IconCheck />
-              </button>
-              <button type="button" class="button-icon" @click="toggleNewModal = false">
-                <IconCancel />
-              </button>
-            </div>
-          </div>
-        </div>
-      </Teleport>
+      <div v-if="linkstore.list.length === 0">
+        <p>Empty list ... You could add a link :)</p>
+      </div>
+      <!-- <LinkEditComponent
+        v-if="filteredLinks.length === 0"
+        :link="{}"
+        @confirmEdit="(link: linkModel) => addLink(link)"
+        @cancelEdit="toggleNewModal = false"
+      /> -->
     </div>
+    <Teleport to="body">
+      <div class="modal-wrapper" v-if="toggleNewModal">
+        <LinkEditComponent
+          :link="{}"
+          @confirmEdit="(link: linkModel) => addLink(link)"
+          @cancelEdit="toggleNewModal = false"
+        />
+      </div>
+    </Teleport>
   </main>
 </template>
 
@@ -241,14 +192,44 @@ main {
   padding: 1.5rem;
   border-radius: 2rem;
 
-  & .filters__categ {
+  & .filters__categories {
     display: flex;
+    flex-flow: column;
     width: 100%;
-    align-items: center;
+    gap: 0.5rem;
+    align-items: flex-start;
     justify-content: space-between;
-    border: 1.5px solid #ddd;
     padding: 0.15rem 0;
     border-radius: 6px;
+
+    & .filtersactive {
+      background-color: #c0a6cd;
+      border-radius: 100%;
+    }
+  }
+
+  & .filters__category {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+    cursor: pointer;
+
+    & p {
+      text-transform: capitalize;
+    }
+
+    & p:last-of-type {
+      font-size: 0.9rem;
+      margin-left: auto;
+      color: #c0a6cd;
+    }
+  }
+
+  & .filters__search {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
   }
 
   & input {
@@ -260,122 +241,23 @@ main {
   display: flex;
   flex-flow: column;
   gap: 2rem;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr;
 }
 
 .link-wrapper {
+  width: 50vw;
   display: flex;
   gap: 1rem;
   transition: height 0.3s;
 }
 
-.categ,
-.actions {
-  background-color: #eee;
+.filters__info {
   display: flex;
-  flex-flow: column;
-  height: fit-content;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-  padding: 0.5rem 0.25rem;
-  border-radius: 2rem;
+  align-items: center;
+  gap: 5rem;
 }
-
-.categ {
-  padding: 0.25rem;
-  background-color: #c0a6cd;
-}
-
-// .actions {
-//   border: 1.5px solid #ddd;
-// }
-
-.actions button {
-  border-radius: 2rem;
-}
-
-.link {
-  width: 50vw;
-  display: flex;
-  flex-flow: column;
-  border-radius: 0.5rem;
-  border-radius: 2rem;
-  border: 1.5px solid #ddd;
-  padding: 0.5rem 1rem 1rem;
-  gap: 0.5rem;
-
-  &__header,
-  &__footer,
-  &__description {
-    display: flex;
-    padding: 0.5rem;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  &__header {
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  &__description {
-    padding: 0 0.5rem;
-  }
-
-  &__footer {
-    justify-content: flex-start;
-    gap: 0.5rem;
-    padding: 0 0.5rem 0.25rem;
-  }
-
-  &__link {
-    display: flex;
-    flex-flow: column;
-    text-decoration: none;
-    color: black;
-    flex: 1;
-  }
-
-  &__title {
-    font-size: 1.5rem;
-    text-transform: capitalize;
-  }
-
-  &__url {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-style: oblique;
-    color: #999;
-  }
-
-  &__description {
-    padding-bottom: 1rem;
-  }
-
-  & textarea {
-    resize: none;
-    overflow: hidden;
-  }
-
-  &__tags {
-    padding: 0.3rem 0.75rem;
-    background-color: #c0a6cd;
-    background-color: #ddd;
-    border-radius: 1rem;
-    width: fit-content;
-    font-size: 0.85rem;
-  }
-
-  &__date {
-    font-size: 0.85rem;
-    color: #999;
-    padding-top: 0.3rem;
-    width: fit-content;
-  }
-}
-// .link-edit {
-//   border: 3px solid #c0a6cd;
-// }
 
 .modal-wrapper {
   position: absolute;
@@ -388,8 +270,5 @@ main {
   align-items: center;
   justify-content: center;
   background-color: rgba(255, 255, 255, 0.8);
-}
-.link-new .link {
-  background-color: #fff;
 }
 </style>

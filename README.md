@@ -18,15 +18,19 @@ Personnal Knowledge Database made with Vue3 and Strapi
 - [x] add link service
 
 ## stores
+- [x] add user store
 - [x] add link store
 
 ## links
 - [x] add filters
-- [x] add categ select
-- [ ] add tags linked to categ
+- [x] dynamic filters
 
 # models
+- [x] add link model
 - [ ] add user model
-- [ ] add link model
 - [ ] add media model
 - [ ] add note model
+
+# css
+- [ ] clean & refactor css
+- [ ] bem everywhere
