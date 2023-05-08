@@ -8,6 +8,9 @@ Personnal Knowledge Database made with Vue3 and Strapi
 - [ ] add media view
 - [ ] add notes view
 
+# categs
+- [ ] dynamic categs ?
+
 # models
 - [ ] add user model
 - [ ] add media model

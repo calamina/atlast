@@ -5,15 +5,13 @@ import { useLinkService } from '@/services/link.service'
 
 import type { linkModel } from '@/models/link.model'
 
-import IconQuestion from '@/components/icons/iconQuestion.vue'
+import categs from '@/utils/link-categs'
+
 import IconDelete from '@/components/icons/iconDelete.vue'
 import IconLink from '@/components/icons/iconLink.vue'
 import IconLike from '@/components/icons/iconLike.vue'
 import IconEdit from '@/components/icons/iconEdit.vue'
-import IconBook from '@/components/icons/iconBook.vue'
-import IconWiki from '@/components/icons/iconWiki.vue'
-import IconTech from '@/components/icons/iconTech.vue'
-import IconDesign from '@/components/icons/iconDesign.vue'
+import { computed } from 'vue'
 
 const props = defineProps<{
   link: linkModel
@@ -21,6 +19,10 @@ const props = defineProps<{
 const emits = defineEmits(['enableEdit'])
 
 const { deleteUserLink } = useLinkService()
+
+const categ = computed(() => {
+  return categs.find((categ: any) => categ.name === props.link.category)
+})
 
 function deleteLink(id: number | undefined) {
   if (id) {
@@ -33,11 +35,7 @@ function deleteLink(id: number | undefined) {
   <div class="link-wrapper">
     <div class="categ">
       <button type="button" class="button-icon">
-        <IconQuestion v-if="props.link.category === 'etc'" />
-        <IconDesign v-if="props.link.category === 'design'" />
-        <IconBook v-if="props.link.category === 'media'" />
-        <IconWiki v-if="props.link.category === 'wiki'" />
-        <IconTech v-if="props.link.category === 'tech'" />
+        <component :is="categ!.component"></component>
       </button>
     </div>
     <div class="link">
@@ -93,13 +91,13 @@ function deleteLink(id: number | undefined) {
   border-radius: 2rem;
 }
 
-.actions {
-  display: none;
-}
+// .actions {
+//   display: none;
+// }
 
-.link-wrapper:hover .actions {
-  display: flex;
-}
+// .link-wrapper:hover .actions {
+//   display: flex;
+// }
 
 .link {
   // width: 50vw;

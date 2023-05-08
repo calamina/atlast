@@ -1,18 +1,12 @@
 <script setup lang="ts">
 import type { linkModel } from '@/models/link.model'
-import { ref, type Ref } from 'vue'
+import { ref } from 'vue'
+
+import categs from '@/utils/link-categs'
 
 import IconEdit from '@/components/icons/iconEdit.vue'
 import IconDelete from '@/components/icons/iconDelete.vue'
-import IconBook from '@/components/icons/iconBook.vue'
-import IconWiki from '@/components/icons/iconWiki.vue'
-import IconQuestion from '@/components/icons/iconQuestion.vue'
-import IconTech from '@/components/icons/iconTech.vue'
-import IconDesign from '@/components/icons/iconDesign.vue'
 
-//
-// vue object props refs get mutated :(
-//
 const props = defineProps<{
   link: linkModel
 }>()
@@ -31,44 +25,14 @@ let linkEdit: any = ref({
   <div class="link-wrapper">
     <div class="categ">
       <button
+        v-for="(categ, index) in categs"
+        :key="index"
         type="button"
         class="button-icon"
-        @click="linkEdit.category = 'etc'"
-        :class="{ active: linkEdit.category === 'etc' }"
+        @click="linkEdit.category = categ.name"
+        :class="{ active: linkEdit.category === categ.name }"
       >
-        <IconQuestion />
-      </button>
-      <button
-        type="button"
-        class="button-icon"
-        @click="linkEdit.category = 'media'"
-        :class="{ active: linkEdit.category === 'media' }"
-      >
-        <IconBook />
-      </button>
-      <button
-        type="button"
-        class="button-icon"
-        @click="linkEdit.category = 'wiki'"
-        :class="{ active: linkEdit.category === 'wiki' }"
-      >
-        <IconWiki />
-      </button>
-      <button
-        type="button"
-        class="button-icon"
-        @click="linkEdit.category = 'tech'"
-        :class="{ active: linkEdit.category === 'tech' }"
-      >
-        <IconTech />
-      </button>
-      <button
-        type="button"
-        class="button-icon"
-        @click="linkEdit.category = 'design'"
-        :class="{ active: linkEdit.category === 'design' }"
-      >
-        <IconDesign />
+        <component :is="categ.component"></component>
       </button>
     </div>
     <div class="link link-edit">
