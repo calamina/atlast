@@ -136,21 +136,23 @@ const filteredLinks: ComputedRef<linkModel[]> = computed(() => {
       </div>
     </div>
     <div class="links" v-if="linkstore.list.length !== 0">
-      <div v-for="(link, index) of filteredLinks" :key="index">
-        <LinkComponent
-          v-if="show !== index"
-          :link="link"
-          :key="link.id"
-          @enableEdit="editLink(index)"
-        />
-        <LinkEditComponent
-          v-else
-          :link="link"
-          :key="link.title"
-          @cancelEdit="editLink(index)"
-          @confirmEdit="(link: linkModel) => editLink(index, link)"
-        />
-      </div>
+      <TransitionGroup name="list">
+        <div v-for="(link, index) of filteredLinks" :key="link.id">
+          <LinkComponent
+            v-if="show !== index"
+            :link="link"
+            :key="link.id"
+            @enableEdit="editLink(index)"
+          />
+          <LinkEditComponent
+            v-else
+            :link="link"
+            :key="link.title"
+            @cancelEdit="editLink(index)"
+            @confirmEdit="(link: linkModel) => editLink(index, link)"
+          />
+        </div>
+      </TransitionGroup>
       <div v-if="linkstore.list.length === 0">
         <p>Empty list ... You could add a link :)</p>
       </div>
@@ -243,6 +245,7 @@ main {
   display: flex;
   gap: 1rem;
   transition: height 0.3s;
+  background-color: #fff;
 }
 
 .filters__info {
@@ -262,5 +265,21 @@ main {
   align-items: center;
   justify-content: center;
   background-color: rgba(255, 255, 255, 0.8);
+}
+
+.list-enter-active,
+.list-leave-active,
+.list-move {
+  transition: all 0.3s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(2rem);
+}
+.list-leave-active {
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
 }
 </style>

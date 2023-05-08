@@ -5,8 +5,8 @@ import { useNotificationStore } from '@/stores/notification'
 
 import IconClose from './icons/iconClose.vue'
 
-const user  = useUserStore()
-const notification  = useNotificationStore()
+const user = useUserStore()
+const notification = useNotificationStore()
 
 async function logoutUser() {
   router.push('auth').then(() => {

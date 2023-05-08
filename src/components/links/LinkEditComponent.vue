@@ -102,7 +102,86 @@ let linkEdit: any = ref({
 </template>
 <style lang="scss" scoped>
 .link {
+  // width: 50vw;
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  border-radius: 2rem;
+  border: 1.5px solid #ddd;
+  padding: 0.5rem 1rem 1rem;
+
+  &__header,
+  &__footer,
+  &__description {
+    display: flex;
+    padding: 0.5rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__header {
+    align-items: flex-start;
+  }
+
+  &__description {
+    padding: 0 0.5rem;
+  }
+
+  &__footer {
+    justify-content: flex-start;
+    gap: 0.5rem;
+    padding: 0 0.5rem 0.25rem;
+  }
+
+  &__link {
+    display: flex;
+    flex-flow: column;
+    text-decoration: none;
+    color: black;
+    flex: 1;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    text-transform: capitalize;
+  }
+
+  &__url {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-style: oblique;
+    color: #999;
+  }
+
+  &__description {
+    padding-bottom: 1rem;
+  }
+
+  & textarea {
+    resize: none;
+    overflow: hidden;
+  }
+
+  &__tags {
+    padding: 0.3rem 0.75rem;
+    background-color: #c0a6cd;
+    background-color: #ddd;
+    border-radius: 1rem;
+    width: fit-content;
+    font-size: 0.85rem;
+  }
+
+  &__date {
+    font-size: 0.85rem;
+    color: #999;
+    padding-top: 0.3rem;
+    width: fit-content;
+  }
+}
+.link {
   background-color: #fff;
+  flex: 1;
 }
 
 .categ,
