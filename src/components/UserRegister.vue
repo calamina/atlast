@@ -23,7 +23,7 @@ const email: Ref<string> = ref('')
     </form>
   </div>
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
 div,
 form {
   display: flex;

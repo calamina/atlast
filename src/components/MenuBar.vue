@@ -1,10 +1,20 @@
 <script setup lang="ts">
-// import { useUserService } from '@/services/user.service'
+import router from '@/router'
 import { useUserStore } from '@/stores/user'
-import IconClose from './icons/IconClose.vue'
+import { useNotificationStore } from '@/stores/notification'
 
-// const userService = useUserService()
-const user = useUserStore()
+import IconClose from './icons/iconClose.vue'
+
+const user  = useUserStore()
+const notification  = useNotificationStore()
+
+async function logoutUser() {
+  router.push('auth').then(() => {
+    localStorage.removeItem('user')
+    notification.alert('User disconnected')
+    user.connectedUser = null
+  })
+}
 </script>
 
 <template>
@@ -14,15 +24,12 @@ const user = useUserStore()
       <router-link v-if="!user.connectedUser" to="auth">auth</router-link>
       <router-link v-if="user.connectedUser" to="library">library</router-link>
     </div>
-    <Suspense>
-      <div class="user" v-if="user.connectedUser">
-        <button type="button">{{ user.connectedUser.username }}</button>
-        to fix :((((
-        <!-- <button class="user__disconnect" type="button" @click="userService.logoutUser()">
-          <IconClose />
-        </button> -->
-      </div>
-    </Suspense>
+    <div class="user" v-if="user.connectedUser">
+      <button type="button">{{ user.connectedUser.username }}</button>
+      <button class="user__disconnect" type="button" @click="logoutUser()">
+        <IconClose />
+      </button>
+    </div>
   </nav>
 </template>
 

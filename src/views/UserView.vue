@@ -12,7 +12,7 @@ import type { linkModel } from '@/models/link.model'
 import LinkComponent from '@/components/links/LinkComponent.vue'
 import LinkEditComponent from '@/components/links/LinkEditComponent.vue'
 import categs from '@/utils/link-categs'
-import IconClose from '@/components/icons/IconClose.vue'
+import IconClose from '@/components/icons/iconClose.vue'
 
 const { getLinksByUser, addUserLink, editUserLink } = useLinkService()
 const linkstore = useLinkStore()
@@ -150,17 +150,10 @@ const filteredLinks: ComputedRef<linkModel[]> = computed(() => {
           @cancelEdit="editLink(index)"
           @confirmEdit="(link: linkModel) => editLink(index, link)"
         />
-        <!-- @confirmEdit="editLink(index)" -->
       </div>
       <div v-if="linkstore.list.length === 0">
         <p>Empty list ... You could add a link :)</p>
       </div>
-      <!-- <LinkEditComponent
-        v-if="filteredLinks.length === 0"
-        :link="{}"
-        @confirmEdit="(link: linkModel) => addLink(link)"
-        @cancelEdit="toggleNewModal = false"
-      /> -->
     </div>
     <Teleport to="body">
       <div class="modal-wrapper" v-if="toggleNewModal">

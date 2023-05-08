@@ -71,7 +71,7 @@ function deleteLink(id: number | undefined) {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .categ,
 .actions {
   background-color: #eee;

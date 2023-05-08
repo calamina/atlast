@@ -52,18 +52,10 @@ async function loginUser(login: string, password: string) {
     })
 }
 
-async function logoutUser() {
-  router.push('auth')
-  localStorage.removeItem('user')
-  notification.alert('User disconnected')
-  user.connectedUser = null
-}
-
 export function useUserService() {
   return {
     getUsers,
     loginUser,
-    logoutUser,
     registerUser
   }
 }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import MenuBar from '@/components/MenuBar.vue'
 import { useNotificationStore } from '@/stores/notification'
 import { useUserStore } from '@/stores/user'
 import { onMounted } from 'vue'
