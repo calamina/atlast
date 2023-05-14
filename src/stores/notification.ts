@@ -28,8 +28,7 @@ export const useNotificationStore = defineStore('notification', () => {
   }
 
   async function autoClear() {
-    await delay(2500)
-    clear()
+    await delay(2500).then(() => clear())
   }
 
   return { message, type, alert, error, clear }

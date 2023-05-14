@@ -3,6 +3,7 @@ import IconWiki from '@/components/icons/iconWiki.vue'
 import IconQuestion from '@/components/icons/iconQuestion.vue'
 import IconTech from '@/components/icons/iconTech.vue'
 import IconDesign from '@/components/icons/iconDesign.vue'
+import iconFlora from '@/components/icons/iconFlora.vue'
 
 export default [
   {
@@ -18,11 +19,15 @@ export default [
     name: 'media'
   },
   {
-    component: IconQuestion,
-    name: 'etc'
-  },
-  {
     component: IconDesign,
     name: 'design'
+  },
+  {
+    component: iconFlora,
+    name: 'flora'
+  },
+  {
+    component: IconQuestion,
+    name: 'etc'
   }
 ]

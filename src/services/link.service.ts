@@ -29,6 +29,23 @@ async function getLinksByUser(user: string): Promise<any> {
     .catch((error) => notification.error(error.response))
 }
 
+async function getFilteredLinksByUser(user: string, filters?: any): Promise<any> {
+  const filter = filters?.category ? `?filters[category][$eq]=${filters.category}` : ''
+  const sort = filters?.sort ? `sort=${filters.sort}` : ''
+  const filterSort = (filter ? filter + '&' : '?') + sort ?? ''
+
+  return http
+    .get<Array<any>>('links' + filterSort)
+    .then((response: any) => {
+      const result = response.data.data.filter((link: any) => {
+        return link.attributes.user === user
+      })
+      linkstore.filteredList = result
+      return result
+    })
+    .catch((error) => notification.error(error.response))
+}
+
 async function addUserLink(link: any): Promise<any> {
   return http
     .post(`links`, { data: link })
@@ -73,6 +90,7 @@ export function useLinkService() {
   return {
     getLinks,
     getLinksByUser,
+    getFilteredLinksByUser,
     addUserLink,
     editUserLink,
     deleteUserLink

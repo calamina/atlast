@@ -3,6 +3,11 @@
   src: url(/src/assets/fonts/ApercuMono.ttf);
   font-display: swap;
 }
+/* @font-face {
+  font-family: apercu;
+  src: url(/src/assets/fonts/contax.OTF);
+  font-display: swap;
+} */
 
 * {
   font-family: 'apercu', Arial, sans-serif;
@@ -20,11 +25,10 @@ html::-webkit-scrollbar {
 #app {
   width: 100%;
   margin: 0;
-  padding: 12rem 0 4rem;
-  /* height: 100vh; */
-  /* background-color: #efefef; */
+  padding: 5rem 0 4rem;
+  background-color: #efefef;
+  min-height: 100vh;
   display: flex;
-  /* align-items: center; */
   justify-content: center;
 }
 

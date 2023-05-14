@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useLinkService } from '@/services/link.service'
-import { computed, ref, watchEffect, type ComputedRef, type Ref } from 'vue'
+import { computed, ref, watch, watchEffect, type ComputedRef, type Ref } from 'vue'
+import { onKeyStroke, useKeyModifier } from '@vueuse/core'
 
 import IconCancel from '@/components/icons/iconCancel.vue'
 
@@ -12,24 +13,42 @@ import type { linkModel } from '@/models/link.model'
 import LinkComponent from '@/components/links/LinkComponent.vue'
 import LinkEditComponent from '@/components/links/LinkEditComponent.vue'
 import categs from '@/utils/link-categs'
-import IconClose from '@/components/icons/iconClose.vue'
 
-const { getLinksByUser, addUserLink, editUserLink } = useLinkService()
+import IconClose from '@/components/icons/iconClose.vue'
+import IconAscending from '@/components/icons/iconAscending.vue'
+
+const { getLinksByUser, getFilteredLinksByUser, addUserLink, editUserLink } = useLinkService()
 const linkstore = useLinkStore()
 
 const show: Ref<number | null> = ref(null)
 const user = useUserStore()
 
-const filterCateg = ref('')
+const displayFilters = ref(true)
 const filterSearch = ref('')
+
+const filters = ref({
+  category: '',
+  sort: 'createdAt'
+})
 
 const toggleNewModal = ref(false)
 
 watchEffect(() => {
   getLinksByUser(user.connectedUser.username).then((result) => {
     linkstore.list = result
+    linkstore.filteredList = result
   })
 })
+
+watch(
+  () => filters.value,
+  () => {
+    getFilteredLinksByUser(user.connectedUser.username, filters.value).then((result) => {
+      linkstore.filteredList = result
+    })
+  },
+  { deep: true }
+)
 
 function editLink(index: number, link?: any) {
   if (link) {
@@ -75,22 +94,11 @@ function countCategLinks(categ: string): number {
 }
 
 function filterCategs(type: string) {
-  return (filterCateg.value = filterCateg.value === type ? '' : type)
+  return (filters.value.category = filters.value.category === type ? '' : type)
 }
 
 const filteredLinks: ComputedRef<linkModel[]> = computed(() => {
-  let list: any[] = linkstore.list
-  if (filterCateg.value !== '') {
-    list = list.filter((link: any) => link.attributes.category === filterCateg.value)
-  }
-  if (filterSearch.value !== '') {
-    list = list.filter(
-      (link: any) =>
-        link.attributes.title.includes(filterSearch.value) ||
-        (link.attributes.description && link.attributes.description.includes(filterSearch.value)) ||
-        (link.attributes.url && link.attributes.url.includes(filterSearch.value))
-    )
-  }
+  let list: any[] = linkstore.filteredList
   list = list.map((link) => {
     const id = link.id
     link = link.attributes
@@ -99,19 +107,32 @@ const filteredLinks: ComputedRef<linkModel[]> = computed(() => {
   })
   return list
 })
+
+const ctrl = useKeyModifier('Control')
+onKeyStroke('f', (e) => {
+  e.preventDefault()
+  if (ctrl.value) {
+    displayFilters.value = !displayFilters.value
+  }
+})
 </script>
 
 <template>
   <main>
-    <div class="filters" @click="show = null">
+    <div class="filters" @click="show = null" v-if="displayFilters">
       <button type="button" class="button--main" @click="toggleNewModal = true">New link</button>
       <div class="filters__search">
         <input v-model="filterSearch" type="text" name="" id="" />
         <button type="button" class="button-icon" @click="filterSearch = ''"><IconCancel /></button>
       </div>
       <div class="filters__categories">
-        <div @click="filterCategs('')" class="filters__category">
-          <button type="button" :class="{ filtersactive: filterCateg === '' }" class="button-icon">
+        <h3>Categories</h3>
+        <div
+          @click="filters.category = filterCategs('')"
+          :class="{ filtersactive: filters.category === '' }"
+          class="filters__category"
+        >
+          <button type="button" class="button-icon">
             <IconClose />
           </button>
           <p>All</p>
@@ -119,23 +140,56 @@ const filteredLinks: ComputedRef<linkModel[]> = computed(() => {
         </div>
         <div
           v-for="(categ, index) in filteredCategs"
-          @click="filterCategs(categ.name)"
+          @click="filters.category = filterCategs(categ.name)"
           :key="index"
           class="filters__category"
+          :class="{ filtersactive: filters.category === categ.name }"
         >
-          <button
-            type="button"
-            :class="{ filtersactive: filterCateg === categ.name }"
-            class="button-icon"
-          >
+          <button type="button" class="button-icon">
             <component :is="categ.component" />
           </button>
           <p>{{ categ.name }}</p>
           <p>{{ countCategLinks(categ.name) }}</p>
         </div>
       </div>
+      <div class="filters__sort">
+        <h3>Sort</h3>
+        <div
+          @click="filters.sort = 'createdAt'"
+          class="filters__category"
+          :class="{ filtersactive: filters.sort === 'createdAt' }"
+        >
+          <button type="button" class="button-icon">
+            <IconAscending />
+          </button>
+          <p>Date</p>
+          <p></p>
+        </div>
+        <div
+          @click="filters.sort = 'title'"
+          class="filters__category"
+          :class="{ filtersactive: filters.sort === 'title' }"
+        >
+          <button type="button" class="button-icon">
+            <IconAscending />
+          </button>
+          <p>Title</p>
+          <p></p>
+        </div>
+        <div
+          @click="filters.sort = 'category'"
+          class="filters__category"
+          :class="{ filtersactive: filters.sort === 'category' }"
+        >
+          <button type="button" class="button-icon">
+            <IconAscending />
+          </button>
+          <p>Category</p>
+          <p></p>
+        </div>
+      </div>
     </div>
-    <div class="links" v-if="linkstore.list.length !== 0">
+    <div class="links" v-if="linkstore.filteredList.length !== 0">
       <TransitionGroup name="list">
         <div v-for="(link, index) of filteredLinks" :key="link.id">
           <LinkComponent
@@ -170,43 +224,40 @@ const filteredLinks: ComputedRef<linkModel[]> = computed(() => {
 </template>
 
 <style lang="scss" scoped>
+h3 {
+  font-weight: 400;
+  font-size: 1rem;
+  margin-bottom: 0.15rem;
+}
+
 main {
-  width: 90vw;
+  width: calc(100vw - 2rem);
   display: flex;
   align-items: flex-start;
-  justify-content: center;
-  gap: 5rem;
+  justify-content: space-evenly;
+  gap: 2rem;
 }
 
 .filters {
   display: flex;
   flex-flow: column;
   gap: 1rem;
-  border: 1px solid #ddd;
-  padding: 1.5rem;
-  border-radius: 2rem;
+  padding: 1rem;
 
   & .filters__categories {
     display: flex;
     flex-flow: column;
-    width: 100%;
-    gap: 0.5rem;
-    align-items: flex-start;
     justify-content: space-between;
-    padding: 0.15rem 0;
-    border-radius: 6px;
-
-    & .filtersactive {
-      background-color: #c0a6cd;
-      border-radius: 100%;
-    }
+  }
+  & .filtersactive {
+    background-color: #c0a6cd;
   }
 
   & .filters__category {
     display: flex;
     align-items: center;
-    width: 100%;
-    gap: 1rem;
+    border-radius: 0.25rem;
+    padding-right: 0.75rem;
     cursor: pointer;
 
     & p {
@@ -216,7 +267,7 @@ main {
     & p:last-of-type {
       font-size: 0.9rem;
       margin-left: auto;
-      color: #c0a6cd;
+      opacity: 0.5;
     }
   }
 
@@ -234,18 +285,32 @@ main {
 .links {
   display: flex;
   flex-flow: column;
-  gap: 2rem;
+  gap: 0.5rem;
   flex: 1;
+  padding: 0 5rem;
   display: grid;
+  align-items: center;
   grid-template-columns: 1fr;
+  transition: width 0.3s;
 }
 
 .link-wrapper {
-  width: 50vw;
+  position: relative;
   display: flex;
+  gap: 0.5rem;
   gap: 1rem;
+  align-items: center;
   transition: height 0.3s;
-  background-color: #fff;
+  // background-color: #dedede;
+  // border: 1px solid #ddd;
+  // border-bottom: 1px solid #ddd;
+  // border-radius: 2rem;
+  padding: 0.25rem 0.5rem;
+  padding-bottom: 0.5rem;
+
+  // &:hover {
+  //   background-color: #fff;
+  // }
 }
 
 .filters__info {
@@ -264,7 +329,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(239, 239, 239, 0.8);
 }
 
 .list-enter-active,

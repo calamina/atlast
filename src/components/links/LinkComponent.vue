@@ -8,7 +8,6 @@ import type { linkModel } from '@/models/link.model'
 import categs from '@/utils/link-categs'
 
 import IconDelete from '@/components/icons/iconDelete.vue'
-import IconLink from '@/components/icons/iconLink.vue'
 import IconLike from '@/components/icons/iconLike.vue'
 import IconEdit from '@/components/icons/iconEdit.vue'
 import { computed } from 'vue'
@@ -34,19 +33,22 @@ function deleteLink(id: number | undefined) {
 <template>
   <div class="link-wrapper">
     <div class="categ">
-      <button type="button" class="button-icon">
+      <div type="button" class="button-icon">
         <component :is="categ!.component"></component>
-      </button>
+      </div>
     </div>
     <div class="link">
       <div class="link__header">
-        <a class="link__link" :href="'http://' + props.link.url" target="_blank">
+        <a class="link__link" :href="props.link.url" target="_blank">
           <p class="link__title">{{ props.link.title }}</p>
-          <p class="link__url"><IconLink class="text-icon" /> {{ props.link.url }}</p>
+          <p class="link__url">
+            <!-- <IconLink class="text-icon" />  -->
+            {{ props.link.url }}
+          </p>
         </a>
-        <p class="link__date">
+        <!-- <p class="link__date">
           {{ useDateFormat(props.link.date, 'DD/MM/YY').value }}
-        </p>
+        </p> -->
       </div>
       <p v-if="props.link.description" class="link__description">
         {{ props.link.description }}
@@ -72,75 +74,72 @@ function deleteLink(id: number | undefined) {
 <style lang="scss" scoped>
 .categ,
 .actions {
-  background-color: #eee;
+  background-color: #ddd;
   display: flex;
-  flex-flow: column;
   height: fit-content;
+  align-items: center;
   gap: 0.5rem;
-  margin-top: 0.5rem;
-  padding: 0.5rem 0.25rem;
   border-radius: 2rem;
 }
 
-.categ {
-  padding: 0.25rem;
-  background-color: #c0a6cd;
-}
+// .categ {
+//   background-color: #c0a6cd;
+// }
 
 .actions button {
   border-radius: 2rem;
 }
 
-// .actions {
-//   display: none;
-// }
+.actions {
+  display: none;
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+}
 
-// .link-wrapper:hover .actions {
-//   display: flex;
-// }
+.link-wrapper:hover .actions {
+  display: flex;
+}
 
 .link {
-  // width: 50vw;
   width: 100%;
   display: flex;
+  // gap: 0.2rem;
   flex-flow: column;
-  border-radius: 2rem;
-  border: 1.5px solid #ddd;
-  padding: 0.5rem 1rem 1rem;
+  padding: 0rem;
 
   &__header,
   &__footer,
   &__description {
     display: flex;
-    padding: 0.5rem;
     align-items: center;
     justify-content: space-between;
   }
 
   &__header {
-    align-items: flex-start;
-  }
-
-  &__description {
-    padding: 0 0.5rem;
+    // align-items: flex-start;
   }
 
   &__footer {
+    margin-top: 0.1rem;
     justify-content: flex-start;
-    gap: 0.5rem;
-    padding: 0 0.5rem 0.25rem;
+    gap: 0.25rem;
+    // display: none;
   }
 
   &__link {
     display: flex;
+    line-height: 1.4rem;
     flex-flow: column;
     text-decoration: none;
     color: black;
     flex: 1;
+    gap: 0.1rem;
+    max-width: 80%;
   }
 
   &__title {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     text-transform: capitalize;
   }
 
@@ -148,32 +147,35 @@ function deleteLink(id: number | undefined) {
     display: flex;
     align-items: center;
     gap: 0.4rem;
+    font-size: 0.85rem;
     font-style: oblique;
     color: #999;
   }
 
-  &__description {
-    padding-bottom: 1rem;
-  }
-
-  & textarea {
-    resize: none;
-    overflow: hidden;
-  }
-
   &__tags {
-    padding: 0.3rem 0.75rem;
-    background-color: #c0a6cd;
+    padding: 0.05rem 0.5rem;
+    // background-color: #c0a6cd;
     background-color: #ddd;
     border-radius: 1rem;
     width: fit-content;
     font-size: 0.85rem;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+
+    &::before {
+      content: '#';
+      // padding-right: 0.1rem;
+    }
+
+    &:hover {
+      opacity: 1;
+    }
   }
 
   &__date {
     font-size: 0.85rem;
     color: #999;
-    padding-top: 0.3rem;
+    // padding-top: 0.3rem;
     width: fit-content;
   }
 }
