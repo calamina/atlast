@@ -14,7 +14,7 @@ import LinkComponent from '@/components/links/LinkComponent.vue'
 import LinkEditComponent from '@/components/links/LinkEditComponent.vue'
 import categs from '@/utils/link-categs'
 
-import IconClose from '@/components/icons/IconClose.vue'
+import IconClose from '@/components/icons/iconClose.vue'
 import IconAscending from '@/components/icons/iconAscending.vue'
 
 const { getLinksByUser, getFilteredLinksByUser, addUserLink, editUserLink } = useLinkService()
@@ -83,7 +83,7 @@ function checkCategPresent(categ: string) {
   })
 }
 
-const filteredCategs: ComputedRef<any> = computed(() => {
+const filteredCategs: ComputedRef<any[]> = computed(() => {
   return categ.filter((categ: any) => checkCategPresent(categ.name))
 })
 

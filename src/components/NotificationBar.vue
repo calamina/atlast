@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useNotificationStore } from '@/stores/notification'
-import IconClose from './icons/IconClose.vue'
+import IconClose from './icons/iconClose.vue'
 
 const notification = useNotificationStore()
 </script>
