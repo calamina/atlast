@@ -1,6 +1,8 @@
 # atlast
-
 Personnal Knowledge Database made with Vue3 and Strapi
+
+# Performance
+- [ ] check how to cache data
 
 # layout
 - [ ] try left sidebar

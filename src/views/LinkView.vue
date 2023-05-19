@@ -26,10 +26,12 @@ const user = useUserStore()
 const displayFilters = ref(false)
 const filterSearch = ref('')
 
-const filters = ref({
+const filters: Ref<any> = ref({
   category: '',
   sort: 'createdAt'
 })
+
+// const categ: any = categs
 
 const toggleNewModal = ref(false)
 
@@ -82,7 +84,7 @@ function checkCategPresent(categ: string) {
 }
 
 const filteredCategs: ComputedRef<any> = computed(() => {
-  return categs.filter((categ) => checkCategPresent(categ.name))
+  return categs.filter((categ: any) => checkCategPresent(categ.name))
 })
 
 function countCategLinks(categ: string): number {
@@ -148,10 +150,10 @@ onKeyStroke('f', (e) => {
           :class="{ filtersactive: filters.category === categ.name }"
         >
           <button type="button" class="button-icon">
-            <component :is="categ.component" />
+            <component :is="categ.component as any" />
           </button>
-          <p>{{ categ.name }}</p>
-          <p>{{ countCategLinks(categ.name) }}</p>
+          <p>{{ categ.name as any }}</p>
+          <p>{{ countCategLinks(categ.name as any) }}</p>
         </div>
       </div>
       <div class="filters__sort">
