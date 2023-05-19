@@ -31,7 +31,7 @@ const filters: Ref<any> = ref({
   sort: 'createdAt'
 })
 
-// const categ: any = categs
+const categ: any = categs
 
 const toggleNewModal = ref(false)
 
@@ -84,7 +84,7 @@ function checkCategPresent(categ: string) {
 }
 
 const filteredCategs: ComputedRef<any> = computed(() => {
-  return categs.filter((categ: any) => checkCategPresent(categ.name))
+  return categ.filter((categ: any) => checkCategPresent(categ.name))
 })
 
 function countCategLinks(categ: string): number {
