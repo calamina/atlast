@@ -4,9 +4,9 @@ import { ref } from 'vue'
 
 import categs from '@/utils/link-categs'
 
-import IconEdit from '@/components/icons/iconEdit.vue'
-import IconDelete from '@/components/icons/iconDelete.vue'
-import IconLike from '../icons/iconLike.vue'
+import IconEdit from '@/components/icons/IconEdit.vue'
+import IconDelete from '@/components/icons/IconDelete.vue'
+import IconLike from '@/components/icons/IconLike.vue'
 
 const props = defineProps<{
   link: linkModel

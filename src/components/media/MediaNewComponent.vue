@@ -5,8 +5,8 @@ import { useUserStore } from '@/stores/user'
 import { useMediaStore } from '@/stores/media'
 import { useNotificationStore } from '@/stores/notification'
 
-import IconEdit from '@/components/icons/iconEdit.vue'
-import IconDelete from '@/components/icons/iconDelete.vue'
+import IconEdit from '@/components/icons/IconEdit.vue'
+import IconDelete from '@/components/icons/IconDelete.vue'
 import router from '@/router/index'
 
 const user = useUserStore()

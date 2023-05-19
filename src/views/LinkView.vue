@@ -3,8 +3,6 @@ import { useLinkService } from '@/services/link.service'
 import { computed, ref, watch, watchEffect, type ComputedRef, type Ref } from 'vue'
 import { onKeyStroke, useKeyModifier } from '@vueuse/core'
 
-import IconCancel from '@/components/icons/iconCancel.vue'
-
 import { useUserStore } from '@/stores/user'
 import { useLinkStore } from '@/stores/link'
 
@@ -14,8 +12,9 @@ import LinkComponent from '@/components/links/LinkComponent.vue'
 import LinkEditComponent from '@/components/links/LinkEditComponent.vue'
 import categs from '@/utils/link-categs'
 
-import IconClose from '@/components/icons/iconClose.vue'
-import IconAscending from '@/components/icons/iconAscending.vue'
+import IconCancel from '@/components/icons/IconCancel.vue'
+import IconClose from '@/components/icons/IconClose.vue'
+import IconAscending from '@/components/icons/IconAscending.vue'
 
 const { getLinksByUser, getFilteredLinksByUser, addUserLink, editUserLink } = useLinkService()
 const linkstore = useLinkStore()

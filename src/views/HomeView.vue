@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import IconLink from '@/components/icons/iconLink.vue'
+import IconLink from '@/components/icons/IconLink.vue'
 import { useUserStore } from '@/stores/user'
 
 const user = useUserStore()

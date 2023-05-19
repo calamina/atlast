@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import MediaNewComponent from '@/components/media/MediaNewComponent.vue'
-import { useWikiService } from '@/services/wiki.service'
+import { onMounted, ref, type Ref } from 'vue'
 import { onKeyStroke, useKeyModifier } from '@vueuse/core'
 import { watchDebounced } from '@vueuse/shared'
-import { onMounted, ref, type Ref } from 'vue'
 
-import iconCheck from '@/components/icons/iconCheck.vue'
+import { useWikiService } from '@/services/wiki.service'
+
+import MediaNewComponent from '@/components/media/MediaNewComponent.vue'
+
+import iconCheck from '@/components/icons/IconCheck.vue'
 
 const emits = defineEmits(['toggleSearch'])
 

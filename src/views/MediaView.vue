@@ -3,7 +3,8 @@ import { computed, watch, watchEffect, type ComputedRef } from 'vue'
 
 import { useUserStore } from '@/stores/user'
 import { useMediaStore } from '@/stores/media'
-import IconDelete from '@/components/icons/iconDelete.vue'
+
+import IconDelete from '@/components/icons/IconDelete.vue'
 
 const mediastore = useMediaStore()
 

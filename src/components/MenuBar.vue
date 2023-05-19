@@ -3,8 +3,8 @@ import router from '@/router/index'
 import { useUserStore } from '@/stores/user'
 import { useNotificationStore } from '@/stores/notification'
 
-import IconClose from './icons/iconClose.vue'
-import IconAdd from './icons/iconAdd.vue'
+import IconClose from './icons/IconClose.vue'
+import IconAdd from './icons/IconAdd.vue'
 
 const emits = defineEmits(['toggleSearch'])
 

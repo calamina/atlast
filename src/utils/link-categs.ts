@@ -1,9 +1,9 @@
-import IconBook from '@/components/icons/iconBook.vue'
-import IconWiki from '@/components/icons/iconWiki.vue'
-import IconQuestion from '@/components/icons/iconQuestion.vue'
-import IconTech from '@/components/icons/iconTech.vue'
-import IconDesign from '@/components/icons/iconDesign.vue'
-import iconFlora from '@/components/icons/iconFlora.vue'
+import IconBook from '@/components/icons/IconBook.vue'
+import IconWiki from '@/components/icons/IconWiki.vue'
+import IconQuestion from '@/components/icons/IconQuestion.vue'
+import IconTech from '@/components/icons/IconTech.vue'
+import IconDesign from '@/components/icons/IconDesign.vue'
+import iconFlora from '@/components/icons/IconFlora.vue'
 
 export default [
   {
