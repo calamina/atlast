@@ -14,7 +14,7 @@ import LinkComponent from '@/components/links/LinkComponent.vue'
 import LinkEditComponent from '@/components/links/LinkEditComponent.vue'
 import categs from '@/utils/link-categs'
 
-import IconClose from '@/components/icons/iconClose.vue'
+import IconClose from '@/components/icons/IconClose.vue'
 import IconAscending from '@/components/icons/iconAscending.vue'
 
 const { getLinksByUser, getFilteredLinksByUser, addUserLink, editUserLink } = useLinkService()
@@ -23,7 +23,7 @@ const linkstore = useLinkStore()
 const show: Ref<number | null> = ref(null)
 const user = useUserStore()
 
-const displayFilters = ref(true)
+const displayFilters = ref(false)
 const filterSearch = ref('')
 
 const filters = ref({
@@ -123,7 +123,9 @@ onKeyStroke('f', (e) => {
       <button type="button" class="button--main" @click="toggleNewModal = true">New link</button>
       <div class="filters__search">
         <input v-model="filterSearch" type="text" name="" id="" />
-        <button type="button" class="button-icon" @click="filterSearch = ''"><IconCancel /></button>
+        <button type="button" class="filter__cancel button-icon" @click="filterSearch = ''">
+          <IconCancel />
+        </button>
       </div>
       <div class="filters__categories">
         <h3>Categories</h3>
@@ -191,7 +193,7 @@ onKeyStroke('f', (e) => {
     </div>
     <div class="links" v-if="linkstore.filteredList.length !== 0">
       <TransitionGroup name="list">
-        <div v-for="(link, index) of filteredLinks" :key="link.id">
+        <div class="TEST" v-for="(link, index) of filteredLinks" :key="link.id">
           <LinkComponent
             v-if="show !== index"
             :link="link"
@@ -233,16 +235,16 @@ h3 {
 main {
   width: calc(100vw - 2rem);
   display: flex;
-  align-items: flex-start;
-  justify-content: space-evenly;
-  gap: 2rem;
+  flex-flow: row;
+  position: relative;
 }
 
 .filters {
   display: flex;
   flex-flow: column;
   gap: 1rem;
-  padding: 1rem;
+  padding: 0 1rem;
+  width: 20rem;
 
   & .filters__categories {
     display: flex;
@@ -272,45 +274,54 @@ main {
   }
 
   & .filters__search {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: flex-start;
   }
 
+  & .filter__cancel {
+    position: absolute;
+    padding: 0.65rem;
+    right: -0.5rem;
+    margin-right: 0.25rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+  }
+
   & input {
     margin-bottom: 0;
+    padding-right: 2rem;
   }
 }
 
 .links {
+  left: 25rem;
   display: flex;
   flex-flow: column;
+  width: calc(100vw - 22rem);
   gap: 0.5rem;
+  height: fit-content;
   flex: 1;
-  padding: 0 5rem;
-  display: grid;
+  padding-left: 1rem;
   align-items: center;
-  grid-template-columns: 1fr;
-  transition: width 0.3s;
 }
 
 .link-wrapper {
   position: relative;
   display: flex;
-  gap: 0.5rem;
+  flex: 1;
   gap: 1rem;
   align-items: center;
   transition: height 0.3s;
-  // background-color: #dedede;
-  // border: 1px solid #ddd;
-  // border-bottom: 1px solid #ddd;
-  // border-radius: 2rem;
   padding: 0.25rem 0.5rem;
   padding-bottom: 0.5rem;
+  // border-bottom: 1px solid #ccc;
+}
 
-  // &:hover {
-  //   background-color: #fff;
-  // }
+.TEST {
+  flex: 1;
+  width: 100%;
 }
 
 .filters__info {

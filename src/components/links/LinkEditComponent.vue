@@ -6,6 +6,7 @@ import categs from '@/utils/link-categs'
 
 import IconEdit from '@/components/icons/iconEdit.vue'
 import IconDelete from '@/components/icons/iconDelete.vue'
+import IconLike from '../icons/iconLike.vue'
 
 const props = defineProps<{
   link: linkModel
@@ -36,25 +37,25 @@ let linkEdit: any = ref({
       </button>
     </div>
     <div class="link link-edit">
-      <div class="link__header">
-        <div class="link__link">
-          <p>title<span>*</span></p>
-          <input type="text" v-model="linkEdit.title" />
-          <p>url<span>*</span></p>
-          <input type="text" v-model="linkEdit.url" />
-        </div>
+      <div>
+        <p>title<span>*</span></p>
+        <input type="text" v-model="linkEdit.title" />
       </div>
-      <div class="link__description">
+      <div>
+        <p>url<span>*</span></p>
+        <input type="text" v-model="linkEdit.url" />
+      </div>
+      <div>
         <p>description</p>
-        <!-- <textarea ref="textarea" v-model="linkEdit.description" name="description" /> -->
         <input type="text" v-model="linkEdit.description" name="description" />
       </div>
-      <div class="link__footer">
+      <div>
         <p>tags (separate with space)</p>
         <input type="text" v-model="linkEdit.tagstring" />
       </div>
     </div>
     <div class="actions">
+      <button type="button" class="button-icon"><IconLike /></button>
       <button type="button" class="button-icon" @click="$emit('confirmEdit', linkEdit)">
         <IconEdit />
       </button>
@@ -65,121 +66,47 @@ let linkEdit: any = ref({
   </div>
 </template>
 <style lang="scss" scoped>
+.link-wrapper {
+  background-color: #ddd;
+  border-radius: 2rem;
+}
 .link {
-  // width: 50vw;
   width: 100%;
   display: flex;
   flex-flow: column;
-  border-radius: 2rem;
-  border: 1.5px solid #ddd;
-  padding: 0.5rem 1rem 1rem;
-
-  &__header,
-  &__footer,
-  &__description {
-    display: flex;
-    padding: 0.5rem;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  &__header {
-    align-items: flex-start;
-  }
-
-  &__description {
-    padding: 0 0.5rem;
-  }
-
-  &__footer {
-    justify-content: flex-start;
-    gap: 0.5rem;
-    padding: 0 0.5rem 0.25rem;
-  }
-
-  &__link {
-    display: flex;
-    flex-flow: column;
-    text-decoration: none;
-    color: black;
-    flex: 1;
-  }
-
-  &__title {
-    font-size: 1.5rem;
-    text-transform: capitalize;
-  }
-
-  &__url {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-style: oblique;
-    color: #999;
-  }
-
-  &__description {
-    padding-bottom: 1rem;
-  }
-
-  & textarea {
-    resize: none;
-    overflow: hidden;
-  }
-
-  &__tags {
-    padding: 0.3rem 0.75rem;
-    background-color: #c0a6cd;
-    background-color: #ddd;
-    border-radius: 1rem;
-    width: fit-content;
-    font-size: 0.85rem;
-  }
-
-  &__date {
-    font-size: 0.85rem;
-    color: #999;
-    padding-top: 0.3rem;
-    width: fit-content;
-  }
-}
-.link {
-  background-color: #fff;
-  flex: 1;
+  flex: 2;
+  gap: 0.5rem;
+  justify-content: space-between;
+  // padding: 1rem;
 }
 
 .categ,
 .actions {
-  background-color: #eee;
   display: flex;
   flex-flow: column;
   height: fit-content;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
+  gap: 0.25rem;
   padding: 0.5rem 0.25rem;
-  border-radius: 2rem;
+}
+
+.actions {
+  flex-flow: row;
 }
 
 p {
   font-size: 0.9rem;
   padding-left: 0.1rem;
-  // text-transform: capitalize;
   font-variant: small-caps;
   color: #00000088;
 
   span {
     padding-left: 0.25rem;
-    color: #c0a6cd;
-    // font-size: 1rem;
+    color: #000;
   }
 }
 
-.categ {
-  padding: 0.25rem;
-
-  & button {
-    border-radius: 100%;
-  }
+.categ button {
+  border-radius: 100%;
 }
 
 .categ .actions button {
@@ -190,15 +117,10 @@ p {
   background-color: #c0a6cd;
 }
 
-.link__description,
-.link__footer {
-  flex-flow: column;
-  align-items: flex-start;
-  padding-bottom: 0;
-  gap: 0;
-}
-
-.link__header {
-  padding-bottom: 0;
+input {
+  // background-color: #eee;
+  border-radius: 0;
+  padding: 0rem 0.1rem 0;
+  border-bottom: 1px solid #999;
 }
 </style>

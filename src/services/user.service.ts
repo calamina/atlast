@@ -1,10 +1,10 @@
-import router from '@/router'
+import router from '@/router/index'
 import http from '@/utils/http-common'
 import { useNotificationStore } from '@/stores/notification'
 import { useUserStore } from '@/stores/user'
 
-const user = useUserStore()
 const notification = useNotificationStore()
+const user = useUserStore()
 
 async function getUsers(): Promise<any> {
   return http
@@ -13,7 +13,7 @@ async function getUsers(): Promise<any> {
       return response
     })
     .catch((error) => {
-      return error
+      notification.error(error.response)
     })
 }
 

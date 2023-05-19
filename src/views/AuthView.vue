@@ -28,9 +28,11 @@ main {
   display: flex;
   flex-flow: column;
   align-items: center;
+  justify-content: center;
   width: 20rem;
   margin: 0 auto;
-  height: 30rem;
+  height: 100vh;
+  padding-bottom: 10rem;
 }
 nav {
   display: flex;

@@ -18,7 +18,24 @@ const router = createRouter({
     {
       path: '/library',
       name: 'library',
-      component: () => import('../views/UserView.vue')
+      component: () => import('../views/LibraryView.vue'),
+      children: [
+        {
+          path: '/media',
+          name: 'media',
+          component: () => import('../views/MediaView.vue')
+        },
+        {
+          path: '/links',
+          name: 'links',
+          component: () => import('../views/LinkView.vue')
+        },
+        {
+          path: '/notes',
+          name: 'notes',
+          component: () => import('../views/NoteView.vue')
+        }
+      ]
     },
     {
       path: '/:pathMatch(.*)*',

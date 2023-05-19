@@ -30,7 +30,7 @@ const library = [
 <style lang="scss" scoped>
 .dashboard {
   width: 100%;
-  padding: 0 1rem;
+  padding: 6rem 1rem 0;
 }
 
 .item-wrapper {

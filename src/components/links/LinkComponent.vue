@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { useDateFormat } from '@vueuse/shared'
+// import { useDateFormat } from '@vueuse/shared'
+import { computed } from 'vue'
 
 import { useLinkService } from '@/services/link.service'
 
@@ -10,7 +11,6 @@ import categs from '@/utils/link-categs'
 import IconDelete from '@/components/icons/iconDelete.vue'
 import IconLike from '@/components/icons/iconLike.vue'
 import IconEdit from '@/components/icons/iconEdit.vue'
-import { computed } from 'vue'
 
 const props = defineProps<{
   link: linkModel
@@ -74,39 +74,26 @@ function deleteLink(id: number | undefined) {
 <style lang="scss" scoped>
 .categ,
 .actions {
-  background-color: #ddd;
   display: flex;
   height: fit-content;
   align-items: center;
   gap: 0.5rem;
   border-radius: 2rem;
 }
-
-// .categ {
-//   background-color: #c0a6cd;
-// }
+.categ {
+  padding: 0.25rem;
+  background-color: #ddd;
+}
 
 .actions button {
   border-radius: 2rem;
 }
 
-.actions {
-  display: none;
-  position: absolute;
-  right: 0.5rem;
-  top: 0.5rem;
-}
-
-.link-wrapper:hover .actions {
-  display: flex;
-}
-
 .link {
-  width: 100%;
   display: flex;
-  // gap: 0.2rem;
   flex-flow: column;
   padding: 0rem;
+  flex: 1;
 
   &__header,
   &__footer,
@@ -116,15 +103,10 @@ function deleteLink(id: number | undefined) {
     justify-content: space-between;
   }
 
-  &__header {
-    // align-items: flex-start;
-  }
-
   &__footer {
     margin-top: 0.1rem;
     justify-content: flex-start;
     gap: 0.25rem;
-    // display: none;
   }
 
   &__link {
@@ -135,7 +117,6 @@ function deleteLink(id: number | undefined) {
     color: black;
     flex: 1;
     gap: 0.1rem;
-    max-width: 80%;
   }
 
   &__title {
@@ -154,7 +135,6 @@ function deleteLink(id: number | undefined) {
 
   &__tags {
     padding: 0.05rem 0.5rem;
-    // background-color: #c0a6cd;
     background-color: #ddd;
     border-radius: 1rem;
     width: fit-content;
@@ -164,7 +144,6 @@ function deleteLink(id: number | undefined) {
 
     &::before {
       content: '#';
-      // padding-right: 0.1rem;
     }
 
     &:hover {
@@ -172,10 +151,9 @@ function deleteLink(id: number | undefined) {
     }
   }
 
-  &__date {
+  &__descripton {
     font-size: 0.85rem;
     color: #999;
-    // padding-top: 0.3rem;
     width: fit-content;
   }
 }

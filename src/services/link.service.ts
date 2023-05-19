@@ -18,7 +18,7 @@ async function getLinks(): Promise<any> {
 
 async function getLinksByUser(user: string): Promise<any> {
   return http
-    .get<Array<any>>('links')
+    .get<Array<any>>('links?sort=createdAt:desc')
     .then((response: any) => {
       const result = response.data.data.filter((link: any) => {
         return link.attributes.user === user
@@ -31,7 +31,7 @@ async function getLinksByUser(user: string): Promise<any> {
 
 async function getFilteredLinksByUser(user: string, filters?: any): Promise<any> {
   const filter = filters?.category ? `?filters[category][$eq]=${filters.category}` : ''
-  const sort = filters?.sort ? `sort=${filters.sort}` : ''
+  const sort = filters?.sort ? `sort=${filters.sort}:desc` : ''
   const filterSort = (filter ? filter + '&' : '?') + sort ?? ''
 
   return http
