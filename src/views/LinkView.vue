@@ -14,7 +14,7 @@ import LinkComponent from '@/components/links/LinkComponent.vue'
 import LinkEditComponent from '@/components/links/LinkEditComponent.vue'
 import categs from '@/utils/link-categs'
 
-import IconClose from '@/components/icons/iconClose.vue'
+import IconClose from '../components/icons/iconClose.vue'
 import IconAscending from '@/components/icons/iconAscending.vue'
 
 const { getLinksByUser, getFilteredLinksByUser, addUserLink, editUserLink } = useLinkService()
@@ -30,8 +30,6 @@ const filters: Ref<any> = ref({
   category: '',
   sort: 'createdAt'
 })
-
-const categ: any = categs
 
 const toggleNewModal = ref(false)
 
@@ -84,7 +82,7 @@ function checkCategPresent(categ: string) {
 }
 
 const filteredCategs: ComputedRef<any[]> = computed(() => {
-  return categ.filter((categ: any) => checkCategPresent(categ.name))
+  return categs.filter((categ: any) => checkCategPresent(categ.name))
 })
 
 function countCategLinks(categ: string): number {
