@@ -1,9 +1,8 @@
 <script setup lang="ts">
-// import { useDateFormat } from '@vueuse/shared'
+import { useDateFormat } from '@vueuse/shared'
 import { computed } from 'vue'
 
-import { useLinkService } from '@/services/link.service'
-
+import { useLinkStore } from '@/stores/link'
 import type { linkModel } from '@/models/link.model'
 
 import categs from '@/utils/link-categs'
@@ -17,7 +16,7 @@ const props = defineProps<{
 }>()
 const emits = defineEmits(['enableEdit'])
 
-const { deleteUserLink } = useLinkService()
+const linkstore = useLinkStore()
 
 const categ = computed(() => {
   return categs.find((categ: any) => categ.name === props.link.category)
@@ -25,30 +24,27 @@ const categ = computed(() => {
 
 function deleteLink(id: number | undefined) {
   if (id) {
-    deleteUserLink(id)
+    linkstore.deleteUserLink(id)
   }
 }
 </script>
 
 <template>
   <div class="link-wrapper">
-    <div class="categ">
+    <!-- <div class="categ">
       <div type="button" class="button-icon">
         <component :is="categ!.component"></component>
       </div>
-    </div>
+    </div> -->
     <div class="link">
       <div class="link__header">
+        <!-- <div class="link__image" :style="`background-image: url(${link.favicon})`"></div> -->
         <a class="link__link" :href="props.link.url" target="_blank">
           <p class="link__title">{{ props.link.title }}</p>
           <p class="link__url">
-            <!-- <IconLink class="text-icon" />  -->
             {{ props.link.url }}
           </p>
         </a>
-        <!-- <p class="link__date">
-          {{ useDateFormat(props.link.date, 'DD/MM/YY').value }}
-        </p> -->
       </div>
       <p v-if="props.link.description" class="link__description">
         {{ props.link.description }}
@@ -59,8 +55,13 @@ function deleteLink(id: number | undefined) {
         </button>
       </div>
     </div>
+    <p class="link__date">
+      {{ useDateFormat(props.link.date, 'DD/MM/YY').value }}
+    </p>
     <div class="actions">
-      <button type="button" class="button-icon"><IconLike /></button>
+      <button type="button" class="button-icon">
+        <IconLike />
+      </button>
       <button type="button" class="button-icon" @click="$emit('enableEdit')">
         <IconEdit />
       </button>
@@ -80,9 +81,10 @@ function deleteLink(id: number | undefined) {
   gap: 0.5rem;
   border-radius: 2rem;
 }
+
 .categ {
   padding: 0.25rem;
-  background-color: #ddd;
+  // background-color: #ddd;
 }
 
 .actions button {
@@ -93,7 +95,8 @@ function deleteLink(id: number | undefined) {
   display: flex;
   flex-flow: column;
   padding: 0rem;
-  flex: 1;
+  align-self: flex-start;
+  // flex: 1;
 
   &__header,
   &__footer,
@@ -103,6 +106,10 @@ function deleteLink(id: number | undefined) {
     justify-content: space-between;
   }
 
+  // &__header {
+  //   gap: 1.5rem;
+  // }
+  //
   &__footer {
     margin-top: 0.1rem;
     justify-content: flex-start;
@@ -124,14 +131,27 @@ function deleteLink(id: number | undefined) {
     text-transform: capitalize;
   }
 
-  &__url {
+  &__url,
+  &__date {
     display: flex;
     align-items: center;
     gap: 0.4rem;
     font-size: 0.85rem;
     font-style: oblique;
-    color: #999;
+    color: var(--active-plus);
   }
+
+  // &__image {
+  //   background-position: 50%;
+  //   background-repeat: no-repeat;
+  //   background-size: contain;
+  //   background-color: #ddd;
+  //   border-radius: 0.5rem;
+  //   border-radius: 100%;
+  //   height: 1rem;
+  //   width: 1rem;
+  //   filter: grayscale(0.8);
+  // }
 
   &__tags {
     padding: 0.05rem 0.5rem;
@@ -149,12 +169,6 @@ function deleteLink(id: number | undefined) {
     &:hover {
       opacity: 1;
     }
-  }
-
-  &__descripton {
-    font-size: 0.85rem;
-    color: #999;
-    width: fit-content;
   }
 }
 </style>

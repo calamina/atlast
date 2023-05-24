@@ -9,4 +9,5 @@ export interface linkModel {
   category?: string
   like?: boolean
   date?: Date
+  favicon?: string
 }

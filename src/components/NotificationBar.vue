@@ -27,9 +27,9 @@ const notification = useNotificationStore()
 <style lang="scss" scoped>
 .notification {
   position: fixed;
-  top: 4rem;
+  top: 5rem;
   width: 90vw;
-  padding: 1.2rem;
+  padding: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;

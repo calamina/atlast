@@ -7,6 +7,10 @@ import iconFlora from '@/components/icons/IconFlora.vue'
 
 export default [
   {
+    component: IconQuestion,
+    name: 'etc'
+  },
+  {
     component: IconTech,
     name: 'tech'
   },
@@ -25,9 +29,5 @@ export default [
   {
     component: iconFlora,
     name: 'flora'
-  },
-  {
-    component: IconQuestion,
-    name: 'etc'
   }
 ]

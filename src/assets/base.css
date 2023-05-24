@@ -9,9 +9,24 @@
   font-display: swap;
 }
 
+
+/* :root {
+  --background: #e6e7ed;
+  --active: #d3d6e6;
+  --active-plus: #9fa6cf;
+  --text: #5a5396;
+} */
+:root {
+  --background: #eee;
+  --active: #ddd;
+  --active-plus: #999;
+  --text: #323232;
+}
+
+
 * {
   font-family: 'apercu', Arial, sans-serif;
-  /* color: var(--color-text); */
+  color: var(--text);
 }
 
 html {
@@ -28,6 +43,7 @@ html::-webkit-scrollbar {
   padding: 5rem 0 4rem;
   padding: 0 0 4rem;
   background-color: #efefef;
+  background-color: var(--background);
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -55,6 +71,12 @@ button {
   align-items: center;
   justify-content: center;
 }
+
+/* .button-icon:focus, 
+button:focus, 
+a:focus {
+  outline: 2px solid #000;
+} */
 
 .text-icon {
   width: 1rem;

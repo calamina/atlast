@@ -42,7 +42,7 @@ async function loginUser(login: string, password: string) {
       password
     })
     .then((response) => {
-      router.push('/')
+      router.push('/media')
       user.connectedUser = response.data.user
       localStorage.setItem('user', JSON.stringify(response.data.user))
       notification.alert('User connected: ' + response.data.user.username)

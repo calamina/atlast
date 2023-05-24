@@ -10,7 +10,6 @@ export const useMediaStore = defineStore('media', () => {
   const filteredList: Ref<Array<any>> = ref([])
 
   const notification = useNotificationStore()
-  const mediastore = useMediaStore()
   const user = useUserStore()
 
   async function getMedia(): Promise<any> {
@@ -29,8 +28,8 @@ export const useMediaStore = defineStore('media', () => {
         const result = response.data.data.filter((media: any) => {
           return media.attributes.user === user
         })
-        mediastore.list = result
-        mediastore.filteredList = result
+        list.value = result
+        filteredList.value = result
         return result
       })
       .catch((error) => notification.error(error.response))
@@ -46,7 +45,6 @@ export const useMediaStore = defineStore('media', () => {
       })
       .catch((error) => {
         notification.error('Incorrect data')
-        console.debug(error.response)
         return error.response
       })
   }

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import router from '@/router/index'
 
 import { useUserStore } from '@/stores/user'
 import { useMediaStore } from '@/stores/media'
@@ -7,7 +8,6 @@ import { useNotificationStore } from '@/stores/notification'
 
 import IconEdit from '@/components/icons/IconEdit.vue'
 import IconDelete from '@/components/icons/IconDelete.vue'
-import router from '@/router/index'
 
 const user = useUserStore()
 const mediastore = useMediaStore()

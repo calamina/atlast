@@ -1,28 +1,43 @@
 <script setup lang="ts">
+import { ref, shallowRef, type Component, type Ref, type ShallowRef } from 'vue'
 import { RouterView } from 'vue-router'
-import NotificationBar from '@/components/NotificationBar.vue'
-import MenuBar from '@/components/MenuBar.vue'
-import { ref } from 'vue'
-import MediaSearch from './views/MediaSearch.vue'
 import { onKeyStroke, useKeyModifier } from '@vueuse/core'
 import { useUserStore } from './stores/user'
+import router from '@/router/index'
 
-const searchActive = ref(false)
+import MediaSearch from './views/MediaSearch.vue'
+
+import NotificationBar from '@/components/NotificationBar.vue'
+import MenuBar from '@/components/MenuBar.vue'
+import ActionOverlay from './components/ActionOverlay.vue'
+import LinkNewComponent from './components/links/LinkNewComponent.vue'
+
+const searchActive: Ref<boolean> = ref(false)
+const searchComponent: ShallowRef<null | Component> = shallowRef(null)
 
 const user = useUserStore()
 
-function toggleSearchModal() {
-  searchActive.value = !searchActive.value
+function toggleSearchModal(component: Component) {
+  if (searchComponent.value !== component && searchActive.value) {
+    searchComponent.value = component
+  } else {
+    searchActive.value = !searchActive.value
+    searchComponent.value = component
+  }
+  // searchComponent.value = component
   document.documentElement.style.overflow === 'hidden'
     ? (document.documentElement.style.overflow = 'auto')
     : (document.documentElement.style.overflow = 'hidden')
 }
 
 const ctrl = useKeyModifier('Control')
-onKeyStroke('s', (e) => {
+onKeyStroke(['s', 'm', 'l', 'u'], (e: any) => {
   if (ctrl.value) {
     e.preventDefault()
-    toggleSearchModal()
+    if (e.key === 's') toggleSearchModal(MediaSearch)
+    if (e.key === 'u') toggleSearchModal(LinkNewComponent)
+    if (e.key === 'm') router.push('/media')
+    if (e.key === 'l') router.push('/links')
   }
 })
 </script>
@@ -32,19 +47,24 @@ onKeyStroke('s', (e) => {
 
   <Suspense>
     <transition name="search" mode="out-in">
-      <MediaSearch class="searchModal" v-if="searchActive" @toggleSearch="toggleSearchModal" />
+      <ActionOverlay
+        v-if="searchActive && searchComponent"
+        class="overlay"
+        :component="searchComponent"
+        :key="searchComponent.name"
+        @toggleSearch="toggleSearchModal"
+      />
     </transition>
   </Suspense>
 
   <Suspense>
-    <MenuBar v-if="user.connectedUser" @toggleSearch="toggleSearchModal" />
+    <MenuBar v-if="user.connectedUser" />
+    <!-- <MenuBar v-if="user.connectedUser" @toggleSearch="toggleSearchModal" /> -->
   </Suspense>
 
   <Suspense>
     <router-view v-slot="{ Component }">
-      <!-- <transition name="router" mode="out-in"> -->
       <component :is="Component" />
-      <!-- </transition> -->
     </router-view>
   </Suspense>
 </template>
@@ -54,7 +74,7 @@ onKeyStroke('s', (e) => {
   z-index: 666;
 }
 
-.searchModal {
+.overlay {
   z-index: 444;
   position: absolute;
 }

@@ -1,0 +1,72 @@
+<script setup lang="ts">
+import { onKeyStroke, useKeyModifier } from '@vueuse/core'
+import type { Component } from 'vue'
+
+const props = defineProps<{
+  component: Component
+}>()
+
+const emits = defineEmits(['toggleSearch'])
+
+const ctrl = useKeyModifier('Control')
+onKeyStroke(['Escape'], (e) => {
+  if (ctrl.value || e.key === 'Escape') {
+    e.preventDefault()
+    emits('toggleSearch')
+  }
+})
+</script>
+
+<template>
+  <main>
+    <div class="wrapper">
+      <transition name="modal" mode="out-in">
+        <component :is="props.component" @exit="$emit('toggleSearch')"></component>
+      </transition>
+    </div>
+  </main>
+</template>
+
+<style lang="scss" scoped>
+main {
+  background-color: rgba(239, 239, 239, 0.9);
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  padding: 5rem;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+.wrapper {
+  display: flex;
+  flex-flow: column;
+  // height: fit-content;
+  min-height: 100%;
+  width: 50rem;
+  padding: 2rem;
+  border-radius: 1rem;
+  gap: 1rem;
+}
+
+// modal transition
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.modal-enter-from {
+  opacity: 0;
+  transform: translateY(-1rem);
+}
+.modal-leave-to {
+  opacity: 0;
+  transform: translateY(-1rem);
+}
+</style>

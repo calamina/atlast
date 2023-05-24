@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import type { linkModel } from '@/models/link.model'
 import { onMounted, ref } from 'vue'
+import router from '@/router/index'
+
+import { useUserStore } from '@/stores/user'
+import { useLinkStore } from '@/stores/link'
+import { useNotificationStore } from '@/stores/notification'
 
 import categs from '@/utils/link-categs'
 
@@ -11,7 +16,11 @@ import IconLike from '@/components/icons/IconLike.vue'
 const props = defineProps<{
   link?: linkModel | undefined
 }>()
-const emits = defineEmits(['confirmEdit', 'cancelEdit'])
+const emits = defineEmits(['exit'])
+
+const linkStore = useLinkStore()
+const notification = useNotificationStore()
+const user = useUserStore()
 
 let linkEdit: any = ref({
   id: props.link?.id,
@@ -31,6 +40,20 @@ function linkFocus() {
   link?.focus()
   link?.select()
 }
+
+function addLink(link: linkModel) {
+  link.tags = link.tagstring ? link.tagstring.split(' ') : null
+  link.user = user.connectedUser.username
+  linkStore
+    .addUserLink(link)
+    .then(() => {
+      emits('exit')
+      router.push('/links')
+    })
+    .catch((error) => {
+      notification.error(error)
+    })
+}
 </script>
 <template>
   <div class="link-wrapper">
@@ -48,12 +71,12 @@ function linkFocus() {
     </div>
     <div class="link link-edit">
       <div>
-        <p>title<span>*</span></p>
-        <input type="text" v-model="linkEdit.title" />
-      </div>
-      <div>
         <p>url<span>*</span></p>
         <input id="link" type="text" v-model="linkEdit.url" />
+      </div>
+      <div>
+        <p>title<span>*</span></p>
+        <input type="text" v-model="linkEdit.title" />
       </div>
       <div>
         <p>description</p>
@@ -68,10 +91,10 @@ function linkFocus() {
       <button type="button" class="button-icon">
         <IconLike />
       </button>
-      <button type="button" class="button-icon" @click="$emit('confirmEdit', linkEdit)">
+      <button type="button" class="button-icon" @click="addLink(linkEdit)">
         <IconEdit />
       </button>
-      <button type="button" class="button-icon" @click="$emit('cancelEdit', props.link)">
+      <button type="button" class="button-icon" @click="$emit('exit')">
         <IconDelete />
       </button>
     </div>

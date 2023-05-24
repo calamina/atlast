@@ -1,6 +1,9 @@
 # atlast
 Personnal Knowledge Database made with Vue3 and Strapi
 
+# Accessibility
+- [ ] aria and focus and img alt
+
 # Performance
 - [ ] check how to cache data
 

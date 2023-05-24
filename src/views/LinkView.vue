@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { useLinkService } from '@/services/link.service'
-import { computed, ref, watch, watchEffect, type ComputedRef, type Ref } from 'vue'
+import { computed, onMounted, ref, watch, type ComputedRef, type Ref } from 'vue'
 import { onKeyStroke, useKeyModifier } from '@vueuse/core'
 
 import { useUserStore } from '@/stores/user'
@@ -16,7 +15,6 @@ import IconCancel from '@/components/icons/IconCancel.vue'
 import IconClose from '@/components/icons/IconClose.vue'
 import IconAscending from '@/components/icons/IconAscending.vue'
 
-const { getLinksByUser, getFilteredLinksByUser, addUserLink, editUserLink } = useLinkService()
 const linkstore = useLinkStore()
 
 const show: Ref<number | null> = ref(null)
@@ -25,24 +23,23 @@ const user = useUserStore()
 const displayFilters = ref(false)
 const filterSearch = ref('')
 
-const filters: Ref<any> = ref({
-  category: '',
-  sort: 'createdAt'
-})
+const filters: Ref<any> = ref({ category: '', sort: 'createdAt' })
 
 const toggleNewModal = ref(false)
 
-watchEffect(() => {
-  getLinksByUser(user.connectedUser.username).then((result) => {
-    linkstore.list = result
-    linkstore.filteredList = result
-  })
+onMounted(() => {
+  if (linkstore.list.length === 0) {
+    linkstore.getLinksByUser(user.connectedUser.username).then((result) => {
+      linkstore.list = result
+      linkstore.filteredList = result
+    })
+  }
 })
 
 watch(
-  () => filters.value,
+  () => [filters.value, linkstore.list],
   () => {
-    getFilteredLinksByUser(user.connectedUser.username, filters.value).then((result) => {
+    linkstore.getFilteredLinksByUser(user.connectedUser.username, filters.value).then((result) => {
       linkstore.filteredList = result
     })
   },
@@ -51,8 +48,10 @@ watch(
 
 function editLink(index: number, link?: any) {
   if (link) {
+    let url = link.url.replace(/^https?:\/\//i, '')
     link.tags = link.tagstring ? link.tagstring.split(' ') : null
-    editUserLink(link).then((response) => {
+    link.favicon = `https://www.google.com/s2/favicons?domain=${url}&sz=512`
+    linkstore.editUserLink(link).then((response) => {
       if (!response.data.error) {
         show.value = null
       }
@@ -65,9 +64,11 @@ function editLink(index: number, link?: any) {
 }
 
 function addLink(link: any) {
+  let url = link.url.replace(/^https?:\/\//i, '')
   link.tags = link.tagstring ? link.tagstring.split(' ') : null
   link.user = user.connectedUser.username
-  addUserLink(link).then((response) => {
+  link.favicon = `https://www.google.com/s2/favicons?domain=${url}&sz=512`
+  linkstore.addUserLink(link).then((response) => {
     if (!response.data.error) {
       toggleNewModal.value = false
     }
@@ -118,6 +119,7 @@ onKeyStroke('f', (e) => {
 
 <template>
   <main>
+    <!-- <transition name="filter" mode="out-in"> -->
     <div class="filters" @click="show = null" v-if="displayFilters">
       <button type="button" class="button--main" @click="toggleNewModal = true">New link</button>
       <div class="filters__search">
@@ -190,6 +192,7 @@ onKeyStroke('f', (e) => {
         </div>
       </div>
     </div>
+    <!-- </transition> -->
     <div class="links" v-if="linkstore.filteredList.length !== 0">
       <TransitionGroup name="list">
         <div class="TEST" v-for="(link, index) of filteredLinks" :key="link.id">
@@ -250,6 +253,7 @@ main {
     flex-flow: column;
     justify-content: space-between;
   }
+
   & .filtersactive {
     background-color: #c0a6cd;
   }
@@ -312,6 +316,10 @@ main {
   flex: 1;
   gap: 1rem;
   align-items: center;
+  justify-content: space-between;
+  display: grid;
+  // grid-template-columns: auto 1fr auto auto;
+  grid-template-columns: 1fr auto auto;
   transition: height 0.3s;
   padding: 0.25rem 0.5rem;
   padding-bottom: 0.5rem;
@@ -342,19 +350,41 @@ main {
   background-color: rgba(239, 239, 239, 0.8);
 }
 
+// TRANSITIONS
 .list-enter-active,
 .list-leave-active,
 .list-move {
   transition: all 0.3s ease;
 }
+
 .list-enter-from,
 .list-leave-to {
   opacity: 0;
   transform: translateY(2rem);
 }
+
 .list-leave-active {
   position: absolute;
   opacity: 0;
   z-index: -1;
 }
+
+// .filter-enter-active,
+// .filter-leave-active,
+// .filter-move {
+//   transition: all 0.3s ease;
+// }
+
+// .filter-enter-from,
+// .filter-leave-to {
+//   overflow: hidden;
+//   transform: translate(-25rem);
+//   width: 0;
+// }
+
+// .filter-leave-active {
+//   overflow: hidden;
+//   transform: translate(-25rem);
+//   width: 0;
+// }
 </style>

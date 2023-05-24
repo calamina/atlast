@@ -5,6 +5,7 @@ import { useNotificationStore } from '@/stores/notification'
 
 import IconClose from './icons/IconClose.vue'
 import IconAdd from './icons/IconAdd.vue'
+import IconCircle from './icons/IconCircle.vue'
 
 const emits = defineEmits(['toggleSearch'])
 
@@ -22,26 +23,27 @@ async function logoutUser() {
 
 <template>
   <nav>
+    <div class="user">
+      <router-link class="button-icon user__disconnect" to="/"><IconCircle /></router-link>
+    </div>
     <!-- <div> -->
-    <!-- <router-link to="/">home</router-link> -->
+    <!-- <router-link class="button-icon user__disconnect" to="/"><IconCircle /></router-link> -->
     <!-- <router-link v-if="!user.connectedUser" to="auth">auth</router-link> -->
     <!-- <router-link v-if="user.connectedUser" to="library">library</router-link> -->
     <!-- </div> -->
     <div class="types">
-      <div class="type media">
-        <router-link class="type__link" to="media">media</router-link>
-        <button type="button" class="button-icon" @click="$emit('toggleSearch')">
-          <IconAdd />
-        </button>
-      </div>
-      <div class="type links">
-        <router-link class="type__link" to="links">links</router-link>
+      <router-link class="type media" to="media">
+        <p class="type__link">media</p>
         <button type="button" class="button-icon"><IconAdd /></button>
-      </div>
-      <div class="type notes">
-        <router-link class="type__link" to="notes">notes</router-link>
+      </router-link>
+      <router-link class="type links" to="links">
+        <p class="type__link">links</p>
         <button type="button" class="button-icon"><IconAdd /></button>
-      </div>
+      </router-link>
+      <!-- <router-link class="type notes" to="notes">
+        <p class="type__link">notes</p>
+        <button type="button" class="button-icon"><IconAdd /></button>
+      </router-link> -->
     </div>
     <div class="user" v-if="user.connectedUser">
       <!-- <button type="button">{{ user.connectedUser.username }}</button> -->
@@ -73,10 +75,6 @@ nav {
     color: #000;
     text-decoration: none;
     transition: color 0.3s;
-
-    &.router-link-active {
-      opacity: 1;
-    }
   }
 }
 
@@ -91,14 +89,15 @@ nav {
   align-items: center;
   justify-content: center;
   border-radius: 2rem;
-  color: #000;
   background-color: #ddd;
+  filter: saturate(0);
+  transition: filter 0.3s;
 
   &__link {
     display: flex;
     justify-content: center;
     border-radius: 2rem;
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1rem;
     width: 8rem;
     transition: width 0.3s;
   }
@@ -112,7 +111,7 @@ nav {
     svg {
       width: 1.2rem;
       height: 1.2rem;
-      transition: transform 0.3s;
+      transition: transform 0.2s;
     }
     &:hover {
       & svg {
@@ -120,10 +119,18 @@ nav {
       }
     }
   }
+
+  &.router-link-active,
+  &:hover {
+    filter: saturate(1);
+  }
 }
 
 .media {
   & .type__link {
+    background-color: #93cfae;
+  }
+  & .router-link-active {
     background-color: #93cfae;
   }
 }
@@ -131,9 +138,15 @@ nav {
   & .type__link {
     background-color: #dfcfe8;
   }
+  & .router-link-active {
+    background-color: #dfcfe8;
+  }
 }
 .notes {
   & .type__link {
+    background-color: #da98ad;
+  }
+  & .router-link-active {
     background-color: #da98ad;
   }
 }

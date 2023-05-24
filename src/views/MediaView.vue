@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watch, watchEffect, type ComputedRef } from 'vue'
+import { computed, onMounted, watch, watchEffect, type ComputedRef } from 'vue'
 
 import { useUserStore } from '@/stores/user'
 import { useMediaStore } from '@/stores/media'
@@ -10,11 +10,13 @@ const mediastore = useMediaStore()
 
 const user = useUserStore()
 
-watchEffect(() => {
-  mediastore.getMediaByUser(user.connectedUser.username).then((result) => {
-    mediastore.list = result
-    mediastore.filteredList = result
-  })
+onMounted(() => {
+  if (mediastore.list.length === 0) {
+    mediastore.getMediaByUser(user.connectedUser.username).then((result) => {
+      mediastore.list = result
+      mediastore.filteredList = result
+    })
+  }
 })
 
 watch(
@@ -150,7 +152,7 @@ main {
     gap: 0.4rem;
     font-size: 0.85rem;
     font-style: oblique;
-    color: #999;
+    color: var(--active-plus);
   }
 
   &__tags {
@@ -173,7 +175,7 @@ main {
 
   &__description {
     font-size: 0.85rem;
-    color: #999;
+    color: var(--active-plus);
     width: fit-content;
   }
 }
