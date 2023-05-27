@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onKeyStroke, useKeyModifier } from '@vueuse/core'
 import type { Component } from 'vue'
+import IconCancel from './icons/IconCancel.vue'
 
 const props = defineProps<{
   component: Component
@@ -24,6 +25,9 @@ onKeyStroke(['Escape'], (e) => {
         <component :is="props.component" @exit="$emit('toggleSearch')"></component>
       </transition>
     </div>
+    <button type="button" class="button-icon exit" @click="$emit('toggleSearch')">
+      <IconCancel />
+    </button>
   </main>
 </template>
 
@@ -53,6 +57,14 @@ main {
   padding: 2rem;
   border-radius: 1rem;
   gap: 1rem;
+}
+
+.exit {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.5rem;
+  background-color: #ddd;
+  border-radius: 2rem;
 }
 
 // modal transition

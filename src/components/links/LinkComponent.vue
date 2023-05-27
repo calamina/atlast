@@ -137,8 +137,7 @@ function deleteLink(id: number | undefined) {
     align-items: center;
     gap: 0.4rem;
     font-size: 0.85rem;
-    font-style: oblique;
-    color: var(--active-plus);
+    opacity: 0.7;
   }
 
   // &__image {

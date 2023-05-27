@@ -121,7 +121,6 @@ onKeyStroke('f', (e) => {
   <main>
     <!-- <transition name="filter" mode="out-in"> -->
     <div class="filters" @click="show = null" v-if="displayFilters">
-      <button type="button" class="button--main" @click="toggleNewModal = true">New link</button>
       <div class="filters__search">
         <input v-model="filterSearch" type="text" name="" id="" />
         <button type="button" class="filter__cancel button-icon" @click="filterSearch = ''">
@@ -194,8 +193,9 @@ onKeyStroke('f', (e) => {
     </div>
     <!-- </transition> -->
     <div class="links" v-if="linkstore.filteredList.length !== 0">
+      <h1>Links</h1>
       <TransitionGroup name="list">
-        <div class="TEST" v-for="(link, index) of filteredLinks" :key="link.id">
+        <div class="link__switch" v-for="(link, index) of filteredLinks" :key="link.id">
           <LinkComponent
             v-if="show !== index"
             :link="link"
@@ -215,19 +215,15 @@ onKeyStroke('f', (e) => {
         <p>Empty list ... You could add a link :)</p>
       </div>
     </div>
-    <Teleport to="body">
-      <div class="modal-wrapper" v-if="toggleNewModal">
-        <LinkEditComponent
-          :link="{}"
-          @confirmEdit="(link: linkModel) => addLink(link)"
-          @cancelEdit="toggleNewModal = false"
-        />
-      </div>
-    </Teleport>
   </main>
 </template>
 
 <style lang="scss" scoped>
+h1 {
+  width: 100%;
+  padding: 1rem 0.5rem 1.5rem;
+}
+
 h3 {
   font-weight: 400;
   font-size: 1rem;
@@ -303,7 +299,7 @@ main {
   display: flex;
   flex-flow: column;
   width: calc(100vw - 22rem);
-  gap: 0.5rem;
+  gap: 0.25rem;
   height: fit-content;
   flex: 1;
   padding-left: 1rem;
@@ -320,13 +316,18 @@ main {
   display: grid;
   // grid-template-columns: auto 1fr auto auto;
   grid-template-columns: 1fr auto auto;
-  transition: height 0.3s;
-  padding: 0.25rem 0.5rem;
-  padding-bottom: 0.5rem;
-  // border-bottom: 1px solid #ccc;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: padding 0.3s;
+
+  &:hover {
+    background-color: #dfcfe8;
+    padding-left: 1.5rem;
+    font-style: oblique;
+  }
 }
 
-.TEST {
+.link__switch {
   flex: 1;
   width: 100%;
 }
@@ -335,19 +336,6 @@ main {
   display: flex;
   align-items: center;
   gap: 5rem;
-}
-
-.modal-wrapper {
-  position: absolute;
-  width: 100%;
-  height: 100vh;
-  padding-bottom: 10rem;
-  top: 0;
-  left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(239, 239, 239, 0.8);
 }
 
 // TRANSITIONS
@@ -368,23 +356,4 @@ main {
   opacity: 0;
   z-index: -1;
 }
-
-// .filter-enter-active,
-// .filter-leave-active,
-// .filter-move {
-//   transition: all 0.3s ease;
-// }
-
-// .filter-enter-from,
-// .filter-leave-to {
-//   overflow: hidden;
-//   transform: translate(-25rem);
-//   width: 0;
-// }
-
-// .filter-leave-active {
-//   overflow: hidden;
-//   transform: translate(-25rem);
-//   width: 0;
-// }
 </style>

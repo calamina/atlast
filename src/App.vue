@@ -58,7 +58,11 @@ onKeyStroke(['s', 'm', 'l', 'u'], (e: any) => {
   </Suspense>
 
   <Suspense>
-    <MenuBar v-if="user.connectedUser" />
+    <MenuBar
+      v-if="user.connectedUser"
+      @openLinks="toggleSearchModal(LinkNewComponent)"
+      @openMedia="toggleSearchModal(MediaSearch)"
+    />
     <!-- <MenuBar v-if="user.connectedUser" @toggleSearch="toggleSearchModal" /> -->
   </Suspense>
 

@@ -41,6 +41,7 @@ const filteredMedia: ComputedRef<any[]> = computed(() => {
 
 <template>
   <main>
+    <h1>Media</h1>
     <div class="links" v-if="mediastore.filteredList.length !== 0">
       <TransitionGroup name="list">
         <div class="TEST" v-for="media of filteredMedia" :key="media.id">
@@ -67,6 +68,10 @@ const filteredMedia: ComputedRef<any[]> = computed(() => {
 </template>
 
 <style lang="scss" scoped>
+h1 {
+  padding: 1rem 1.5rem 0;
+}
+
 h3 {
   font-weight: 400;
   font-size: 1rem;
@@ -76,6 +81,7 @@ h3 {
 main {
   width: calc(100vw - 2rem);
   display: flex;
+  flex-flow: column;
   justify-content: center;
   gap: 2rem;
 }
@@ -83,7 +89,7 @@ main {
 .links {
   display: flex;
   flex-flow: column;
-  gap: 0.5rem;
+  gap: 0.25rem;
   flex: 1;
   align-items: center;
 }
@@ -96,8 +102,15 @@ main {
   gap: 1rem;
   align-items: center;
   transition: height 0.3s;
-  padding: 0.25rem 0.5rem;
-  padding-bottom: 0.5rem;
+  padding: 0.5rem 0.5rem;
+  border-radius: 0.5rem;
+  transition: padding-left 0.3s;
+
+  &:hover {
+    background-color: #93cfae;
+    // padding-left: 1rem;
+    // font-style: oblique;
+  }
 }
 
 .TEST {
@@ -175,7 +188,8 @@ main {
 
   &__description {
     font-size: 0.85rem;
-    color: var(--active-plus);
+    // color: var(--active-plus);
+    opacity: 0.7;
     width: fit-content;
   }
 }

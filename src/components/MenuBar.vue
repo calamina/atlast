@@ -7,7 +7,7 @@ import IconClose from './icons/IconClose.vue'
 import IconAdd from './icons/IconAdd.vue'
 import IconCircle from './icons/IconCircle.vue'
 
-const emits = defineEmits(['toggleSearch'])
+const emits = defineEmits(['toggleSearch', 'openLinks', 'openMedia'])
 
 const user = useUserStore()
 const notification = useNotificationStore()
@@ -34,11 +34,23 @@ async function logoutUser() {
     <div class="types">
       <router-link class="type media" to="media">
         <p class="type__link">media</p>
-        <button type="button" class="button-icon"><IconAdd /></button>
+        <button
+          type="button"
+          class="button-icon"
+          @click="$event.preventDefault, $emit('openMedia')"
+        >
+          <IconAdd />
+        </button>
       </router-link>
       <router-link class="type links" to="links">
         <p class="type__link">links</p>
-        <button type="button" class="button-icon"><IconAdd /></button>
+        <button
+          type="button"
+          class="button-icon"
+          @click="$event.preventDefault, $emit('openLinks')"
+        >
+          <IconAdd />
+        </button>
       </router-link>
       <!-- <router-link class="type notes" to="notes">
         <p class="type__link">notes</p>

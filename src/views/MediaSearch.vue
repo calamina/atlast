@@ -65,8 +65,8 @@ function cancelAdd() {
 </script>
 
 <template>
-  <div>
-    <div class="search">
+  <div class="wrapper-search">
+    <div class="search" v-if="!activeMedia">
       <input
         class="search__input"
         s
@@ -108,6 +108,12 @@ function cancelAdd() {
 </template>
 
 <style lang="scss" scoped>
+.wrapper-search {
+  display: flex;
+  flex-flow: column;
+  gap: 2rem;
+}
+
 .search {
   display: flex;
   flex-flow: column;
@@ -132,14 +138,21 @@ function cancelAdd() {
 .links {
   display: flex;
   flex-flow: column;
-  gap: 0.5rem;
+  gap: 0.25rem;
+  background-color: #eee;
+  padding-bottom: 3rem;
 }
 
 .link {
   display: flex;
   flex-flow: row;
-  padding: 0.25rem 0.5rem 0.5rem;
+  padding: 0.5rem 0.5rem 0.5rem;
   gap: 1rem;
+  border-radius: 0.5rem;
+
+  &:hover {
+    background-color: #93cfae;
+  }
 }
 
 .link__link {
@@ -179,8 +192,7 @@ function cancelAdd() {
 
 .link__description {
   font-size: 0.85rem;
-  font-style: oblique;
-  color: #999;
+  opacity: 0.7;
 }
 
 .link__button {

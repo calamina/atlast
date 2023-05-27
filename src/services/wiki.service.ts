@@ -11,12 +11,9 @@ const config = {
 }
 
 async function getWikiByLink(link: string): Promise<any> {
-  const tempTitle = link.replace(
-    'https://en.wikipedia.org/wiki/',
-    'https://en.wikipedia.org/api/rest_v1/page/summary/'
-  )
+  const title = 'https://en.wikipedia.org/api/rest_v1/page/summary/' + link
   return http
-    .get<WikiGet>(tempTitle)
+    .get<WikiGet>(title)
     .then((response) => {
       return response.data
     })

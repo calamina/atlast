@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref, type Ref } from 'vue'
 import router from '@/router/index'
 
 import { useUserStore } from '@/stores/user'
@@ -8,16 +8,35 @@ import { useNotificationStore } from '@/stores/notification'
 
 import IconEdit from '@/components/icons/IconEdit.vue'
 import IconDelete from '@/components/icons/IconDelete.vue'
+import { useWikiService } from '@/services/wiki.service'
 
 const user = useUserStore()
 const mediastore = useMediaStore()
 const notification = useNotificationStore()
+
+const wikiservice = useWikiService()
 
 const props = defineProps<{
   media: any
 }>()
 
 const emits = defineEmits(['add', 'cancel'])
+
+let mediaNew: Ref<any> = ref(null)
+
+onMounted(() => {
+  wikiservice.getWikiByLink(props.media.key).then((data) => {
+    mediaNew.value = {
+      id: data.id,
+      title: data.title,
+      url: data.content_urls.desktop.page,
+      description: data.description,
+      tagstring: props.media.tags?.join(' '),
+      category: props.media.category ?? 'etc',
+      extract: data.extract
+    }
+  })
+})
 
 function addMedia(media: any) {
   media.tags = media.tagstring ? media.tagstring.split(' ') : null
@@ -33,18 +52,18 @@ function addMedia(media: any) {
     })
 }
 
-let mediaNew: any = ref({
-  id: props.media.id,
-  title: props.media.title,
-  url: `http://wikipedia.org/wiki/${props.media.title}`,
-  description: props.media.description,
-  tagstring: props.media.tags?.join(' '),
-  category: props.media.category ?? 'etc',
-  extract: props.media.excerpt
-})
+// let mediaNew: any = ref({
+//   id: props.media.id,
+//   title: props.media.title,
+//   url: `http://wikipedia.org/wiki/${props.media.title}`,
+//   description: props.media.description,
+//   tagstring: props.media.tags?.join(' '),
+//   category: props.media.category ?? 'etc',
+//   extract: props.media.excerpt
+// })
 </script>
 <template>
-  <div class="link-wrapper">
+  <div class="link-wrapper" v-if="mediaNew">
     <div class="link link-edit">
       <div class="link__header">
         <div class="link__link">
@@ -80,12 +99,10 @@ let mediaNew: any = ref({
 </template>
 <style lang="scss" scoped>
 .link {
-  // width: 50vw;
   width: 100%;
   display: flex;
   flex-flow: column;
   border-radius: 2rem;
-  border: 1.5px solid #ddd;
   padding: 0.5rem 1rem 1rem;
 
   &__header,
@@ -158,13 +175,11 @@ let mediaNew: any = ref({
   }
 }
 .link {
-  background-color: #fff;
   flex: 1;
 }
 
 .categ,
 .actions {
-  background-color: #eee;
   display: flex;
   flex-flow: column;
   height: fit-content;
@@ -177,14 +192,12 @@ let mediaNew: any = ref({
 p {
   font-size: 0.9rem;
   padding-left: 0.1rem;
-  // text-transform: capitalize;
   font-variant: small-caps;
   color: #00000088;
 
   span {
     padding-left: 0.25rem;
     color: #c0a6cd;
-    // font-size: 1rem;
   }
 }
 
