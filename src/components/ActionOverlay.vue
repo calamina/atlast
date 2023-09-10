@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onKeyStroke, useKeyModifier } from '@vueuse/core'
 import type { Component } from 'vue'
-import IconCancel from './icons/IconCancel.vue'
+import IconCancel from '@/components/icons/IconCancel.vue'
 
 const props = defineProps<{
   component: Component
