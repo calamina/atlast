@@ -4,8 +4,18 @@
   font-display: swap;
 }
 @font-face {
-  font-family: apercu;
+  font-family: contax;
   src: url(/src/assets/fonts/contax.OTF);
+  font-display: swap;
+}
+@font-face {
+  font-family: contaxBold;
+  src: url(/src/assets/fonts/contaxBold.OTF);
+  font-display: swap;
+}
+@font-face {
+  font-family: contaxItalic;
+  src: url(/src/assets/fonts/contaxItalic.otf);
   font-display: swap;
 }
 
@@ -17,15 +27,16 @@
   --text: #5a5396;
 } */
 :root {
-  --background: #eee;
+  /* --background: #eee; */
+  --background: #ccc;
   --active: #ddd;
   --active-plus: #999;
   --text: #323232;
 }
 
 
-* {
-  font-family: 'apercu', Arial, sans-serif;
+p, a, h1, h2, h3, h4, span, label, input, button, select, textarea {
+  font-family: 'contax', Arial, sans-serif;
   color: var(--text);
 }
 
@@ -40,13 +51,13 @@ html::-webkit-scrollbar {
 #app {
   width: 100%;
   margin: 0;
-  padding: 5rem 0 4rem;
-  padding: 0 0 4rem;
+  /* background-color: var(--background); */
+  /* background-color: #fff; */
   background-color: #efefef;
-  background-color: var(--background);
   min-height: 100vh;
   display: flex;
-  justify-content: center;
+  flex-flow: column;
+  background-size: cover;
 }
 
 
@@ -72,11 +83,9 @@ button {
   justify-content: center;
 }
 
-/* .button-icon:focus, 
-button:focus, 
-a:focus {
-  outline: 2px solid #000;
-} */
+input:autofill {
+  background: transparent;
+}
 
 .text-icon {
   width: 1rem;
@@ -88,22 +97,9 @@ input[type="text"], input[type="password"], input[type="date"], textarea, select
   width: 100%;
   border: none;
   outline: none;
-  background-color: #ddd;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  border-radius: 0.5rem;
   margin-bottom: 0.5rem;
-  /* border: 1.5px solid #ddd; */
-  /* border-left: 3px solid #c0a6cd; */
 }
 
 input[type="date"] {
   width: auto;
-}
-
-button[type="submit"] {
-  margin-top: 1rem;
-  background-color: #c0a6cd;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
 }

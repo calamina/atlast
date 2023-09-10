@@ -15,8 +15,18 @@ const notification = useNotificationStore()
 async function logoutUser() {
   router.push('/auth').then(() => {
     localStorage.removeItem('user')
-    notification.alert('User disconnected')
+    notification.addNotification({
+      type: 'alert',
+      message: 'Goodbye ' + user.connectedUser.username + ' !'
+    })
     user.connectedUser = null
+  })
+}
+
+function testNotification() {
+  notification.addNotification({
+    type: 'alert',
+    message: 'This is a test notification'
   })
 }
 </script>
@@ -24,13 +34,10 @@ async function logoutUser() {
 <template>
   <nav>
     <div class="user">
-      <router-link class="button-icon user__disconnect" to="/"><IconCircle /></router-link>
+      <router-link class="button-icon user__disconnect" to="/" @click="testNotification()"
+        ><IconCircle
+      /></router-link>
     </div>
-    <!-- <div> -->
-    <!-- <router-link class="button-icon user__disconnect" to="/"><IconCircle /></router-link> -->
-    <!-- <router-link v-if="!user.connectedUser" to="auth">auth</router-link> -->
-    <!-- <router-link v-if="user.connectedUser" to="library">library</router-link> -->
-    <!-- </div> -->
     <div class="types">
       <router-link class="type media" to="media">
         <p class="type__link">media</p>
@@ -42,6 +49,16 @@ async function logoutUser() {
           <IconAdd />
         </button>
       </router-link>
+      <!-- <router-link class="type media" to="library">
+        <p class="type__link">HERE !!!</p>
+        <button
+          type="button"
+          class="button-icon"
+          @click="$event.preventDefault, $emit('openLibrary')"
+        >
+          <IconAdd />
+        </button>
+      </router-link> -->
       <router-link class="type links" to="links">
         <p class="type__link">links</p>
         <button
@@ -52,13 +69,9 @@ async function logoutUser() {
           <IconAdd />
         </button>
       </router-link>
-      <!-- <router-link class="type notes" to="notes">
-        <p class="type__link">notes</p>
-        <button type="button" class="button-icon"><IconAdd /></button>
-      </router-link> -->
     </div>
     <div class="user" v-if="user.connectedUser">
-      <!-- <button type="button">{{ user.connectedUser.username }}</button> -->
+      <button type="button">{{ user.connectedUser.username }}</button>
       <button class="user__disconnect button-icon" type="button" @click="logoutUser()">
         <IconClose />
       </button>
@@ -68,14 +81,18 @@ async function logoutUser() {
 
 <style lang="scss" scoped>
 nav {
-  position: absolute;
-  top: 1rem;
-  width: calc(100vw - 1rem);
-  padding: 0 1rem;
+  // position: absolute;
+  // margin: 0.5rem auto 0.5rem auto;
+  // width: calc(100vw - 1.5rem);
+  width: 100%;
+  padding: 1rem;
   border-radius: 5rem;
+  // height: 3rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  // background-color: #93cfae;
+  // background-color: #ccc;
 
   & > div {
     display: flex;
@@ -132,6 +149,10 @@ nav {
     }
   }
 
+  &:not(.router-link-active) .button-icon {
+    display: none;
+  }
+
   &.router-link-active,
   &:hover {
     filter: saturate(1);
@@ -165,10 +186,12 @@ nav {
 
 .user {
   background-color: #ddd;
+  // border: 1px solid #000;
   display: flex;
   border-radius: 2rem;
   padding: 0.25rem;
-  gap: 1rem;
+  padding-left: 1rem;
+  gap: 0.5rem;
 
   &__disconnect {
     width: 2.25rem;

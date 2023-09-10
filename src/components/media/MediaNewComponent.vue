@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { onMounted, ref, type Ref } from 'vue'
-import router from '@/router/index'
 
 import { useUserStore } from '@/stores/user'
 import { useMediaStore } from '@/stores/media'
 import { useNotificationStore } from '@/stores/notification'
 
-import IconEdit from '@/components/icons/IconEdit.vue'
-import IconDelete from '@/components/icons/IconDelete.vue'
 import { useWikiService } from '@/services/wiki.service'
+import IconLikeFull from '../icons/IconLikeFull.vue'
+import IconLike from '../icons/IconLike.vue'
 
 const user = useUserStore()
 const mediastore = useMediaStore()
@@ -22,6 +21,9 @@ const props = defineProps<{
 
 const emits = defineEmits(['add', 'cancel'])
 
+const actions: string[] = ['planning', 'watching', 'completed', 'rewatching', 'dropped', 'paused']
+const categories: string[] = ['movie', 'series', 'game', 'book', 'comic']
+
 let mediaNew: Ref<any> = ref(null)
 
 onMounted(() => {
@@ -29,11 +31,15 @@ onMounted(() => {
     mediaNew.value = {
       id: data.id,
       title: data.title,
-      url: data.content_urls.desktop.page,
+      url: data.content_urls?.desktop?.page,
       description: data.description,
       tagstring: props.media.tags?.join(' '),
-      category: props.media.category ?? 'etc',
-      extract: data.extract
+      extract: data.extract,
+      image: data.originalimage?.source,
+      thumbnail: data.thumbnail?.source,
+      score: 1,
+      action: 'completed',
+      categ: 'movie'
     }
   })
 })
@@ -45,187 +51,181 @@ function addMedia(media: any) {
     .addUserMedia(media)
     .then(() => {
       emits('add')
-      router.push('/media')
     })
     .catch((error) => {
-      notification.error(error)
+      notification.addNotification({ message: error, type: 'error' })
     })
 }
-
-// let mediaNew: any = ref({
-//   id: props.media.id,
-//   title: props.media.title,
-//   url: `http://wikipedia.org/wiki/${props.media.title}`,
-//   description: props.media.description,
-//   tagstring: props.media.tags?.join(' '),
-//   category: props.media.category ?? 'etc',
-//   extract: props.media.excerpt
-// })
 </script>
 <template>
-  <div class="link-wrapper" v-if="mediaNew">
-    <div class="link link-edit">
-      <div class="link__header">
-        <div class="link__link">
-          <p>title<span>*</span></p>
-          <input type="text" v-model="mediaNew.title" />
-          <p>url<span>*</span></p>
-          <input type="text" v-model="mediaNew.url" />
-        </div>
+  <div class="media">
+    <img class="media__image" v-if="mediaNew?.image" :src="mediaNew.image" />
+    <div class="media__info">
+      <a class="media__link" :href="mediaNew?.url" target="_blank">
+        {{ mediaNew.title }}
+      </a>
+      <p class="media__description">{{ mediaNew.description }}</p>
+      <p>{{ mediaNew.extract }}</p>
+    </div>
+    <button
+      class="media__favorite button-icon"
+      type="button"
+      @click="mediaNew.like = !mediaNew.like"
+    >
+      <IconLikeFull v-if="mediaNew.like === true" />
+      <IconLike v-else />
+    </button>
+    <div>
+      <p class="label">rating</p>
+      <div class="ratings">
+        <button
+          type="button"
+          class="rating"
+          v-for="index in 10"
+          :key="index"
+          @click="mediaNew.score = index"
+          :class="{ active: mediaNew.score === index }"
+        >
+          {{ index }}
+        </button>
       </div>
-      <div class="link__description">
-        <p>description</p>
-        <input type="text" v-model="mediaNew.description" name="description" />
+    </div>
+    <div>
+      <p class="label">action</p>
+      <div class="ratings">
+        <button
+          type="button"
+          v-for="action in actions"
+          :key="action"
+          @click="mediaNew.action = action"
+          :class="{ active: mediaNew.action === action }"
+        >
+          {{ action }}
+        </button>
       </div>
-      <div class="link__description">
-        <p>extract</p>
-        <!-- <textarea ref="textarea" v-model="mediaNew.description" name="description" /> -->
-        <input type="text" v-model="mediaNew.extract" name="description" />
+    </div>
+    <div>
+      <p class="label">category</p>
+      <div class="ratings">
+        <button
+          type="button"
+          v-for="category in categories"
+          :key="category"
+          @click="mediaNew.categ = category"
+          :class="{ active: mediaNew.categ === category }"
+        >
+          {{ category }}
+        </button>
       </div>
-      <div class="link__footer">
-        <p>tags (separate with space)</p>
+      <div>
+        <p class="label">tags (separate with space)</p>
         <input type="text" v-model="mediaNew.tagstring" />
       </div>
     </div>
-    <div class="actions">
-      <button type="button" class="button-icon" @click="addMedia(mediaNew)">
-        <IconEdit />
-      </button>
-      <button type="button" class="button-icon" @click="$emit('cancel')">
-        <IconDelete />
-      </button>
+    <div class="media__actions">
+      <button class="media__submit" type="submit" @click="addMedia(mediaNew)">Add</button>
+      <button class="media__reset" type="reset" @click="$emit('cancel')">Cancel</button>
     </div>
   </div>
 </template>
 <style lang="scss" scoped>
-.link {
-  width: 100%;
+.media {
+  position: relative;
   display: flex;
   flex-flow: column;
-  border-radius: 2rem;
-  padding: 0.5rem 1rem 1rem;
 
-  &__header,
-  &__footer,
-  &__description {
+  &__image {
+    height: 10rem;
+    width: 10rem;
+    object-fit: contain;
+    object-position: right;
+  }
+
+  &__info {
     display: flex;
-    padding: 0.5rem;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  &__header {
-    align-items: flex-start;
-  }
-
-  &__description {
-    padding: 0 0.5rem;
-  }
-
-  &__footer {
-    justify-content: flex-start;
-    gap: 0.5rem;
-    padding: 0 0.5rem 0.25rem;
+    flex-flow: column;
+    gap: 0.25rem;
+    padding-bottom: 1rem;
   }
 
   &__link {
     display: flex;
-    flex-flow: column;
+    align-items: baseline;
+    gap: 0.5rem;
+    width: fit-content;
+    font-size: 1.5rem;
+    line-height: 1.4rem;
+    font-family: 'contaxBold', Arial, sans-serif;
+    text-transform: capitalize;
     text-decoration: none;
     color: black;
-    flex: 1;
-  }
-
-  &__title {
-    font-size: 1.5rem;
-    text-transform: capitalize;
-  }
-
-  &__url {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-style: oblique;
-    color: #999;
   }
 
   &__description {
-    padding-bottom: 1rem;
+    font-family: 'contaxItalic', Arial, sans-serif;
+    opacity: 0.7;
+    padding-bottom: 0.5rem;
   }
 
-  & textarea {
-    resize: none;
-    overflow: hidden;
+  &__favorite {
+    position: absolute;
+    right: 0;
+    padding: 0.55rem;
   }
 
   &__tags {
     padding: 0.3rem 0.75rem;
-    background-color: #c0a6cd;
     background-color: #ddd;
     border-radius: 1rem;
     width: fit-content;
     font-size: 0.85rem;
   }
 
-  &__date {
-    font-size: 0.85rem;
-    color: #999;
-    padding-top: 0.3rem;
-    width: fit-content;
+  &__actions {
+    display: flex;
+    flex-flow: row;
+    justify-content: end;
+    gap: 0.5rem;
+    padding: 0.5rem 0.25rem;
+  }
+
+  &__submit {
+    font-size: 1.2rem;
+    color: #000;
+    border: 1px solid #000;
+    border-radius: 1.5rem;
+    padding: 0.4rem 1.5rem;
+    overflow: hidden;
+  }
+
+  &__reset {
+    text-decoration: underline;
+    font-size: 1rem;
+    color: #000;
   }
 }
-.link {
-  flex: 1;
-}
 
-.categ,
-.actions {
+.ratings {
   display: flex;
-  flex-flow: column;
-  height: fit-content;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-  padding: 0.5rem 0.25rem;
-  border-radius: 2rem;
+  align-items: center;
+  gap: 1rem;
+
+  & .rating {
+    font-family: 'contaxBold', Arial, sans-serif;
+    width: 2rem;
+    height: 2rem;
+    opacity: 0.5;
+  }
+  & .active {
+    border: 1px solid #000;
+    opacity: 1;
+  }
 }
 
-p {
+.label {
   font-size: 0.9rem;
   padding-left: 0.1rem;
   font-variant: small-caps;
   color: #00000088;
-
-  span {
-    padding-left: 0.25rem;
-    color: #c0a6cd;
-  }
-}
-
-.categ {
-  padding: 0.25rem;
-
-  & button {
-    border-radius: 100%;
-  }
-}
-
-.categ .actions button {
-  border-radius: 2rem;
-}
-
-.active {
-  background-color: #c0a6cd;
-}
-
-.link__description,
-.link__footer {
-  flex-flow: column;
-  align-items: flex-start;
-  padding-bottom: 0;
-  gap: 0;
-}
-
-.link__header {
-  padding-bottom: 0;
 }
 </style>

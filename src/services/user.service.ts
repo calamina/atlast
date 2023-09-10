@@ -13,7 +13,7 @@ async function getUsers(): Promise<any> {
       return response
     })
     .catch((error) => {
-      notification.error(error.response)
+      notification.addNotification({ type: 'error', message: error.response })
     })
 }
 
@@ -27,11 +27,14 @@ async function registerUser(username: string, email: string, password: string): 
     .then((response) => {
       user.connectedUser = response.data.user
       localStorage.setItem('user', JSON.stringify(response.data.user))
-      notification.alert('User created: ' + response.data.user.username)
+      notification.addNotification({
+        type: 'alert',
+        message: 'User created: ' + response.data.user.username
+      })
       router.push('/')
     })
     .catch((error) => {
-      notification.error(error.response)
+      notification.addNotification({ type: 'error', message: error.response })
     })
 }
 
@@ -42,13 +45,16 @@ async function loginUser(login: string, password: string) {
       password
     })
     .then((response) => {
-      router.push('/media')
       user.connectedUser = response.data.user
       localStorage.setItem('user', JSON.stringify(response.data.user))
-      notification.alert('User connected: ' + response.data.user.username)
+      notification.addNotification({
+        type: 'alert',
+        message: 'Welcome back ' + response.data.user.username + ' :)'
+      })
+      router.push('/media')
     })
     .catch((error) => {
-      notification.error(error.response)
+      notification.addNotification({ type: 'error', message: error.response })
     })
 }
 

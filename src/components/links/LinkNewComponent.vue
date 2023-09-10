@@ -102,8 +102,6 @@ function addLink(link: linkModel) {
 </template>
 <style lang="scss" scoped>
 .link-wrapper {
-  background-color: transparent;
-  border-radius: 2rem;
   display: grid;
   gap: 1rem;
   align-items: center;

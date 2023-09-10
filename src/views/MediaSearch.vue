@@ -6,15 +6,14 @@ import { watchDebounced } from '@vueuse/shared'
 import { useWikiService } from '@/services/wiki.service'
 
 import MediaNewComponent from '@/components/media/MediaNewComponent.vue'
-
-import iconCheck from '@/components/icons/IconCheck.vue'
+import FormInput from '@/components/form/formInput.vue'
 
 const emits = defineEmits(['exit'])
 
 const { getWikiByname } = useWikiService()
 
 let wikiList: Ref<any[]> = ref([])
-let searchBar = ref('')
+let search = ref('')
 const activeMedia = ref(null)
 
 onMounted(() => {
@@ -28,9 +27,9 @@ function searchFocus() {
 }
 
 watchDebounced(
-  searchBar,
+  search,
   () => {
-    searchBar.value ? getWikis(searchBar.value) : (wikiList.value = [])
+    search.value ? getWikis(search.value) : (wikiList.value = [])
   },
   { debounce: 500, maxWait: 1000 }
 )
@@ -67,33 +66,22 @@ function cancelAdd() {
 <template>
   <div class="wrapper-search">
     <div class="search" v-if="!activeMedia">
-      <input
-        class="search__input"
-        s
-        type="text"
-        name="search"
-        v-model="searchBar"
-        id="search"
-        placeholder="search ..."
-      />
+      <FormInput v-model="search" :type="'text'" :name="'search'" id="search" />
       <p class="search__info"><span>ctrl+s</span> to quick search</p>
     </div>
     <div class="links" v-if="wikiList.length !== 0 && !activeMedia">
       <TransitionGroup name="list">
-        <div class="link" v-for="(link, index) of wikiList" :key="index">
-          <div class="link__image" :style="`background-image: url(${link.thumbnail?.url})`"></div>
+        <div class="link" v-for="(link, index) of wikiList" :key="index" @click="addMedia(link)">
+          <img class="link__image" :src="link.thumbnail?.url" alt=":(" />
           <div class="link__content">
             <a
               class="link__link"
               :href="`http://en.wikipedia.com/wiki/${link.key}`"
               target="_blank"
             >
-              <h2 class="link__title">{{ link.title }}</h2>
-              <p class="link__description">{{ link.description }}</p>
-            </a>
-            <button class="link__button button-icon" @click="addMedia(link)">
-              <iconCheck />
-            </button>
+              {{ link.title }}</a
+            >
+            <p class="link__description">{{ link.description }}</p>
           </div>
         </div>
       </TransitionGroup>
@@ -111,6 +99,7 @@ function cancelAdd() {
 .wrapper-search {
   display: flex;
   flex-flow: column;
+  width: 50rem;
   gap: 2rem;
 }
 
@@ -120,10 +109,6 @@ function cancelAdd() {
   gap: 0.5rem;
 }
 
-.search__input {
-  margin-bottom: 0;
-}
-
 .search__info {
   padding-top: 0.25rem;
   font-size: 0.85rem;
@@ -131,7 +116,7 @@ function cancelAdd() {
   color: #999;
 
   span {
-    color: #43b174;
+    color: #000;
   }
 }
 
@@ -146,12 +131,11 @@ function cancelAdd() {
 .link {
   display: flex;
   flex-flow: row;
-  padding: 0.5rem 0.5rem 0.5rem;
+  padding: 0.75rem 0.5rem;
+  cursor: pointer;
   gap: 1rem;
-  border-radius: 0.5rem;
-
   &:hover {
-    background-color: #93cfae;
+    background-color: #ddd;
   }
 }
 
@@ -161,58 +145,45 @@ function cancelAdd() {
   flex-flow: column;
   text-decoration: none;
   color: black;
-  flex: 1;
-  // gap: 0.1rem;
-  width: 100%;
-}
-
-.link__title {
+  width: fit-content;
   font-weight: 400;
   font-size: 1.25rem;
   text-transform: capitalize;
+  font-family: 'contaxBold', Arial, sans-serif;
 }
 
 .link__content {
   display: flex;
-  flex-flow: row;
+  flex-flow: column;
+  gap: 0;
   flex: 1;
 }
 
 .link__image {
-  background-position: 50%;
-  background-repeat: no-repeat;
-  background-size: cover;
   background-color: #ddd;
-  border-radius: 0.5rem;
-  border-radius: 100%;
+  outline: none;
+  border: none;
   height: 3rem;
   width: 3rem;
-  flex-shrink: 0;
+  object-fit: contain;
 }
 
 .link__description {
-  font-size: 0.85rem;
   opacity: 0.7;
+  font-family: 'contaxItalic', Arial, sans-serif;
 }
 
-.link__button {
-  background-color: #ddd;
-  border-radius: 100%;
-}
-
+// TRANSITION
 .list-enter-active,
 .list-leave-active,
 .list-move {
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
 }
 .list-enter-from,
 .list-leave-to {
   opacity: 0;
-  // transform: translateY(2rem);
 }
 .list-leave-active {
-  // position: absolute;
   opacity: 0;
-  // z-index: -1;
 }
 </style>

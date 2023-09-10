@@ -18,7 +18,7 @@ export const useMediaStore = defineStore('media', () => {
       .then((response: any) => {
         return response.data
       })
-      .catch((error) => notification.error(error.response))
+      .catch((error) => notification.addNotification({ type: 'error', message: error.response }))
   }
 
   async function getMediaByUser(user: string): Promise<any> {
@@ -32,19 +32,19 @@ export const useMediaStore = defineStore('media', () => {
         filteredList.value = result
         return result
       })
-      .catch((error) => notification.error(error.response))
+      .catch((error) => notification.addNotification({ type: 'error', message: error.response }))
   }
 
   async function addUserMedia(media: any): Promise<any> {
     return http
       .post(`medias`, { data: media })
       .then((response) => {
-        notification.alert('Media added !')
+        notification.addNotification({ type: 'alert', message: 'Media added !' })
         getMediaByUser(user.connectedUser.username)
         return response.data
       })
       .catch((error) => {
-        notification.error('Incorrect data')
+        notification.addNotification({ type: 'error', message: error.response })
         return error.response
       })
   }
@@ -53,12 +53,12 @@ export const useMediaStore = defineStore('media', () => {
     return http
       .put(`medias/${media.id}`, { data: media })
       .then((response) => {
-        notification.alert('Media updated !')
+        notification.addNotification({ type: 'alert', message: 'Media added !' })
         getMediaByUser(user.connectedUser.username)
         return response.data
       })
       .catch((error) => {
-        notification.error('Incorrect data')
+        notification.addNotification({ type: 'error', message: 'oops wrong media !!' })
         return error.response
       })
   }
@@ -67,11 +67,11 @@ export const useMediaStore = defineStore('media', () => {
     return http
       .delete(`medias/${id}`)
       .then(() => {
-        notification.alert('Media deleted !')
+        notification.addNotification({ type: 'alert', message: 'Media deleted !' })
         getMediaByUser(user.connectedUser.username)
       })
       .catch((error) => {
-        notification.error(error.response)
+        notification.addNotification({ type: 'error', message: error.response })
       })
   }
 

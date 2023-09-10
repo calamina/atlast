@@ -1,36 +1,25 @@
 <script setup lang="ts">
-import IconLink from '@/components/icons/IconLink.vue'
-import { useUserStore } from '@/stores/user'
+// import IconLink from '@/components/icons/IconLink.vue'
+// import { useUserStore } from '@/stores/user'
+import MediaView from './MediaView.vue'
+import LinkView from './LinkView.vue'
 
-const user = useUserStore()
-
-const library = [
-  { type: 'links', number: '10', color: '' },
-  { type: 'media', number: '20', color: '' },
-  { type: 'notes', number: '30', color: '' }
-]
+// const user = useUserStore()
 </script>
 <template>
-  <div class="dashboard">
-    <div>hey {{ user.connectedUser.username }} :)</div>
-    <div class="item-wrapper">
-      <div v-for="(item, index) in library" :key="index" :class="item.type" class="item">
-        <div class="item__header">
-          <h2>{{ item.type }}</h2>
-          <button type="button" class="item__button button-icon" :class="item.type + '__button'">
-            <IconLink />
-          </button>
-        </div>
-        <p class="item__count">{{ item.number }} in library</p>
-        <button class="item__add" :class="item.type + '__add'">add new +</button>
-      </div>
-    </div>
-  </div>
+  <main>
+    <MediaView />
+    <!-- <LinkView /> -->
+  </main>
 </template>
 <style lang="scss" scoped>
 .dashboard {
   width: 100%;
   padding: 6rem 1rem 0;
+}
+
+main {
+  display: flex;
 }
 
 .item-wrapper {

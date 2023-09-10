@@ -11,8 +11,8 @@ Personnal Knowledge Database made with Vue3 and Strapi
 - [ ] try left sidebar
 
 # library
-- [ ] add dashboard view
-- [ ] add notes view
+- [?] add dashboard view
+- [?] add notes view
 
 # categs
 - [ ] dynamic categs ?
@@ -28,6 +28,8 @@ Personnal Knowledge Database made with Vue3 and Strapi
 - [ ] add arrows to search
   - top/bottom to go through results
   - left/right to go to form and back
+- [ ] display library media in search results
+- [ ] hide wikis matching library media
 
 # utils
 - [ ] add confirmation dialog
@@ -38,11 +40,11 @@ Personnal Knowledge Database made with Vue3 and Strapi
 - [ ] add note model
 
 # css
-- [ ] clean & refactor css
-- [ ] bem everywhere
+- [!!] clean & refactor css
+- [!?] bem everywhere
 
 # filters
 - [ ] add tag search ?
 
 # notifications
-- [ ] reset autoclear on notification
+- [x] reset autoclear on notification

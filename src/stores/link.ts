@@ -21,7 +21,7 @@ export const useLinkStore = defineStore('links', () => {
       .then((response: any) => {
         return response.data
       })
-      .catch((error) => notification.error(error.response))
+      .catch((error) => notification.addNotification({ type: 'error', message: error.response }))
   }
 
   async function getLinksByUser(user: string): Promise<any> {
@@ -34,7 +34,7 @@ export const useLinkStore = defineStore('links', () => {
         list.value = result
         return result
       })
-      .catch((error) => notification.error(error.response))
+      .catch((error) => notification.addNotification({ type: 'error', message: error.response }))
   }
 
   async function getFilteredLinksByUser(user: string, filters?: any): Promise<any> {
@@ -51,19 +51,19 @@ export const useLinkStore = defineStore('links', () => {
         filteredList.value = result
         return result
       })
-      .catch((error) => notification.error(error.response))
+      .catch((error) => notification.addNotification({ type: 'error', message: error.response }))
   }
 
   async function addUserLink(link: any): Promise<any> {
     return http
       .post(`links`, { data: link })
       .then((response) => {
-        notification.alert('Link added !')
+        notification.addNotification({ type: 'alert', message: 'Link added !' })
         getLinksByUser(user.connectedUser.username)
         return response.data
       })
       .catch((error) => {
-        notification.error('Incorrect data')
+        notification.addNotification({ type: 'error', message: error.response })
         return error.response
       })
   }
@@ -72,12 +72,12 @@ export const useLinkStore = defineStore('links', () => {
     return http
       .put(`links/${link.id}`, { data: link })
       .then((response) => {
-        notification.alert('Link updated !')
+        notification.addNotification({ type: 'alert', message: 'Link updated !' })
         getLinksByUser(user.connectedUser.username)
         return response.data
       })
       .catch((error) => {
-        notification.error('Incorrect data')
+        notification.addNotification({ type: 'error', message: error.response })
         return error.response
       })
   }
@@ -86,11 +86,11 @@ export const useLinkStore = defineStore('links', () => {
     return http
       .delete(`links/${id}`)
       .then(() => {
-        notification.alert('Link deleted !')
+        notification.addNotification({ type: 'alert', message: 'Link deleted !' })
         getLinksByUser(user.connectedUser.username)
       })
       .catch((error) => {
-        notification.error(error.response)
+        notification.addNotification({ type: 'error', message: error.response })
       })
   }
 

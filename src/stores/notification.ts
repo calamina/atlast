@@ -1,35 +1,16 @@
 import { defineStore } from 'pinia'
+import type { notification } from '@/models/notification.model'
 import { ref, type Ref } from 'vue'
 
 export const useNotificationStore = defineStore('notification', () => {
-  const message: Ref<string | null> = ref(null)
-  const type: Ref<string | null> = ref(null)
-  const delay = (time: number) => new Promise((res) => setTimeout(res, time))
+  const notifications: Ref<notification[]> = ref([])
 
-  async function alert(alertMessage: string) {
-    message.value = alertMessage
-    type.value = 'alert'
-    autoClear()
+  async function addNotification(notification: notification) {
+    notifications?.value.push(notification)
   }
 
-  async function error(error: any | string) {
-    if (typeof error === 'string') {
-      message.value = error
-    } else {
-      error = error.data.error
-      message.value = `${error.status} : ${error.message}`
-    }
-    type.value = 'error'
-    autoClear()
+  async function removeNotification(notification: notification) {
+    notifications.value.splice(notifications.value.indexOf(notification), 1)
   }
-
-  function clear() {
-    message.value = null
-  }
-
-  async function autoClear() {
-    await delay(2500).then(() => clear())
-  }
-
-  return { message, type, alert, error, clear }
+  return { notifications, addNotification, removeNotification }
 })

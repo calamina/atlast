@@ -33,7 +33,7 @@ onKeyStroke(['Escape'], (e) => {
 
 <style lang="scss" scoped>
 main {
-  background-color: rgba(239, 239, 239, 0.9);
+  background-color: rgba(239, 239, 239, 1);
   position: fixed;
   display: flex;
   justify-content: center;
@@ -43,7 +43,6 @@ main {
   padding: 5rem;
   -ms-overflow-style: none;
   scrollbar-width: none;
-
   &::-webkit-scrollbar {
     display: none;
   }
@@ -51,9 +50,7 @@ main {
 .wrapper {
   display: flex;
   flex-flow: column;
-  // height: fit-content;
   min-height: 100%;
-  width: 50rem;
   padding: 2rem;
   border-radius: 1rem;
   gap: 1rem;
@@ -70,7 +67,8 @@ main {
 // modal transition
 .modal-enter-active,
 .modal-leave-active {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53),
+    transform 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
 }
 
 .modal-enter-from {

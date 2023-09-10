@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { ref, shallowRef, type Component, type Ref, type ShallowRef } from 'vue'
-import { RouterView } from 'vue-router'
 import { onKeyStroke, useKeyModifier } from '@vueuse/core'
 import { useUserStore } from './stores/user'
 import router from '@/router/index'
 
 import MediaSearch from './views/MediaSearch.vue'
 
-import NotificationBar from '@/components/NotificationBar.vue'
+import NotificationsBar from '@/components/NotificationsBar.vue'
 import MenuBar from '@/components/MenuBar.vue'
 import ActionOverlay from './components/ActionOverlay.vue'
 import LinkNewComponent from './components/links/LinkNewComponent.vue'
@@ -43,7 +42,7 @@ onKeyStroke(['s', 'm', 'l', 'u'], (e: any) => {
 </script>
 
 <template>
-  <NotificationBar class="notification" />
+  <NotificationsBar class="notification" />
 
   <Suspense>
     <transition name="search" mode="out-in">
@@ -63,7 +62,6 @@ onKeyStroke(['s', 'm', 'l', 'u'], (e: any) => {
       @openLinks="toggleSearchModal(LinkNewComponent)"
       @openMedia="toggleSearchModal(MediaSearch)"
     />
-    <!-- <MenuBar v-if="user.connectedUser" @toggleSearch="toggleSearchModal" /> -->
   </Suspense>
 
   <Suspense>
@@ -71,6 +69,10 @@ onKeyStroke(['s', 'm', 'l', 'u'], (e: any) => {
       <component :is="Component" />
     </router-view>
   </Suspense>
+  <!-- <div v-if="user.connectedUser">
+    <MediaView />
+    <LinkView />
+  </div> -->
 </template>
 
 <style lang="scss" scoped>
@@ -81,6 +83,7 @@ onKeyStroke(['s', 'm', 'l', 'u'], (e: any) => {
 .overlay {
   z-index: 444;
   position: absolute;
+  top: 0;
 }
 
 .router-enter-active,

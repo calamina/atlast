@@ -15,28 +15,23 @@ const router = createRouter({
       name: 'auth',
       component: () => import('../views/AuthView.vue')
     },
+
     {
-      path: '/library',
-      name: 'library',
-      component: () => import('../views/LibraryView.vue'),
-      children: [
-        {
-          path: '/media',
-          name: 'media',
-          component: () => import('../views/MediaView.vue')
-        },
-        {
-          path: '/links',
-          name: 'links',
-          component: () => import('../views/LinkView.vue')
-        },
-        {
-          path: '/notes',
-          name: 'notes',
-          component: () => import('../views/NoteView.vue')
-        }
-      ]
+      path: '/media',
+      name: 'media',
+      component: () => import('../views/MediaView.vue')
     },
+    {
+      path: '/links',
+      name: 'links',
+      component: () => import('../views/LinkView.vue')
+    },
+    {
+      path: '/notes',
+      name: 'notes',
+      component: () => import('../views/NoteView.vue')
+    },
+
     {
       path: '/:pathMatch(.*)*',
       name: 'Backrooms',
@@ -51,7 +46,7 @@ router.beforeEach(async (to) => {
   const userStore = useUserStore()
   if (authRequired && !userStore.connectedUser) {
     const notification = useNotificationStore()
-    notification.error('Login to see this page')
+    notification.addNotification({ type: 'error', message: 'Login to see this page' })
     return '/auth'
   }
 })
