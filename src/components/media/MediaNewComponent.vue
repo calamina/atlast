@@ -8,6 +8,7 @@ import { useNotificationStore } from '@/stores/notification'
 import { useWikiService } from '@/services/wiki.service'
 import IconLikeFull from '../icons/IconLikeFull.vue'
 import IconLike from '../icons/IconLike.vue'
+import router from '@/router/index'
 
 const user = useUserStore()
 const mediastore = useMediaStore()
@@ -58,73 +59,75 @@ function addMedia(media: any) {
 }
 </script>
 <template>
-  <div class="media">
-    <img class="media__image" v-if="mediaNew?.image" :src="mediaNew.image" />
-    <div class="media__info">
-      <a class="media__link" :href="mediaNew?.url" target="_blank">
-        {{ mediaNew.title }}
-      </a>
-      <p class="media__description">{{ mediaNew.description }}</p>
-      <p>{{ mediaNew.extract }}</p>
-    </div>
-    <button
-      class="media__favorite button-icon"
-      type="button"
-      @click="mediaNew.like = !mediaNew.like"
-    >
-      <IconLikeFull v-if="mediaNew.like === true" />
-      <IconLike v-else />
-    </button>
-    <div>
-      <p class="label">rating</p>
-      <div class="ratings">
-        <button
-          type="button"
-          class="rating"
-          v-for="index in 10"
-          :key="index"
-          @click="mediaNew.score = index"
-          :class="{ active: mediaNew.score === index }"
-        >
-          {{ index }}
-        </button>
+  <div class="media" v-if="mediaNew">
+    <img class="media__image" v-if="mediaNew.image" :src="mediaNew.image" />
+    <div class="media__content">
+      <div class="media__info">
+        <a class="media__link" :href="mediaNew.url" target="_blank">
+          {{ mediaNew.title }}
+        </a>
+        <p class="media__description">{{ mediaNew.description }}</p>
+        <p>{{ mediaNew.extract }}</p>
       </div>
-    </div>
-    <div>
-      <p class="label">action</p>
-      <div class="ratings">
-        <button
-          type="button"
-          v-for="action in actions"
-          :key="action"
-          @click="mediaNew.action = action"
-          :class="{ active: mediaNew.action === action }"
-        >
-          {{ action }}
-        </button>
-      </div>
-    </div>
-    <div>
-      <p class="label">category</p>
-      <div class="ratings">
-        <button
-          type="button"
-          v-for="category in categories"
-          :key="category"
-          @click="mediaNew.categ = category"
-          :class="{ active: mediaNew.categ === category }"
-        >
-          {{ category }}
-        </button>
+      <button
+        class="media__favorite button-icon"
+        type="button"
+        @click="mediaNew.like = !mediaNew.like"
+      >
+        <IconLikeFull class="love" v-if="mediaNew.like === true" />
+        <IconLike v-else />
+      </button>
+      <div>
+        <p class="label">rating</p>
+        <div class="ratings">
+          <button
+            type="button"
+            class="rating"
+            v-for="index in 10"
+            :key="index"
+            @click="mediaNew.score = index"
+            :class="{ active: mediaNew.score === index }"
+          >
+            {{ index }}
+          </button>
+        </div>
       </div>
       <div>
-        <p class="label">tags (separate with space)</p>
-        <input type="text" v-model="mediaNew.tagstring" />
+        <p class="label">action</p>
+        <div class="ratings">
+          <button
+            type="button"
+            v-for="action in actions"
+            :key="action"
+            @click="mediaNew.action = action"
+            :class="{ active: mediaNew.action === action }"
+          >
+            {{ action }}
+          </button>
+        </div>
       </div>
-    </div>
-    <div class="media__actions">
-      <button class="media__submit" type="submit" @click="addMedia(mediaNew)">Add</button>
-      <button class="media__reset" type="reset" @click="$emit('cancel')">Cancel</button>
+      <div>
+        <p class="label">category</p>
+        <div class="ratings">
+          <button
+            type="button"
+            v-for="category in categories"
+            :key="category"
+            @click="mediaNew.categ = category"
+            :class="{ active: mediaNew.categ === category }"
+          >
+            {{ category }}
+          </button>
+        </div>
+        <div>
+          <p class="label">tags (separate with space)</p>
+          <input type="text" v-model="mediaNew.tagstring" />
+        </div>
+      </div>
+      <div class="media__actions">
+        <button class="media__submit" type="submit" @click="addMedia(mediaNew)">Add</button>
+        <button class="media__reset" type="reset" @click="$emit('cancel')">Cancel</button>
+      </div>
     </div>
   </div>
 </template>
@@ -132,7 +135,14 @@ function addMedia(media: any) {
 .media {
   position: relative;
   display: flex;
-  flex-flow: column;
+  flex-flow: row;
+  gap: 1rem;
+
+  &__content {
+    display: flex;
+    flex-flow: column;
+    padding-bottom: 1rem;
+  }
 
   &__image {
     height: 10rem;
@@ -203,6 +213,10 @@ function addMedia(media: any) {
     font-size: 1rem;
     color: #000;
   }
+}
+
+.love {
+  color: #dc6389;
 }
 
 .ratings {

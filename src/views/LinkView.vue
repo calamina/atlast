@@ -10,8 +10,8 @@ import type { linkModel } from '@/models/link.model'
 import LinkComponent from '@/components/links/LinkComponent.vue'
 import LinkEditComponent from '@/components/links/LinkEditComponent.vue'
 import categs from '@/utils/link-categs'
-import IconAscending from '@/components/icons/IconAscending.vue'
-import IconClose from '@/components/icons/IconClose.vue'
+// import IconAscending from '@/components/icons/IconAscending.vue'
+// import IconClose from '@/components/icons/IconClose.vue'
 
 const linkstore = useLinkStore()
 
@@ -105,7 +105,7 @@ onKeyStroke('f', (e) => {
 
 <template>
   <main>
-    <transition name="filter" mode="out-in">
+    <!-- <transition name="filter" mode="out-in">
       <div class="filters" @click="show = null" v-if="displayFilters">
         <div class="filters__search">
           <input v-model="filterSearch" type="text" name="" id="" />
@@ -177,7 +177,7 @@ onKeyStroke('f', (e) => {
           </div>
         </div>
       </div>
-    </transition>
+    </transition> -->
     <div class="links" v-if="linkstore.filteredList.length !== 0">
       <TransitionGroup name="list">
         <div class="link__switch" v-for="(link, index) of filteredLinks" :key="link.id">
