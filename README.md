@@ -7,9 +7,6 @@ Personnal Knowledge Database made with Vue3 and Strapi
 # Performance
 - [ ] check how to cache data
 
-# layout
-- [ ] try left sidebar
-
 # library
 - [?] add dashboard view
 - [?] add notes view
@@ -29,18 +26,18 @@ Personnal Knowledge Database made with Vue3 and Strapi
   - top/bottom to go through results
   - left/right to go to form and back
 - [ ] display library media in search results
-- [ ] hide wikis matching library media
+- [ ] hide / highlight wikis matching library media
 
 # utils
 - [ ] add confirmation dialog
 
 # models
 - [ ] add user model
-- [ ] add media model
+- [x] add media model
 - [ ] add note model
 
 # css
-- [!!] clean & refactor css
+- [x] clean & refactor css
 - [!?] bem everywhere
 
 # filters

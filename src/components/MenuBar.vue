@@ -4,7 +4,6 @@ import { useUserStore } from '@/stores/user'
 import { useNotificationStore } from '@/stores/notification'
 
 import IconClose from '@/components/icons/IconClose.vue'
-import IconAdd from '@/components/icons/IconAdd.vue'
 import IconCircle from '@/components/icons/IconCircle.vue'
 
 const emits = defineEmits(['toggleSearch', 'openLinks', 'openMedia'])
@@ -27,9 +26,7 @@ async function logoutUser() {
 <template>
   <nav>
     <div class="user">
-      <!-- <router-link class="button-icon user__disconnect" to="/"><IconCircle /></router-link> -->
       <button class="button-icon user__disconnect"><IconCircle /></button>
-      <!-- <router-link class="button-icon user__disconnect" to="/454"><IconCircle /></router-link> -->
     </div>
     <div class="types">
       <router-link class="type media" to="media">

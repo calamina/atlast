@@ -31,12 +31,6 @@ const filteredMedia: ComputedRef<MediaModel[]> = computed(() => {
   })
 })
 
-function updateList() {
-  mediastore.getFilteredMediaByUser(user.connectedUser.username).then((result) => {
-    mediastore.filteredList = result
-  })
-}
-
 function toggleSearchModal() {
   searchActive.value = !searchActive.value
   document.documentElement.style.overflow === 'hidden'
@@ -55,11 +49,11 @@ onKeyStroke(['s'], (e: KeyboardEvent) => {
 
 <template>
   <main>
-    <MediaFilters @toggleSearch="toggleSearchModal()" @refreshList="updateList()" />
+    <MediaFilters @toggleSearch="toggleSearchModal()" />
     <div class="medias" v-if="mediastore.filteredList.length !== 0">
       <TransitionGroup name="list">
         <div v-for="media of filteredMedia" :key="media.id">
-          <MediaComponent :media="media" @refreshList="updateList()" />
+          <MediaComponent :media="media" />
         </div>
       </TransitionGroup>
     </div>
