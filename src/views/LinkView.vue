@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch, type ComputedRef, type Ref, type Component } from 'vue'
-// import { onKeyStroke, useKeyModifier } from '@vueuse/core'
+import { computed, onMounted, ref, type ComputedRef, type Ref } from 'vue'
 
 import { useUserStore } from '@/stores/user'
 import { useLinkStore } from '@/stores/link'
@@ -9,21 +8,11 @@ import type { LinkModel } from '@/models/link.model'
 
 import LinkComponent from '@/components/links/LinkComponent.vue'
 import LinkEditComponent from '@/components/links/LinkEditComponent.vue'
-import categs from '@/utils/link-categs'
-// import IconAscending from '@/components/icons/IconAscending.vue'
-// import IconClose from '@/components/icons/IconClose.vue'
 
 const linkstore = useLinkStore()
 
 const show: Ref<number | null> = ref(null)
 const user = useUserStore()
-
-const displayFilters = ref(true)
-const filterSearch = ref('')
-
-const filters: Ref<{ category: string; sort: string }> = ref({ category: '', sort: 'createdAt' })
-
-// const toggleNewModal = ref(false)
 
 onMounted(() => {
   if (linkstore.list.length === 0) {
@@ -33,16 +22,6 @@ onMounted(() => {
     })
   }
 })
-
-watch(
-  () => [filters.value, linkstore.list],
-  () => {
-    linkstore.getFilteredLinksByUser(user.connectedUser.username, filters.value).then((result) => {
-      linkstore.filteredList = result
-    })
-  },
-  { deep: true }
-)
 
 function editLink(index: number, link?: LinkModel) {
   if (link) {
@@ -61,30 +40,6 @@ function editLink(index: number, link?: LinkModel) {
   }
 }
 
-function checkCategPresent(categ: string) {
-  return linkstore.list.find((link: LinkModel) => {
-    return link.attributes.category === categ
-  })
-}
-
-const filteredCategs: ComputedRef<{ name: string; component: Component }[]> = computed(() => {
-  return categs.filter((categ: { name: string; component: Component }) =>
-    checkCategPresent(categ.name)
-  )
-})
-
-function countCategLinks(categ: string): number {
-  let count = 0
-  linkstore.list.forEach((link: LinkModel) => {
-    if (link.attributes.category === categ) count++
-  })
-  return count
-}
-
-function filterCategs(type: string) {
-  return (filters.value.category = filters.value.category === type ? '' : type)
-}
-
 const filteredLinks: ComputedRef<LinkModel[]> = computed(() => {
   let list: LinkModel[] = linkstore.filteredList
   list = list.map((link) => {
@@ -95,91 +50,10 @@ const filteredLinks: ComputedRef<LinkModel[]> = computed(() => {
   })
   return list
 })
-
-// const ctrl = useKeyModifier('Control')
-// onKeyStroke('f', (e) => {
-//   e.preventDefault()
-//   if (ctrl.value) {
-//     displayFilters.value = !displayFilters.value
-//   }
-// })
 </script>
 
 <template>
   <main>
-    <transition name="filter" mode="out-in">
-      <div class="filters" @click="show = null" v-if="displayFilters">
-        <div class="filters__search">
-          <input v-model="filterSearch" type="text" name="" id="" />
-          <button type="button" class="filter__cancel button-icon" @click="filterSearch = ''">
-            <IconCancel />
-          </button>
-        </div>
-        <div class="filters__categories">
-          <h3>Categories</h3>
-          <div
-            @click="filters.category = filterCategs('')"
-            :class="{ filtersactive: filters.category === '' }"
-            class="filters__category"
-          >
-            <button type="button" class="button-icon">
-              <IconClose />
-            </button>
-            <p>All</p>
-            <p>{{ linkstore.list.length }}</p>
-          </div>
-          <div
-            v-for="(categ, index) in filteredCategs"
-            @click="filters.category = filterCategs(categ.name)"
-            :key="index"
-            class="filters__category"
-            :class="{ filtersactive: filters.category === categ.name }"
-          >
-            <button type="button" class="button-icon">
-              <component :is="categ.component" />
-            </button>
-            <p>{{ categ.name }}</p>
-            <p>{{ countCategLinks(categ.name) }}</p>
-          </div>
-        </div>
-        <div class="filters__sort">
-          <h3>Sort</h3>
-          <div
-            @click="filters.sort = 'createdAt'"
-            class="filters__category"
-            :class="{ filtersactive: filters.sort === 'createdAt' }"
-          >
-            <button type="button" class="button-icon">
-              <IconAscending />
-            </button>
-            <p>Date</p>
-            <p></p>
-          </div>
-          <div
-            @click="filters.sort = 'title'"
-            class="filters__category"
-            :class="{ filtersactive: filters.sort === 'title' }"
-          >
-            <button type="button" class="button-icon">
-              <IconAscending />
-            </button>
-            <p>Title</p>
-            <p></p>
-          </div>
-          <div
-            @click="filters.sort = 'category'"
-            class="filters__category"
-            :class="{ filtersactive: filters.sort === 'category' }"
-          >
-            <button type="button" class="button-icon">
-              <IconAscending />
-            </button>
-            <p>Category</p>
-            <p></p>
-          </div>
-        </div>
-      </div>
-    </transition>
     <div class="links" v-if="linkstore.filteredList.length !== 0">
       <TransitionGroup name="list">
         <div class="link__switch" v-for="(link, index) of filteredLinks" :key="link.id">

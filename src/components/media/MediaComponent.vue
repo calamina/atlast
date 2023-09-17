@@ -18,6 +18,10 @@ const status = computed(() => {
 })
 
 const expanded: Ref<boolean | null> = ref(null)
+
+function deleteMedia(id: number) {
+  mediastore.deleteUserMedia(id)
+}
 </script>
 
 <template>
@@ -49,11 +53,7 @@ const expanded: Ref<boolean | null> = ref(null)
       <button class="button-icon action" type="button" @click="$emit('enableEdit')">
         <IconEditVue />
       </button>
-      <button
-        class="button-icon action"
-        type="button"
-        @click="mediastore.deleteUserMedia(media.id)"
-      >
+      <button class="button-icon action" type="button" @click="deleteMedia(media.id)">
         <IconDelete />
       </button>
     </div>

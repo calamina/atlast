@@ -15,24 +15,27 @@ const user = useUserStore()
 const searchActive: Ref<boolean> = ref(false)
 
 onMounted(() => {
-  if (mediastore.list.length === 0) {
+  if (mediastore.filteredList.length === 0) {
     mediastore.getMediaByUser(user.connectedUser.username).then((result) => {
-      mediastore.list = result
       mediastore.filteredList = result
     })
   }
 })
 
 const filteredMedia: ComputedRef<MediaModel[]> = computed(() => {
-  let list: MediaModel[] = mediastore.filteredList
-  list = list.map((media: MediaModel) => {
+  return mediastore.filteredList.map((media: MediaModel) => {
     const id = media.id
     media = media.attributes
     media.id = id
     return media
   })
-  return list
 })
+
+function updateList() {
+  mediastore.getFilteredMediaByUser(user.connectedUser.username).then((result) => {
+    mediastore.filteredList = result
+  })
+}
 
 function toggleSearchModal() {
   searchActive.value = !searchActive.value
@@ -52,11 +55,11 @@ onKeyStroke(['s'], (e: KeyboardEvent) => {
 
 <template>
   <main>
-    <MediaFilters @toggleSearch="toggleSearchModal()" />
+    <MediaFilters @toggleSearch="toggleSearchModal()" @refreshList="updateList()" />
     <div class="medias" v-if="mediastore.filteredList.length !== 0">
       <TransitionGroup name="list">
         <div v-for="media of filteredMedia" :key="media.id">
-          <MediaComponent :media="media" />
+          <MediaComponent :media="media" @refreshList="updateList()" />
         </div>
       </TransitionGroup>
     </div>

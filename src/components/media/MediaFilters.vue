@@ -1,30 +1,11 @@
 <script setup lang="ts">
+import { type Ref, ref, type ComputedRef, computed } from 'vue'
+import type { FilterModel } from '@/models/filter.model'
 import { useMediaStore } from '@/stores/media'
-import { useUserStore } from '@/stores/user'
-import { type Ref, ref, type ComputedRef, computed, watch } from 'vue'
 
-const emits = defineEmits(['toggleSearch'])
-
+const emits = defineEmits(['toggleSearch', 'refreshList'])
 const mediastore = useMediaStore()
-const user = useUserStore()
-const filters: Ref<{
-  sort: string
-  categ?: string | null
-  action?: string | null
-  like?: boolean | null
-}> = ref({
-  sort: 'createdAt'
-})
-
-watch(
-  () => [filters.value, mediastore.list],
-  () => {
-    mediastore.getFilteredMediaByUser(user.connectedUser.username, filters.value).then((result) => {
-      mediastore.filteredList = result
-    })
-  },
-  { deep: true }
-)
+const filters: Ref<FilterModel> = ref({ sort: 'createdAt' })
 
 const categs: ComputedRef<{ name: string; number: number }[]> = computed(() => {
   return countElements('categ') as { name: string; number: number }[]
@@ -53,6 +34,12 @@ function resetFilters() {
   filters.value.categ = null
   filters.value.action = null
   filters.value.like = null
+  mediastore.updateFilters(filters.value)
+}
+
+function updateFilters(property: any, value: string | boolean | null) {
+  filters.value[property] = filters.value[property] === value ? null : value
+  mediastore.updateFilters(filters.value)
 }
 </script>
 
@@ -79,7 +66,7 @@ function resetFilters() {
         <h3>favorites</h3>
         <button
           class="stat"
-          @click="filters.like === true ? (filters.like = false) : (filters.like = true)"
+          @click="updateFilters('like', true)"
           :class="{ statSelected: filters.like === true }"
         >
           <p class="stat__name">favorite{{ favorites > 1 ? 's' : '' }}</p>
@@ -92,9 +79,7 @@ function resetFilters() {
           class="stat"
           v-for="categ in categs"
           :key="categ.name"
-          @click="
-            filters.categ === categ.name ? (filters.categ = '') : (filters.categ = categ.name)
-          "
+          @click="updateFilters('categ', categ.name)"
           :class="{ statSelected: filters.categ === categ.name }"
         >
           <p class="stat__name">{{ categ.name }}{{ categ.number > 1 ? 's' : '' }}</p>
@@ -107,9 +92,7 @@ function resetFilters() {
           class="stat"
           v-for="action in actions"
           :key="action.name"
-          @click="
-            filters.action === action.name ? (filters.action = '') : (filters.action = action.name)
-          "
+          @click="updateFilters('action', action.name)"
           :class="{ statSelected: filters.action === action.name }"
         >
           <p class="stat__name">{{ action.name }}</p>
@@ -121,14 +104,14 @@ function resetFilters() {
         <h3>sort by</h3>
         <button
           class="stat"
-          @click="filters.sort = 'createdAt'"
+          @click="updateFilters('sort', 'createdAt')"
           :class="{ statSelected: filters.sort === 'createdAt' }"
         >
           <p class="stat__name">Added</p>
         </button>
         <button
           class="stat"
-          @click="filters.sort = 'title'"
+          @click="updateFilters('sort', 'title')"
           :class="{ statSelected: filters.sort === 'title' }"
         >
           <p class="stat__name">name</p>
@@ -136,7 +119,7 @@ function resetFilters() {
         <button
           type="button"
           class="stat"
-          @click="filters.sort = 'score'"
+          @click="updateFilters('sort', 'score')"
           :class="{ statSelected: filters.sort === 'score' }"
         >
           <p class="stat__name">rating</p>

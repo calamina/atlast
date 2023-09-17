@@ -6,10 +6,12 @@ import http from '@/utils/http-common'
 
 import { useNotificationStore } from '@/stores/notification'
 import { useUserStore } from '@/stores/user'
+import type { FilterModel } from '@/models/filter.model'
 
 export const useMediaStore = defineStore('media', () => {
   const list: Ref<Array<MediaModel>> = ref([])
   const filteredList: Ref<Array<MediaModel>> = ref([])
+  const filters: Ref<FilterModel> = ref({ sort: 'createdAt' })
 
   const notification = useNotificationStore()
   const user = useUserStore()
@@ -36,19 +38,19 @@ export const useMediaStore = defineStore('media', () => {
       .catch((error) => notification.addNotification({ type: 'error', message: error.response }))
   }
 
-  async function getFilteredMediaByUser(user: string, filters?: any): Promise<any> {
+  async function getFilteredMediaByUser(user: string): Promise<any> {
     let filter: string = ''
-    if (filters.categ) {
-      filter += `&filters[categ][$eq]=${filters.categ}`
+    if (filters.value?.categ) {
+      filter += `&filters[categ][$eq]=${filters.value.categ}`
     }
-    if (filters.action) {
-      filter += `&filters[action][$eq]=${filters.action}`
+    if (filters.value?.action) {
+      filter += `&filters[action][$eq]=${filters.value.action}`
     }
-    if (filters.like) {
-      filter += `&filters[like][$eq]=${filters.like}`
+    if (filters.value?.like) {
+      filter += `&filters[like][$eq]=${filters.value.like}`
     }
 
-    const sort = filters?.sort ? `?sort=${filters.sort}:desc` : ''
+    const sort = filters?.value!.sort ? `?sort=${filters.value.sort}:desc` : ''
     const filterSort = sort + filter ?? ''
 
     return http
@@ -68,7 +70,7 @@ export const useMediaStore = defineStore('media', () => {
       .post(`medias`, { data: media })
       .then((response) => {
         notification.addNotification({ type: 'alert', message: 'Media added !' })
-        getMediaByUser(user.connectedUser.username)
+        getFilteredMediaByUser(user.connectedUser.username)
         return response.data
       })
       .catch((error) => {
@@ -80,10 +82,9 @@ export const useMediaStore = defineStore('media', () => {
   async function editUserMedia(media: any): Promise<any> {
     return http
       .put(`medias/${media.id}`, { data: media })
-      .then((response) => {
-        notification.addNotification({ type: 'alert', message: 'Media added !' })
-        getMediaByUser(user.connectedUser.username)
-        return response.data
+      .then(() => {
+        notification.addNotification({ type: 'alert', message: 'Media edited !' })
+        getFilteredMediaByUser(user.connectedUser.username)
       })
       .catch((error) => {
         notification.addNotification({ type: 'error', message: 'oops wrong media !!' })
@@ -96,16 +97,23 @@ export const useMediaStore = defineStore('media', () => {
       .delete(`medias/${id}`)
       .then(() => {
         notification.addNotification({ type: 'alert', message: 'Media deleted !' })
-        getMediaByUser(user.connectedUser.username)
+        getFilteredMediaByUser(user.connectedUser.username)
       })
       .catch((error) => {
         notification.addNotification({ type: 'error', message: error.response })
       })
   }
 
+  async function updateFilters(newFilters: FilterModel): Promise<any> {
+    filters.value = newFilters
+    getFilteredMediaByUser(user.connectedUser.username)
+  }
+
   return {
     list,
     filteredList,
+    filters,
+    updateFilters,
     getMedia,
     getFilteredMediaByUser,
     getMediaByUser,
