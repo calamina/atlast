@@ -7,6 +7,7 @@ import { useWikiService } from '@/services/wiki.service'
 
 import MediaNewComponent from '@/components/media/MediaNewComponent.vue'
 import FormInput from '@/components/form/formInput.vue'
+import type { MediaModel } from '@/models/media.model'
 
 const emits = defineEmits(['exit'])
 
@@ -14,14 +15,14 @@ const { getWikiByname } = useWikiService()
 
 let wikiList: Ref<any[]> = ref([])
 let search = ref('')
-const activeMedia = ref(null)
+const activeMedia: Ref<MediaModel | null> = ref(null)
 
 onMounted(() => {
   searchFocus()
 })
 
 function searchFocus() {
-  const search = document.getElementById('search') as HTMLInputElement | any
+  const search = document.getElementById('search') as HTMLInputElement
   search?.focus()
   search?.select()
 }
@@ -53,7 +54,7 @@ onKeyStroke(['Escape'], (e) => {
   }
 })
 
-function addMedia(media: any) {
+function addMedia(media: MediaModel) {
   activeMedia.value = media
 }
 

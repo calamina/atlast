@@ -1,4 +1,4 @@
-export interface notification {
+export interface Notification {
   message: string
   type: string
 }

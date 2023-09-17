@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch, type ComputedRef, type Ref } from 'vue'
+import { computed, onMounted, ref, watch, type ComputedRef, type Ref, type Component } from 'vue'
 // import { onKeyStroke, useKeyModifier } from '@vueuse/core'
 
 import { useUserStore } from '@/stores/user'
 import { useLinkStore } from '@/stores/link'
 
-import type { linkModel } from '@/models/link.model'
+import type { LinkModel } from '@/models/link.model'
 
 import LinkComponent from '@/components/links/LinkComponent.vue'
 import LinkEditComponent from '@/components/links/LinkEditComponent.vue'
@@ -21,7 +21,7 @@ const user = useUserStore()
 const displayFilters = ref(true)
 const filterSearch = ref('')
 
-const filters: Ref<any> = ref({ category: '', sort: 'createdAt' })
+const filters: Ref<{ category: string; sort: string }> = ref({ category: '', sort: 'createdAt' })
 
 // const toggleNewModal = ref(false)
 
@@ -44,9 +44,9 @@ watch(
   { deep: true }
 )
 
-function editLink(index: number, link?: any) {
+function editLink(index: number, link?: LinkModel) {
   if (link) {
-    let url = link.url.replace(/^https?:\/\//i, '')
+    let url = link.url?.replace(/^https?:\/\//i, '')
     link.tags = link.tagstring ? link.tagstring.split(' ') : null
     link.favicon = `https://www.google.com/s2/favicons?domain=${url}&sz=512`
     linkstore.editUserLink(link).then((response) => {
@@ -62,18 +62,20 @@ function editLink(index: number, link?: any) {
 }
 
 function checkCategPresent(categ: string) {
-  return linkstore.list.find((link: any) => {
+  return linkstore.list.find((link: LinkModel) => {
     return link.attributes.category === categ
   })
 }
 
-const filteredCategs: ComputedRef<any[]> = computed(() => {
-  return categs.filter((categ: any) => checkCategPresent(categ.name))
+const filteredCategs: ComputedRef<{ name: string; component: Component }[]> = computed(() => {
+  return categs.filter((categ: { name: string; component: Component }) =>
+    checkCategPresent(categ.name)
+  )
 })
 
 function countCategLinks(categ: string): number {
   let count = 0
-  linkstore.list.forEach((link: any) => {
+  linkstore.list.forEach((link: LinkModel) => {
     if (link.attributes.category === categ) count++
   })
   return count
@@ -83,8 +85,8 @@ function filterCategs(type: string) {
   return (filters.value.category = filters.value.category === type ? '' : type)
 }
 
-const filteredLinks: ComputedRef<linkModel[]> = computed(() => {
-  let list: any[] = linkstore.filteredList
+const filteredLinks: ComputedRef<LinkModel[]> = computed(() => {
+  let list: LinkModel[] = linkstore.filteredList
   list = list.map((link) => {
     const id = link.id
     link = link.attributes
@@ -134,10 +136,10 @@ const filteredLinks: ComputedRef<linkModel[]> = computed(() => {
             :class="{ filtersactive: filters.category === categ.name }"
           >
             <button type="button" class="button-icon">
-              <component :is="categ.component as any" />
+              <component :is="categ.component" />
             </button>
-            <p>{{ categ.name as any }}</p>
-            <p>{{ countCategLinks(categ.name as any) }}</p>
+            <p>{{ categ.name }}</p>
+            <p>{{ countCategLinks(categ.name) }}</p>
           </div>
         </div>
         <div class="filters__sort">
@@ -192,7 +194,7 @@ const filteredLinks: ComputedRef<linkModel[]> = computed(() => {
             :link="link"
             :key="link.title"
             @cancelEdit="editLink(index)"
-            @confirmEdit="(link: linkModel) => editLink(index, link)"
+            @confirmEdit="(link: LinkModel) => editLink(index, link)"
           />
         </div>
       </TransitionGroup>

@@ -35,6 +35,7 @@ onKeyStroke(['Escape'], (e) => {
 .overlay-background {
   top: 0;
   background-color: rgba(239, 239, 239, 1);
+  background-color: rgba(239, 239, 239, 0.8);
   position: fixed;
   display: flex;
   justify-content: center;

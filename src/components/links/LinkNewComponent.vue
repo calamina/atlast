@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { linkModel } from '@/models/link.model'
-import { onMounted, ref } from 'vue'
+import type { LinkModel } from '@/models/link.model'
+import { onMounted, ref, type Ref } from 'vue'
 import router from '@/router/index'
 
 import { useUserStore } from '@/stores/user'
@@ -14,7 +14,7 @@ import IconDelete from '@/components/icons/IconDelete.vue'
 import IconLike from '@/components/icons/IconLike.vue'
 
 const props = defineProps<{
-  link?: linkModel | undefined
+  link?: LinkModel | undefined
 }>()
 const emits = defineEmits(['exit'])
 
@@ -22,7 +22,7 @@ const linkStore = useLinkStore()
 const notification = useNotificationStore()
 const user = useUserStore()
 
-let linkEdit: any = ref({
+let linkEdit: Ref<LinkModel> = ref({
   id: props.link?.id,
   title: props.link?.title,
   url: props.link?.url,
@@ -36,12 +36,12 @@ onMounted(() => {
 })
 
 function linkFocus() {
-  const link = document.getElementById('link') as HTMLInputElement | any
+  const link = document.getElementById('link') as HTMLInputElement
   link?.focus()
   link?.select()
 }
 
-function addLink(link: linkModel) {
+function addLink(link: LinkModel) {
   link.tags = link.tagstring ? link.tagstring.split(' ') : null
   link.user = user.connectedUser.username
   linkStore

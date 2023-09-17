@@ -10,6 +10,7 @@ import IconLikeFull from '@/components/icons/IconLikeFull.vue'
 import IconLike from '@/components/icons/IconLike.vue'
 import IconDelete from '@/components/icons/IconDelete.vue'
 import IconCheck from '@/components/icons/IconCheck.vue'
+import type { MediaModel } from '@/models/media.model'
 
 const user = useUserStore()
 const mediastore = useMediaStore()
@@ -18,7 +19,7 @@ const notification = useNotificationStore()
 const wikiservice = useWikiService()
 
 const props = defineProps<{
-  media: any
+  media: MediaModel
 }>()
 
 const emits = defineEmits(['add', 'cancel'])
@@ -26,10 +27,10 @@ const emits = defineEmits(['add', 'cancel'])
 const actions: string[] = ['planning', 'watching', 'completed', 'dropped', 'paused']
 const categories: string[] = ['movie', 'series', 'game', 'book', 'comic']
 
-let mediaNew: Ref<any> = ref(null)
+let mediaNew: Ref<MediaModel> = ref({})
 
 onMounted(() => {
-  wikiservice.getWikiByLink(props.media.key).then((data) => {
+  wikiservice.getWikiByLink(props.media.key!).then((data) => {
     mediaNew.value = {
       id: data.id,
       title: data.title,
@@ -46,7 +47,7 @@ onMounted(() => {
   })
 })
 
-function addMedia(media: any) {
+function addMedia(media: MediaModel) {
   media.tags = media.tagstring ? media.tagstring.split(' ') : null
   media.user = user.connectedUser.username
   mediastore

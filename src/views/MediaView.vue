@@ -7,6 +7,7 @@ import MediaComponent from '@/components/media/MediaComponent.vue'
 import MediaFilters from '@/components/media/MediaFilters.vue'
 import MediaSearch from '@/components/media/MediaSearch.vue'
 import ActionOverlay from '@/components/ActionOverlay.vue'
+import type { MediaModel } from '@/models/media.model'
 
 const mediastore = useMediaStore()
 const user = useUserStore()
@@ -22,9 +23,9 @@ onMounted(() => {
   }
 })
 
-const filteredMedia: ComputedRef<any[]> = computed(() => {
-  let list: any[] = mediastore.filteredList
-  list = list.map((media) => {
+const filteredMedia: ComputedRef<MediaModel[]> = computed(() => {
+  let list: MediaModel[] = mediastore.filteredList
+  list = list.map((media: MediaModel) => {
     const id = media.id
     media = media.attributes
     media.id = id
@@ -41,7 +42,7 @@ function toggleSearchModal() {
 }
 
 const ctrl = useKeyModifier('Control')
-onKeyStroke(['s'], (e: any) => {
+onKeyStroke(['s'], (e: KeyboardEvent) => {
   if (ctrl.value) {
     e.preventDefault()
     if (e.key === 's') toggleSearchModal()
@@ -59,19 +60,14 @@ onKeyStroke(['s'], (e: any) => {
         </div>
       </TransitionGroup>
     </div>
-    <Teleport to="body">
-      <Suspense>
-        <transition name="search" mode="out-in">
-          <ActionOverlay
-            v-if="searchActive"
-            class="overlay"
-            :component="MediaSearch"
-            :key="MediaSearch.name"
-            @toggleSearch="toggleSearchModal"
-          />
-        </transition>
-      </Suspense>
-    </Teleport>
+    <transition name="search" mode="out-in">
+      <ActionOverlay
+        v-if="searchActive"
+        class="overlay"
+        :component="MediaSearch"
+        @toggleSearch="toggleSearchModal"
+      />
+    </transition>
   </main>
 </template>
 

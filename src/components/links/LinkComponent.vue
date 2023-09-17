@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 
 import { useLinkStore } from '@/stores/link'
-import type { linkModel } from '@/models/link.model'
+import type { LinkModel } from '@/models/link.model'
 
 import categs from '@/utils/link-categs'
 
@@ -12,13 +12,13 @@ import IconEdit from '@/components/icons/IconEdit.vue'
 
 const emits = defineEmits(['enableEdit'])
 const props = defineProps<{
-  link: linkModel
+  link: LinkModel
 }>()
 
 const linkstore = useLinkStore()
 
 const categ = computed(() => {
-  return categs.find((categ: any) => categ.name === props.link.category)
+  return categs.find((categ: { name: string }) => categ.name === props.link.category)
 })
 
 function deleteLink(id: number | undefined) {

@@ -1,4 +1,4 @@
-export interface userModel {
+export interface UserModel {
   username?: string
   email?: string
   provider?: string

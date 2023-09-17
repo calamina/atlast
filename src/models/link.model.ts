@@ -1,4 +1,4 @@
-export interface linkModel {
+export interface LinkModel {
   id?: number
   url?: string
   title?: string
@@ -10,4 +10,5 @@ export interface linkModel {
   like?: boolean
   date?: Date
   favicon?: string
+  attributes?: any
 }

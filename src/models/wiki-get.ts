@@ -11,6 +11,7 @@ export interface WikiGet {
   extract?: string
   extract_html?: string
   thumbnail?: {
+    url: string
     source: string
   }
   content_urls?: {

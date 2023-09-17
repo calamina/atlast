@@ -5,22 +5,23 @@ import IconDelete from '@/components/icons/IconDelete.vue'
 import IconEditVue from '@/components/icons/IconEdit.vue'
 import actions from '@/utils/media-actions'
 import IconLikeFull from '@/components/icons/IconLikeFull.vue'
-import IconLike from '@/components/icons/IconLike.vue'
+import type { MediaModel } from '@/models/media.model'
+// import IconLike from '@/components/icons/IconLike.vue'
 
 const mediastore = useMediaStore()
 
 const emits = defineEmits(['enableEdit'])
-const props = defineProps<{ media: any }>()
+const props = defineProps<{ media: MediaModel }>()
 
 const status = computed(() => {
-  return actions.find((action: any) => action.name === props.media.action)
+  return actions.find((action: { name: string }) => action.name === props.media.action)
 })
 
 const expanded: Ref<boolean | null> = ref(null)
 </script>
 
 <template>
-  <div class="media">
+  <div class="media" v-if="media.id">
     <img class="media__img" @click="expanded = !expanded" :src="media.thumbnail" alt="cover" />
     <div class="media__content">
       <a class="media__link" :href="media.url" target="_blank">

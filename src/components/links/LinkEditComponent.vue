@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { linkModel } from '@/models/link.model'
-import { onMounted, ref } from 'vue'
+import type { LinkModel } from '@/models/link.model'
+import { onMounted, ref, type Ref } from 'vue'
 
 import categs from '@/utils/link-categs'
 
@@ -9,11 +9,11 @@ import IconDelete from '@/components/icons/IconDelete.vue'
 import IconLike from '@/components/icons/IconLike.vue'
 
 const props = defineProps<{
-  link?: linkModel | undefined
+  link?: LinkModel
 }>()
 const emits = defineEmits(['confirmEdit', 'cancelEdit'])
 
-let linkEdit: any = ref({
+let linkEdit: Ref<LinkModel> = ref({
   id: props.link?.id,
   title: props.link?.title,
   url: props.link?.url,
@@ -27,7 +27,7 @@ onMounted(() => {
 })
 
 function linkFocus() {
-  const link = document.getElementById('link') as HTMLInputElement | any
+  const link = document.getElementById('link') as HTMLInputElement
   link?.focus()
   link?.select()
 }
@@ -91,18 +91,12 @@ function linkFocus() {
   justify-content: center !important;
 }
 
-// input[type='text'] {
-//   background-color: #fff !important;
-// }
-
 .link {
   width: 100%;
   display: flex;
   flex-flow: column;
-  // flex: 2;
   gap: 0.5rem;
   justify-content: space-between;
-  // padding: 1rem;
 }
 
 .categ,

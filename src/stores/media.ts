@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, type Ref } from 'vue'
+import type { MediaModel } from '@/models/media.model'
 
 import http from '@/utils/http-common'
 
@@ -7,8 +8,8 @@ import { useNotificationStore } from '@/stores/notification'
 import { useUserStore } from '@/stores/user'
 
 export const useMediaStore = defineStore('media', () => {
-  const list: Ref<Array<any>> = ref([])
-  const filteredList: Ref<Array<any>> = ref([])
+  const list: Ref<Array<MediaModel>> = ref([])
+  const filteredList: Ref<Array<MediaModel>> = ref([])
 
   const notification = useNotificationStore()
   const user = useUserStore()

@@ -6,14 +6,14 @@ import http from '@/utils/http-common'
 import { useNotificationStore } from '@/stores/notification'
 import { useUserStore } from '@/stores/user'
 
-import type { linkModel } from '@/models/link.model'
+import type { LinkModel } from '@/models/link.model'
 
 export const useLinkStore = defineStore('links', () => {
   const notification = useNotificationStore()
   const user = useUserStore()
 
-  const list: Ref<Array<linkModel>> = ref([])
-  const filteredList: Ref<Array<linkModel>> = ref([])
+  const list: Ref<Array<LinkModel>> = ref([])
+  const filteredList: Ref<Array<LinkModel>> = ref([])
 
   async function getLinks(): Promise<any> {
     return http

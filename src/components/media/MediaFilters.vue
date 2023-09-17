@@ -7,7 +7,14 @@ const emits = defineEmits(['toggleSearch'])
 
 const mediastore = useMediaStore()
 const user = useUserStore()
-const filters: Ref<any> = ref({ sort: 'createdAt' })
+const filters: Ref<{
+  sort: string
+  categ?: string | null
+  action?: string | null
+  like?: boolean | null
+}> = ref({
+  sort: 'createdAt'
+})
 
 watch(
   () => [filters.value, mediastore.list],
@@ -19,17 +26,17 @@ watch(
   { deep: true }
 )
 
-const categs: ComputedRef<any[]> = computed(() => {
-  return countElements('categ')
+const categs: ComputedRef<{ name: string; number: number }[]> = computed(() => {
+  return countElements('categ') as { name: string; number: number }[]
 })
-const actions: ComputedRef<any[]> = computed(() => {
-  return countElements('action')
+const actions: ComputedRef<{ name: string; number: number }[]> = computed(() => {
+  return countElements('action') as { name: string; number: number }[]
 })
 const favorites: ComputedRef<number> = computed(() => {
   return mediastore.filteredList.filter((media) => media.attributes.like === true).length
 })
 
-function countElements(property: any) {
+function countElements(property: string) {
   return Object.values(
     mediastore.filteredList
       .map((media) => media.attributes[property])
@@ -84,7 +91,7 @@ function resetFilters() {
         <button
           class="stat"
           v-for="categ in categs"
-          :key="categ"
+          :key="categ.name"
           @click="
             filters.categ === categ.name ? (filters.categ = '') : (filters.categ = categ.name)
           "
@@ -99,7 +106,7 @@ function resetFilters() {
         <button
           class="stat"
           v-for="action in actions"
-          :key="action"
+          :key="action.name"
           @click="
             filters.action === action.name ? (filters.action = '') : (filters.action = action.name)
           "
