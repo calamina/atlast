@@ -66,8 +66,7 @@ function cancelAdd() {
 <template>
   <div class="wrapper-search">
     <div class="search" v-if="!activeMedia">
-      <FormInput v-model="search" :type="'text'" :name="'search'" id="search" />
-      <p class="search__info"><span>ctrl+s</span> to quick search</p>
+      <FormInput v-model="search" :type="'text'" :name="'search'" :show-label="false" />
     </div>
     <div class="links" v-if="wikiList.length !== 0 && !activeMedia">
       <TransitionGroup name="list">
@@ -107,17 +106,6 @@ function cancelAdd() {
   display: flex;
   flex-flow: column;
   gap: 0.5rem;
-}
-
-.search__info {
-  padding-top: 0.25rem;
-  font-size: 0.85rem;
-  align-self: flex-end;
-  color: #999;
-
-  span {
-    color: #000;
-  }
 }
 
 .links {

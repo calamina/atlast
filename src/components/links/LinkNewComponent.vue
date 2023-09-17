@@ -51,7 +51,7 @@ function addLink(link: linkModel) {
       router.push('/links')
     })
     .catch((error) => {
-      notification.error(error)
+      // notification.error(error)
     })
 }
 </script>

@@ -22,17 +22,20 @@ const expanded: Ref<boolean | null> = ref(null)
 <template>
   <div class="media">
     <img class="media__img" @click="expanded = !expanded" :src="media.thumbnail" alt="cover" />
-
     <div class="media__content">
       <a class="media__link" :href="media.url" target="_blank">
         {{ media.title }}
-        <span class="media__status" :style="{ backgroundColor: status!.color }"></span>
+        <!-- <IconLikeFull class="media__favorite" v-if="media.like" /> -->
+        <!-- <span class="media__status1" :style="{ backgroundColor: status!.color }"></span> -->
       </a>
       <p class="media__description">{{ media.description }}</p>
       <transition name="reveal">
         <p class="media__extract" v-if="expanded">{{ media.extract }}</p>
       </transition>
       <div class="media__footer">
+        <!-- <button class="media__status" :style="{ backgroundColor: status!.color }">
+          {{ media.action }}
+        </button> -->
         <IconLikeFull class="media__favorite" v-if="media.like" />
         <button class="media__tag" v-for="tag in media.tags" :key="tag">
           {{ tag }}
@@ -64,10 +67,12 @@ const expanded: Ref<boolean | null> = ref(null)
   flex-flow: row;
   flex: 1;
   gap: 0.75rem;
-  padding: 1rem 0;
+  padding: 1rem;
   background-color: #efefef;
-  &:hover .media__actions {
-    display: flex;
+  &:hover {
+    .media__actions {
+      display: flex;
+    }
   }
 
   &__img {
@@ -75,6 +80,7 @@ const expanded: Ref<boolean | null> = ref(null)
     height: 5rem;
     width: 5rem;
     filter: saturate(0);
+    border-radius: 1rem;
   }
 
   &__score {
@@ -92,24 +98,31 @@ const expanded: Ref<boolean | null> = ref(null)
     flex-flow: column;
     flex: 1;
     gap: 0.25rem;
-    padding: 0.25rem 0;
     overflow: hidden;
   }
 
   &__link {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 0.5rem;
     width: fit-content;
     font-size: 1.5rem;
-    line-height: 1.4rem;
+    // line-height: 1.4rem;
+    margin-bottom: -0.5rem;
     font-family: 'contaxBold', Arial, sans-serif;
     text-transform: capitalize;
     text-decoration: none;
     color: black;
+    transition: padding 0.3s, font-style 0.3s;
   }
 
   &__status {
+    padding: 0.05rem 0.5rem;
+    font-size: 0.85rem;
+    opacity: 0.7;
+  }
+
+  &__status1 {
     display: block;
     width: 0.75rem;
     height: 0.75rem;

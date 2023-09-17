@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import { computed, onMounted, watch, type ComputedRef } from 'vue'
+import { computed, onMounted, ref, type ComputedRef, type Ref } from 'vue'
+import { useKeyModifier, onKeyStroke } from '@vueuse/core'
 import { useUserStore } from '@/stores/user'
 import { useMediaStore } from '@/stores/media'
 import MediaComponent from '@/components/media/MediaComponent.vue'
+import MediaFilters from '@/components/media/MediaFilters.vue'
+import MediaSearch from '@/components/media/MediaSearch.vue'
+import ActionOverlay from '@/components/ActionOverlay.vue'
 
 const mediastore = useMediaStore()
 const user = useUserStore()
+
+const searchActive: Ref<boolean> = ref(false)
 
 onMounted(() => {
   if (mediastore.list.length === 0) {
@@ -15,14 +21,6 @@ onMounted(() => {
     })
   }
 })
-
-watch(
-  () => mediastore.list,
-  () => {
-    mediastore.filteredList = mediastore.list
-  },
-  { deep: true }
-)
 
 const filteredMedia: ComputedRef<any[]> = computed(() => {
   let list: any[] = mediastore.filteredList
@@ -34,10 +32,26 @@ const filteredMedia: ComputedRef<any[]> = computed(() => {
   })
   return list
 })
+
+function toggleSearchModal() {
+  searchActive.value = !searchActive.value
+  document.documentElement.style.overflow === 'hidden'
+    ? (document.documentElement.style.overflow = 'auto')
+    : (document.documentElement.style.overflow = 'hidden')
+}
+
+const ctrl = useKeyModifier('Control')
+onKeyStroke(['s'], (e: any) => {
+  if (ctrl.value) {
+    e.preventDefault()
+    if (e.key === 's') toggleSearchModal()
+  }
+})
 </script>
 
 <template>
   <main>
+    <MediaFilters @toggleSearch="toggleSearchModal()" />
     <div class="medias" v-if="mediastore.filteredList.length !== 0">
       <TransitionGroup name="list">
         <div v-for="media of filteredMedia" :key="media.id">
@@ -45,21 +59,39 @@ const filteredMedia: ComputedRef<any[]> = computed(() => {
         </div>
       </TransitionGroup>
     </div>
+    <Teleport to="body">
+      <Suspense>
+        <transition name="search" mode="out-in">
+          <ActionOverlay
+            v-if="searchActive"
+            class="overlay"
+            :component="MediaSearch"
+            :key="MediaSearch.name"
+            @toggleSearch="toggleSearchModal"
+          />
+        </transition>
+      </Suspense>
+    </Teleport>
   </main>
 </template>
 
 <style lang="scss" scoped>
 main {
   width: 100vw;
+  padding: 1rem 0;
   position: relative;
   scrollbar-width: none;
+  display: flex;
+  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
 }
 
 .medias {
   display: flex;
   flex-flow: column;
   align-items: center;
-  padding: 3rem 0;
 }
 
 .list-enter-active,
@@ -76,5 +108,19 @@ main {
   position: absolute;
   opacity: 0;
   z-index: -1;
+}
+
+// searchbar transition
+.search-enter-active,
+.search-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.search-enter-from {
+  opacity: 0;
+  transform: translateY(-1rem);
+}
+.search-leave-to {
+  opacity: 0;
+  transform: translateY(-1rem);
 }
 </style>

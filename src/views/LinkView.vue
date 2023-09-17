@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch, type ComputedRef, type Ref } from 'vue'
-import { onKeyStroke, useKeyModifier } from '@vueuse/core'
+// import { onKeyStroke, useKeyModifier } from '@vueuse/core'
 
 import { useUserStore } from '@/stores/user'
 import { useLinkStore } from '@/stores/link'
@@ -23,7 +23,7 @@ const filterSearch = ref('')
 
 const filters: Ref<any> = ref({ category: '', sort: 'createdAt' })
 
-const toggleNewModal = ref(false)
+// const toggleNewModal = ref(false)
 
 onMounted(() => {
   if (linkstore.list.length === 0) {
@@ -94,18 +94,18 @@ const filteredLinks: ComputedRef<linkModel[]> = computed(() => {
   return list
 })
 
-const ctrl = useKeyModifier('Control')
-onKeyStroke('f', (e) => {
-  e.preventDefault()
-  if (ctrl.value) {
-    displayFilters.value = !displayFilters.value
-  }
-})
+// const ctrl = useKeyModifier('Control')
+// onKeyStroke('f', (e) => {
+//   e.preventDefault()
+//   if (ctrl.value) {
+//     displayFilters.value = !displayFilters.value
+//   }
+// })
 </script>
 
 <template>
   <main>
-    <!-- <transition name="filter" mode="out-in">
+    <transition name="filter" mode="out-in">
       <div class="filters" @click="show = null" v-if="displayFilters">
         <div class="filters__search">
           <input v-model="filterSearch" type="text" name="" id="" />
@@ -177,7 +177,7 @@ onKeyStroke('f', (e) => {
           </div>
         </div>
       </div>
-    </transition> -->
+    </transition>
     <div class="links" v-if="linkstore.filteredList.length !== 0">
       <TransitionGroup name="list">
         <div class="link__switch" v-for="(link, index) of filteredLinks" :key="link.id">
@@ -226,7 +226,8 @@ main {
   display: flex;
   flex-flow: row;
   position: relative;
-  // justify-content: center;
+  padding: 2rem 0;
+  justify-content: center;
 }
 
 .filters {
@@ -293,7 +294,6 @@ main {
   width: 50rem;
   height: fit-content;
   align-items: center;
-  padding: 3rem 1rem;
 }
 
 .link__switch {

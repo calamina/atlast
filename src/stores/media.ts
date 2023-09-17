@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, type Ref } from 'vue'
 
 import http from '@/utils/http-common'
+
 import { useNotificationStore } from '@/stores/notification'
 import { useUserStore } from '@/stores/user'
 
@@ -29,6 +30,32 @@ export const useMediaStore = defineStore('media', () => {
           return media.attributes.user === user
         })
         list.value = result
+        return result
+      })
+      .catch((error) => notification.addNotification({ type: 'error', message: error.response }))
+  }
+
+  async function getFilteredMediaByUser(user: string, filters?: any): Promise<any> {
+    let filter: string = ''
+    if (filters.categ) {
+      filter += `&filters[categ][$eq]=${filters.categ}`
+    }
+    if (filters.action) {
+      filter += `&filters[action][$eq]=${filters.action}`
+    }
+    if (filters.like) {
+      filter += `&filters[like][$eq]=${filters.like}`
+    }
+
+    const sort = filters?.sort ? `?sort=${filters.sort}:desc` : ''
+    const filterSort = sort + filter ?? ''
+
+    return http
+      .get<Array<any>>('medias' + filterSort)
+      .then((response: any) => {
+        const result = response.data.data.filter((media: any) => {
+          return media.attributes.user === user
+        })
         filteredList.value = result
         return result
       })
@@ -79,6 +106,7 @@ export const useMediaStore = defineStore('media', () => {
     list,
     filteredList,
     getMedia,
+    getFilteredMediaByUser,
     getMediaByUser,
     addUserMedia,
     editUserMedia,

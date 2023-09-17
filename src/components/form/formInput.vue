@@ -3,35 +3,35 @@ const props = defineProps<{
   modelValue: string
   type: string
   name: string
+  showLabel: boolean
 }>()
 const emits = defineEmits(['update:modelValue'])
 </script>
 
 <template>
-  <input
-    :value="props.modelValue"
-    :type="props.type"
-    :name="props.name"
-    :id="props.name"
-    :placeholder="props.name"
-    @input="$emit('update:modelValue', ($event.target as HTMLInputElement)!.value)"
-  />
-  <label :for="props.name"
-    ><p>{{ name }}</p></label
-  >
+  <div>
+    <input
+      :value="props.modelValue"
+      :type="props.type"
+      :name="props.name"
+      :id="props.name"
+      :placeholder="props.name"
+      @input="$emit('update:modelValue', ($event.target as HTMLInputElement)!.value)"
+    />
+    <label :for="props.name" v-if="props.showLabel">
+      <p>{{ name }}</p>
+    </label>
+  </div>
 </template>
 <style lang="scss" scoped>
 label {
   color: #000;
-  font-variant: small-caps;
   margin-top: -1rem;
-  font-style: italic;
   padding-left: 0.15rem;
   overflow: hidden;
 
   p {
-    letter-spacing: 0.05rem;
-    color: #000;
+    font-family: 'contaxBold', 'Arial', sans-serif;
     animation: translateIn 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
   }
 }
@@ -41,13 +41,13 @@ input[type='password'],
 input[type='date'],
 textarea,
 select {
-  background-color: transparent;
+  background-color: #fff;
   font-size: 2.5rem;
   padding: 0;
-  border-bottom: 1px solid #000;
   opacity: 1;
   color: #000;
-  border-radius: 0;
+  border-radius: 1rem;
+  padding: 0.25rem 1rem;
 }
 
 @keyframes translateIn {

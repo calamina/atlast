@@ -4,11 +4,12 @@ import { onMounted, ref, type Ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useMediaStore } from '@/stores/media'
 import { useNotificationStore } from '@/stores/notification'
-
 import { useWikiService } from '@/services/wiki.service'
-import IconLikeFull from '../icons/IconLikeFull.vue'
-import IconLike from '../icons/IconLike.vue'
-import router from '@/router/index'
+
+import IconLikeFull from '@/components/icons/IconLikeFull.vue'
+import IconLike from '@/components/icons/IconLike.vue'
+import IconDelete from '@/components/icons/IconDelete.vue'
+import IconCheck from '@/components/icons/IconCheck.vue'
 
 const user = useUserStore()
 const mediastore = useMediaStore()
@@ -22,7 +23,7 @@ const props = defineProps<{
 
 const emits = defineEmits(['add', 'cancel'])
 
-const actions: string[] = ['planning', 'watching', 'completed', 'rewatching', 'dropped', 'paused']
+const actions: string[] = ['planning', 'watching', 'completed', 'dropped', 'paused']
 const categories: string[] = ['movie', 'series', 'game', 'book', 'comic']
 
 let mediaNew: Ref<any> = ref(null)
@@ -77,56 +78,62 @@ function addMedia(media: any) {
         <IconLikeFull class="love" v-if="mediaNew.like === true" />
         <IconLike v-else />
       </button>
-      <div>
-        <p class="label">rating</p>
-        <div class="ratings">
-          <button
-            type="button"
-            class="rating"
-            v-for="index in 10"
-            :key="index"
-            @click="mediaNew.score = index"
-            :class="{ active: mediaNew.score === index }"
-          >
-            {{ index }}
-          </button>
+      <div class="media__form">
+        <div>
+          <p class="label">rating</p>
+          <div class="ratings">
+            <button
+              v-for="index in 10"
+              type="button"
+              class="rating"
+              :key="index"
+              @click="mediaNew.score = index"
+              :class="{ active: mediaNew.score === index }"
+            >
+              {{ index }}
+            </button>
+          </div>
         </div>
-      </div>
-      <div>
-        <p class="label">action</p>
-        <div class="ratings">
-          <button
-            type="button"
-            v-for="action in actions"
-            :key="action"
-            @click="mediaNew.action = action"
-            :class="{ active: mediaNew.action === action }"
-          >
-            {{ action }}
-          </button>
+        <div>
+          <p class="label">action</p>
+          <div class="ratings">
+            <button
+              v-for="action in actions"
+              type="button"
+              class="rating"
+              :key="action"
+              @click="mediaNew.action = action"
+              :class="{ active: mediaNew.action === action }"
+            >
+              {{ action }}
+            </button>
+          </div>
         </div>
-      </div>
-      <div>
-        <p class="label">category</p>
-        <div class="ratings">
-          <button
-            type="button"
-            v-for="category in categories"
-            :key="category"
-            @click="mediaNew.categ = category"
-            :class="{ active: mediaNew.categ === category }"
-          >
-            {{ category }}
-          </button>
+        <div>
+          <p class="label">category</p>
+          <div class="ratings">
+            <button
+              v-for="category in categories"
+              type="button"
+              class="rating"
+              :key="category"
+              @click="mediaNew.categ = category"
+              :class="{ active: mediaNew.categ === category }"
+            >
+              {{ category }}
+            </button>
+          </div>
         </div>
         <div>
           <p class="label">tags (separate with space)</p>
-          <input type="text" v-model="mediaNew.tagstring" />
+          <input class="media__tags" type="text" v-model="mediaNew.tagstring" />
         </div>
       </div>
       <div class="media__actions">
-        <button class="media__submit" type="submit" @click="addMedia(mediaNew)">Add</button>
-        <button class="media__reset" type="reset" @click="$emit('cancel')">Cancel</button>
+        <button class="button-icon" type="reset" @click="$emit('cancel')"><IconDelete /></button>
+        <button class="button-icon media__submit" type="submit" @click="addMedia(mediaNew)">
+          <IconCheck />
+        </button>
       </div>
     </div>
   </div>
@@ -174,7 +181,12 @@ function addMedia(media: any) {
   &__description {
     font-family: 'contaxItalic', Arial, sans-serif;
     opacity: 0.7;
-    padding-bottom: 0.5rem;
+  }
+
+  &__form {
+    display: flex;
+    flex-flow: column;
+    gap: 1rem;
   }
 
   &__favorite {
@@ -184,10 +196,10 @@ function addMedia(media: any) {
   }
 
   &__tags {
-    padding: 0.3rem 0.75rem;
+    padding: 0.5rem 1rem;
     background-color: #ddd;
     border-radius: 1rem;
-    width: fit-content;
+    width: 100%;
     font-size: 0.85rem;
   }
 
@@ -200,18 +212,8 @@ function addMedia(media: any) {
   }
 
   &__submit {
-    font-size: 1.2rem;
-    color: #000;
-    border: 1px solid #000;
-    border-radius: 1.5rem;
-    padding: 0.4rem 1.5rem;
-    overflow: hidden;
-  }
-
-  &__reset {
-    text-decoration: underline;
-    font-size: 1rem;
-    color: #000;
+    background-color: #ccc;
+    border-radius: 100%;
   }
 }
 
@@ -222,24 +224,30 @@ function addMedia(media: any) {
 .ratings {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 
   & .rating {
     font-family: 'contaxBold', Arial, sans-serif;
-    width: 2rem;
+    // background-color: #ccc;
+    font-size: 1rem;
+    min-width: 2rem;
+    padding: 0.1rem 1rem;
     height: 2rem;
+    border-radius: 1rem;
     opacity: 0.5;
   }
   & .active {
-    border: 1px solid #000;
+    opacity: 1;
+    background-color: #dfcfe8;
     opacity: 1;
   }
 }
 
 .label {
   font-size: 0.9rem;
-  padding-left: 0.1rem;
-  font-variant: small-caps;
-  color: #00000088;
+  text-transform: capitalize;
+  opacity: 0.5;
+  font-family: 'contaxBold', Arial, sans-serif;
 }
 </style>

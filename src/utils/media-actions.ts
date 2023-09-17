@@ -12,10 +12,6 @@ export default [
     name: 'completed'
   },
   {
-    color: '#63cedc',
-    name: 'rewatching'
-  },
-  {
     color: '#888',
     name: 'dropped'
   },

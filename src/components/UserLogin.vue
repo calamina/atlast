@@ -12,8 +12,8 @@ const password: Ref<string> = ref('password')
 </script>
 <template>
   <form action="" @submit.prevent>
-    <formInput v-model="login" :type="'text'" :name="'login'" />
-    <formInput v-model="password" :type="'password'" :name="'password'" />
+    <formInput v-model="login" :type="'text'" :name="'login'" :show-label="true" />
+    <formInput v-model="password" :type="'password'" :name="'password'" :show-label="true" />
 
     <button
       v-if="login !== '' && password !== ''"
@@ -36,5 +36,25 @@ form {
   display: flex;
   flex-flow: column;
   gap: 0.5rem;
+}
+
+.button--primary {
+  width: unset;
+  font-size: 1.4rem;
+  font-family: 'contaxBold', 'Arial', sans-serif;
+  border-radius: 1.5rem;
+  padding: 0.4rem 1.5rem;
+  margin-top: 2rem;
+  background-color: #ddd;
+}
+
+.button--secondary {
+  width: unset;
+  font-size: 1.2rem;
+  background-color: transparent;
+
+  span {
+    font-family: 'contaxBold', 'Arial', sans-serif;
+  }
 }
 </style>

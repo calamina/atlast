@@ -19,7 +19,7 @@ onKeyStroke(['Escape'], (e) => {
 </script>
 
 <template>
-  <main>
+  <div class="overlay-background">
     <div class="wrapper">
       <transition name="modal" mode="out-in">
         <component :is="props.component" @exit="$emit('toggleSearch')"></component>
@@ -28,11 +28,12 @@ onKeyStroke(['Escape'], (e) => {
     <button type="button" class="button-icon exit" @click="$emit('toggleSearch')">
       <IconCancel />
     </button>
-  </main>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-main {
+.overlay-background {
+  top: 0;
   background-color: rgba(239, 239, 239, 1);
   position: fixed;
   display: flex;
@@ -58,8 +59,8 @@ main {
 
 .exit {
   position: absolute;
-  top: 1.25rem;
-  right: 1.5rem;
+  top: 1rem;
+  right: 1rem;
   background-color: #ddd;
   border-radius: 2rem;
 }

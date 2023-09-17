@@ -3,8 +3,8 @@ import router from '@/router/index'
 import { useUserStore } from '@/stores/user'
 import { useNotificationStore } from '@/stores/notification'
 
-import IconClose from './icons/IconClose.vue'
-import IconAdd from './icons/IconAdd.vue'
+import IconClose from '@/components/icons/IconClose.vue'
+import IconAdd from '@/components/icons/IconAdd.vue'
 import IconCircle from '@/components/icons/IconCircle.vue'
 
 const emits = defineEmits(['toggleSearch', 'openLinks', 'openMedia'])
@@ -22,56 +22,24 @@ async function logoutUser() {
     user.connectedUser = null
   })
 }
-
-function testNotification() {
-  notification.addNotification({
-    type: 'alert',
-    message: 'This is a test notification'
-  })
-}
 </script>
 
 <template>
   <nav>
     <div class="user">
-      <router-link class="button-icon user__disconnect" to="/" @click="testNotification()"
-        ><IconCircle
-      /></router-link>
+      <!-- <router-link class="button-icon user__disconnect" to="/"><IconCircle /></router-link> -->
+      <button class="button-icon user__disconnect"><IconCircle /></button>
+      <!-- <router-link class="button-icon user__disconnect" to="/454"><IconCircle /></router-link> -->
     </div>
     <div class="types">
       <router-link class="type media" to="media">
         <p class="type__link">media</p>
-        <button
-          type="button"
-          class="button-icon"
-          @click="$event.preventDefault, $emit('openMedia')"
-        >
-          <IconAdd />
-        </button>
       </router-link>
-      <!-- <router-link class="type media" to="library">
-        <p class="type__link">HERE !!!</p>
-        <button
-          type="button"
-          class="button-icon"
-          @click="$event.preventDefault, $emit('openLibrary')"
-        >
-          <IconAdd />
-        </button>
-      </router-link> -->
       <router-link class="type links" to="links">
         <p class="type__link">links</p>
-        <button
-          type="button"
-          class="button-icon"
-          @click="$event.preventDefault, $emit('openLinks')"
-        >
-          <IconAdd />
-        </button>
       </router-link>
     </div>
     <div class="user" v-if="user.connectedUser">
-      <button type="button">{{ user.connectedUser.username }}</button>
       <button class="user__disconnect button-icon" type="button" @click="logoutUser()">
         <IconClose />
       </button>
@@ -81,18 +49,18 @@ function testNotification() {
 
 <style lang="scss" scoped>
 nav {
-  // position: absolute;
-  // margin: 0.5rem auto 0.5rem auto;
-  // width: calc(100vw - 1.5rem);
   width: 100%;
   padding: 1rem;
   border-radius: 5rem;
-  // height: 3rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  // background-color: #93cfae;
-  // background-color: #ccc;
+  // opacity: 0.5;
+  transition: opacity 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
+
+  &:hover {
+    opacity: 1;
+  }
 
   & > div {
     display: flex;
@@ -129,24 +97,7 @@ nav {
     padding: 0.6rem 1rem;
     width: 8rem;
     transition: width 0.3s;
-  }
-
-  button {
-    width: 3rem;
-    height: 2.25rem;
-    border-radius: 100%;
-    transition: width 0.3s;
-
-    svg {
-      width: 1.2rem;
-      height: 1.2rem;
-      transition: transform 0.2s;
-    }
-    &:hover {
-      & svg {
-        transform: rotate(90deg);
-      }
-    }
+    font-family: 'contaxBold', Arial, sans-serif;
   }
 
   &:not(.router-link-active) .button-icon {
@@ -159,39 +110,19 @@ nav {
   }
 }
 
-.media {
-  & .type__link {
-    background-color: #93cfae;
-  }
-  & .router-link-active {
-    background-color: #93cfae;
-  }
+.type__link {
+  background-color: #dfcfe8;
 }
-.links {
-  & .type__link {
-    background-color: #dfcfe8;
-  }
-  & .router-link-active {
-    background-color: #dfcfe8;
-  }
+.router-link-active {
+  background-color: #dfcfe8;
 }
-.notes {
-  & .type__link {
-    background-color: #da98ad;
-  }
-  & .router-link-active {
-    background-color: #da98ad;
-  }
-}
-
 .user {
   background-color: #ddd;
-  // border: 1px solid #000;
   display: flex;
   border-radius: 2rem;
   padding: 0.25rem;
-  padding-left: 1rem;
   gap: 0.5rem;
+  font-family: 'contaxBold', Arial, sans-serif;
 
   &__disconnect {
     width: 2.25rem;
