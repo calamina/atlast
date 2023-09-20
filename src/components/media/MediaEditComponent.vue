@@ -1,82 +1,50 @@
 <script setup lang="ts">
 import { onMounted, ref, type Ref } from 'vue'
 
-import { useUserStore } from '@/stores/user'
-import { useMediaStore } from '@/stores/media'
-import { useNotificationStore } from '@/stores/notification'
-import { useWikiService } from '@/services/wiki.service'
-
 import IconLikeFull from '@/components/icons/IconLikeFull.vue'
 import IconLike from '@/components/icons/IconLike.vue'
 import IconDelete from '@/components/icons/IconDelete.vue'
 import IconCheck from '@/components/icons/IconCheck.vue'
 import type { MediaModel } from '@/models/media.model'
 
-const user = useUserStore()
-const mediastore = useMediaStore()
-const notification = useNotificationStore()
-
-const wikiservice = useWikiService()
-
 const props = defineProps<{
   media: MediaModel
 }>()
 
-const emits = defineEmits(['add', 'cancel'])
+const emits = defineEmits(['confirmEdit', 'cancelEdit'])
 
-const actions: string[] = ['completed', 'planning', 'watching', 'dropped', 'paused']
+const actions: string[] = ['planning', 'watching', 'completed', 'dropped', 'paused']
 const categories: string[] = ['movie', 'series', 'game', 'book', 'comic']
 
-let mediaNew: Ref<MediaModel> = ref({})
-
-onMounted(() => {
-  wikiservice.getWikiByLink(props.media.key!).then((data) => {
-    mediaNew.value = {
-      id: data.id,
-      title: data.title,
-      url: data.content_urls?.desktop?.page,
-      description: data.description,
-      tagstring: props.media.tags?.join(' '),
-      extract: data.extract,
-      image: data.originalimage?.source,
-      thumbnail: data.thumbnail?.source,
-      score: 1,
-      action: 'completed',
-      categ: 'movie'
-    }
-  })
+let mediaEdit: Ref<MediaModel> = ref({
+  id: props.media?.id,
+  title: props.media?.title,
+  url: props.media?.url,
+  description: props.media?.description,
+  tagstring: props.media?.tags?.join(' '),
+  categ: props.media?.categ,
+  action: props.media?.action,
+  score: props.media?.score,
+  like: props.media?.like,
+  extract: props.media?.extract,
+  image: props.media?.image
 })
-
-function addMedia(media: MediaModel) {
-  media.tags = media.tagstring ? media.tagstring.split(' ') : null
-  media.user = user.connectedUser.username
-  mediastore
-    .addUserMedia(media)
-    .then(() => {
-      emits('add')
-    })
-    .catch((error) => {
-      notification.addNotification({ message: error, type: 'error' })
-    })
-}
 </script>
 <template>
-  <div class="media" v-if="mediaNew">
-    <img class="media__image" v-if="mediaNew.image" :src="mediaNew.image" />
+  <div class="media" v-if="mediaEdit">
+    <img class="media__image" v-if="mediaEdit.image" :src="mediaEdit.image" />
     <div class="media__content">
-      <div class="media__info">
-        <a class="media__link" :href="mediaNew.url" target="_blank">
-          {{ mediaNew.title }}
-        </a>
-        <p class="media__description">{{ mediaNew.description }}</p>
-        <p>{{ mediaNew.extract }}</p>
-      </div>
+      <a class="media__link" :href="mediaEdit.url" target="_blank">
+        {{ mediaEdit.title }}
+      </a>
+      <p class="media__description">{{ mediaEdit.description }}</p>
+      <p class="media__extract">{{ mediaEdit.extract }}</p>
       <button
         class="media__favorite button-icon"
         type="button"
-        @click="mediaNew.like = !mediaNew.like"
+        @click="mediaEdit.like = !mediaEdit.like"
       >
-        <IconLikeFull class="love" v-if="mediaNew.like === true" />
+        <IconLikeFull class="love" v-if="mediaEdit.like === true" />
         <IconLike v-else />
       </button>
       <div class="media__form">
@@ -88,8 +56,8 @@ function addMedia(media: MediaModel) {
               type="button"
               class="rating"
               :key="index"
-              @click="mediaNew.score = index"
-              :class="{ active: mediaNew.score === index }"
+              @click="mediaEdit.score = index"
+              :class="{ active: mediaEdit.score === index }"
             >
               {{ index }}
             </button>
@@ -103,8 +71,8 @@ function addMedia(media: MediaModel) {
               type="button"
               class="rating"
               :key="action"
-              @click="mediaNew.action = action"
-              :class="{ active: mediaNew.action === action }"
+              @click="mediaEdit.action = action"
+              :class="{ active: mediaEdit.action === action }"
             >
               {{ action }}
             </button>
@@ -118,23 +86,31 @@ function addMedia(media: MediaModel) {
               type="button"
               class="rating"
               :key="category"
-              @click="mediaNew.categ = category"
-              :class="{ active: mediaNew.categ === category }"
+              @click="mediaEdit.categ = category"
+              :class="{ active: mediaEdit.categ === category }"
             >
               {{ category }}
             </button>
           </div>
         </div>
-        <div>
-          <p class="label">tags (separate with space)</p>
-          <input class="media__tags" type="text" v-model="mediaNew.tagstring" />
+        <div class="media__footer">
+          <div class="media__tags-wrapper">
+            <p class="label">tags (separate with space)</p>
+            <input class="media__tags" type="text" v-model="mediaEdit.tagstring" />
+          </div>
+          <div class="media__actions">
+            <button class="button-icon" type="reset" @click="$emit('cancelEdit', props.media)">
+              <IconDelete />
+            </button>
+            <button
+              class="button-icon media__submit"
+              type="button"
+              @click="$emit('confirmEdit', mediaEdit)"
+            >
+              <IconCheck />
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="media__actions">
-        <button class="button-icon" type="reset" @click="$emit('cancel')"><IconDelete /></button>
-        <button class="button-icon media__submit" type="submit" @click="addMedia(mediaNew)">
-          <IconCheck />
-        </button>
       </div>
     </div>
   </div>
@@ -210,6 +186,18 @@ function addMedia(media: MediaModel) {
     padding: 0.55rem;
   }
 
+  &__footer {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: end;
+    gap: 5rem;
+  }
+
+  &__tags-wrapper {
+    flex: 1;
+  }
+
   &__tags {
     padding: 0.5rem 1rem;
     background-color: #efefef;
@@ -233,6 +221,7 @@ function addMedia(media: MediaModel) {
 
 .love {
   color: #dc6389;
+  // color: #bfa3d0;
 }
 
 .ratings {
@@ -266,5 +255,17 @@ function addMedia(media: MediaModel) {
   opacity: 0.5;
   padding-bottom: 0.25rem;
   font-family: 'contaxBold', Arial, sans-serif;
+}
+
+// TRANSITIONS
+.reveal-enter-active,
+.reveal-leave-active {
+  transition: max-height 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53),
+    opacity 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
+}
+.reveal-enter-from,
+.reveal-leave-to {
+  max-height: 0;
+  opacity: 0;
 }
 </style>

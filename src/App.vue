@@ -26,10 +26,4 @@ const user = useUserStore()
 .notification {
   z-index: 666;
 }
-
-.overlay {
-  z-index: 444;
-  position: absolute;
-  top: 0;
-}
 </style>

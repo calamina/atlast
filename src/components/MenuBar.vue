@@ -6,8 +6,6 @@ import { useNotificationStore } from '@/stores/notification'
 import IconClose from '@/components/icons/IconClose.vue'
 import IconCircle from '@/components/icons/IconCircle.vue'
 
-const emits = defineEmits(['toggleSearch', 'openLinks', 'openMedia'])
-
 const user = useUserStore()
 const notification = useNotificationStore()
 

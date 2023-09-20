@@ -77,8 +77,8 @@ function updateFilters(property: any, value: string | boolean | null) {
         <h3>category</h3>
         <button
           class="stat"
-          v-for="categ in categs"
-          :key="categ.name"
+          v-for="(categ, index) in categs"
+          :key="index"
           @click="updateFilters('categ', categ.name)"
           :class="{ statSelected: filters.categ === categ.name }"
         >

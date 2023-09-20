@@ -82,9 +82,10 @@ export const useMediaStore = defineStore('media', () => {
   async function editUserMedia(media: any): Promise<any> {
     return http
       .put(`medias/${media.id}`, { data: media })
-      .then(() => {
+      .then((response) => {
         notification.addNotification({ type: 'alert', message: 'Media edited !' })
         getFilteredMediaByUser(user.connectedUser.username)
+        return response.data
       })
       .catch((error) => {
         notification.addNotification({ type: 'error', message: 'oops wrong media !!' })

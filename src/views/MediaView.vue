@@ -4,6 +4,7 @@ import { useKeyModifier, onKeyStroke } from '@vueuse/core'
 import { useUserStore } from '@/stores/user'
 import { useMediaStore } from '@/stores/media'
 import MediaComponent from '@/components/media/MediaComponent.vue'
+import MediaEditComponent from '@/components/media/MediaEditComponent.vue'
 import MediaFilters from '@/components/media/MediaFilters.vue'
 import MediaSearch from '@/components/media/MediaSearch.vue'
 import ActionOverlay from '@/components/ActionOverlay.vue'
@@ -13,6 +14,7 @@ const mediastore = useMediaStore()
 const user = useUserStore()
 
 const searchActive: Ref<boolean> = ref(false)
+const show: Ref<number | null> = ref(null)
 
 onMounted(() => {
   if (mediastore.filteredList.length === 0) {
@@ -38,6 +40,23 @@ function toggleSearchModal() {
     : (document.documentElement.style.overflow = 'hidden')
 }
 
+function editMedia(index: number, media?: MediaModel) {
+  if (media) {
+    media.tags = media.tagstring ? media.tagstring.split(' ') : null
+    // let url = media.url?.replace(/^https?:\/\//i, '')
+    // media.favicon = `https://www.google.com/s2/favicons?domain=${url}&sz=512`
+    mediastore.editUserMedia(media).then((response) => {
+      if (!response.data.error) {
+        show.value = null
+      }
+    })
+  } else if (show.value === index) {
+    show.value = null
+  } else {
+    show.value = index
+  }
+}
+
 const ctrl = useKeyModifier('Control')
 onKeyStroke(['s'], (e: KeyboardEvent) => {
   if (ctrl.value) {
@@ -51,11 +70,23 @@ onKeyStroke(['s'], (e: KeyboardEvent) => {
   <main>
     <MediaFilters @toggleSearch="toggleSearchModal()" />
     <div class="medias" v-if="mediastore.filteredList.length !== 0">
-      <TransitionGroup name="list">
-        <div v-for="media of filteredMedia" :key="media.id">
-          <MediaComponent :media="media" />
-        </div>
-      </TransitionGroup>
+      <!-- <TransitionGroup name="list"> -->
+      <div class="media__switch" v-for="(media, index) of filteredMedia" :key="media.id">
+        <MediaComponent
+          v-if="show !== index"
+          :media="media"
+          :key="media.id"
+          @enableEdit="editMedia(index)"
+        />
+        <MediaEditComponent
+          v-else
+          :media="media"
+          :key="media.title"
+          @cancelEdit="editMedia(index)"
+          @confirmEdit="(media: MediaModel) => editMedia(index, media)"
+        />
+      </div>
+      <!-- </TransitionGroup> -->
     </div>
     <transition name="search" mode="out-in">
       <ActionOverlay

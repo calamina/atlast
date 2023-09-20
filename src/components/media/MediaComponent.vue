@@ -169,8 +169,8 @@ function deleteMedia(id: number) {
 
   &__actions {
     position: absolute;
-    top: 0.75rem;
-    right: 0;
+    top: 0.5rem;
+    right: 0.5rem;
     display: none;
     padding: 0;
     gap: 0.25rem;

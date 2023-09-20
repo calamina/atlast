@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onKeyStroke, useKeyModifier } from '@vueuse/core'
-import type { Component } from 'vue'
 import IconCancel from '@/components/icons/IconCancel.vue'
+import type { Component } from 'vue'
 
 const props = defineProps<{
   component: Component
@@ -34,8 +34,8 @@ onKeyStroke(['Escape'], (e) => {
 <style lang="scss" scoped>
 .overlay-background {
   top: 0;
-  background-color: rgba(239, 239, 239, 1);
-  background-color: rgba(239, 239, 239, 0.8);
+  background-color: #efefef;
+  // background-color: #efefefcc;
   position: fixed;
   display: flex;
   justify-content: center;
