@@ -1,14 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, type Ref } from 'vue'
-import { useMediaStore } from '@/stores/media'
-import IconDelete from '@/components/icons/IconDelete.vue'
 import IconEditVue from '@/components/icons/IconEdit.vue'
 import actions from '@/utils/media-actions'
 import IconLikeFull from '@/components/icons/IconLikeFull.vue'
 import type { MediaModel } from '@/models/media.model'
-// import IconLike from '@/components/icons/IconLike.vue'
-
-const mediastore = useMediaStore()
 
 const emits = defineEmits(['enableEdit'])
 const props = defineProps<{ media: MediaModel }>()
@@ -18,43 +13,33 @@ const status = computed(() => {
 })
 
 const expanded: Ref<boolean | null> = ref(null)
-
-function deleteMedia(id: number) {
-  mediastore.deleteUserMedia(id)
-}
 </script>
 
 <template>
   <div class="media" v-if="media.id">
-    <img class="media__img" @click="expanded = !expanded" :src="media.thumbnail" alt="cover" />
+    <img class="media__img" @click="expanded = !expanded" :src="media.thumbnail" alt="no img :(" />
     <div class="media__content">
       <a class="media__link" :href="media.url" target="_blank">
         {{ media.title }}
-        <!-- <IconLikeFull class="media__favorite" v-if="media.like" /> -->
-        <!-- <span class="media__status1" :style="{ backgroundColor: status!.color }"></span> -->
+        <IconLikeFull class="media__favorite" v-if="media.like" />
       </a>
       <p class="media__description">{{ media.description }}</p>
       <transition name="reveal">
         <p class="media__extract" v-if="expanded">{{ media.extract }}</p>
       </transition>
       <div class="media__footer">
-        <!-- <button class="media__status" :style="{ backgroundColor: status!.color }">
+        <p class="media__status" :style="{ backgroundColor: status!.color }">
           {{ media.action }}
-        </button> -->
-        <IconLikeFull class="media__favorite" v-if="media.like" />
-        <button class="media__tag" v-for="tag in media.tags" :key="tag">
+        </p>
+        <p class="media__tag" v-for="tag in media.tags" :key="tag">
           {{ tag }}
-        </button>
+        </p>
       </div>
-      <!-- <p class="media__score">{{ media.score }}</p> -->
     </div>
 
     <div class="media__actions">
-      <button class="button-icon action" type="button" @click="$emit('enableEdit')">
+      <button class="button-icon media__action" type="button" @click="$emit('enableEdit')">
         <IconEditVue />
-      </button>
-      <button class="button-icon action" type="button" @click="deleteMedia(media.id)">
-        <IconDelete />
       </button>
     </div>
   </div>
@@ -70,7 +55,9 @@ function deleteMedia(id: number) {
   gap: 0.75rem;
   padding: 1rem;
   background-color: #efefef;
+  border-radius: 1.5rem;
   &:hover {
+    background-color: #fff;
     .media__actions {
       display: flex;
     }
@@ -82,6 +69,13 @@ function deleteMedia(id: number) {
     width: 5rem;
     filter: saturate(0);
     border-radius: 1rem;
+    background-color: #ddd;
+    display: flex;
+    font-size: 0.9rem;
+    color: #777;
+    align-items: center;
+    justify-content: center;
+    font-family: 'contaxBold', Arial, sans-serif;
   }
 
   &__score {
@@ -115,19 +109,18 @@ function deleteMedia(id: number) {
     text-decoration: none;
     color: black;
     transition: padding 0.3s, font-style 0.3s;
+
+    // &:hover {
+    //   color: #b48bcc;
+    // }
   }
 
   &__status {
-    padding: 0.05rem 0.5rem;
+    padding: 0.1rem 0.75rem;
     font-size: 0.85rem;
-    opacity: 0.7;
-  }
-
-  &__status1 {
-    display: block;
-    width: 0.75rem;
-    height: 0.75rem;
-    border-radius: 100%;
+    border-radius: 1rem;
+    color: #343434aa;
+    font-family: 'contaxBold', Arial, sans-serif;
   }
 
   &__description {
@@ -143,6 +136,7 @@ function deleteMedia(id: number) {
     margin-top: -0.05rem;
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 0.5rem;
   }
 
@@ -153,11 +147,11 @@ function deleteMedia(id: number) {
   }
 
   &__tag {
-    padding: 0.05rem 0.5rem;
+    padding: 0.1rem 0.75rem;
     background-color: #ddd;
-    color: #000000;
+    border-radius: 1rem;
+    color: #777;
     font-size: 0.85rem;
-    opacity: 0.5;
     transition: opacity 0.3s;
     &::before {
       content: '#';
@@ -169,17 +163,23 @@ function deleteMedia(id: number) {
 
   &__actions {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
+    top: 0.75rem;
+    right: 0.75rem;
+    // top: 2.25rem;
+    // left: 2.25rem;
+    // right: 2.25rem;
+    z-index: 600;
     display: none;
     padding: 0;
     gap: 0.25rem;
   }
 
   &__action {
+    background-color: #fff;
     width: 2.5rem;
     height: 2.5rem;
     padding: 0.55rem;
+    border-radius: 100%;
   }
 }
 

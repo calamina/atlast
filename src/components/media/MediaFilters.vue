@@ -49,7 +49,7 @@ function updateFilters(property: any, value: string | boolean | null) {
       <div class="stats">
         <button class="stat stat--new" @click="$emit('toggleSearch')">
           <p class="stat__name">Add media</p>
-          <p class="stat__count">ctrl + s</p>
+          <p class="stat__count">[ctrl + s]</p>
         </button>
       </div>
       <div class="stats">
@@ -170,12 +170,12 @@ h3 {
 }
 
 .stat {
-  padding: 0.3rem 1rem;
+  padding: 0.5rem 1rem;
   width: 15rem;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  border-radius: 1rem;
+  border-radius: 2rem;
 
   &Selected {
     background-color: #fff;

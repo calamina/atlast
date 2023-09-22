@@ -5,9 +5,9 @@ import { watchDebounced } from '@vueuse/shared'
 
 import { useWikiService } from '@/services/wiki.service'
 
-import MediaNewComponent from '@/components/media/MediaNewComponent.vue'
 import FormInput from '@/components/form/formInput.vue'
 import type { MediaModel } from '@/models/media.model'
+import MediaUpdateComponent from './MediaUpdateComponent.vue'
 
 const emits = defineEmits(['exit'])
 
@@ -86,10 +86,17 @@ function cancelAdd() {
         </div>
       </TransitionGroup>
     </div>
-    <MediaNewComponent
+    <!-- <MediaNewComponent
       v-if="activeMedia"
       :media="activeMedia"
       @add="$emit('exit')"
+      @cancel="cancelAdd()"
+    /> -->
+    <MediaUpdateComponent
+      v-if="activeMedia"
+      :media="activeMedia"
+      :action="'createMedia'"
+      @confirm="$emit('exit')"
       @cancel="cancelAdd()"
     />
   </div>
@@ -113,18 +120,27 @@ function cancelAdd() {
   display: flex;
   flex-flow: column;
   gap: 0.25rem;
-  background-color: #eee;
-  padding-bottom: 3rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  background-color: #fff;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .link {
   display: flex;
   flex-flow: row;
-  padding: 0.75rem 0.5rem;
+  padding: 0.5rem;
   cursor: pointer;
   gap: 1rem;
+  border-radius: 1rem;
+
   &:hover {
-    background-color: #ddd;
+    background-color: #efefef;
   }
 }
 
@@ -154,6 +170,7 @@ function cancelAdd() {
   border: none;
   height: 3rem;
   width: 3rem;
+  border-radius: 0.75rem;
   object-fit: contain;
 }
 

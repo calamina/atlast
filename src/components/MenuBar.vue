@@ -124,7 +124,6 @@ nav {
     height: 2.25rem;
     padding: 0.55rem;
     border-radius: 100%;
-    border-radius: 100%;
   }
 }
 </style>

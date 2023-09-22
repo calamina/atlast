@@ -20,11 +20,7 @@ onKeyStroke(['Escape'], (e) => {
 
 <template>
   <div class="overlay-background">
-    <div class="wrapper">
-      <transition name="modal" mode="out-in">
-        <component :is="props.component" @exit="$emit('toggleSearch')"></component>
-      </transition>
-    </div>
+    <component class="wrapper" :is="props.component" @exit="$emit('toggleSearch')"></component>
     <button type="button" class="button-icon exit" @click="$emit('toggleSearch')">
       <IconCancel />
     </button>
@@ -34,8 +30,7 @@ onKeyStroke(['Escape'], (e) => {
 <style lang="scss" scoped>
 .overlay-background {
   top: 0;
-  background-color: #efefef;
-  // background-color: #efefefcc;
+  background-color: #efefefcc;
   position: fixed;
   display: flex;
   justify-content: center;
@@ -43,11 +38,6 @@ onKeyStroke(['Escape'], (e) => {
   height: 100vh;
   overflow: auto;
   padding: 5rem;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
 }
 .wrapper {
   display: flex;
@@ -59,26 +49,10 @@ onKeyStroke(['Escape'], (e) => {
 }
 
 .exit {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background-color: #ddd;
-  border-radius: 2rem;
-}
-
-// modal transition
-.modal-enter-active,
-.modal-leave-active {
-  transition: opacity 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53),
-    transform 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
-}
-
-.modal-enter-from {
-  opacity: 0;
-  transform: translateY(-1rem);
-}
-.modal-leave-to {
-  opacity: 0;
-  transform: translateY(-1rem);
+  position: fixed;
+  top: 1.1rem;
+  right: 1.1rem;
+  border-radius: 100%;
+  // background-color: #fff;
 }
 </style>

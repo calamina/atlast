@@ -71,6 +71,7 @@ export const useMediaStore = defineStore('media', () => {
       .then((response) => {
         notification.addNotification({ type: 'alert', message: 'Media added !' })
         getFilteredMediaByUser(user.connectedUser.username)
+        getMediaByUser(user.connectedUser.username)
         return response.data
       })
       .catch((error) => {
@@ -98,6 +99,7 @@ export const useMediaStore = defineStore('media', () => {
       .delete(`medias/${id}`)
       .then(() => {
         notification.addNotification({ type: 'alert', message: 'Media deleted !' })
+        getMediaByUser(user.connectedUser.username)
         getFilteredMediaByUser(user.connectedUser.username)
       })
       .catch((error) => {

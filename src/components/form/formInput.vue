@@ -42,11 +42,12 @@ input[type='date'],
 textarea,
 select {
   background-color: #fff;
-  font-size: 2.5rem;
+  font-size: 1.2rem;
   padding: 0;
   opacity: 1;
   color: #000;
   border-radius: 1rem;
+  height: 3rem;
   padding: 0.25rem 1rem;
 }
 

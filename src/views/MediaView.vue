@@ -4,7 +4,7 @@ import { useKeyModifier, onKeyStroke } from '@vueuse/core'
 import { useUserStore } from '@/stores/user'
 import { useMediaStore } from '@/stores/media'
 import MediaComponent from '@/components/media/MediaComponent.vue'
-import MediaEditComponent from '@/components/media/MediaEditComponent.vue'
+import MediaUpdateComponent from '@/components/media/MediaUpdateComponent.vue'
 import MediaFilters from '@/components/media/MediaFilters.vue'
 import MediaSearch from '@/components/media/MediaSearch.vue'
 import ActionOverlay from '@/components/ActionOverlay.vue'
@@ -78,12 +78,20 @@ onKeyStroke(['s'], (e: KeyboardEvent) => {
           :key="media.id"
           @enableEdit="editMedia(index)"
         />
-        <MediaEditComponent
+        <!-- <MediaEditComponent
           v-else
           :media="media"
           :key="media.title"
           @cancelEdit="editMedia(index)"
           @confirmEdit="(media: MediaModel) => editMedia(index, media)"
+        /> -->
+        <MediaUpdateComponent
+          v-else
+          :media="media"
+          :action="'editMedia'"
+          :key="media.title"
+          @confirm="(media: MediaModel) => editMedia(index, media)"
+          @cancel="editMedia(index)"
         />
       </div>
       <!-- </TransitionGroup> -->
@@ -116,6 +124,7 @@ main {
   display: flex;
   flex-flow: column;
   align-items: center;
+  gap: 0.25rem;
 }
 
 .list-enter-active,
