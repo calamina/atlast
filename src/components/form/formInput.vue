@@ -25,9 +25,10 @@ const emits = defineEmits(['update:modelValue'])
 </template>
 <style lang="scss" scoped>
 label {
+  display: flex;
   color: #000;
-  margin-top: -1rem;
-  padding-left: 0.15rem;
+  padding-left: 0.25rem;
+  font-size: 0.9rem;
   overflow: hidden;
 
   p {

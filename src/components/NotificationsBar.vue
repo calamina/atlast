@@ -7,7 +7,7 @@ const notifications = useNotificationStore()
 
 <template>
   <div class="notifications">
-    <transition-group name="notifications" tag="div">
+    <transition-group name="notifications">
       <NotificationComponent
         v-for="notification in notifications.notifications"
         :key="notification.message"
@@ -22,7 +22,6 @@ const notifications = useNotificationStore()
   position: fixed;
   top: 1rem;
   left: 1rem;
-  // width: 100vw;
   display: flex;
   flex-flow: column;
   align-items: flex-start;

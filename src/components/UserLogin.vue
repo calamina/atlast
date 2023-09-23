@@ -40,17 +40,19 @@ form {
 
 .button--primary {
   width: unset;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-family: 'contaxBold', 'Arial', sans-serif;
-  border-radius: 1.5rem;
+  border-radius: 2rem;
   padding: 0.4rem 1.5rem;
-  margin-top: 2rem;
-  background-color: #ddd;
+  margin-top: 1rem;
+  color: #000;
+  text-transform: capitalize;
+  background-color: #dfcfe8;
 }
 
 .button--secondary {
   width: unset;
-  font-size: 1.2rem;
+  font-size: 1rem;
   background-color: transparent;
 
   span {

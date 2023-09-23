@@ -24,7 +24,17 @@ async function logoutUser() {
 <template>
   <nav>
     <div class="user">
-      <button class="button-icon user__disconnect"><IconCircle /></button>
+      <button
+        @click="
+          notification.addNotification({
+            type: 'alert',
+            message: Math.random() + ' !'
+          })
+        "
+        class="button-icon user__disconnect"
+      >
+        <IconCircle />
+      </button>
     </div>
     <div class="types">
       <router-link class="type media" to="media">

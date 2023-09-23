@@ -131,7 +131,6 @@ function updateFilters(property: any, value: string | boolean | null) {
 
 <style lang="scss" scoped>
 .filter-wrapper {
-  width: 100%;
   position: relative;
   display: flex;
   justify-content: flex-end;
