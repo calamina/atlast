@@ -3,8 +3,8 @@ import router from '@/router/index'
 import { useUserStore } from '@/stores/user'
 import { useNotificationStore } from '@/stores/notification'
 
-// import IconClose from '@/components/icons/IconClose.vue'
-// import IconCircle from '@/components/icons/IconCircle.vue'
+import IconClose from '@/components/icons/IconClose.vue'
+import IconCircle from '@/components/icons/IconCircle.vue'
 
 const user = useUserStore()
 const notification = useNotificationStore()
@@ -24,7 +24,7 @@ async function logoutUser() {
 <template>
   <nav>
     <div class="user">
-      <!-- <button class="button-icon user__disconnect"><IconCircle /></button> -->
+      <button class="button-icon user__disconnect"><IconCircle /></button>
     </div>
     <div class="types">
       <router-link class="type media" to="media">
@@ -36,7 +36,7 @@ async function logoutUser() {
     </div>
     <div class="user" v-if="user.connectedUser">
       <button class="user__disconnect button-icon" type="button" @click="logoutUser()">
-        <!-- <IconClose /> -->
+        <IconClose />
       </button>
     </div>
   </nav>
