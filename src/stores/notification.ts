@@ -1,15 +1,15 @@
 import { defineStore } from 'pinia'
-import type { notification } from '@/models/notification.model'
+import type { Notification } from '@/models/notification.model'
 import { ref, type Ref } from 'vue'
 
 export const useNotificationStore = defineStore('notification', () => {
-  const notifications: Ref<notification[]> = ref([])
+  const notifications: Ref<Notification[]> = ref([])
 
-  async function addNotification(notification: notification) {
+  async function addNotification(notification: Notification) {
     notifications?.value.push(notification)
   }
 
-  async function removeNotification(notification: notification) {
+  async function removeNotification(notification: Notification) {
     notifications.value.splice(notifications.value.indexOf(notification), 1)
   }
   return { notifications, addNotification, removeNotification }

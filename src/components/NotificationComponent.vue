@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { notification } from '@/models/notification.model'
+import type { Notification } from '@/models/notification.model'
 import { useNotificationStore } from '@/stores/notification'
 import { onMounted } from 'vue'
 
 const notifications = useNotificationStore()
 const props = defineProps<{
-  notification: notification
+  notification: Notification
 }>()
 
 onMounted(() => {
