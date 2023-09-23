@@ -26,9 +26,6 @@ const password: Ref<string> = ref('password')
     <button class="button--secondary" type="button" @click="$emit('toggleRegister')">
       or <span>register</span>
     </button>
-    <!-- <button class="button--tertiary" type="submit" @click="$emit('toggleRegister')">
-      lost password ?
-    </button> -->
   </form>
 </template>
 <style lang="scss" scoped>

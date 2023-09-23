@@ -53,8 +53,8 @@ async function loginUser(login: string, password: string) {
       })
       router.push('/media')
     })
-    .catch((error) => {
-      notification.addNotification({ type: 'error', message: error.response })
+    .catch(() => {
+      notification.addNotification({ type: 'error', message: 'Wrong login info :(' })
     })
 }
 
