@@ -158,13 +158,12 @@ h3 {
   font-size: 1rem;
   font-family: 'contaxItalic', 'Arial', sans-serif;
   opacity: 0.5;
-  padding: 0 1rem;
+  padding: 0 1rem 0.25rem;
 }
 
 .stats {
   display: flex;
   flex-flow: column;
-  gap: 0.25rem;
   border-radius: 1rem;
 }
 

@@ -30,23 +30,17 @@ onMounted(() => {
 <style lang="scss" scoped>
 .notification {
   width: 20rem;
-  padding: 1rem;
+  padding: 0 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 2rem;
+  height: 3rem;
   box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
-  border: 1px solid #000;
   background-color: #000;
 
   p {
     color: #fff;
   }
 }
-// .error {
-//   background-color: rgb(219, 157, 157);
-// }
-// .alert {
-//   background-color: #c0a6cd;
-// }
 </style>

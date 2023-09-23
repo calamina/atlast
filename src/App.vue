@@ -9,7 +9,8 @@ const user = useUserStore()
 </script>
 
 <template>
-  <NotificationsBar class="notification" v-if="notification.notifications.length" />
+  <NotificationsBar class="notification" />
+  <!-- <NotificationsBar class="notification" v-if="notification.notifications.length" /> -->
 
   <Suspense>
     <MenuBar v-if="user.connectedUser" />
