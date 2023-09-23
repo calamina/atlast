@@ -21,7 +21,7 @@ Personnal Knowledge Database made with Vue3 and Strapi
 - [ ] move filters to component / copy media
 
 # media
-// PRIO !!
+- [ ] add message when empty list
 - [ ] display library media in search results
 - [ ] hide / highlight wikis matching library media
 - [ ] add arrows to search
@@ -32,15 +32,20 @@ Personnal Knowledge Database made with Vue3 and Strapi
 - [ ] add confirmation dialog
 
 # models
+- [ ] change actions name to status
+- [ ] add status model
 - [ ] add user model
 - [ ] add note model
 
 # css
-- [x] clean & refactor css
-- [!?] bem everywhere
+- [ ] clean & refactor css
+- [ ] bem everywhere
 
 # filters
 - [ ] add tag search ?
 
 # overlay
-- [ ] add shortcuts nex to exit button
+- [ ] add keyboard shortcuts next to exit button
+
+# notifications
+- [ ] add gap between notifications

@@ -40,15 +40,15 @@ const router = createRouter({
   ]
 })
 
-// router.beforeEach(async (to) => {
-//   const publicPages = ['/auth']
-//   const authRequired = !publicPages.includes(to.path)
-//   const userStore = useUserStore()
-//   if (authRequired && !userStore.connectedUser) {
-//     const notification = useNotificationStore()
-//     notification.addNotification({ type: 'error', message: 'Login to see this page' })
-//     return '/auth'
-//   }
-// })
+router.beforeEach(async (to) => {
+  const publicPages = ['/auth']
+  const authRequired = !publicPages.includes(to.path)
+  const userStore = useUserStore()
+  if (authRequired && !userStore.connectedUser) {
+    const notification = useNotificationStore()
+    notification.addNotification({ type: 'error', message: 'Login to see this page' })
+    return '/auth'
+  }
+})
 
 export default router
