@@ -53,6 +53,6 @@ onKeyStroke(['Escape'], (e) => {
   top: 1.1rem;
   right: 1.1rem;
   border-radius: 100%;
-  // background-color: #fff;
+  background-color: #ddd;
 }
 </style>

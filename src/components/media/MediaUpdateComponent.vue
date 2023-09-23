@@ -10,6 +10,7 @@ import IconLikeFull from '@/components/icons/IconLikeFull.vue'
 import IconLike from '@/components/icons/IconLike.vue'
 import IconDelete from '@/components/icons/IconDelete.vue'
 import IconCheck from '@/components/icons/IconCheck.vue'
+import IconBack from '@/components/icons/IconBack.vue'
 import type { MediaModel } from '@/models/media.model'
 import IconRating from '../icons/IconRating.vue'
 import actions from '@/utils/media-actions'
@@ -85,6 +86,7 @@ function deleteMedia(id: number) {
 <template>
   <div class="media" v-if="media">
     <img class="media__image" v-if="media.image" :src="media.image" />
+    <div class="media__image" v-else></div>
     <div class="media__content">
       <a class="media__link" :href="media.url" target="_blank">
         {{ media.title }}
@@ -96,18 +98,6 @@ function deleteMedia(id: number) {
         <IconLike v-else />
       </button>
       <div class="media__form">
-        <div class="choices">
-          <button
-            v-for="index in 10"
-            type="button"
-            class="rating-icon"
-            :key="index"
-            @click="media.score = index"
-            :class="{ iconActive: media.score! >= index }"
-          >
-            <IconRating />
-          </button>
-        </div>
         <div class="choices">
           <button
             v-for="action in actions"
@@ -135,6 +125,18 @@ function deleteMedia(id: number) {
             {{ category }}
           </button>
         </div>
+        <div class="choices">
+          <button
+            v-for="index in 10"
+            type="button"
+            class="rating-icon"
+            :key="index"
+            @click="media.score = index"
+            :class="{ iconActive: media.score! >= index }"
+          >
+            <IconRating />
+          </button>
+        </div>
         <div class="media__footer">
           <input
             placeholder="tags (separate with space)"
@@ -143,9 +145,6 @@ function deleteMedia(id: number) {
             v-model="media.tagstring"
           />
           <div class="media__actions" v-if="props.action === 'createMedia'">
-            <button class="button-icon" type="reset" @click="$emit('cancel')">
-              <IconDelete />
-            </button>
             <button class="button-icon media__submit" type="submit" @click="addMedia(media)">
               <IconCheck />
             </button>
@@ -154,7 +153,7 @@ function deleteMedia(id: number) {
             <button
               class="button-icon media__cancel"
               type="reset"
-              @click="$emit('cancelEdit', props.media)"
+              @click="$emit('cancel', props.media)"
             >
               <IconBack />
             </button>
@@ -193,6 +192,7 @@ function deleteMedia(id: number) {
     display: flex;
     flex-flow: column;
     gap: 0.25rem;
+    flex: 1;
   }
 
   &__image {
@@ -201,6 +201,7 @@ function deleteMedia(id: number) {
     width: 5rem;
     filter: saturate(0);
     border-radius: 1rem;
+    background-color: #ddd;
   }
 
   &__link {
@@ -270,6 +271,11 @@ function deleteMedia(id: number) {
     background-color: #dfcfe8;
     border-radius: 100%;
   }
+
+  &__cancel {
+    background-color: #efefef;
+    border-radius: 100%;
+  }
 }
 
 .love {
@@ -280,26 +286,16 @@ function deleteMedia(id: number) {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  flex-wrap: wrap;
 
   & .rating {
     font-family: 'contaxBold', Arial, sans-serif;
-    // background-color: #ccc;
     font-size: 1rem;
-    min-width: 2rem;
     padding: 0.1rem 1rem;
     height: 2rem;
     border-radius: 1rem;
     color: #999;
     background-color: #efefef;
   }
-  & .active {
-    opacity: 1;
-    background-color: #dfcfe8;
-    color: #323232;
-    opacity: 1;
-  }
-
   & .active {
     background-color: #dfcfe8;
     color: #323232;

@@ -8,6 +8,7 @@ import { useWikiService } from '@/services/wiki.service'
 import FormInput from '@/components/form/formInput.vue'
 import type { MediaModel } from '@/models/media.model'
 import MediaUpdateComponent from './MediaUpdateComponent.vue'
+import IconBack from '../icons/IconBack.vue'
 
 const emits = defineEmits(['exit'])
 
@@ -92,6 +93,10 @@ function cancelAdd() {
       @add="$emit('exit')"
       @cancel="cancelAdd()"
     /> -->
+    <button class="link__back" v-if="activeMedia" @click="cancelAdd()">
+      <IconBack class="button-icon" />
+      back to search
+    </button>
     <MediaUpdateComponent
       v-if="activeMedia"
       :media="activeMedia"
@@ -172,6 +177,22 @@ function cancelAdd() {
   width: 3rem;
   border-radius: 0.75rem;
   object-fit: contain;
+}
+
+.link__back {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #fff;
+  width: fit-content;
+  padding-right: 1rem;
+  border-radius: 2rem;
+  font-family: 'contaxBold', Arial, sans-serif;
+}
+
+.button-icon {
+  // background-color: #fff;
+  border-radius: 100%;
 }
 
 .link__description {

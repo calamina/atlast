@@ -17,7 +17,13 @@ const expanded: Ref<boolean | null> = ref(null)
 
 <template>
   <div class="media" v-if="media.id">
-    <img class="media__img" @click="expanded = !expanded" :src="media.thumbnail" alt="no img :(" />
+    <img
+      class="media__image"
+      v-if="media.image"
+      @click="expanded = !expanded"
+      :src="media.thumbnail"
+    />
+    <div class="media__image" v-else @click="expanded = !expanded"></div>
     <div class="media__content">
       <a class="media__link" :href="media.url" target="_blank">
         {{ media.title }}
@@ -63,7 +69,7 @@ const expanded: Ref<boolean | null> = ref(null)
     }
   }
 
-  &__img {
+  &__image {
     object-fit: cover;
     height: 5rem;
     width: 5rem;
