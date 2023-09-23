@@ -18,22 +18,21 @@ Personnal Knowledge Database made with Vue3 and Strapi
 - [ ] parent sites ? "main" link with sublinks !!!
 - [ ] new categs : cosmos/science ? fun ? urban/street ? music ? games ? food ?
 - [ ] lists ?
-- [ ] move filters to component
-- [ ] refactor link page
+- [ ] move filters to component / copy media
 
 # media
+// PRIO !!
+- [ ] display library media in search results
+- [ ] hide / highlight wikis matching library media
 - [ ] add arrows to search
   - top/bottom to go through results
   - left/right to go to form and back
-- [ ] display library media in search results
-- [ ] hide / highlight wikis matching library media
 
 # utils
 - [ ] add confirmation dialog
 
 # models
 - [ ] add user model
-- [x] add media model
 - [ ] add note model
 
 # css
@@ -43,5 +42,5 @@ Personnal Knowledge Database made with Vue3 and Strapi
 # filters
 - [ ] add tag search ?
 
-# notifications
-- [x] reset autoclear on notification
+# overlay
+- [ ] add shortcuts nex to exit button
