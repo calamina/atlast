@@ -1,6 +1,8 @@
 # atlast
 Personnal Knowledge Database made with Vue3 and Strapi
 
+![atlast preview](atlast.png?raw=true "Atlast preview")
+
 # Accessibility
 - [ ] aria and focus and img alt
 
