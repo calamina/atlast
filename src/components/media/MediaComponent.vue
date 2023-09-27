@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { computed, ref, type Ref } from 'vue'
-import IconEditVue from '@/components/icons/IconEdit.vue'
-import actions from '@/utils/media-actions'
-import IconLikeFull from '@/components/icons/IconLikeFull.vue'
 import type { MediaModel } from '@/models/media.model'
+import actions from '@/utils/media-actions'
+import categs from '@/utils/media-categs'
+import IconEditVue from '@/components/icons/IconEdit.vue'
+import IconLikeFull from '@/components/icons/IconLikeFull.vue'
+import IconAdd from '../icons/IconAdd.vue'
+import IconClose from '../icons/IconClose.vue'
+import IconRating from '../icons/IconRating.vue'
 
 const emits = defineEmits(['enableEdit'])
 const props = defineProps<{ media: MediaModel }>()
@@ -11,19 +15,22 @@ const props = defineProps<{ media: MediaModel }>()
 const status = computed(() => {
   return actions.find((action: { name: string }) => action.name === props.media.action)
 })
+const categ = computed(() => {
+  return categs.find((categ: { name: string }) => categ.name === props.media.categ)
+})
 
 const expanded: Ref<boolean | null> = ref(null)
 </script>
 
 <template>
   <div class="media" v-if="media.id">
-    <img
-      class="media__image"
-      v-if="media.image"
-      @click="expanded = !expanded"
-      :src="media.thumbnail"
-    />
-    <div class="media__image" v-else @click="expanded = !expanded"></div>
+    <div class="media__expand" @click="expanded = !expanded">
+      <button class="button-icon media__expand--icon" type="button">
+        <IconAdd v-if="!expanded" />
+        <IconClose v-else />
+      </button>
+    </div>
+    <img class="media__image" v-if="media.image" :src="media.thumbnail" />
     <div class="media__content">
       <a class="media__link" :href="media.url" target="_blank">
         {{ media.title }}
@@ -34,12 +41,26 @@ const expanded: Ref<boolean | null> = ref(null)
         <p class="media__extract" v-if="expanded">{{ media.extract }}</p>
       </transition>
       <div class="media__footer">
-        <p class="media__status" :style="{ backgroundColor: status!.color }">
-          {{ media.action }}
+        <component
+          class="media__status"
+          :is="status!.component"
+          :style="{ backgroundColor: status!.color }"
+        />
+        <!-- <component class="media__status" :is="categ!.component" /> -->
+        <p class="media__categ">
+          {{ media.categ }}
         </p>
-        <p class="media__tag" v-for="tag in media.tags" :key="tag">
+        <div class="media__score" v-if="media.score">
+          <IconRating v-for="score in media.score" :key="score" class="media__score-icon" />
+          <!-- <p class="media__score-text">{{ media.score }}</p> -->
+        </div>
+        <!-- <div class="media__score" v-if="media.score">
+          <IconRating class="media__score-icon" />
+          <p class="media__score-text">{{ media.score }}</p>
+        </div> -->
+        <!-- <p class="media__tag" v-for="tag in media.tags" :key="tag">
           {{ tag }}
-        </p>
+        </p> -->
       </div>
     </div>
 
@@ -64,15 +85,34 @@ const expanded: Ref<boolean | null> = ref(null)
   border-radius: 1.5rem;
   &:hover {
     background-color: #fff;
-    .media__actions {
+    .media__actions,
+    .media__expand {
       display: flex;
+    }
+  }
+
+  &__expand {
+    position: absolute;
+    top: 2.5rem;
+    left: 2.5rem;
+    z-index: 600;
+    display: none;
+    gap: 0.25rem;
+    border-radius: 100%;
+
+    &--icon {
+      background-color: #fff;
+      width: 2.5rem;
+      height: 2.5rem;
+      padding: 0.55rem;
+      border-radius: 100%;
     }
   }
 
   &__image {
     object-fit: cover;
-    height: 5rem;
-    width: 5rem;
+    height: 5.5rem;
+    width: 5.5rem;
     filter: saturate(0);
     border-radius: 1rem;
     background-color: #ddd;
@@ -84,21 +124,11 @@ const expanded: Ref<boolean | null> = ref(null)
     font-family: 'contaxBold', Arial, sans-serif;
   }
 
-  &__score {
-    font-size: 1rem;
-    font-family: 'contaxBold', Arial, sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.5rem;
-    height: 2.5rem;
-  }
-
   &__content {
     display: flex;
     flex-flow: column;
     flex: 1;
-    gap: 0.25rem;
+    gap: 0.3rem;
     overflow: hidden;
   }
 
@@ -107,26 +137,21 @@ const expanded: Ref<boolean | null> = ref(null)
     align-items: center;
     gap: 0.5rem;
     width: fit-content;
+    // justify-content: space-between;
     font-size: 1.5rem;
-    // line-height: 1.4rem;
+    margin-top: -0.25rem;
     margin-bottom: -0.5rem;
     font-family: 'contaxBold', Arial, sans-serif;
     text-transform: capitalize;
     text-decoration: none;
     color: black;
     transition: padding 0.3s, font-style 0.3s;
-
-    // &:hover {
-    //   color: #b48bcc;
-    // }
   }
 
-  &__status {
-    padding: 0.1rem 0.75rem;
-    font-size: 0.85rem;
-    border-radius: 1rem;
-    color: #343434aa;
-    font-family: 'contaxBold', Arial, sans-serif;
+  &__favorite {
+    width: 1.1rem;
+    height: 1.1rem;
+    color: #dc6389;
   }
 
   &__description {
@@ -136,56 +161,98 @@ const expanded: Ref<boolean | null> = ref(null)
 
   &__extract {
     max-height: 30rem;
+    padding-bottom: 0.5rem;
   }
 
   &__footer {
-    margin-top: -0.05rem;
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    // align-items: center;
+    // flex-flow: column;
     gap: 0.5rem;
   }
 
-  &__favorite {
-    width: 1.1rem;
-    height: 1.1rem;
-    color: #dc6389;
+  &__status {
+    height: 1.75rem;
+    padding: 0.25rem;
+    border-radius: 1rem;
+  }
+
+  &__categ {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    gap: 0.25rem;
+    height: 1.75rem;
+    font-size: 0.9rem;
+    padding: 0.25rem 1rem;
+    width: 6rem;
+    font-family: 'contaxBold', Arial, sans-serif;
+    background-color: #ddd;
+    border-radius: 1rem;
   }
 
   &__tag {
-    padding: 0.1rem 0.75rem;
+    height: 1.75rem;
+    font-size: 0.9rem;
+    padding: 0.25rem 1rem;
     background-color: #ddd;
-    border-radius: 1rem;
+    // font-family: 'contaxBold', Arial, sans-serif;
     color: #777;
+    border-radius: 1rem;
     font-size: 0.85rem;
-    transition: opacity 0.3s;
     &::before {
       content: '#';
-    }
-    &:hover {
-      opacity: 1;
     }
   }
 
   &__actions {
     position: absolute;
-    top: 0.75rem;
+    top: 2.5rem;
     right: 0.75rem;
-    // top: 2.25rem;
-    // left: 2.25rem;
-    // right: 2.25rem;
     z-index: 600;
     display: none;
     padding: 0;
     gap: 0.25rem;
+    border-radius: 100%;
   }
 
   &__action {
-    background-color: #fff;
+    background-color: #efefef;
     width: 2.5rem;
     height: 2.5rem;
     padding: 0.55rem;
     border-radius: 100%;
+  }
+
+  &__score {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    gap: 0.25rem;
+    height: 1.75rem;
+    font-size: 0.9rem;
+    font-family: 'contaxBold', Arial, sans-serif;
+    background-color: #dc956333;
+    border-radius: 1rem;
+    // width: 4rem;
+    padding: 0 0.5rem;
+  }
+
+  &__score-text {
+    font-size: 0.9rem;
+    line-height: 1.25rem;
+    font-family: 'contaxBold', Arial, sans-serif;
+  }
+
+  &__score-icon {
+    padding: 0.5rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    padding: 0;
+    color: #b97749aa;
   }
 }
 
@@ -193,11 +260,13 @@ const expanded: Ref<boolean | null> = ref(null)
 .reveal-enter-active,
 .reveal-leave-active {
   transition: max-height 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53),
-    opacity 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
+    opacity 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53),
+    padding 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
 }
 .reveal-enter-from,
 .reveal-leave-to {
   max-height: 0;
   opacity: 0;
+  padding: 0;
 }
 </style>

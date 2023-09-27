@@ -42,6 +42,7 @@ function toggleSearchModal() {
 
 function editMedia(index: number, media?: MediaModel) {
   if (media) {
+    if (media.action === 'planning') media.score = null
     media.tags = media.tagstring ? media.tagstring.split(' ') : null
     // let url = media.url?.replace(/^https?:\/\//i, '')
     // media.favicon = `https://www.google.com/s2/favicons?domain=${url}&sz=512`
@@ -124,6 +125,7 @@ main {
   display: flex;
   flex-flow: column;
   align-items: center;
+  // gap: 0.5rem;
   gap: 0.25rem;
 }
 

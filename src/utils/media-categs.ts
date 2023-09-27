@@ -1,4 +1,4 @@
-import IconWatching from '@/components/icons/IconWatching.vue'
+import IconBook from '@/components/icons/IconBook.vue'
 import IconPaused from '@/components/icons/IconPaused.vue'
 import IconCompleted from '@/components/icons/IconCompleted.vue'
 import IconDropped from '@/components/icons/IconDropped.vue'
@@ -6,29 +6,28 @@ import IconPlanning from '@/components/icons/IconPlanning.vue'
 
 export default [
   {
-    color: '#a4dc6377',
-    name: 'completed',
+    color: '#a4dc6366',
+    name: 'movie',
     component: IconCompleted
   },
   {
-    color: '#dcbc6377',
-    name: 'planning',
+    color: '#dca86366',
+    name: 'series',
     component: IconPlanning
   },
   {
-    color: '#63cedc77',
-    name: 'watching',
-    component: IconWatching
+    color: '#63cedc66',
+    name: 'book',
+    component: IconBook
   },
   {
-    // color: '#88888877 ',
-    color: '#dc848477',
-    name: 'dropped',
+    color: '#88888866',
+    name: 'comic',
     component: IconDropped
   },
   {
-    color: '#b6cccf77',
-    name: 'paused',
+    color: '#b6cccf66',
+    name: 'game',
     component: IconPaused
   }
 ]

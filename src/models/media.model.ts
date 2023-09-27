@@ -7,7 +7,7 @@ export interface MediaModel {
   tags?: string[] | null
   categ?: string
   action?: string
-  score?: number
+  score?: number | null
   thumbnail?: string
   image?: string
   description?: string

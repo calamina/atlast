@@ -58,7 +58,7 @@ onMounted(() => {
         extract: data.extract,
         image: data.originalimage?.source,
         thumbnail: data.thumbnail?.source,
-        score: 1,
+        score: 0,
         action: 'completed',
         categ: 'movie'
       }
@@ -66,6 +66,7 @@ onMounted(() => {
 })
 
 function addMedia(media: MediaModel) {
+  if (media.action === 'planning') media.score = null
   media.tags = media.tagstring ? media.tagstring.split(' ') : null
   media.user = user.connectedUser.username
   mediastore
@@ -125,7 +126,7 @@ function deleteMedia(id: number) {
             {{ category }}
           </button>
         </div>
-        <div class="choices">
+        <div class="choices" v-if="media.action !== 'planning'">
           <button
             v-for="index in 10"
             type="button"
@@ -197,8 +198,8 @@ function deleteMedia(id: number) {
 
   &__image {
     object-fit: cover;
-    height: 5rem;
-    width: 5rem;
+    height: 5.5rem;
+    width: 5.5rem;
     filter: saturate(0);
     border-radius: 1rem;
     background-color: #ddd;
@@ -210,6 +211,7 @@ function deleteMedia(id: number) {
     gap: 0.5rem;
     width: fit-content;
     font-size: 1.5rem;
+    margin-top: -0.5rem;
     margin-bottom: -0.5rem;
     font-family: 'contaxBold', Arial, sans-serif;
     text-transform: capitalize;
@@ -268,7 +270,7 @@ function deleteMedia(id: number) {
   }
 
   &__submit {
-    background-color: #dfcfe8;
+    background-color: var(--highlight);
     border-radius: 100%;
   }
 
@@ -297,7 +299,7 @@ function deleteMedia(id: number) {
     background-color: #efefef;
   }
   & .active {
-    background-color: #dfcfe8;
+    background-color: var(--highlight);
     color: #323232;
   }
   & .rating-icon {

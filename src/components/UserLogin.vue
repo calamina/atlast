@@ -44,7 +44,7 @@ form {
   margin-top: 1rem;
   color: #000;
   text-transform: capitalize;
-  background-color: #dfcfe8;
+  background-color: var(--highlight);
 }
 
 .button--secondary {

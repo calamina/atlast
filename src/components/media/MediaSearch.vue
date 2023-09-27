@@ -87,12 +87,6 @@ function cancelAdd() {
         </div>
       </TransitionGroup>
     </div>
-    <!-- <MediaNewComponent
-      v-if="activeMedia"
-      :media="activeMedia"
-      @add="$emit('exit')"
-      @cancel="cancelAdd()"
-    /> -->
     <button class="link__back" v-if="activeMedia" @click="cancelAdd()">
       <IconBack class="button-icon" />
       back to search
@@ -119,6 +113,7 @@ function cancelAdd() {
   display: flex;
   flex-flow: column;
   gap: 0.5rem;
+  border-radius: 3rem;
 }
 
 .links {
@@ -186,7 +181,8 @@ function cancelAdd() {
   background-color: #fff;
   width: fit-content;
   padding-right: 1rem;
-  border-radius: 2rem;
+  border-radius: 3rem;
+  height: 3rem;
   font-family: 'contaxBold', Arial, sans-serif;
 }
 

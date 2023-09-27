@@ -21,11 +21,10 @@ function countElements(property: string) {
   return Object.values(
     mediastore.filteredList
       .map((media) => media.attributes[property])
-      .reduce((acc, element) => {
-        // eslint-disable-next-line no-prototype-builtins
-        if (!acc.hasOwnProperty(element)) acc[element] = { name: element, number: 0 }
-        acc[element].number++
-        return acc
+      .reduce((mapping: any, item: string) => {
+        const { [item]: matchingItem } = mapping
+        matchingItem ? matchingItem.number++ : (mapping[item] = { name: item, number: 1 })
+        return mapping
       }, {})
   )
 }
@@ -38,7 +37,12 @@ function resetFilters() {
 }
 
 function updateFilters(property: any, value: string | boolean | null) {
-  filters.value[property] = filters.value[property] === value ? null : value
+  if (property === 'sort' && filters.value[property] === value) {
+    filters.value.order = filters.value.order === 'asc' ? 'desc' : 'asc'
+    mediastore.updateFilters(filters.value)
+    return
+  }
+  filters.value[property] = filters.value[property] === value && property !== 'sort' ? null : value
   mediastore.updateFilters(filters.value)
 }
 </script>
@@ -180,7 +184,7 @@ h3 {
   }
 
   &--new {
-    background-color: #dfcfe8;
+    background-color: var(--highlight);
   }
 
   &__name {

@@ -116,10 +116,10 @@ nav {
 }
 
 .type__link {
-  background-color: #dfcfe8;
+  background-color: var(--highlight);
 }
 .router-link-active {
-  background-color: #dfcfe8;
+  background-color: var(--highlight);
 }
 .user {
   background-color: #ddd;

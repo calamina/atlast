@@ -11,7 +11,7 @@ import type { FilterModel } from '@/models/filter.model'
 export const useMediaStore = defineStore('media', () => {
   const list: Ref<Array<MediaModel>> = ref([])
   const filteredList: Ref<Array<MediaModel>> = ref([])
-  const filters: Ref<FilterModel> = ref({ sort: 'createdAt' })
+  const filters: Ref<FilterModel> = ref({ sort: 'createdAt', order: 'desc' })
 
   const notification = useNotificationStore()
   const user = useUserStore()
@@ -50,7 +50,7 @@ export const useMediaStore = defineStore('media', () => {
       filter += `&filters[like][$eq]=${filters.value.like}`
     }
 
-    const sort = filters?.value!.sort ? `?sort=${filters.value.sort}:desc` : ''
+    const sort = filters?.value!.sort ? `?sort=${filters.value.sort}:${filters.value.order}` : ''
     const filterSort = sort + filter ?? ''
 
     return http

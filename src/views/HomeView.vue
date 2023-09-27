@@ -64,7 +64,7 @@ main {
 }
 
 .links {
-  background-color: #dfcfe8;
+  background-color: var(--highlight);
   &__button,
   &__add {
     background-color: #c0a6cd;
