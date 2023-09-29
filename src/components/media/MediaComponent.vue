@@ -30,7 +30,7 @@ const expanded: Ref<boolean | null> = ref(null)
         <IconClose v-else />
       </button>
     </div>
-    <img class="media__image" v-if="media.image" :src="media.thumbnail" />
+    <img class="media__image" :src="media.thumbnail" />
     <div class="media__content">
       <a class="media__link" :href="media.url" target="_blank">
         {{ media.title }}

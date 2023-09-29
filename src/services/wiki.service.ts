@@ -24,7 +24,7 @@ async function getWikiByLink(link: string): Promise<any> {
 
 async function getWikiByname(name: string): Promise<any> {
   return http
-    .get<WikiGet>(`https://en.wikipedia.org/w/rest.php/v1/search/title?q=${name}&limit=20`, config)
+    .get<WikiGet>(`https://en.wikipedia.org/w/rest.php/v1/search/title?q=${name}&limit=30`, config)
     .then((response) => {
       return response.data
     })

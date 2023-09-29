@@ -211,7 +211,7 @@ function deleteMedia(id: number) {
     gap: 0.5rem;
     width: fit-content;
     font-size: 1.5rem;
-    margin-top: -0.5rem;
+    margin-top: -0.25rem;
     margin-bottom: -0.5rem;
     font-family: 'contaxBold', Arial, sans-serif;
     text-transform: capitalize;

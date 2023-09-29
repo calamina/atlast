@@ -37,6 +37,9 @@ function resetFilters() {
 }
 
 function updateFilters(property: any, value: string | boolean | null) {
+  if (property === 'sort' && value === (null || undefined)) {
+    value = 'asc'
+  }
   if (property === 'sort' && filters.value[property] === value) {
     filters.value.order = filters.value.order === 'asc' ? 'desc' : 'asc'
     mediastore.updateFilters(filters.value)
@@ -149,11 +152,6 @@ function updateFilters(property: any, value: string | boolean | null) {
   padding: 1rem;
   gap: 1rem;
   transition: opacity 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
-  // opacity: 0.5;
-
-  &:hover {
-    opacity: 1;
-  }
 }
 
 h3 {
@@ -161,7 +159,7 @@ h3 {
   font-weight: 400;
   font-size: 1rem;
   font-family: 'contaxItalic', 'Arial', sans-serif;
-  opacity: 0.5;
+  color: #999;
   padding: 0 1rem 0.25rem;
 }
 
@@ -172,7 +170,7 @@ h3 {
 }
 
 .stat {
-  padding: 0.5rem 1rem;
+  padding: 0.35rem 1rem;
   width: 15rem;
   display: flex;
   align-items: baseline;
