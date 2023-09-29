@@ -2,10 +2,11 @@
 import { type Ref, ref, type ComputedRef, computed } from 'vue'
 import type { FilterModel } from '@/models/filter.model'
 import { useMediaStore } from '@/stores/media'
+import IconPlus from '@/components/icons/IconPlus.vue'
 
 const emits = defineEmits(['toggleSearch', 'refreshList'])
 const mediastore = useMediaStore()
-const filters: Ref<FilterModel> = ref({ sort: 'createdAt' })
+const filters: Ref<FilterModel> = ref({ sort: 'createdAt', order: 'asc' })
 
 const categs: ComputedRef<{ name: string; number: number }[]> = computed(() => {
   return countElements('categ') as { name: string; number: number }[]
@@ -37,9 +38,6 @@ function resetFilters() {
 }
 
 function updateFilters(property: any, value: string | boolean | null) {
-  if (property === 'sort' && value === (null || undefined)) {
-    value = 'asc'
-  }
   if (property === 'sort' && filters.value[property] === value) {
     filters.value.order = filters.value.order === 'asc' ? 'desc' : 'asc'
     mediastore.updateFilters(filters.value)
@@ -54,8 +52,11 @@ function updateFilters(property: any, value: string | boolean | null) {
   <div class="filter-wrapper">
     <div class="filters">
       <div class="stats">
-        <button class="stat stat--new" @click="$emit('toggleSearch')">
+        <button class="stat stat--new stat--plus" @click="$emit('toggleSearch')">
           <p class="stat__name">Add media</p>
+          <!-- <button class="button-icon">
+            <IconPlus />
+          </button> -->
           <p class="stat__count">[ctrl + s]</p>
         </button>
       </div>
@@ -173,7 +174,7 @@ h3 {
   padding: 0.35rem 1rem;
   width: 15rem;
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   border-radius: 2rem;
 
@@ -182,6 +183,7 @@ h3 {
   }
 
   &--new {
+    padding: 0.75rem 1rem;
     background-color: var(--highlight);
   }
 

@@ -3,6 +3,10 @@ Personnal Knowledge Database made with Vue3 and Strapi
 [atlast.vercel.app](https://atlast.vercel.app)
 ![atlast preview](atlast.png?raw=true "Atlast preview")
 
+# Important !
+- [ ] add user menu ! (white background, disconnect/settings/...)
+
+
 # Accessibility
 - [ ] aria and focus and img alt
 

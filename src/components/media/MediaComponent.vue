@@ -5,8 +5,8 @@ import actions from '@/utils/media-actions'
 import categs from '@/utils/media-categs'
 import IconEditVue from '@/components/icons/IconEdit.vue'
 import IconLikeFull from '@/components/icons/IconLikeFull.vue'
-import IconAdd from '../icons/IconAdd.vue'
-import IconClose from '../icons/IconClose.vue'
+import IconPlus from '../icons/IconPlus.vue'
+import IconMinus from '../icons/IconMinus.vue'
 import IconRating from '../icons/IconRating.vue'
 
 const emits = defineEmits(['enableEdit'])
@@ -26,8 +26,8 @@ const expanded: Ref<boolean | null> = ref(null)
   <div class="media" v-if="media.id">
     <div class="media__expand" @click="expanded = !expanded">
       <button class="button-icon media__expand--icon" type="button">
-        <IconAdd v-if="!expanded" />
-        <IconClose v-else />
+        <IconPlus v-if="!expanded" />
+        <IconMinus v-else />
       </button>
     </div>
     <img class="media__image" :src="media.thumbnail" />
@@ -209,7 +209,7 @@ const expanded: Ref<boolean | null> = ref(null)
 
   &__actions {
     position: absolute;
-    top: 2.5rem;
+    top: 0.75rem;
     right: 0.75rem;
     z-index: 600;
     display: none;
