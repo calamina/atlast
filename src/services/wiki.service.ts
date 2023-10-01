@@ -1,6 +1,6 @@
 import http from '@/utils/http-common'
 import type { WikiGet } from '@/models/wiki-get'
-import { useNotificationStore } from '@/stores/notification'
+// import { useNotificationStore } from '@/stores/notification'
 
 // const notification = useNotificationStore()
 

@@ -146,6 +146,9 @@ const expanded: Ref<boolean | null> = ref(null)
     text-decoration: none;
     color: black;
     transition: padding 0.3s, font-style 0.3s;
+    // &:hover {
+    //   background-color: var(--highlight);
+    // }
   }
 
   &__favorite {
@@ -191,6 +194,7 @@ const expanded: Ref<boolean | null> = ref(null)
     font-family: 'contaxBold', Arial, sans-serif;
     background-color: #ddd;
     border-radius: 1rem;
+    cursor: default;
   }
 
   &__tag {

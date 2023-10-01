@@ -45,7 +45,8 @@ onMounted(() => {
       score: props.media?.score,
       like: props.media?.like,
       extract: props.media?.extract,
-      image: props.media?.image
+      image: props.media?.image,
+      key: props.media?.key
     }
   } else if (props.action === 'createMedia')
     wikiservice.getWikiByLink(props.media.key!).then((data) => {
@@ -60,9 +61,11 @@ onMounted(() => {
         thumbnail: data.thumbnail?.source,
         score: 0,
         action: 'completed',
-        categ: 'movie'
+        categ: 'movie',
+        key: props.media.key
       }
     })
+  console.debug(media.value)
 })
 
 function addMedia(media: MediaModel) {
@@ -77,6 +80,22 @@ function addMedia(media: MediaModel) {
     .catch((error) => {
       notification.addNotification({ message: error, type: 'error' })
     })
+}
+
+function editMedia(media?: MediaModel) {
+  if (media) {
+    if (media.action === 'planning') media.score = null
+    media.tags = media.tagstring ? media.tagstring.split(' ') : null
+    mediastore
+      .editUserMedia(media)
+      .then((response) => {
+        // if (!response.data.error) {}
+        emits('confirm')
+      })
+      .catch((error) => {
+        notification.addNotification({ message: error, type: 'error' })
+      })
+  }
 }
 
 function deleteMedia(id: number) {
@@ -165,11 +184,7 @@ function deleteMedia(id: number) {
             >
               <IconDelete />
             </button>
-            <button
-              class="button-icon media__submit"
-              type="button"
-              @click="$emit('confirm', media)"
-            >
+            <button class="button-icon media__submit" type="button" @click="editMedia(media)">
               <IconCheck />
             </button>
           </div>

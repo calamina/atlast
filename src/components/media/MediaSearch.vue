@@ -4,19 +4,26 @@ import { onKeyStroke, useKeyModifier } from '@vueuse/core'
 import { watchDebounced } from '@vueuse/shared'
 
 import { useWikiService } from '@/services/wiki.service'
+import { useMediaStore } from '@/stores/media'
+import { useUserStore } from '@/stores/user'
+
+import type { MediaModel } from '@/models/media.model'
 
 import FormInput from '@/components/form/formInput.vue'
-import type { MediaModel } from '@/models/media.model'
-import MediaUpdateComponent from './MediaUpdateComponent.vue'
-import IconBack from '../icons/IconBack.vue'
+import MediaUpdateComponent from '@/components/media/MediaUpdateComponent.vue'
+import IconBack from '@/components/icons/IconBack.vue'
 
 const emits = defineEmits(['exit'])
 
 const { getWikiByname } = useWikiService()
+const mediaStore = useMediaStore()
+const { connectedUser } = useUserStore()
 
-let wikiList: Ref<any[]> = ref([])
+let wikiList: Ref<MediaModel[]> = ref([])
+let mediaList: Ref<MediaModel[]> = ref([])
 let search = ref('')
 const activeMedia: Ref<MediaModel | null> = ref(null)
+const createOrUpdate: Ref<string> = ref('')
 
 onMounted(() => {
   searchFocus()
@@ -31,19 +38,25 @@ function searchFocus() {
 watchDebounced(
   search,
   () => {
-    search.value ? getWikis(search.value) : (wikiList.value = [])
+    search.value ? getResults(search.value) : ((wikiList.value = []), (mediaList.value = []))
   },
   { debounce: 500, maxWait: 1000 }
 )
 
-async function getWikis(value: string) {
+async function getResults(value: string) {
+  mediaList.value = []
   wikiList.value = []
-  getWikiByname(value).then((data) => {
-    data.pages?.forEach((element: any) => {
-      if (element.description) {
-        wikiList.value.push(element)
-      }
+
+  mediaStore.getMediaByUserAndName(connectedUser.username, value).then((data: MediaModel[]) => {
+    data?.forEach((element) => {
+      element.attributes.id = element.id
+      mediaList.value.push(element.attributes)
     })
+  })
+
+  getWikiByname(value).then((data) => {
+    const mediaListKeys = new Set(mediaList.value.map((el) => el.key))
+    wikiList.value = data.pages.filter(({ key }: { key: string }) => !mediaListKeys.has(key))
   })
 }
 
@@ -55,8 +68,9 @@ onKeyStroke(['Escape'], (e) => {
   }
 })
 
-function addMedia(media: MediaModel) {
+function addMedia(media: MediaModel, action: string) {
   activeMedia.value = media
+  createOrUpdate.value = action
 }
 
 function cancelAdd() {
@@ -67,34 +81,63 @@ function cancelAdd() {
 
 <template>
   <div class="wrapper-search">
-    <div class="search" v-if="!activeMedia">
-      <FormInput v-model="search" :type="'text'" :name="'search'" :show-label="false" />
-    </div>
-    <div class="links" v-if="wikiList.length !== 0 && !activeMedia">
-      <TransitionGroup name="list">
-        <div class="link" v-for="(link, index) of wikiList" :key="index" @click="addMedia(link)">
-          <img class="link__image" :src="link.thumbnail?.url" alt=":(" />
-          <div class="link__content">
-            <a
-              class="link__link"
-              :href="`http://en.wikipedia.com/wiki/${link.key}`"
-              target="_blank"
-            >
-              {{ link.title }}</a
-            >
-            <p class="link__description">{{ link.description }}</p>
+    <FormInput
+      v-if="!activeMedia"
+      class="search"
+      v-model="search"
+      :type="'text'"
+      :name="'search'"
+      :show-label="false"
+    />
+    <div class="results" v-if="(wikiList.length || mediaList.length) && !activeMedia">
+      <div class="medias medias__collection" v-if="mediaList.length">
+        <div
+          class="mediaSimple"
+          v-for="(media, index) of mediaList"
+          :key="index"
+          @click="addMedia(media, 'editMedia')"
+        >
+          <img class="media__image" :src="media.thumbnail" alt=":(" />
+          <div class="media__content">
+            <a class="media__link" :href="media.url" target="_blank"> {{ media.title }}</a>
+            <p class="media__description">{{ media.description }}</p>
+            <p class="media__description">{{ media.score }}</p>
+            <p class="media__description">{{ media.categ }}</p>
+            <p class="media__description">{{ media.action }}</p>
           </div>
         </div>
-      </TransitionGroup>
+      </div>
+      <div class="medias" v-if="wikiList.length">
+        <h2></h2>
+        <div
+          class="mediaSimple"
+          v-for="(media, index) of wikiList"
+          :key="index"
+          @click="addMedia(media, 'createMedia')"
+        >
+          <img class="media__image" :src="media.thumbnail?.url" alt=":(" />
+          <div class="media__content">
+            <a
+              class="media__link"
+              :href="`http://en.wikipedia.com/wiki/${media.key}`"
+              target="_blank"
+            >
+              {{ media.title }}</a
+            >
+            <p class="media__description">{{ media.description }}</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <button class="link__back" v-if="activeMedia" @click="cancelAdd()">
+    <button class="media__back" v-if="activeMedia" @click="cancelAdd()">
       <IconBack class="button-icon" />
       back to search
     </button>
     <MediaUpdateComponent
       v-if="activeMedia"
       :media="activeMedia"
-      :action="'createMedia'"
+      :action="createOrUpdate"
+      :key="activeMedia.key"
       @confirm="$emit('exit')"
       @cancel="cancelAdd()"
     />
@@ -105,18 +148,28 @@ function cancelAdd() {
 .wrapper-search {
   display: flex;
   flex-flow: column;
-  width: 50rem;
   gap: 2rem;
+  align-items: center;
 }
 
 .search {
-  display: flex;
-  flex-flow: column;
-  gap: 0.5rem;
-  border-radius: 3rem;
+  width: 30rem;
 }
 
-.links {
+.results {
+  display: flex;
+  flex-flow: column;
+  gap: 1rem;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.medias {
+  width: 40rem;
   display: flex;
   flex-flow: column;
   gap: 0.25rem;
@@ -129,14 +182,18 @@ function cancelAdd() {
   &::-webkit-scrollbar {
     display: none;
   }
+
+  &__collection {
+    overflow-y: visible;
+  }
 }
 
-.link {
+.mediaSimple {
   display: flex;
   flex-flow: row;
   padding: 0.5rem;
   cursor: pointer;
-  gap: 1rem;
+  gap: 0.5rem;
   border-radius: 1rem;
 
   &:hover {
@@ -144,7 +201,7 @@ function cancelAdd() {
   }
 }
 
-.link__link {
+.media__link {
   display: flex;
   line-height: 1.4rem;
   flex-flow: column;
@@ -157,14 +214,14 @@ function cancelAdd() {
   font-family: 'contaxBold', Arial, sans-serif;
 }
 
-.link__content {
+.media__content {
   display: flex;
   flex-flow: column;
   gap: 0;
   flex: 1;
 }
 
-.link__image {
+.media__image {
   background-color: #ddd;
   outline: none;
   border: none;
@@ -174,7 +231,7 @@ function cancelAdd() {
   object-fit: contain;
 }
 
-.link__back {
+.media__back {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -191,22 +248,8 @@ function cancelAdd() {
   border-radius: 100%;
 }
 
-.link__description {
+.media__description {
   opacity: 0.7;
   font-family: 'contaxItalic', Arial, sans-serif;
-}
-
-// TRANSITION
-.list-enter-active,
-.list-leave-active,
-.list-move {
-  transition: all 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
-}
-.list-enter-from,
-.list-leave-to {
-  opacity: 0;
-}
-.list-leave-active {
-  opacity: 0;
 }
 </style>

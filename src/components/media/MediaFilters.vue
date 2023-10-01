@@ -115,7 +115,8 @@ function updateFilters(property: any, value: string | boolean | null) {
           @click="updateFilters('sort', 'createdAt')"
           :class="{ statSelected: filters.sort === 'createdAt' }"
         >
-          <p class="stat__name">Added</p>
+          <p class="stat__name">added</p>
+          <p class="stat__count">{{ filters.order === 'asc' ? '01 — 12' : '12 — 01' }}</p>
         </button>
         <button
           class="stat"
@@ -123,6 +124,7 @@ function updateFilters(property: any, value: string | boolean | null) {
           :class="{ statSelected: filters.sort === 'title' }"
         >
           <p class="stat__name">name</p>
+          <p class="stat__count">{{ filters.order === 'asc' ? 'a — z' : 'z — a' }}</p>
         </button>
         <button
           type="button"
@@ -131,6 +133,7 @@ function updateFilters(property: any, value: string | boolean | null) {
           :class="{ statSelected: filters.sort === 'score' }"
         >
           <p class="stat__name">rating</p>
+          <p class="stat__count">{{ filters.order === 'asc' ? '1 — 10' : '10 — 1' }}</p>
         </button>
       </div>
     </div>

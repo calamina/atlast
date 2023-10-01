@@ -40,18 +40,26 @@ function toggleSearchModal() {
     : (document.documentElement.style.overflow = 'hidden')
 }
 
-function editMedia(index: number, media?: MediaModel) {
-  if (media) {
-    if (media.action === 'planning') media.score = null
-    media.tags = media.tagstring ? media.tagstring.split(' ') : null
-    // let url = media.url?.replace(/^https?:\/\//i, '')
-    // media.favicon = `https://www.google.com/s2/favicons?domain=${url}&sz=512`
-    mediastore.editUserMedia(media).then((response) => {
-      if (!response.data.error) {
-        show.value = null
-      }
-    })
-  } else if (show.value === index) {
+// function editMedia(index: number, media?: MediaModel) {
+//   if (media) {
+//     if (media.action === 'planning') media.score = null
+//     media.tags = media.tagstring ? media.tagstring.split(' ') : null
+//     // let url = media.url?.replace(/^https?:\/\//i, '')
+//     // media.favicon = `https://www.google.com/s2/favicons?domain=${url}&sz=512`
+//     mediastore.editUserMedia(media).then((response) => {
+//       if (!response.data.error) {
+//         show.value = null
+//       }
+//     })
+//   } else if (show.value === index) {
+//     show.value = null
+//   } else {
+//     show.value = index
+//   }
+// }
+
+function editMedia(index: number) {
+  if (show.value === index) {
     show.value = null
   } else {
     show.value = index
@@ -90,8 +98,8 @@ onKeyStroke(['s'], (e: KeyboardEvent) => {
           v-else
           :media="media"
           :action="'editMedia'"
-          :key="media.title"
-          @confirm="(media: MediaModel) => editMedia(index, media)"
+          :key="media.key"
+          @confirm="editMedia(index)"
           @cancel="editMedia(index)"
         />
       </div>
