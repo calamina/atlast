@@ -20,7 +20,7 @@ onKeyStroke(['Escape'], (e) => {
 
 <template>
   <div class="overlay-background">
-    <component class="wrapper" :is="props.component" @exit="$emit('toggleSearch')"></component>
+    <component :is="props.component" @exit="$emit('toggleSearch')"></component>
     <button type="button" class="button-icon exit" @click="$emit('toggleSearch')">
       <IconCancel />
     </button>
@@ -38,14 +38,7 @@ onKeyStroke(['Escape'], (e) => {
   height: 100vh;
   overflow: auto;
   padding: 5rem;
-}
-.wrapper {
-  display: flex;
-  flex-flow: column;
-  min-height: 100%;
-  padding: 2rem;
-  border-radius: 1rem;
-  gap: 1rem;
+  z-index: 100;
 }
 
 .exit {
@@ -57,6 +50,5 @@ onKeyStroke(['Escape'], (e) => {
   left: auto;
   border-radius: 100%;
   background-color: #ddd;
-  // background-color: #fff;
 }
 </style>

@@ -9,9 +9,13 @@ import { useUserStore } from '@/stores/user'
 
 import type { MediaModel } from '@/models/media.model'
 
+import actions from '@/utils/media-actions'
+
+import IconBack from '@/components/icons/IconBack.vue'
+import IconSearch from '@/components/icons/IconSearch.vue'
 import FormInput from '@/components/form/formInput.vue'
 import MediaUpdateComponent from '@/components/media/MediaUpdateComponent.vue'
-import IconBack from '@/components/icons/IconBack.vue'
+import MediaComponent from './MediaComponent.vue'
 
 const emits = defineEmits(['exit'])
 
@@ -24,6 +28,10 @@ let mediaList: Ref<MediaModel[]> = ref([])
 let search = ref('')
 const activeMedia: Ref<MediaModel | null> = ref(null)
 const createOrUpdate: Ref<string> = ref('')
+
+function getStatus(media: MediaModel) {
+  return actions.find((action: { name: string }) => action.name === media.action)
+}
 
 onMounted(() => {
   searchFocus()
@@ -81,32 +89,26 @@ function cancelAdd() {
 
 <template>
   <div class="wrapper-search">
-    <FormInput
+    <!-- <FormInput
       v-if="!activeMedia"
       class="search"
       v-model="search"
       :type="'text'"
       :name="'search'"
       :show-label="false"
-    />
+    /> -->
+    <div v-if="!activeMedia" class="media__search" @click="cancelAdd()">
+      <IconSearch class="button-icon" />
+      <input type="text" name="search" v-model="search" id="search" />
+    </div>
     <div class="results" v-if="(wikiList.length || mediaList.length) && !activeMedia">
-      <div class="medias medias__collection" v-if="mediaList.length">
-        <div
-          class="mediaSimple"
-          v-for="(media, index) of mediaList"
-          :key="index"
-          @click="addMedia(media, 'editMedia')"
-        >
-          <img class="media__image" :src="media.thumbnail" alt=":(" />
-          <div class="media__content">
-            <a class="media__link" :href="media.url" target="_blank"> {{ media.title }}</a>
-            <p class="media__description">{{ media.description }}</p>
-            <p class="media__description">{{ media.score }}</p>
-            <p class="media__description">{{ media.categ }}</p>
-            <p class="media__description">{{ media.action }}</p>
-          </div>
-        </div>
-      </div>
+      <MediaComponent
+        class="background__media"
+        v-for="media of mediaList"
+        :media="media"
+        :key="media.id"
+        @enableEdit="addMedia(media, 'editMedia')"
+      />
       <div class="medias" v-if="wikiList.length">
         <h2></h2>
         <div
@@ -150,13 +152,39 @@ function cancelAdd() {
   flex-flow: column;
   gap: 2rem;
   align-items: center;
+  display: flex;
+  flex-flow: column;
+  min-height: 100%;
+  padding: 2rem;
+  border-radius: 1rem;
+  gap: 1rem;
 }
 
-.search {
-  width: 30rem;
+.media__search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #fff;
+  width: fit-content;
+  padding: 0 0.5rem;
+  border-radius: 3rem;
+  // overflow-x: hidden;
+  width: 25rem;
+  height: 3rem;
+
+  input[type='text'] {
+    border-radius: 3rem;
+    height: 3rem;
+    font-family: 'contaxBold', Arial, sans-serif;
+  }
+}
+
+.background__media {
+  background-color: #fff;
 }
 
 .results {
+  width: 45rem;
   display: flex;
   flex-flow: column;
   gap: 1rem;
@@ -169,7 +197,6 @@ function cancelAdd() {
 }
 
 .medias {
-  width: 40rem;
   display: flex;
   flex-flow: column;
   gap: 0.25rem;
@@ -191,6 +218,7 @@ function cancelAdd() {
 .mediaSimple {
   display: flex;
   flex-flow: row;
+  align-items: center;
   padding: 0.5rem;
   cursor: pointer;
   gap: 0.5rem;
@@ -199,6 +227,28 @@ function cancelAdd() {
   &:hover {
     background-color: #efefef;
   }
+}
+
+.media__categ {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  gap: 0.25rem;
+  height: 1.75rem;
+  font-size: 0.9rem;
+  padding: 0.25rem 1rem;
+  width: 6rem;
+  font-family: 'contaxBold', Arial, sans-serif;
+  background-color: #ddd;
+  border-radius: 1rem;
+  cursor: default;
+}
+
+.media__status {
+  height: 1.75rem;
+  padding: 0.25rem;
+  border-radius: 1rem;
 }
 
 .media__link {
@@ -237,7 +287,7 @@ function cancelAdd() {
   gap: 0.5rem;
   background-color: #fff;
   width: fit-content;
-  padding-right: 1rem;
+  padding-right: 1.5rem;
   border-radius: 3rem;
   height: 3rem;
   font-family: 'contaxBold', Arial, sans-serif;
