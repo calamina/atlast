@@ -51,12 +51,12 @@ function updateFilters(property: any, value: string | boolean | null) {
 <template>
   <div class="filter-wrapper">
     <div class="filters" v-if="!!mediastore.filteredList.length">
-      <div class="stats">
+      <!-- <div class="stats">
         <button class="stat stat--new" @click="$emit('toggleSearch')">
           <p class="stat__name">Search</p>
           <p class="stat__count">ctrl + s</p>
         </button>
-      </div>
+      </div> -->
       <div class="stats">
         <button
           class="stat"

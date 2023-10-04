@@ -77,6 +77,10 @@ onKeyStroke(['s'], (e: KeyboardEvent) => {
 
 <template>
   <main>
+    <button class="stat stat--new" @click="toggleSearchModal()">
+      <p class="stat__name">Search</p>
+      <p class="stat__count">ctrl + s</p>
+    </button>
     <MediaFilters @toggleSearch="toggleSearchModal()" />
     <div class="medias" v-if="mediastore.filteredList.length !== 0">
       <TransitionGroup name="list">
@@ -120,13 +124,42 @@ onKeyStroke(['s'], (e: KeyboardEvent) => {
 main {
   width: 100vw;
   padding: 1rem 0;
-  position: relative;
+  // position: relative;
   scrollbar-width: none;
   display: flex;
   justify-content: center;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 2rem;
+}
+
+.stat {
+  position: absolute;
+  top: 1rem;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: row;
+  z-index: 5;
+  background-color: #fff;
+  border-radius: 2rem;
+  gap: 2rem;
+
+  p {
+    font-family: 'contaxBold', Arial, sans-serif;
+  }
+
+  p:last-of-type {
+    position: absolute;
+    right: 1rem;
+    opacity: 0.5;
+  }
 }
 
 .medias {

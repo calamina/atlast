@@ -54,7 +54,8 @@ nav {
   padding: 1rem 0 1rem 1rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 1rem;
+  // justify-content: space-between;
 }
 
 .types {
@@ -85,6 +86,7 @@ nav {
 }
 
 .user {
+  margin-left: auto;
   display: flex;
   gap: 1rem;
   transform: translateX(3.5rem);
