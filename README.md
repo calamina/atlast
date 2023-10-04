@@ -3,55 +3,42 @@ Personnal Knowledge Database made with Vue3 and Strapi
 [atlast.vercel.app](https://atlast.vercel.app)
 ![atlast preview](atlast.png?raw=true "Atlast preview")
 
-# Important !
-- [ ] add user menu ! (white background, disconnect/settings/...)
-
-
-# Accessibility
-- [ ] aria and focus and img alt
-
-# Performance
-- [ ] check how to cache data
-
-# library
-- [?] add dashboard view
-- [?] add notes view
-
-# categs
-- [ ] dynamic categs ?
-
-# links
-- [ ] parent sites ? "main" link with sublinks !!!
-- [ ] new categs : cosmos/science ? fun ? urban/street ? music ? games ? food ?
-- [ ] lists ?
-- [ ] move filters to component / copy media
-
-# media
-- [ ] add message when empty list
-- [ ] display library media in search results
-- [ ] hide / highlight wikis matching library media
-- [ ] add arrows to search
-  - top/bottom to go through results
-  - left/right to go to form and back
-
-# utils
-- [ ] add confirmation dialog
-
-# models
-- [ ] change actions name to status
-- [ ] add status model
-- [ ] add user model
-- [ ] add note model
-
 # css
 - [ ] clean & refactor css
 - [ ] bem everywhere
 
+# Menu
+- [ ] make user menu functionnal and PRETTY
 # filters
-- [ ] add tag search ?
+- [ ] add tag search -> add tag list on the bottom with Set of existing tags
+# utils
+- [ ] add confirmation dialog
 
-# overlay
-- [ ] add keyboard shortcuts next to exit button
+# filters
+- [ ] hide categ when no children !!
+
+# models
+- [ ] change actions name to status
+- [ ] add user model
+
+# media
+- [ ] add message when empty list
+- [ ] add arrows to search
+  - top/bottom to go through results
+  - left/right to go to form and back
 
 # notifications
-- [ ] add gap between notifications
+- [ ] add gap between notifications ... >:(
+
+# Accessibility
+- [ ] aria and focus and img alt and link hover
+
+# Performance
+- [ ] check how to cache data (done already with store ?)
+- [ ] check how to lazy load images
+
+# links
+- [ ] parent sites ? "main" link with sublinks !!!
+- [ ] new categs : cosmos/science ? fun ? urban/street ? music ? games ? food ?
+- [ ] move filters to component / copy media
+
