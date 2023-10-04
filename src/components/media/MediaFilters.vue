@@ -50,14 +50,11 @@ function updateFilters(property: any, value: string | boolean | null) {
 
 <template>
   <div class="filter-wrapper">
-    <div class="filters">
+    <div class="filters" v-if="!!mediastore.filteredList.length">
       <div class="stats">
-        <button class="stat stat--new stat--plus" @click="$emit('toggleSearch')">
-          <p class="stat__name">Add media</p>
-          <!-- <button class="button-icon">
-            <IconPlus />
-          </button> -->
-          <p class="stat__count">[ctrl + s]</p>
+        <button class="stat stat--new" @click="$emit('toggleSearch')">
+          <p class="stat__name">Search</p>
+          <p class="stat__count">ctrl + s</p>
         </button>
       </div>
       <div class="stats">
@@ -137,6 +134,12 @@ function updateFilters(property: any, value: string | boolean | null) {
         </button>
       </div>
     </div>
+    <div class="stats" v-else>
+      <button class="stat stat--new" @click="$emit('toggleSearch')">
+        <p class="stat__name">Search</p>
+        <p class="stat__count">ctrl + s</p>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -174,7 +177,7 @@ h3 {
 }
 
 .stat {
-  padding: 0.35rem 1rem;
+  padding: 0.35rem 1.25rem;
   width: 15rem;
   display: flex;
   align-items: center;
@@ -186,8 +189,9 @@ h3 {
   }
 
   &--new {
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 1.25rem;
     background-color: var(--highlight);
+    background-color: #ddd;
   }
 
   &__name {

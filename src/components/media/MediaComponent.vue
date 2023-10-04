@@ -137,18 +137,15 @@ const expanded: Ref<boolean | null> = ref(null)
     align-items: center;
     gap: 0.5rem;
     width: fit-content;
-    // justify-content: space-between;
+    line-height: 1.55rem;
     font-size: 1.5rem;
-    margin-top: -0.25rem;
-    margin-bottom: -0.5rem;
+    margin-top: 0.1rem;
+    margin-bottom: -0.25rem;
     font-family: 'contaxBold', Arial, sans-serif;
     text-transform: capitalize;
     text-decoration: none;
     color: black;
     transition: padding 0.3s, font-style 0.3s;
-    // &:hover {
-    //   background-color: var(--highlight);
-    // }
   }
 
   &__favorite {

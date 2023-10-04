@@ -79,31 +79,31 @@ onKeyStroke(['s'], (e: KeyboardEvent) => {
   <main>
     <MediaFilters @toggleSearch="toggleSearchModal()" />
     <div class="medias" v-if="mediastore.filteredList.length !== 0">
-      <!-- <TransitionGroup name="list"> -->
-      <div class="media__switch" v-for="(media, index) of filteredMedia" :key="media.id">
-        <MediaComponent
-          v-if="show !== index"
-          :media="media"
-          :key="media.id"
-          @enableEdit="editMedia(index)"
-        />
-        <!-- <MediaEditComponent
+      <TransitionGroup name="list">
+        <div class="media__switch" v-for="(media, index) of filteredMedia" :key="media.id">
+          <MediaComponent
+            v-if="show !== index"
+            :media="media"
+            :key="media.id"
+            @enableEdit="editMedia(index)"
+          />
+          <!-- <MediaEditComponent
           v-else
           :media="media"
           :key="media.title"
           @cancelEdit="editMedia(index)"
           @confirmEdit="(media: MediaModel) => editMedia(index, media)"
         /> -->
-        <MediaUpdateComponent
-          v-else
-          :media="media"
-          :action="'editMedia'"
-          :key="media.key"
-          @confirm="editMedia(index)"
-          @cancel="editMedia(index)"
-        />
-      </div>
-      <!-- </TransitionGroup> -->
+          <MediaUpdateComponent
+            v-else
+            :media="media"
+            :action="'editMedia'"
+            :key="media.key"
+            @confirm="editMedia(index)"
+            @cancel="editMedia(index)"
+          />
+        </div>
+      </TransitionGroup>
     </div>
     <transition name="search" mode="out-in">
       <ActionOverlay
@@ -133,7 +133,6 @@ main {
   display: flex;
   flex-flow: column;
   align-items: center;
-  // gap: 0.5rem;
   gap: 0.25rem;
 }
 

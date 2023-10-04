@@ -16,6 +16,7 @@ import IconSearch from '@/components/icons/IconSearch.vue'
 import FormInput from '@/components/form/formInput.vue'
 import MediaUpdateComponent from '@/components/media/MediaUpdateComponent.vue'
 import MediaComponent from './MediaComponent.vue'
+import IconCancel from '../icons/IconCancel.vue'
 
 const emits = defineEmits(['exit'])
 
@@ -48,7 +49,7 @@ watchDebounced(
   () => {
     search.value ? getResults(search.value) : ((wikiList.value = []), (mediaList.value = []))
   },
-  { debounce: 500, maxWait: 1000 }
+  { debounce: 600, maxWait: 1200 }
 )
 
 async function getResults(value: string) {
@@ -89,17 +90,10 @@ function cancelAdd() {
 
 <template>
   <div class="wrapper-search">
-    <!-- <FormInput
-      v-if="!activeMedia"
-      class="search"
-      v-model="search"
-      :type="'text'"
-      :name="'search'"
-      :show-label="false"
-    /> -->
     <div v-if="!activeMedia" class="media__search" @click="cancelAdd()">
       <IconSearch class="button-icon" />
       <input type="text" name="search" v-model="search" id="search" />
+      <IconCancel class="button-icon" @click="search = ''" />
     </div>
     <div class="results" v-if="(wikiList.length || mediaList.length) && !activeMedia">
       <MediaComponent
@@ -173,6 +167,7 @@ function cancelAdd() {
   height: 3rem;
 
   input[type='text'] {
+    font-size: 1.1rem;
     border-radius: 3rem;
     height: 3rem;
     font-family: 'contaxBold', Arial, sans-serif;

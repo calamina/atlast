@@ -43,9 +43,7 @@ onKeyStroke(['Escape'], (e) => {
 
 .exit {
   position: fixed;
-  top: 1.1rem;
   top: 2.25rem;
-  right: 1.1rem;
   right: auto;
   left: auto;
   border-radius: 100%;

@@ -3,19 +3,20 @@ Personnal Knowledge Database made with Vue3 and Strapi
 [atlast.vercel.app](https://atlast.vercel.app)
 ![atlast preview](atlast.png?raw=true "Atlast preview")
 
+# auth
+- [ ] add auth token to store or localstorage
+- [ ] repair middleware
+
 # css
 - [ ] clean & refactor css
 - [ ] bem everywhere
 
-# Menu
-- [ ] make user menu functionnal and PRETTY
 # filters
+- [ ] refactor filters make sub-components
 - [ ] add tag search -> add tag list on the bottom with Set of existing tags
+- [ ] hide categ when no children !!
 # utils
 - [ ] add confirmation dialog
-
-# filters
-- [ ] hide categ when no children !!
 
 # models
 - [ ] change actions name to status
@@ -28,7 +29,7 @@ Personnal Knowledge Database made with Vue3 and Strapi
   - left/right to go to form and back
 
 # notifications
-- [ ] add gap between notifications ... >:(
+- [ ] add gap between notifications ...
 
 # Accessibility
 - [ ] aria and focus and img alt and link hover
@@ -41,4 +42,3 @@ Personnal Knowledge Database made with Vue3 and Strapi
 - [ ] parent sites ? "main" link with sublinks !!!
 - [ ] new categs : cosmos/science ? fun ? urban/street ? music ? games ? food ?
 - [ ] move filters to component / copy media
-
