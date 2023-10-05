@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, type Ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import { onKeyStroke, useKeyModifier } from '@vueuse/core'
 import { watchDebounced } from '@vueuse/shared'
 
@@ -9,40 +9,22 @@ import { useUserStore } from '@/stores/user'
 
 import type { MediaModel } from '@/models/media.model'
 
-import actions from '@/utils/media-actions'
-
 import IconBack from '@/components/icons/IconBack.vue'
-import IconSearch from '@/components/icons/IconSearch.vue'
-import FormInput from '@/components/form/formInput.vue'
 import MediaUpdateComponent from '@/components/media/MediaUpdateComponent.vue'
 import MediaComponent from './MediaComponent.vue'
-import IconCancel from '../icons/IconCancel.vue'
+import { storeToRefs } from 'pinia'
 
 const emits = defineEmits(['exit'])
 
 const { getWikiByname } = useWikiService()
-const mediaStore = useMediaStore()
 const { connectedUser } = useUserStore()
+const mediastore = useMediaStore()
+const { search } = storeToRefs(mediastore)
 
 let wikiList: Ref<MediaModel[]> = ref([])
 let mediaList: Ref<MediaModel[]> = ref([])
-let search = ref('')
 const activeMedia: Ref<MediaModel | null> = ref(null)
 const createOrUpdate: Ref<string> = ref('')
-
-function getStatus(media: MediaModel) {
-  return actions.find((action: { name: string }) => action.name === media.action)
-}
-
-onMounted(() => {
-  searchFocus()
-})
-
-function searchFocus() {
-  const search = document.getElementById('search') as HTMLInputElement
-  search?.focus()
-  search?.select()
-}
 
 watchDebounced(
   search,
@@ -56,7 +38,7 @@ async function getResults(value: string) {
   mediaList.value = []
   wikiList.value = []
 
-  mediaStore.getMediaByUserAndName(connectedUser.username, value).then((data: MediaModel[]) => {
+  mediastore.getMediaByUserAndName(connectedUser.username, value).then((data: MediaModel[]) => {
     data?.forEach((element) => {
       element.attributes.id = element.id
       mediaList.value.push(element.attributes)
@@ -84,17 +66,11 @@ function addMedia(media: MediaModel, action: string) {
 
 function cancelAdd() {
   activeMedia.value = null
-  searchFocus()
 }
 </script>
 
 <template>
   <div class="wrapper-search">
-    <div v-if="!activeMedia" class="media__search" @click="cancelAdd()">
-      <IconSearch class="button-icon" />
-      <input type="text" name="search" v-model="search" id="search" />
-      <IconCancel class="button-icon" @click="search = ''" />
-    </div>
     <div class="results" v-if="(wikiList.length || mediaList.length) && !activeMedia">
       <MediaComponent
         class="background__media"
@@ -152,26 +128,6 @@ function cancelAdd() {
   padding: 2rem;
   border-radius: 1rem;
   gap: 1rem;
-}
-
-.media__search {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background-color: #fff;
-  width: fit-content;
-  padding: 0 0.5rem;
-  border-radius: 3rem;
-  // overflow-x: hidden;
-  width: 25rem;
-  height: 3rem;
-
-  input[type='text'] {
-    font-size: 1.1rem;
-    border-radius: 3rem;
-    height: 3rem;
-    font-family: 'contaxBold', Arial, sans-serif;
-  }
 }
 
 .background__media {

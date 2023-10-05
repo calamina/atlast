@@ -24,13 +24,16 @@ async function logoutUser() {
 
 <template>
   <nav>
-    <div class="menu-icon">
-      <button class="button-icon"><IconGlobe /></button>
+    <div class="submenu">
+      <div class="menu-icon">
+        <button class="button-icon"><IconGlobe /></button>
+      </div>
+      <div class="types">
+        <router-link class="type" to="media"> media </router-link>
+        <router-link class="type" to="links"> links </router-link>
+      </div>
     </div>
-    <div class="types">
-      <router-link class="type" to="media"> media </router-link>
-      <router-link class="type" to="links"> links </router-link>
-    </div>
+    <div id="menu-search"></div>
     <div class="user">
       <div class="user__info">
         <div class="menu-icon">
@@ -55,7 +58,13 @@ nav {
   display: flex;
   align-items: center;
   gap: 1rem;
-  // justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.submenu {
+  display: flex;
+  gap: 1rem;
 }
 
 .types {
@@ -69,6 +78,7 @@ nav {
   align-items: center;
   justify-content: center;
   border-radius: 2rem;
+  height: 3rem;
   background-color: #ddd;
   transition: filter 0.3s;
   padding: 0.6rem 1rem;
@@ -86,7 +96,7 @@ nav {
 }
 
 .user {
-  margin-left: auto;
+  justify-self: end;
   display: flex;
   gap: 1rem;
   transform: translateX(3.5rem);
@@ -140,6 +150,11 @@ nav {
     padding: 0 2rem;
   }
 }
+
+#menu-search {
+  margin: 0 auto;
+}
+
 .menu-icon {
   background-color: #ddd;
   border-radius: 2rem;

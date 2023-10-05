@@ -2,9 +2,9 @@
 import { type Ref, ref, type ComputedRef, computed } from 'vue'
 import type { FilterModel } from '@/models/filter.model'
 import { useMediaStore } from '@/stores/media'
-import IconPlus from '@/components/icons/IconPlus.vue'
 
-const emits = defineEmits(['toggleSearch', 'refreshList'])
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const emits = defineEmits(['refreshList'])
 const mediastore = useMediaStore()
 const filters: Ref<FilterModel> = ref({ sort: 'createdAt', order: 'asc' })
 
@@ -51,12 +51,6 @@ function updateFilters(property: any, value: string | boolean | null) {
 <template>
   <div class="filter-wrapper">
     <div class="filters" v-if="!!mediastore.filteredList.length">
-      <!-- <div class="stats">
-        <button class="stat stat--new" @click="$emit('toggleSearch')">
-          <p class="stat__name">Search</p>
-          <p class="stat__count">ctrl + s</p>
-        </button>
-      </div> -->
       <div class="stats">
         <button
           class="stat"
@@ -134,12 +128,6 @@ function updateFilters(property: any, value: string | boolean | null) {
         </button>
       </div>
     </div>
-    <div class="stats" v-else>
-      <button class="stat stat--new" @click="$emit('toggleSearch')">
-        <p class="stat__name">Search</p>
-        <p class="stat__count">ctrl + s</p>
-      </button>
-    </div>
   </div>
 </template>
 
@@ -186,12 +174,6 @@ h3 {
 
   &Selected {
     background-color: #fff;
-  }
-
-  &--new {
-    padding: 0.75rem 1.25rem;
-    background-color: var(--highlight);
-    background-color: #ddd;
   }
 
   &__name {

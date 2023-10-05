@@ -1,29 +1,24 @@
 <script setup lang="ts">
-import { onKeyStroke, useKeyModifier } from '@vueuse/core'
-import IconCancel from '@/components/icons/IconCancel.vue'
+import { onKeyStroke } from '@vueuse/core'
 import type { Component } from 'vue'
+
+const emits = defineEmits(['exit'])
 
 const props = defineProps<{
   component: Component
 }>()
 
-const emits = defineEmits(['toggleSearch'])
-
-const ctrl = useKeyModifier('Control')
 onKeyStroke(['Escape'], (e) => {
-  if (ctrl.value || e.key === 'Escape') {
+  if (e.key === 'Escape') {
     e.preventDefault()
-    emits('toggleSearch')
+    emits('exit')
   }
 })
 </script>
 
 <template>
   <div class="overlay-background">
-    <component :is="props.component" @exit="$emit('toggleSearch')"></component>
-    <button type="button" class="button-icon exit" @click="$emit('toggleSearch')">
-      <IconCancel />
-    </button>
+    <component :is="props.component"></component>
   </div>
 </template>
 
@@ -37,16 +32,7 @@ onKeyStroke(['Escape'], (e) => {
   width: 100vw;
   height: 100vh;
   overflow: auto;
-  padding: 5rem;
+  padding: 3rem 0 0 0;
   z-index: 100;
-}
-
-.exit {
-  position: fixed;
-  top: 2.25rem;
-  right: auto;
-  left: auto;
-  border-radius: 100%;
-  background-color: #ddd;
 }
 </style>

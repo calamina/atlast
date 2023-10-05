@@ -9,18 +9,12 @@ const user = useUserStore()
 </script>
 
 <template>
-  <NotificationsBar class="notification" />
-  <!-- <NotificationsBar class="notification" v-if="notification.notifications.length" /> -->
+  <NotificationsBar class="notification" v-if="notification.notifications.length" />
 
-  <Suspense>
-    <MenuBar v-if="user.connectedUser" />
-  </Suspense>
-
-  <Suspense>
-    <router-view v-slot="{ Component }">
-      <component :is="Component" />
-    </router-view>
-  </Suspense>
+  <MenuBar v-if="user.connectedUser" />
+  <router-view v-slot="{ Component }">
+    <component :is="Component" />
+  </router-view>
 </template>
 
 <style lang="scss" scoped>

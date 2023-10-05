@@ -12,6 +12,7 @@ export const useMediaStore = defineStore('media', () => {
   const list: Ref<Array<MediaModel>> = ref([])
   const filteredList: Ref<Array<MediaModel>> = ref([])
   const filters: Ref<FilterModel> = ref({ sort: 'createdAt', order: 'desc' })
+  const search: Ref<string> = ref('')
 
   const notification = useNotificationStore()
   const user = useUserStore()
@@ -110,6 +111,10 @@ export const useMediaStore = defineStore('media', () => {
     getFilteredMediaByUser(user.connectedUser.username)
   }
 
+  function updateSearch(value: string) {
+    search.value = value
+  }
+
   return {
     list,
     filteredList,
@@ -120,6 +125,8 @@ export const useMediaStore = defineStore('media', () => {
     getMediaByUserAndName,
     addUserMedia,
     editUserMedia,
-    deleteUserMedia
+    deleteUserMedia,
+    search,
+    updateSearch
   }
 })
