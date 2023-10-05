@@ -59,6 +59,7 @@ nav {
   align-items: center;
   gap: 1rem;
   display: grid;
+  overflow: hidden;
   grid-template-columns: 1fr 1fr 1fr;
 }
 

@@ -1,8 +1,7 @@
 # atlast
 Personnal Knowledge Database made with Vue3 and Strapi
 [atlast.vercel.app](https://atlast.vercel.app)
-![atlast preview](atlast.png?raw=true "Atlast preview")
-![atlast preview alt](atlast2.png?raw=true "Atlast preview 2")
+![atlast preview](atlast2.png?raw=true "Atlast preview")
 
 # search
 - [ ] empty search on add / edit
