@@ -65,7 +65,6 @@ onMounted(() => {
         key: props.media.key
       }
     })
-  console.debug(media.value)
 })
 
 function addMedia(media: MediaModel) {
@@ -165,6 +164,13 @@ function deleteMedia(id: number) {
             v-model="media.tagstring"
           />
           <div class="media__actions" v-if="props.action === 'createMedia'">
+            <button
+              class="button-icon media__cancel"
+              type="reset"
+              @click="$emit('cancel', props.media)"
+            >
+              <IconBack />
+            </button>
             <button class="button-icon media__submit" type="submit" @click="addMedia(media)">
               <IconCheck />
             </button>

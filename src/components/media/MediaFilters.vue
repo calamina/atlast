@@ -81,7 +81,7 @@ function updateFilters(property: any, value: string | boolean | null) {
           @click="updateFilters('categ', categ.name)"
           :class="{ statSelected: filters.categ === categ.name }"
         >
-          <p class="stat__name">{{ categ.name }}{{ categ.number > 1 ? 's' : '' }}</p>
+          <p class="stat__name">{{ categ.name }}</p>
           <p class="stat__count">{{ categ.number }}</p>
         </button>
       </div>

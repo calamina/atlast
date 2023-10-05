@@ -29,6 +29,7 @@ const createOrUpdate: Ref<string> = ref('')
 watchDebounced(
   search,
   () => {
+    activeMedia.value = null
     search.value ? getResults(search.value) : ((wikiList.value = []), (mediaList.value = []))
   },
   { debounce: 600, maxWait: 1200 }
@@ -101,10 +102,6 @@ function cancelAdd() {
         </div>
       </div>
     </div>
-    <button class="media__back" v-if="activeMedia" @click="cancelAdd()">
-      <IconBack class="button-icon" />
-      back to search
-    </button>
     <MediaUpdateComponent
       v-if="activeMedia"
       :media="activeMedia"
@@ -230,23 +227,6 @@ function cancelAdd() {
   width: 3rem;
   border-radius: 0.75rem;
   object-fit: contain;
-}
-
-.media__back {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background-color: #fff;
-  width: fit-content;
-  padding-right: 1.5rem;
-  border-radius: 3rem;
-  height: 3rem;
-  font-family: 'contaxBold', Arial, sans-serif;
-}
-
-.button-icon {
-  // background-color: #fff;
-  border-radius: 100%;
 }
 
 .media__description {

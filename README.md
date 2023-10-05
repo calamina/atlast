@@ -4,6 +4,9 @@ Personnal Knowledge Database made with Vue3 and Strapi
 ![atlast preview](atlast.png?raw=true "Atlast preview")
 ![atlast preview alt](atlast2.png?raw=true "Atlast preview 2")
 
+# search
+- [ ] empty search on add / edit
+
 # auth
 - [ ] add auth token to store or localstorage
 - [ ] repair middleware
