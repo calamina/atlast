@@ -1,8 +1,8 @@
 import http from '@/utils/http-common'
 import type { WikiGet } from '@/models/wiki-get'
-// import { useNotificationStore } from '@/stores/notification'
+import { useNotificationStore } from '@/stores/notification'
 
-// const notification = useNotificationStore()
+const notification = useNotificationStore()
 
 const config = {
   headers: {
@@ -18,7 +18,7 @@ async function getWikiByLink(link: string): Promise<any> {
       return response.data
     })
     .catch((error) => {
-      // notification.error(error.response)
+      notification.addNotification({ message: error.response, type: 'error' })
     })
 }
 
@@ -29,7 +29,7 @@ async function getWikiByname(name: string): Promise<any> {
       return response.data
     })
     .catch((error) => {
-      // notification.error(error.response)
+      notification.addNotification({ message: error.response, type: 'error' })
     })
 }
 

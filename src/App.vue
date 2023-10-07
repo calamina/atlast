@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { useUserStore } from './stores/user'
 import { useNotificationStore } from './stores/notification'
+import { useUserStore } from './stores/user'
 import NotificationsBar from '@/components/NotificationsBar.vue'
 import MenuBar from '@/components/MenuBar.vue'
 
-const notification = useNotificationStore()
-const user = useUserStore()
+const { notifications } = useNotificationStore()
+const { connectedUser } = useUserStore()
 </script>
 
 <template>
-  <NotificationsBar class="notification" v-if="notification.notifications.length" />
+  <NotificationsBar class="notification" v-if="notifications.length" />
 
-  <MenuBar v-if="user.connectedUser" />
+  <MenuBar v-if="connectedUser" />
   <router-view v-slot="{ Component }">
     <component :is="Component" />
   </router-view>

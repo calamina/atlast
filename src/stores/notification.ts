@@ -1,6 +1,6 @@
+import { ref, type Ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { Notification } from '@/models/notification.model'
-import { ref, type Ref } from 'vue'
 
 export const useNotificationStore = defineStore('notification', () => {
   const notifications: Ref<Notification[]> = ref([])

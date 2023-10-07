@@ -36,7 +36,15 @@ const expanded: Ref<boolean | null> = ref(null)
         {{ media.title }}
         <IconLikeFull class="media__favorite" v-if="media.like" />
       </a>
-      <p class="media__description">{{ media.description }}</p>
+      <p class="media__description" v-if="media.description">{{ media.description }}</p>
+      <p class="media__description" v-else>No description :(</p>
+      <transition name="reveal">
+        <div class="media__tags" v-if="expanded">
+          <p class="media__tag" v-for="tag in media.tags" :key="tag">
+            {{ tag }}
+          </p>
+        </div>
+      </transition>
       <transition name="reveal">
         <p class="media__extract" v-if="expanded">{{ media.extract }}</p>
       </transition>
@@ -58,9 +66,6 @@ const expanded: Ref<boolean | null> = ref(null)
           <IconRating class="media__score-icon" />
           <p class="media__score-text">{{ media.score }}</p>
         </div> -->
-        <!-- <p class="media__tag" v-for="tag in media.tags" :key="tag">
-          {{ tag }}
-        </p> -->
       </div>
     </div>
 
@@ -192,6 +197,12 @@ const expanded: Ref<boolean | null> = ref(null)
     background-color: #ddd;
     border-radius: 1rem;
     cursor: default;
+  }
+
+  &__tags {
+    display: flex;
+    gap: 0.5rem;
+    max-height: 10rem;
   }
 
   &__tag {

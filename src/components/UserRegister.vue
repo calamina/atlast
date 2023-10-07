@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
-import { useUserService } from '@/services/user.service'
 import formInput from '@/components/form/formInput.vue'
+import { useUserStore } from '@/stores/user'
 
-const { registerUser } = useUserService()
+const { register } = useUserStore()
 
 const emits = defineEmits(['toggleLogin'])
 
@@ -16,7 +16,7 @@ const email: Ref<string> = ref('')
     <formInput v-model="login" :type="'text'" :name="'login'" :show-label="true" />
     <formInput v-model="password" :type="'password'" :name="'password'" :show-label="true" />
     <formInput v-model="email" :type="'text'" :name="'mail'" :show-label="true" />
-    <button class="button--primary" type="submit" @click="registerUser(login, email, password)">
+    <button class="button--primary" type="submit" @click="register({ login, email, password })">
       register
     </button>
     <button class="button--secondary" type="submit" @click="$emit('toggleLogin')">

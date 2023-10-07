@@ -8,6 +8,9 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
+      meta: {
+        requiresAuth: true
+      },
       component: () => import('@/views/HomeView.vue')
     },
     {
@@ -19,16 +22,25 @@ const router = createRouter({
     {
       path: '/media',
       name: 'media',
+      meta: {
+        requiresAuth: true
+      },
       component: () => import('../views/MediaView.vue')
     },
     {
       path: '/links',
       name: 'links',
+      meta: {
+        requiresAuth: true
+      },
       component: () => import('../views/LinkView.vue')
     },
     {
       path: '/notes',
       name: 'notes',
+      meta: {
+        requiresAuth: true
+      },
       component: () => import('../views/NoteView.vue')
     },
 
@@ -40,14 +52,10 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach(async (to) => {
-  const publicPages = ['/auth']
-  const authRequired = !publicPages.includes(to.path)
-  const userStore = useUserStore()
-  if (authRequired && !userStore.connectedUser) {
-    const notification = useNotificationStore()
-    notification.addNotification({ type: 'error', message: 'Login to see this page' })
-    return '/auth'
+router.beforeEach((to) => {
+  const { connectedUser } = useUserStore()
+  if (!connectedUser && to.meta.requiresAuth) {
+    return { name: 'auth' }
   }
 })
 

@@ -17,9 +17,18 @@ export const useMediaStore = defineStore('media', () => {
   const notification = useNotificationStore()
   const user = useUserStore()
 
+  const headers = {
+    headers: {
+      Authorization: 'Bearer ' + user.connectedUserToken
+    }
+  }
+
   async function getMediaByUserAndName(user: string, name: string): Promise<any> {
     return http
-      .get<Array<any>>('medias?filters[title][$containsi]=' + name + '&filters[user][$eq]=' + user)
+      .get<Array<any>>(
+        'medias?filters[title][$containsi]=' + name + '&filters[user][$eq]=' + user,
+        headers
+      )
       .then((response: any) => {
         return response.data.data
       })
@@ -28,7 +37,7 @@ export const useMediaStore = defineStore('media', () => {
 
   async function getMediaByUser(user: string): Promise<any> {
     return http
-      .get<Array<any>>('medias?sort=createdAt:desc')
+      .get<Array<any>>('medias?sort=createdAt:desc', headers)
       .then((response: any) => {
         const result = response.data.data.filter((media: any) => media.attributes.user === user)
         list.value = result
@@ -48,12 +57,15 @@ export const useMediaStore = defineStore('media', () => {
     if (filters.value?.like) {
       filter += `&filters[like][$eq]=${filters.value.like}`
     }
+    if (filters.value?.tag) {
+      filter += `&filters[tags][$contains]=${filters.value.tag}`
+    }
 
     const sort = filters?.value!.sort ? `?sort=${filters.value.sort}:${filters.value.order}` : ''
     const filterSort = sort + filter ?? ''
 
     return http
-      .get<Array<any>>('medias' + filterSort)
+      .get<Array<any>>('medias' + filterSort, headers)
       .then((response: any) => {
         const result = response.data.data.filter((media: any) => {
           return media.attributes.user === user
@@ -66,7 +78,7 @@ export const useMediaStore = defineStore('media', () => {
 
   async function addUserMedia(media: any): Promise<any> {
     return http
-      .post(`medias`, { data: media })
+      .post(`medias`, { data: media }, headers)
       .then((response) => {
         notification.addNotification({ type: 'alert', message: 'Media added !' })
         getFilteredMediaByUser(user.connectedUser.username)
@@ -81,7 +93,7 @@ export const useMediaStore = defineStore('media', () => {
 
   async function editUserMedia(media: any): Promise<any> {
     return http
-      .put(`medias/${media.id}`, { data: media })
+      .put(`medias/${media.id}`, { data: media }, headers)
       .then((response) => {
         notification.addNotification({ type: 'alert', message: 'Media edited !' })
         getFilteredMediaByUser(user.connectedUser.username)
@@ -95,7 +107,7 @@ export const useMediaStore = defineStore('media', () => {
 
   async function deleteUserMedia(id: number): Promise<any> {
     return http
-      .delete(`medias/${id}`)
+      .delete(`medias/${id}`, headers)
       .then(() => {
         notification.addNotification({ type: 'alert', message: 'Media deleted !' })
         getMediaByUser(user.connectedUser.username)

@@ -18,6 +18,14 @@ const favorites: ComputedRef<number> = computed(() => {
   return mediastore.filteredList.filter((media) => media.attributes.like === true).length
 })
 
+const tags: ComputedRef<any> = computed(() => {
+  const tags = new Set()
+  mediastore.filteredList.map((media) => {
+    media.attributes.tags?.forEach((tag: string) => tags.add(tag))
+  })
+  return tags
+})
+
 function countElements(property: string) {
   return Object.values(
     mediastore.filteredList
@@ -127,6 +135,20 @@ function updateFilters(property: any, value: string | boolean | null) {
           <p class="stat__count">{{ filters.order === 'asc' ? '1 — 10' : '10 — 1' }}</p>
         </button>
       </div>
+      <div class="stats" v-if="tags.size">
+        <h3>tags</h3>
+        <div class="media__tags">
+          <button
+            class="media__tag"
+            v-for="(tag, index) in tags"
+            :key="index"
+            @click="updateFilters('tag', tag)"
+            :class="{ tagSelected: filters.tag === tag }"
+          >
+            {{ tag }}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -185,5 +207,31 @@ h3 {
     font-family: 'contaxBold', Arial, sans-serif;
     opacity: 0.5;
   }
+}
+
+.media__tags {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 0.5rem;
+  width: 15rem;
+}
+
+.media__tag {
+  height: 1.75rem;
+  font-size: 0.9rem;
+  padding: 0.25rem 1rem;
+  background-color: #ddd;
+  width: fit-content;
+  font-family: 'contaxBold', Arial, sans-serif;
+  color: #777;
+  border-radius: 1rem;
+  font-size: 0.85rem;
+  &::before {
+    content: '#';
+  }
+}
+
+.tagSelected {
+  background-color: #fff;
 }
 </style>

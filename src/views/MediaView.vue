@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import type { MediaModel } from '@/models/media.model'
 import { computed, onMounted, ref, type ComputedRef, type Ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
+import type { MediaModel } from '@/models/media.model'
 import { useUserStore } from '@/stores/user'
 import { useMediaStore } from '@/stores/media'
 import MediaComponent from '@/components/media/MediaComponent.vue'
@@ -11,22 +12,23 @@ import ActionOverlay from '@/components/ActionOverlay.vue'
 import IconCancel from '@/components/icons/IconCancel.vue'
 import IconSearch from '@/components/icons/IconSearch.vue'
 
-const mediastore = useMediaStore()
-const user = useUserStore()
+const { filteredList } = storeToRefs(useMediaStore())
+const { getMediaByUser, updateSearch } = useMediaStore()
+const { connectedUser } = useUserStore()
 
 const show: Ref<number | null> = ref(null)
 let search = ref('')
 
 onMounted(() => {
-  if (mediastore.filteredList.length === 0) {
-    mediastore.getMediaByUser(user.connectedUser.username).then((result) => {
-      mediastore.filteredList = result
+  if (filteredList.value.length === 0) {
+    getMediaByUser(connectedUser?.username).then((result) => {
+      filteredList.value = result
     })
   }
 })
 
 const filteredMedia: ComputedRef<MediaModel[]> = computed(() => {
-  return mediastore.filteredList.map((media: MediaModel) => {
+  return filteredList.value.map((media: MediaModel) => {
     const id = media.id
     media = media.attributes
     media.id = id
@@ -35,18 +37,14 @@ const filteredMedia: ComputedRef<MediaModel[]> = computed(() => {
 })
 
 watch(search, () => {
-  mediastore.updateSearch(search.value)
+  updateSearch(search.value)
   search.value.length > 0
     ? (document.documentElement.style.overflow = 'hidden')
     : (document.documentElement.style.overflow = 'auto')
 })
 
 function editMedia(index: number) {
-  if (show.value === index) {
-    show.value = null
-  } else {
-    show.value = index
-  }
+  show.value = show.value === index ? null : index
 }
 </script>
 
@@ -67,7 +65,7 @@ function editMedia(index: number) {
       </div>
     </teleport>
     <MediaFilters />
-    <div class="medias" v-if="mediastore.filteredList.length !== 0">
+    <div class="medias" v-if="filteredList.length !== 0">
       <TransitionGroup name="list">
         <div class="media__switch" v-for="(media, index) of filteredMedia" :key="media.id">
           <MediaComponent

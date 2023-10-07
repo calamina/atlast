@@ -1,25 +1,13 @@
 <script setup lang="ts">
-import router from '@/router/index'
+import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/stores/user'
-import { useNotificationStore } from '@/stores/notification'
 
 import IconGlobe from '@/components/icons/IconGlobe.vue'
 import IconUser from '@/components/icons/IconUser.vue'
 import IconUserOff from '@/components/icons/IconUserOff.vue'
 
-const user = useUserStore()
-const notification = useNotificationStore()
-
-async function logoutUser() {
-  router.push('/auth').then(() => {
-    localStorage.removeItem('user')
-    notification.addNotification({
-      type: 'alert',
-      message: 'Goodbye ' + user.connectedUser.username + ' !'
-    })
-    user.connectedUser = null
-  })
-}
+const { logout } = useUserStore()
+const { connectedUser } = storeToRefs(useUserStore())
 </script>
 
 <template>
@@ -39,10 +27,10 @@ async function logoutUser() {
         <div class="menu-icon">
           <div class="button-icon"><IconUser /></div>
         </div>
-        <p class="user__name">{{ user.connectedUser.username }}</p>
+        <p class="user__name">{{ connectedUser?.username }}</p>
       </div>
       <div class="user__actions">
-        <button class="button-icon" type="button" @click="logoutUser()">
+        <button class="button-icon" type="button" @click="logout()">
           <IconUserOff />
         </button>
       </div>

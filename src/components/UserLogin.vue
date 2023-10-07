@@ -1,26 +1,21 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
-import { useUserService } from '@/services/user.service'
 import formInput from '@/components/form/formInput.vue'
+import { useUserStore } from '@/stores/user'
 
-const { loginUser } = useUserService()
+const { login } = useUserStore()
 
 const emits = defineEmits(['toggleRegister'])
 
-const login: Ref<string> = ref('cala')
+const name: Ref<string> = ref('cala')
 const password: Ref<string> = ref('password')
 </script>
 <template>
   <form action="" @submit.prevent>
-    <formInput v-model="login" :type="'text'" :name="'login'" :show-label="true" />
+    <formInput v-model="name" :type="'text'" :name="'login'" :show-label="true" />
     <formInput v-model="password" :type="'password'" :name="'password'" :show-label="true" />
 
-    <button
-      v-if="login !== '' && password !== ''"
-      @click="loginUser(login, password)"
-      class="button--primary"
-      type="submit"
-    >
+    <button @click="login({ login: name, password })" class="button--primary" type="submit">
       login
     </button>
     <button class="button--secondary" type="button" @click="$emit('toggleRegister')">
