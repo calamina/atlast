@@ -16,7 +16,11 @@ const email: Ref<string> = ref('')
     <formInput v-model="login" :type="'text'" :name="'login'" :show-label="true" />
     <formInput v-model="password" :type="'password'" :name="'password'" :show-label="true" />
     <formInput v-model="email" :type="'text'" :name="'mail'" :show-label="true" />
-    <button class="button--primary" type="submit" @click="register({ login, email, password })">
+    <button
+      class="button--primary"
+      type="submit"
+      @click="register({ username: login, email, password })"
+    >
       register
     </button>
     <button class="button--secondary" type="submit" @click="$emit('toggleLogin')">

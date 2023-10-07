@@ -7,8 +7,7 @@ Personnal Knowledge Database made with Vue3 and Strapi
 - [ ] empty search on add / edit
 
 # auth
-- [ ] add auth token to store or localstorage
-- [ ] repair middleware
+- [ ] repair menu & media bugs 
 
 # css
 - [ ] clean & refactor css
@@ -16,8 +15,6 @@ Personnal Knowledge Database made with Vue3 and Strapi
 
 # filters
 - [ ] refactor filters make sub-components
-- [ ] add tag search -> add tag list on the bottom with Set of existing tags
-- [ ] hide categ when no children !!
 # utils
 - [ ] add confirmation dialog
 
