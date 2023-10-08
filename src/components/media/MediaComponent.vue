@@ -39,7 +39,7 @@ const expanded: Ref<boolean | null> = ref(null)
         <IconMinus v-else />
       </button>
     </div>
-    <ItemPicture :src="media.thumbnail ?? null" />
+    <ItemPicture :src="media.thumbnail ?? null" :small="false" />
     <div class="media__content">
       <ItemTitle :title="media.title ?? null" :url="media.url ?? null">
         <IconLikeFull class="media__favorite" v-if="media.like" />

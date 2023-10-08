@@ -6,7 +6,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <a class="title" :href="props.url" target="_blank">
+  <a v-if="props.title && props.url" class="title" :href="props.url" target="_blank">
     {{ props.title }}
     <slot />
   </a>

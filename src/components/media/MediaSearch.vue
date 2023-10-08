@@ -11,6 +11,7 @@ import type { MediaModel } from '@/models/media.model'
 
 import MediaUpdateComponent from '@/components/media/MediaUpdateComponent.vue'
 import MediaComponent from './MediaComponent.vue'
+import MediaSimple from './MediaSimple.vue'
 import { storeToRefs } from 'pinia'
 
 const emits = defineEmits(['exit'])
@@ -63,16 +64,12 @@ function addMedia(media: MediaModel, action: string) {
   activeMedia.value = media
   createOrUpdate.value = action
 }
-
-function cancelAdd() {
-  activeMedia.value = null
-}
 </script>
 
 <template>
   <div class="wrapper-search">
-    <div class="results" v-if="(wikiList.length || mediaList.length) && !activeMedia">
-      <div class="collection">
+    <div class="results" v-if="!activeMedia">
+      <div class="collection" v-if="mediaList.length">
         <MediaComponent
           v-for="media of mediaList"
           class="background__media"
@@ -82,26 +79,17 @@ function cancelAdd() {
         />
       </div>
       <div class="medias" v-if="wikiList.length">
-        <h2></h2>
-        <div
-          class="mediaSimple"
+        <MediaSimple
           v-for="(media, index) of wikiList"
           :key="index"
+          :media="media"
           @click="addMedia(media, 'createMedia')"
-        >
-          <img class="media__image" :src="media.thumbnail?.url" alt=":(" />
-          <div class="media__content">
-            <a
-              class="media__link"
-              :href="`http://en.wikipedia.com/wiki/${media.key}`"
-              target="_blank"
-            >
-              {{ media.title }}</a
-            >
-            <p class="media__description">{{ media.description }}</p>
-          </div>
-        </div>
+        />
       </div>
+      <!-- <div class="medias" v-if="!mediaList.length && !wikiList.length">
+        TODO: separate no results / loading
+        <p>No results</p>
+      </div> -->
     </div>
     <MediaUpdateComponent
       v-if="activeMedia"
@@ -109,7 +97,7 @@ function cancelAdd() {
       :action="createOrUpdate"
       :key="activeMedia.key"
       @confirm="$emit('exit')"
-      @cancel="cancelAdd()"
+      @cancel="activeMedia = null"
     />
   </div>
 </template>
@@ -126,6 +114,12 @@ function cancelAdd() {
   padding: 2rem;
   border-radius: 1rem;
   gap: 1rem;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .background__media {
@@ -136,26 +130,32 @@ function cancelAdd() {
   display: flex;
   flex-flow: column;
   gap: 0.5rem;
+  // overflow-y: auto;
+  // -ms-overflow-style: none;
+  // scrollbar-width: none;
+  // &::-webkit-scrollbar {
+  //   display: none;
+  // }
 }
 
 .results {
   // width: 45rem;
-  // flex-flow: column;
+  flex-flow: column;
   display: flex;
   gap: 1rem;
-  overflow-y: auto;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  // overflow-y: auto;
+  // -ms-overflow-style: none;
+  // scrollbar-width: none;
+  // &::-webkit-scrollbar {
+  //   display: none;
+  // }
 }
 
 .medias {
   width: 45rem;
   display: flex;
   flex-flow: column;
-  gap: 0.25rem;
+  gap: 0.5rem;
   padding: 1rem;
   border-radius: 1rem;
   background-color: #fff;
@@ -165,80 +165,5 @@ function cancelAdd() {
   &::-webkit-scrollbar {
     display: none;
   }
-
-  &__collection {
-    overflow-y: visible;
-  }
-}
-
-.mediaSimple {
-  display: flex;
-  flex-flow: row;
-  align-items: center;
-  padding: 0.5rem;
-  cursor: pointer;
-  gap: 0.5rem;
-  border-radius: 1rem;
-
-  &:hover {
-    background-color: #efefef;
-  }
-}
-
-.media__categ {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  gap: 0.25rem;
-  height: 1.75rem;
-  font-size: 0.9rem;
-  padding: 0.25rem 1rem;
-  width: 6rem;
-  font-family: 'contaxBold', Arial, sans-serif;
-  background-color: #ddd;
-  border-radius: 1rem;
-  cursor: default;
-}
-
-.media__status {
-  height: 1.75rem;
-  padding: 0.25rem;
-  border-radius: 1rem;
-}
-
-.media__link {
-  display: flex;
-  line-height: 1.4rem;
-  flex-flow: column;
-  text-decoration: none;
-  color: black;
-  width: fit-content;
-  font-weight: 400;
-  font-size: 1.25rem;
-  text-transform: capitalize;
-  font-family: 'contaxBold', Arial, sans-serif;
-}
-
-.media__content {
-  display: flex;
-  flex-flow: column;
-  gap: 0;
-  flex: 1;
-}
-
-.media__image {
-  background-color: #ddd;
-  outline: none;
-  border: none;
-  height: 3rem;
-  width: 3rem;
-  border-radius: 0.75rem;
-  object-fit: contain;
-}
-
-.media__description {
-  opacity: 0.7;
-  font-family: 'contaxItalic', Arial, sans-serif;
 }
 </style>

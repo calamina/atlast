@@ -10,6 +10,7 @@ Personnal Knowledge Database made with Vue3 and Strapi
 # css
 - [ ] clean & refactor css
 - [ ] bem everywhere
+- [ ] responsive
 
 # utils
 - [ ] add confirmation dialog
@@ -19,9 +20,6 @@ Personnal Knowledge Database made with Vue3 and Strapi
 
 # media
 - [ ] add message when empty list
-- [ ] add arrows to search
-  - top/bottom to go through results
-  - left/right to go to form and back
 
 # Accessibility
 - [ ] aria and focus and img alt and link hover

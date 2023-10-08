@@ -110,7 +110,7 @@ function deleteMedia(id: number) {
 </script>
 <template>
   <div class="media" v-if="media">
-    <ItemPicture :src="media.image ?? null" />
+    <ItemPicture :src="media.image ?? null" :small="false" />
     <div class="media__content">
       <ItemTitle :title="media.title ?? null" :url="media.url ?? null" />
       <ItemDescription :description="media.description ?? null" />
