@@ -1,59 +1,28 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
-import formInput from '@/components/form/formInput.vue'
 import { useUserStore } from '@/stores/user'
+import FormInput from '@/components/atomic/FormInput.vue'
+import FormGroup from '@/components/atomic/FormGroup.vue'
+import FormSubmit from '@/components/atomic/FormSubmit.vue'
+import FormSubmitAlt from '@/components/atomic/FormSubmitAlt.vue'
 
 const { register } = useUserStore()
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emits = defineEmits(['toggleLogin'])
 
-const login: Ref<string> = ref('')
-const password: Ref<string> = ref('')
-const email: Ref<string> = ref('')
+const form: Ref<{ username: string; password: string; email: string }> = ref({
+  username: '',
+  password: '',
+  email: ''
+})
 </script>
 <template>
-  <form action="" @submit.prevent>
-    <formInput v-model="login" :type="'text'" :name="'login'" :show-label="true" />
-    <formInput v-model="password" :type="'password'" :name="'password'" :show-label="true" />
-    <formInput v-model="email" :type="'text'" :name="'mail'" :show-label="true" />
-    <button
-      class="button--primary"
-      type="submit"
-      @click="register({ username: login, email, password })"
-    >
-      register
-    </button>
-    <button class="button--secondary" type="submit" @click="$emit('toggleLogin')">
-      or <span>login</span>
-    </button>
-  </form>
+  <FormGroup>
+    <FormInput v-model="form.username" :type="'text'" :name="'username'" />
+    <FormInput v-model="form.password" :type="'password'" :name="'password'" />
+    <FormInput v-model="form.email" :type="'text'" :name="'mail'" />
+    <FormSubmit :name="'register'" :type="'submit'" @click="register(form)" />
+    <FormSubmitAlt :name="'login'" :type="'button'" @click="$emit('toggleLogin')" />
+  </FormGroup>
 </template>
-<style lang="scss" scoped>
-form {
-  display: flex;
-  flex-flow: column;
-  gap: 0.5rem;
-}
-
-.button--primary {
-  width: unset;
-  font-size: 1.2rem;
-  font-family: 'contaxBold', 'Arial', sans-serif;
-  border-radius: 2rem;
-  padding: 0.4rem 1.5rem;
-  margin-top: 1rem;
-  color: #000;
-  text-transform: capitalize;
-  background-color: var(--highlight);
-}
-
-.button--secondary {
-  width: unset;
-  font-size: 1rem;
-  background-color: transparent;
-
-  span {
-    font-family: 'contaxBold', 'Arial', sans-serif;
-  }
-}
-</style>

@@ -4,11 +4,8 @@ Personnal Knowledge Database made with Vue3 and Strapi
 ![atlast preview](atlast2.png?raw=true "Atlast preview")
 
 # atomic
-- [ ] menu buttons (icon / text / texticon)
+- [ ] menu buttons (icon / text / texticon) maybe ...
 - [ ] menu search
-- [ ] auth with slots ?
-- [ ] move field component and rename
-- [ ] auth buttons
 
 # search
 - [ ] empty search on add / edit

@@ -56,7 +56,7 @@ router.beforeEach((to) => {
   const { connectedUser } = useUserStore()
   const { addNotification } = useNotificationStore()
   if (!connectedUser && to.meta.requiresAuth) {
-    addNotification({ type: 'error', message: 'You must be logged in to access this page' })
+    addNotification({ type: 'error', message: 'log in to access this page :)' })
     return { name: 'auth' }
   }
 })

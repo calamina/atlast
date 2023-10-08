@@ -51,14 +51,14 @@ export const useUserStore = defineStore('users', () => {
         router.push('/')
       })
       .catch((error) => {
-        notification.addNotification({ type: 'error', message: error.response })
+        notification.addNotification({ type: 'error', message: 'Wrong info :(' })
       })
   }
 
-  async function login({ login, password }: { login: string; password: string }) {
+  async function login({ username, password }: { username: string; password: string }) {
     http
       .post('auth/local', {
-        identifier: login,
+        identifier: username,
         password
       })
       .then((response) => {
