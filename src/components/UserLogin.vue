@@ -12,7 +12,7 @@ const { login } = useUserStore()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emits = defineEmits(['toggleRegister'])
 
-const form: Ref<User | any> = ref({
+const form: Ref<User> = ref({
   username: 'cala',
   password: 'password'
 })
