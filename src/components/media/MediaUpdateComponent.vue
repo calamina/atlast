@@ -112,8 +112,8 @@ function deleteMedia(id: number) {
   <div class="media" v-if="media">
     <ItemPicture :src="media.image ?? null" />
     <div class="media__content">
-      <ItemTitle :title="media.title!" :url="media.url!" />
-      <ItemDescription :description="media.description!" />
+      <ItemTitle :title="media.title ?? null" :url="media.url ?? null" />
+      <ItemDescription :description="media.description ?? null" />
       <p class="media__extract">{{ media.extract }}</p>
       <button class="media__favorite button-icon" type="button" @click="media.like = !media.like">
         <IconLikeFull class="love" v-if="media.like === true" />

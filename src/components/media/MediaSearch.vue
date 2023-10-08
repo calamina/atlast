@@ -72,13 +72,15 @@ function cancelAdd() {
 <template>
   <div class="wrapper-search">
     <div class="results" v-if="(wikiList.length || mediaList.length) && !activeMedia">
-      <MediaComponent
-        class="background__media"
-        v-for="media of mediaList"
-        :media="media"
-        :key="media.id"
-        @enableEdit="addMedia(media, 'editMedia')"
-      />
+      <div class="collection">
+        <MediaComponent
+          v-for="media of mediaList"
+          class="background__media"
+          :media="media"
+          :key="media.id"
+          @enableEdit="addMedia(media, 'editMedia')"
+        />
+      </div>
       <div class="medias" v-if="wikiList.length">
         <h2></h2>
         <div
@@ -130,10 +132,16 @@ function cancelAdd() {
   background-color: #fff;
 }
 
-.results {
-  width: 45rem;
+.collection {
   display: flex;
   flex-flow: column;
+  gap: 0.5rem;
+}
+
+.results {
+  // width: 45rem;
+  // flex-flow: column;
+  display: flex;
   gap: 1rem;
   overflow-y: auto;
   -ms-overflow-style: none;
@@ -144,6 +152,7 @@ function cancelAdd() {
 }
 
 .medias {
+  width: 45rem;
   display: flex;
   flex-flow: column;
   gap: 0.25rem;

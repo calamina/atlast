@@ -41,10 +41,10 @@ const expanded: Ref<boolean | null> = ref(null)
     </div>
     <ItemPicture :src="media.thumbnail ?? null" />
     <div class="media__content">
-      <ItemTitle :title="media.title!" :url="media.url!">
+      <ItemTitle :title="media.title ?? null" :url="media.url ?? null">
         <IconLikeFull class="media__favorite" v-if="media.like" />
       </ItemTitle>
-      <ItemDescription :description="media.description!" />
+      <ItemDescription :description="media.description ?? null" />
       <TransitionGroup name="reveal">
         <TagGroup v-if="expanded && media.tags?.length" :max-height="true">
           <TagButton v-for="tag in media.tags" :key="tag" :name="tag" :selected="false" />
@@ -81,7 +81,6 @@ const expanded: Ref<boolean | null> = ref(null)
   width: 45rem;
   display: flex;
   flex-flow: row;
-  flex: 1;
   gap: 0.75rem;
   padding: 1rem;
   background-color: #efefef;
