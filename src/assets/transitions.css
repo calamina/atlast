@@ -1,0 +1,68 @@
+
+
+.notifications-move {
+  transition: transform 0.2s;
+  left: auto;
+  right: auto;
+  position: absolute;
+}
+.notifications-enter-active {
+  animation: notification-in 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53);
+  position: absolute;
+  left: auto;
+  right: auto;
+}
+.notifications-leave-active {
+  animation: notification-in 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53) reverse;
+  position: absolute;
+  left: auto;
+  right: auto;
+}
+@keyframes notification-in {
+  0% {
+    transform: translateY(-2rem);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.auth-enter-active {
+  animation: auth-in 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53);
+}
+.auth-leave-active {
+  animation: auth-in 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53) reverse;
+}
+@keyframes auth-in {
+  0% {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.list-enter-active,
+.list-leave-active,
+.list-move {
+  transition: all 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+}
+.list-leave-active {
+  opacity: 0;
+}
+
+.search-enter-active,
+.search-leave-active {
+  transition: opacity 0.3s ease;
+}
+.search-enter-from,
+.search-leave-to {
+  opacity: 0;
+}

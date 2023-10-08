@@ -9,7 +9,7 @@ let loginRegister = ref(true)
 <template>
   <main class="auth">
     <h1>Atlast</h1>
-    <Transition mode="out-in">
+    <Transition mode="out-in" name="auth">
       <UserLogin class="userForm" v-if="loginRegister" @toggleRegister="loginRegister = false" />
       <UserRegister class="userForm" v-else @toggleLogin="loginRegister = true" />
     </Transition>
@@ -35,22 +35,5 @@ h1 {
   font-weight: 300;
   font-size: 5rem;
   font-size: 2rem;
-}
-
-@keyframes notification-in {
-  0% {
-    opacity: 0;
-    transform: translateY(2rem);
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-.v-enter-active {
-  animation: notification-in 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53);
-}
-.v-leave-active {
-  animation: notification-in 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53) reverse;
 }
 </style>

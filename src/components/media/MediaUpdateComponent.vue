@@ -6,14 +6,20 @@ import { useMediaStore } from '@/stores/media'
 import { useNotificationStore } from '@/stores/notification'
 import { useWikiService } from '@/services/wiki.service'
 
-import IconLikeFull from '@/components/icons/IconLikeFull.vue'
-import IconLike from '@/components/icons/IconLike.vue'
-import IconDelete from '@/components/icons/IconDelete.vue'
-import IconCheck from '@/components/icons/IconCheck.vue'
-import IconBack from '@/components/icons/IconBack.vue'
-import type { MediaModel } from '@/models/media.model'
-import IconRating from '../icons/IconRating.vue'
 import actions from '@/utils/media-actions'
+
+import type { MediaModel } from '@/models/media.model'
+
+import ItemTitle from '@/components/atomic/ItemTitle.vue'
+import ItemDescription from '@/components/atomic/ItemDescription.vue'
+import ItemPicture from '@/components/atomic/ItemPicture.vue'
+
+import IconLike from '@/components/icons/IconLike.vue'
+import IconBack from '@/components/icons/IconBack.vue'
+import IconCheck from '@/components/icons/IconCheck.vue'
+import IconRating from '../icons/IconRating.vue'
+import IconDelete from '@/components/icons/IconDelete.vue'
+import IconLikeFull from '@/components/icons/IconLikeFull.vue'
 
 const user = useUserStore()
 const mediastore = useMediaStore()
@@ -104,13 +110,10 @@ function deleteMedia(id: number) {
 </script>
 <template>
   <div class="media" v-if="media">
-    <img class="media__image" v-if="media.image" :src="media.image" />
-    <div class="media__image" v-else></div>
+    <ItemPicture :src="media.image!" />
     <div class="media__content">
-      <a class="media__link" :href="media.url" target="_blank">
-        {{ media.title }}
-      </a>
-      <p class="media__description">{{ media.description }}</p>
+      <ItemTitle :title="media.title!" :url="media.url!" />
+      <ItemDescription :description="media.description!" />
       <p class="media__extract">{{ media.extract }}</p>
       <button class="media__favorite button-icon" type="button" @click="media.like = !media.like">
         <IconLikeFull class="love" v-if="media.like === true" />
@@ -215,36 +218,6 @@ function deleteMedia(id: number) {
     flex-flow: column;
     gap: 0.25rem;
     flex: 1;
-  }
-
-  &__image {
-    object-fit: cover;
-    height: 5.5rem;
-    width: 5.5rem;
-    filter: saturate(0);
-    border-radius: 1rem;
-    background-color: #ddd;
-  }
-
-  &__link {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    width: fit-content;
-    font-size: 1.5rem;
-    line-height: 1.55rem;
-    margin-top: 0.1rem;
-    margin-bottom: -0.25rem;
-    font-family: 'contaxBold', Arial, sans-serif;
-    text-transform: capitalize;
-    text-decoration: none;
-    color: black;
-    transition: padding 0.3s, font-style 0.3s;
-  }
-
-  &__description {
-    font-family: 'contaxItalic', Arial, sans-serif;
-    opacity: 0.7;
   }
 
   &__extract {

@@ -1,13 +1,22 @@
 <script setup lang="ts">
 import { computed, ref, type Ref } from 'vue'
+
 import type { MediaModel } from '@/models/media.model'
+
 import actions from '@/utils/media-actions'
 import categs from '@/utils/media-categs'
+
 import IconEditVue from '@/components/icons/IconEdit.vue'
 import IconLikeFull from '@/components/icons/IconLikeFull.vue'
 import IconPlus from '../icons/IconPlus.vue'
 import IconMinus from '../icons/IconMinus.vue'
 import IconRating from '../icons/IconRating.vue'
+
+import ItemTitle from '@/components/atomic/ItemTitle.vue'
+import ItemDescription from '@/components/atomic/ItemDescription.vue'
+import ItemPicture from '@/components/atomic/ItemPicture.vue'
+import TagButton from '@/components/atomic/TagButton.vue'
+import TagGroup from '@/components/atomic/TagGroup.vue'
 
 const emits = defineEmits(['enableEdit'])
 const props = defineProps<{ media: MediaModel }>()
@@ -30,31 +39,25 @@ const expanded: Ref<boolean | null> = ref(null)
         <IconMinus v-else />
       </button>
     </div>
-    <img class="media__image" :src="media.thumbnail" />
+    <ItemPicture :src="media.thumbnail!" />
     <div class="media__content">
-      <a class="media__link" :href="media.url" target="_blank">
-        {{ media.title }}
+      <ItemTitle :title="media.title!" :url="media.url!">
         <IconLikeFull class="media__favorite" v-if="media.like" />
-      </a>
-      <p class="media__description" v-if="media.description">{{ media.description }}</p>
-      <p class="media__description" v-else>No description :(</p>
-      <transition name="reveal">
-        <div class="media__tags" v-if="expanded">
-          <p class="media__tag" v-for="tag in media.tags" :key="tag">
-            {{ tag }}
-          </p>
-        </div>
-      </transition>
-      <transition name="reveal">
+      </ItemTitle>
+      <ItemDescription :description="media.description!" />
+      <TransitionGroup name="reveal">
+        <TagGroup v-if="expanded && media.tags?.length" :max-height="true">
+          <TagButton v-for="tag in media.tags" :key="tag" :name="tag" :selected="false" />
+        </TagGroup>
         <p class="media__extract" v-if="expanded">{{ media.extract }}</p>
-      </transition>
+      </TransitionGroup>
+      <transition name="reveal"> </transition>
       <div class="media__footer">
         <component
           class="media__status"
           :is="status!.component"
           :style="{ backgroundColor: status!.color }"
         />
-        <!-- <component class="media__status" :is="categ!.component" /> -->
         <p class="media__categ">
           {{ media.categ }}
         </p>
@@ -62,13 +65,8 @@ const expanded: Ref<boolean | null> = ref(null)
           <IconRating v-for="score in media.score" :key="score" class="media__score-icon" />
           <!-- <p class="media__score-text">{{ media.score }}</p> -->
         </div>
-        <!-- <div class="media__score" v-if="media.score">
-          <IconRating class="media__score-icon" />
-          <p class="media__score-text">{{ media.score }}</p>
-        </div> -->
       </div>
     </div>
-
     <div class="media__actions">
       <button class="button-icon media__action" type="button" @click="$emit('enableEdit')">
         <IconEditVue />
@@ -114,21 +112,6 @@ const expanded: Ref<boolean | null> = ref(null)
     }
   }
 
-  &__image {
-    object-fit: cover;
-    height: 5.5rem;
-    width: 5.5rem;
-    filter: saturate(0);
-    border-radius: 1rem;
-    background-color: #ddd;
-    display: flex;
-    font-size: 0.9rem;
-    color: #777;
-    align-items: center;
-    justify-content: center;
-    font-family: 'contaxBold', Arial, sans-serif;
-  }
-
   &__content {
     display: flex;
     flex-flow: column;
@@ -137,31 +120,10 @@ const expanded: Ref<boolean | null> = ref(null)
     overflow: hidden;
   }
 
-  &__link {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    width: fit-content;
-    line-height: 1.55rem;
-    font-size: 1.5rem;
-    margin-top: 0.1rem;
-    margin-bottom: -0.25rem;
-    font-family: 'contaxBold', Arial, sans-serif;
-    text-transform: capitalize;
-    text-decoration: none;
-    color: black;
-    transition: padding 0.3s, font-style 0.3s;
-  }
-
   &__favorite {
     width: 1.1rem;
     height: 1.1rem;
     color: #dc6389;
-  }
-
-  &__description {
-    font-family: 'contaxItalic', Arial, sans-serif;
-    opacity: 0.7;
   }
 
   &__extract {
@@ -172,8 +134,6 @@ const expanded: Ref<boolean | null> = ref(null)
   &__footer {
     display: flex;
     flex-wrap: wrap;
-    // align-items: center;
-    // flex-flow: column;
     gap: 0.5rem;
   }
 
@@ -197,26 +157,6 @@ const expanded: Ref<boolean | null> = ref(null)
     background-color: #ddd;
     border-radius: 1rem;
     cursor: default;
-  }
-
-  &__tags {
-    display: flex;
-    gap: 0.5rem;
-    max-height: 10rem;
-  }
-
-  &__tag {
-    height: 1.75rem;
-    font-size: 0.9rem;
-    padding: 0.25rem 1rem;
-    background-color: #ddd;
-    // font-family: 'contaxBold', Arial, sans-serif;
-    color: #777;
-    border-radius: 1rem;
-    font-size: 0.85rem;
-    &::before {
-      content: '#';
-    }
   }
 
   &__actions {
@@ -249,7 +189,6 @@ const expanded: Ref<boolean | null> = ref(null)
     font-family: 'contaxBold', Arial, sans-serif;
     background-color: #dc956333;
     border-radius: 1rem;
-    // width: 4rem;
     padding: 0 0.5rem;
   }
 
@@ -268,7 +207,7 @@ const expanded: Ref<boolean | null> = ref(null)
   }
 }
 
-// TRANSITIONS
+/* TRANSITIONS */
 .reveal-enter-active,
 .reveal-leave-active {
   transition: max-height 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53),

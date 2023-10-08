@@ -141,29 +141,4 @@ main {
     cursor: pointer;
   }
 }
-
-.list-enter-active,
-.list-leave-active,
-.list-move {
-  transition: all 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
-}
-.list-enter-from,
-.list-leave-to {
-  opacity: 0;
-  // transform: translateY(2rem);
-}
-.list-leave-active {
-  // position: absolute;
-  opacity: 0;
-}
-
-// searchbar transition
-.search-enter-active,
-.search-leave-active {
-  transition: opacity 0.3s ease;
-}
-.search-enter-from,
-.search-leave-to {
-  opacity: 0;
-}
 </style>

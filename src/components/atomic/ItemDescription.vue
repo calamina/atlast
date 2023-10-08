@@ -1,0 +1,17 @@
+<script setup lang="ts">
+const props = defineProps<{
+  description: string
+}>()
+</script>
+
+<template>
+  <p class="description" v-if="props.description">{{ props.description }}</p>
+  <p class="description" v-else>No description :(</p>
+</template>
+
+<style scoped lang="scss">
+.description {
+  font-family: 'contaxItalic', Arial, sans-serif;
+  opacity: 0.7;
+}
+</style>

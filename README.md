@@ -13,8 +13,6 @@ Personnal Knowledge Database made with Vue3 and Strapi
 - [ ] clean & refactor css
 - [ ] bem everywhere
 
-# filters
-- [ ] refactor filters make sub-components
 # utils
 - [ ] add confirmation dialog
 
