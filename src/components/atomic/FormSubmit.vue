@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ButtonHTMLAttributes } from 'vue'
+import type { ButtonHTMLAttributes } from 'vue'
 
 const props = defineProps<{
   name: string

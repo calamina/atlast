@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
 import { useUserStore } from '@/stores/user'
-import type { UserModel } from '@/models/user'
+import type { User } from '@/models/user.model'
 import FormInput from '@/components/atomic/FormInput.vue'
 import FormGroup from '@/components/atomic/FormGroup.vue'
 import FormSubmit from '@/components/atomic/FormSubmit.vue'
@@ -12,7 +12,7 @@ const { login } = useUserStore()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emits = defineEmits(['toggleRegister'])
 
-const form: Ref<UserModel> = ref({
+const form: Ref<User> = ref({
   username: 'cala',
   password: 'password'
 })

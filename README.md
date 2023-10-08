@@ -10,9 +10,6 @@ Personnal Knowledge Database made with Vue3 and Strapi
 # search
 - [ ] empty search on add / edit
 
-# auth
-- [ ] repair menu & media router bugs 
-
 # css
 - [ ] clean & refactor css
 - [ ] bem everywhere

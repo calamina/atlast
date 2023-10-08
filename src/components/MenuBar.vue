@@ -12,7 +12,7 @@ const { connectedUser } = storeToRefs(useUserStore())
 
 <template>
   <nav>
-    <div class="submenu">
+    <div class="submenu" v-if="connectedUser">
       <div class="menu-icon">
         <button class="button-icon"><IconGlobe /></button>
       </div>
@@ -22,7 +22,7 @@ const { connectedUser } = storeToRefs(useUserStore())
       </div>
     </div>
     <div id="menu-search"></div>
-    <div class="user">
+    <div class="user" v-if="connectedUser">
       <div class="user__info">
         <div class="menu-icon">
           <div class="button-icon"><IconUser /></div>
