@@ -126,7 +126,7 @@ main {
   border-radius: 3rem;
   width: 25rem;
   height: 3rem;
-  z-index: 900;
+  z-index: 800;
 
   input[type='text'] {
     padding: 0 1rem;

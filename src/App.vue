@@ -7,15 +7,11 @@ const { notifications } = useNotificationStore()
 </script>
 
 <template>
-  <NotificationsBar class="notification" v-if="notifications.length" />
+  <transition name="notifications">
+    <NotificationsBar v-if="notifications.length" />
+  </transition>
   <MenuBar />
   <router-view v-slot="{ Component }">
     <component :is="Component" />
   </router-view>
 </template>
-
-<style lang="scss" scoped>
-.notification {
-  z-index: 666;
-}
-</style>

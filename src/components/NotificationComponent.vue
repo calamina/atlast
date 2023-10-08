@@ -11,7 +11,7 @@ const props = defineProps<{
 onMounted(() => {
   setTimeout(() => {
     notifications.removeNotification(props.notification)
-  }, 2500)
+  }, 3500)
 })
 </script>
 
@@ -29,18 +29,19 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .notification {
-  width: 20rem;
+  width: fit-content;
+  min-width: 15rem;
   padding: 0 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 2rem;
   height: 3rem;
-  box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
-  background-color: #000;
+  background-color: #ddd;
+  background-color: var(--highlight);
 
-  p {
-    color: #fff;
+  &__message {
+    font-family: 'contaxBold', 'Arial', sans-serif;
   }
 }
 </style>
