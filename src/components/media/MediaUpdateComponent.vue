@@ -216,7 +216,7 @@ function deleteMedia(id: number) {
   &__content {
     display: flex;
     flex-flow: column;
-    gap: 0.25rem;
+    gap: 0.3rem;
     flex: 1;
   }
 

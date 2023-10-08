@@ -11,7 +11,7 @@ const router = createRouter({
       meta: {
         requiresAuth: true
       },
-      component: () => import('@/views/HomeView.vue')
+      component: () => import('@/views/MediaView.vue')
     },
     {
       path: '/auth',
@@ -54,7 +54,9 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const { connectedUser } = useUserStore()
+  const { addNotification } = useNotificationStore()
   if (!connectedUser && to.meta.requiresAuth) {
+    addNotification({ type: 'error', message: 'You must be logged in to access this page' })
     return { name: 'auth' }
   }
 })
