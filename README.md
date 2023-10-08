@@ -3,11 +3,18 @@ Personnal Knowledge Database made with Vue3 and Strapi
 [atlast.vercel.app](https://atlast.vercel.app)
 ![atlast preview](atlast2.png?raw=true "Atlast preview")
 
+# atomic
+- [ ] menu buttons (icon / text / texticon)
+- [ ] menu search
+- [ ] auth with slots ?
+- [ ] move field component and rename
+- [ ] auth buttons
+
 # search
 - [ ] empty search on add / edit
 
 # auth
-- [ ] repair menu & media bugs 
+- [ ] repair menu & media router bugs 
 
 # css
 - [ ] clean & refactor css
