@@ -9,7 +9,6 @@ import { useUserStore } from '@/stores/user'
 
 import type { MediaModel } from '@/models/media.model'
 
-import IconBack from '@/components/icons/IconBack.vue'
 import MediaUpdateComponent from '@/components/media/MediaUpdateComponent.vue'
 import MediaComponent from './MediaComponent.vue'
 import { storeToRefs } from 'pinia'

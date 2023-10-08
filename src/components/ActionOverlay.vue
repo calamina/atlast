@@ -18,7 +18,7 @@ onKeyStroke(['Escape'], (e) => {
 
 <template>
   <div class="overlay-background">
-    <component :is="props.component"></component>
+    <component :is="props.component" @exit="$emit('exit')"></component>
   </div>
 </template>
 

@@ -5,10 +5,7 @@ Personnal Knowledge Database made with Vue3 and Strapi
 
 # atomic
 - [ ] menu buttons (icon / text / texticon) maybe ...
-- [ ] menu search
-
-# search
-- [ ] empty search on add / edit
+- [ ] menu search maybe ...
 
 # css
 - [ ] clean & refactor css
@@ -25,9 +22,6 @@ Personnal Knowledge Database made with Vue3 and Strapi
 - [ ] add arrows to search
   - top/bottom to go through results
   - left/right to go to form and back
-
-# notifications
-- [ ] add gap between notifications ...
 
 # Accessibility
 - [ ] aria and focus and img alt and link hover
