@@ -105,7 +105,6 @@ function addMedia(media: MediaModel, action: string) {
 <style lang="scss" scoped>
 .wrapper-search {
   display: flex;
-  flex-flow: column;
   gap: 2rem;
   align-items: center;
   display: flex;
@@ -114,12 +113,12 @@ function addMedia(media: MediaModel, action: string) {
   padding: 2rem;
   border-radius: 1rem;
   gap: 1rem;
-  overflow-y: auto;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  // overflow-y: auto;
+  // -ms-overflow-style: none;
+  // scrollbar-width: none;
+  // &::-webkit-scrollbar {
+  //   display: none;
+  // }
 }
 
 .background__media {
@@ -130,25 +129,25 @@ function addMedia(media: MediaModel, action: string) {
   display: flex;
   flex-flow: column;
   gap: 0.5rem;
-  // overflow-y: auto;
-  // -ms-overflow-style: none;
-  // scrollbar-width: none;
-  // &::-webkit-scrollbar {
-  //   display: none;
-  // }
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .results {
   // width: 45rem;
-  flex-flow: column;
+  // flex-flow: column;
   display: flex;
   gap: 1rem;
-  // overflow-y: auto;
-  // -ms-overflow-style: none;
-  // scrollbar-width: none;
-  // &::-webkit-scrollbar {
-  //   display: none;
-  // }
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .medias {

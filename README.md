@@ -3,6 +3,9 @@ Personnal Knowledge Database made with Vue3 and Strapi
 [atlast.vercel.app](https://atlast.vercel.app)
 ![atlast preview](atlast2.png?raw=true "Atlast preview")
 
+# fonts
+- [ ] fix font render
+
 # atomic
 - [ ] menu buttons (icon / text / texticon) maybe ...
 - [ ] menu search maybe ...
@@ -19,7 +22,7 @@ Personnal Knowledge Database made with Vue3 and Strapi
 - [ ] change actions name to status
 
 # media
-- [ ] add message when empty list
+- [ ] fix message/loading when empty list
 
 # Accessibility
 - [ ] aria and focus and img alt and link hover
