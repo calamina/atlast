@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { ref, type Ref } from 'vue'
 import router from '@/router/index'
 import http from '@/utils/http-common'
+import { UserModel } from '@/models/user.model'
 
 export const useUserStore = defineStore('users', () => {
   const notification = useNotificationStore()
@@ -26,15 +27,7 @@ export const useUserStore = defineStore('users', () => {
       })
   }
 
-  async function register({
-    username,
-    email,
-    password
-  }: {
-    username: string
-    email: string
-    password: string
-  }): Promise<any> {
+  async function register({ username, email, password }: UserModel): Promise<any> {
     return http
       .post('auth/local/register', {
         username,
@@ -55,7 +48,7 @@ export const useUserStore = defineStore('users', () => {
       })
   }
 
-  async function login({ username, password }: { username: string; password: string }) {
+  async function login({ username, password }: UserModel) {
     http
       .post('auth/local', {
         identifier: username,

@@ -16,7 +16,7 @@ let loginRegister = ref(true)
 </template>
 
 <style lang="scss" scoped>
-main {
+.auth {
   display: flex;
   flex-flow: column;
   align-items: center;

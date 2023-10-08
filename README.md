@@ -22,7 +22,6 @@ Personnal Knowledge Database made with Vue3 and Strapi
 
 # models
 - [ ] change actions name to status
-- [ ] add user model
 
 # media
 - [ ] add message when empty list
