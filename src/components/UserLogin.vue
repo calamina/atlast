@@ -15,6 +15,7 @@ const emits = defineEmits(['toggleRegister'])
 const form: Ref<User> = ref({
   username: 'cala',
   password: 'password'
+  email: ''
 })
 </script>
 <template>
