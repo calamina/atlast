@@ -86,7 +86,7 @@ export const useMediaStore = defineStore('media', () => {
         return response.data
       })
       .catch((error) => {
-        notification.addNotification({ type: 'error', message: error.response })
+        notification.addNotification({ type: 'error', message: error })
         return error.response
       })
   }
