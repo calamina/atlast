@@ -63,7 +63,7 @@ function updateFilters(property: any, value: string | boolean | null) {
 
 <template>
   <div class="filter-wrapper">
-    <div class="filters" v-if="!!mediastore.filteredList.length">
+    <div class="filters" v-if="!!mediastore.filteredList?.length">
       <FilterGroup :title="''">
         <FilterButton
           :selected="mediastore.filteredList.length === mediastore.list.length"

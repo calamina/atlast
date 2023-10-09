@@ -20,7 +20,7 @@ const show: Ref<number | null> = ref(null)
 let search = ref('')
 
 onMounted(() => {
-  if (filteredList.value.length === 0) {
+  if (filteredList?.value.length === 0) {
     getMediaByUser(connectedUser?.username).then((result) => {
       filteredList.value = result
     })
@@ -28,7 +28,7 @@ onMounted(() => {
 })
 
 const filteredMedia: ComputedRef<MediaModel[]> = computed(() => {
-  return filteredList.value.map((media: MediaModel) => {
+  return filteredList?.value?.map((media: MediaModel) => {
     const id = media.id
     media = media.attributes
     media.id = id
@@ -65,7 +65,7 @@ function editMedia(index: number) {
       </div>
     </teleport>
     <MediaFilters />
-    <div class="medias" v-if="filteredList.length !== 0">
+    <div class="medias" v-if="filteredList?.length !== 0">
       <TransitionGroup name="list">
         <div class="media__switch" v-for="(media, index) of filteredMedia" :key="media.id">
           <MediaComponent
