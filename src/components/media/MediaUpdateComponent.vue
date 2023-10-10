@@ -74,7 +74,7 @@ onMounted(() => {
 })
 
 function addMedia(media: MediaModel) {
-  if (media.action === 'planning') media.score = null
+  if (media.action === 'planning') media.score = 0
   media.tags = media.tagstring ? media.tagstring.split(' ') : null
   media.user = user.connectedUser.username
   mediastore
@@ -88,19 +88,17 @@ function addMedia(media: MediaModel) {
 }
 
 function editMedia(media?: MediaModel) {
-  if (media) {
-    if (media.action === 'planning') media.score = null
-    media.tags = media.tagstring ? media.tagstring.split(' ') : null
-    mediastore
-      .editUserMedia(media)
-      .then((response) => {
-        // if (!response.data.error) {}
-        emits('confirm')
-      })
-      .catch((error) => {
-        notification.addNotification({ message: error, type: 'error' })
-      })
-  }
+  if (!media) return
+  if (media.action === 'planning') media.score = 0
+  media.tags = media.tagstring ? media.tagstring.split(' ') : null
+  mediastore
+    .editUserMedia(media)
+    .then(() => {
+      emits('confirm')
+    })
+    .catch((error) => {
+      notification.addNotification({ message: error, type: 'error' })
+    })
 }
 
 function deleteMedia(id: number) {
