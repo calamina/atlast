@@ -1,18 +1,51 @@
 @font-face {
-  font-family: 'Contax Pro 55';
-  src: url('/src/assets/fonts/contax.OTF') format('otf');
+  font-family: 'contax_pro_55regular';
+  src: url('/src/assets/fonts/contax.OTF');
+  font-weight: normal;
+  font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Contax Pro 75 Bold';
-  src: url('/src/assets/fonts/contaxBold.OTF') format('otf');
+  font-family: 'contax_pro_75_boldregular';
+  src: url('/src/assets/fonts/contaxBold.OTF');
+  font-weight: normal;
+  font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Contax Pro 66 Med Italic';
-  src: url('/src/assets/fonts/contaxItalic.otf') format('otf');
+  font-family: 'contax_pro_66_med_italicIt';
+  src: url('/src/assets/fonts/contaxItalic.otf');
+  font-weight: normal;
+  font-style: normal;
   font-display: swap;
 }
+
+/* @font-face {
+  font-family: 'contax_pro_55regular';
+  src: url('/src/assets/fonts/contax-webfont.woff2') format('woff2'),
+       url('/src/assets/fonts/contax-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'contax_pro_75_boldregular';
+  src: url('/src/assets/fonts/contaxbold-webfont.woff2') format('woff2'),
+       url('/src/assets/fonts/contaxbold-webfont.woff') format('woff');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'contax_pro_66_med_italicIt';
+  src: url('/src/assets/fonts/contaxitalic-webfont.woff2') format('woff2'),
+       url('/src/assets/fonts/contaxitalic-webfont.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+} */
 
 :root {
   --background: #ccc;
@@ -20,13 +53,13 @@
   --active-plus: #999;
   --text: #323232;
   --highlight: #dfcfe8;
-  --font-italic: 'Contax Pro 66 Med Italic', Arial, sans-serif;
-  --font-bold: 'Contax Pro 75 Bold', Arial, sans-serif;
+  --font-italic: 'contax_pro_66_med_italicIt', Arial, sans-serif;
+  --font-bold: 'contax_pro_75_boldregular', Arial, sans-serif;
 }
 
 
 p, a, h1, h2, h3, h4, span, label, input, button, select, textarea {
-  font-family: 'Contax Pro 55', Arial, sans-serif;
+  font-family: 'contax_pro_55regular', Arial, sans-serif;
   color: var(--text);
 }
 
