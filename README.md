@@ -6,6 +6,12 @@ Personnal Knowledge Database made with Vue3 and Strapi
 # fonts
 - [ ] fix font render
 
+# search
+- [ ] either close or rerender on delete !
+
+# mediaView
+- [ ] remove active media on edit (regression)
+
 # atomic
 - [ ] menu buttons (icon / text / texticon) maybe ...
 - [ ] menu search maybe ...

@@ -18,14 +18,12 @@ import ItemPicture from '@/components/atomic/ItemPicture.vue'
 import TagButton from '@/components/atomic/TagButton.vue'
 import TagGroup from '@/components/atomic/TagGroup.vue'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emits = defineEmits(['enableEdit'])
 const props = defineProps<{ media: MediaModel }>()
 
 const status = computed(() => {
   return actions.find((action: { name: string }) => action.name === props.media.action)
-})
-const categ = computed(() => {
-  return categs.find((categ: { name: string }) => categ.name === props.media.categ)
 })
 
 const expanded: Ref<boolean | null> = ref(null)
@@ -51,7 +49,6 @@ const expanded: Ref<boolean | null> = ref(null)
         </TagGroup>
         <p class="media__extract" v-if="expanded">{{ media.extract }}</p>
       </TransitionGroup>
-      <transition name="reveal"> </transition>
       <div class="media__footer">
         <component
           class="media__status"
@@ -77,6 +74,8 @@ const expanded: Ref<boolean | null> = ref(null)
 
 <style lang="scss" scoped>
 .media {
+  animation: enter 0.3s ease-in-out;
+  transform-origin: left;
   position: relative;
   width: 45rem;
   display: flex;
@@ -218,5 +217,14 @@ const expanded: Ref<boolean | null> = ref(null)
   max-height: 0;
   opacity: 0;
   padding: 0;
+}
+
+@keyframes enter {
+  0% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 </style>

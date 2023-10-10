@@ -43,20 +43,12 @@ function countElements(property: string) {
   )
 }
 
-function resetFilters(): void {
-  filters.value.categ = null
-  filters.value.action = null
-  filters.value.like = null
-  mediastore.updateFilters(filters.value)
-}
-
 function updateFilters(property: any, value: string | boolean | null) {
   if (property === 'sort' && filters.value[property] === value) {
     filters.value.order = filters.value.order === 'asc' ? 'desc' : 'asc'
-    mediastore.updateFilters(filters.value)
-    return
+  } else {
+    filters.value[property] = filters.value[property] === value ? null : value
   }
-  filters.value[property] = filters.value[property] === value && property !== 'sort' ? null : value
   mediastore.updateFilters(filters.value)
 }
 </script>
@@ -69,7 +61,7 @@ function updateFilters(property: any, value: string | boolean | null) {
           :selected="mediastore.filteredList.length === mediastore.list.length"
           :name="'All'"
           :info="mediastore.list.length"
-          @click="resetFilters()"
+          @click="mediastore.resetFilters()"
         />
       </FilterGroup>
       <FilterGroup :title="'favorites'" v-if="favorites > 0">

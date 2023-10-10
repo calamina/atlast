@@ -7,6 +7,7 @@ import http from '@/utils/http-common'
 
 import { useNotificationStore } from '@/stores/notification'
 import { useUserStore } from '@/stores/user'
+import { useLoadingStore } from '@/stores/loading'
 
 export const useMediaStore = defineStore('media', () => {
   const list: Ref<Array<MediaModel>> = ref([])
@@ -16,6 +17,7 @@ export const useMediaStore = defineStore('media', () => {
 
   const notification = useNotificationStore()
   const user = useUserStore()
+  const { setLoading } = useLoadingStore()
 
   const headers = {
     headers: {
@@ -24,29 +26,40 @@ export const useMediaStore = defineStore('media', () => {
   }
 
   async function getMediaByUserAndName(user: string, name: string): Promise<any> {
+    setLoading(true)
     return http
       .get<Array<any>>(
         'medias?filters[title][$containsi]=' + name + '&filters[user][$eq]=' + user,
         headers
       )
       .then((response: any) => {
+        setLoading(false)
         return response.data.data
       })
-      .catch((error) => notification.addNotification({ type: 'error', message: error.response }))
+      .catch((error) => {
+        setLoading(false)
+        notification.addNotification({ type: 'error', message: error.response })
+      })
   }
 
   async function getMediaByUser(user: string): Promise<any> {
+    setLoading(true)
     return http
       .get<Array<any>>('medias?sort=createdAt:desc', headers)
       .then((response: any) => {
         const result = response.data.data.filter((media: any) => media.attributes.user === user)
         list.value = result
+        setLoading(false)
         return result
       })
-      .catch((error) => notification.addNotification({ type: 'error', message: error.response }))
+      .catch((error) => {
+        setLoading(false)
+        notification.addNotification({ type: 'error', message: error.response })
+      })
   }
 
   async function getFilteredMediaByUser(user: string): Promise<any> {
+    setLoading(true)
     let filter: string = ''
     if (filters.value?.categ) {
       filter += `&filters[categ][$eq]=${filters.value.categ}`
@@ -67,59 +80,80 @@ export const useMediaStore = defineStore('media', () => {
     return http
       .get<Array<any>>('medias' + filterSort, headers)
       .then((response: any) => {
+        setLoading(false)
         const result = response.data.data.filter((media: any) => {
           return media.attributes.user === user
         })
         filteredList.value = result
         return result
       })
-      .catch((error) => notification.addNotification({ type: 'error', message: error.response }))
+      .catch((error) => {
+        setLoading(false)
+        notification.addNotification({ type: 'error', message: error.response })
+      })
   }
 
   async function addUserMedia(media: any): Promise<any> {
+    setLoading(true)
     return http
       .post(`medias`, { data: media }, headers)
       .then((response) => {
         notification.addNotification({ type: 'alert', message: 'Media added !' })
         getFilteredMediaByUser(user.connectedUser.username)
         getMediaByUser(user.connectedUser.username)
+        setLoading(false)
         return response.data
       })
       .catch((error) => {
+        setLoading(false)
         notification.addNotification({ type: 'error', message: error })
         return error.response
       })
   }
 
   async function editUserMedia(media: any): Promise<any> {
+    setLoading(true)
     return http
       .put(`medias/${media.id}`, { data: media }, headers)
       .then((response) => {
+        setLoading(false)
         notification.addNotification({ type: 'alert', message: 'Media edited !' })
         getFilteredMediaByUser(user.connectedUser.username)
         return response.data
       })
       .catch((error) => {
+        setLoading(false)
         notification.addNotification({ type: 'error', message: 'oops wrong media !!' })
         return error.response
       })
   }
 
   async function deleteUserMedia(id: number): Promise<any> {
+    setLoading(true)
     return http
       .delete(`medias/${id}`, headers)
       .then(() => {
+        setLoading(false)
         notification.addNotification({ type: 'alert', message: 'Media deleted !' })
         getMediaByUser(user.connectedUser.username)
         getFilteredMediaByUser(user.connectedUser.username)
       })
       .catch((error) => {
+        setLoading(false)
         notification.addNotification({ type: 'error', message: error.response })
       })
   }
 
   async function updateFilters(newFilters: FilterModel): Promise<any> {
     filters.value = newFilters
+    getFilteredMediaByUser(user.connectedUser.username)
+  }
+
+  async function resetFilters(): Promise<any> {
+    filters.value.action = null
+    filters.value.categ = null
+    filters.value.like = null
+    filters.value.tag = null
     getFilteredMediaByUser(user.connectedUser.username)
   }
 
@@ -132,6 +166,7 @@ export const useMediaStore = defineStore('media', () => {
     filteredList,
     filters,
     updateFilters,
+    resetFilters,
     getFilteredMediaByUser,
     getMediaByUser,
     getMediaByUserAndName,
