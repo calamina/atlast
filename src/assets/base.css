@@ -1,21 +1,16 @@
 @font-face {
-  font-family: apercu;
-  src: url('/src/assets/fonts/ApercuMono.ttf');
-  font-display: swap;
-}
-@font-face {
   font-family: 'Contax Pro 55';
-  src: url('/src/assets/fonts/contax.OTF');
+  src: url('/src/assets/fonts/contax.OTF') format('otf');
   font-display: swap;
 }
 @font-face {
   font-family: 'Contax Pro 75 Bold';
-  src: url('/src/assets/fonts/contaxBold.OTF');
+  src: url('/src/assets/fonts/contaxBold.OTF') format('otf');
   font-display: swap;
 }
 @font-face {
   font-family: 'Contax Pro 66 Med Italic';
-  src: url('/src/assets/fonts/contaxItalic.otf');
+  src: url('/src/assets/fonts/contaxItalic.otf') format('otf');
   font-display: swap;
 }
 
