@@ -23,6 +23,6 @@ let loginRegister = ref(true)
   justify-content: center;
   width: 20rem;
   margin: 0 auto;
-  height: 100vh;
+  height: calc(100vh - 2rem);
 }
 </style>
