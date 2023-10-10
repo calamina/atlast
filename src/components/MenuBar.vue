@@ -72,7 +72,7 @@ nav {
   transition: filter 0.3s;
   padding: 0.6rem 1rem;
   width: 8rem;
-  font-family: 'contaxBold', Arial, sans-serif;
+  font-family: var(--font-bold);
   color: #343434;
   text-decoration: none;
   transition: background-color 0.2s;
@@ -125,7 +125,7 @@ nav {
   }
 
   &__name {
-    font-family: 'contaxBold', Arial, sans-serif;
+    font-family: var(--font-bold);
   }
 
   &__button {
@@ -134,7 +134,7 @@ nav {
     display: flex;
     align-items: center;
     background-color: #fff;
-    font-family: 'contaxBold', Arial, sans-serif;
+    font-family: var(--font-bold);
     border-radius: 2rem;
     padding: 0 2rem;
   }

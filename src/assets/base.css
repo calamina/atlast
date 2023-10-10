@@ -4,41 +4,34 @@
   font-display: swap;
 }
 @font-face {
-  font-family: contax;
+  font-family: 'Contax Pro 55';
   src: url('/src/assets/fonts/contax.OTF');
   font-display: swap;
 }
 @font-face {
-  font-family: contaxBold;
+  font-family: 'Contax Pro 75 Bold';
   src: url('/src/assets/fonts/contaxBold.OTF');
   font-display: swap;
 }
 @font-face {
-  font-family: contaxItalic;
+  font-family: 'Contax Pro 66 Med Italic';
   src: url('/src/assets/fonts/contaxItalic.otf');
   font-display: swap;
 }
 
-
-/* :root {
-  --background: #e6e7ed;
-  --active: #d3d6e6;
-  --active-plus: #9fa6cf;
-  --text: #5a5396;
-} */
 :root {
-  /* --background: #eee; */
   --background: #ccc;
   --active: #ddd;
   --active-plus: #999;
   --text: #323232;
-  /* --highlight: #d7ccce; */
   --highlight: #dfcfe8;
+  --font-italic: 'Contax Pro 66 Med Italic', Arial, sans-serif;
+  --font-bold: 'Contax Pro 75 Bold', Arial, sans-serif;
 }
 
 
 p, a, h1, h2, h3, h4, span, label, input, button, select, textarea {
-  font-family: 'contax', Arial, sans-serif;
+  font-family: 'Contax Pro 55', Arial, sans-serif;
   color: var(--text);
 }
 

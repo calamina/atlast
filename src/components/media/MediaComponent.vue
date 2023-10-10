@@ -152,7 +152,7 @@ const expanded: Ref<boolean | null> = ref(null)
     font-size: 0.9rem;
     padding: 0.25rem 1rem;
     width: 6rem;
-    font-family: 'contaxBold', Arial, sans-serif;
+    font-family: var(--font-bold);
     background-color: #ddd;
     border-radius: 1rem;
     cursor: default;
@@ -185,7 +185,7 @@ const expanded: Ref<boolean | null> = ref(null)
     gap: 0.25rem;
     height: 1.75rem;
     font-size: 0.9rem;
-    font-family: 'contaxBold', Arial, sans-serif;
+    font-family: var(--font-bold);
     background-color: #dc956333;
     border-radius: 1rem;
     padding: 0 0.5rem;
@@ -194,7 +194,7 @@ const expanded: Ref<boolean | null> = ref(null)
   &__score-text {
     font-size: 0.9rem;
     line-height: 1.25rem;
-    font-family: 'contaxBold', Arial, sans-serif;
+    font-family: var(--font-bold);
   }
 
   &__score-icon {

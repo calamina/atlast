@@ -134,7 +134,7 @@ main {
     font-size: 1.1rem;
     border-radius: 3rem;
     height: 3rem;
-    font-family: 'contaxBold', Arial, sans-serif;
+    font-family: var(--font-bold);
   }
 
   .button-icon {

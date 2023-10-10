@@ -149,7 +149,7 @@ function deleteLink(id: number | undefined) {
 
   &__title {
     font-size: 1.25rem;
-    font-family: 'contaxBold', Arial, sans-serif;
+    font-family: var(--font-bold);
     text-transform: capitalize;
   }
 

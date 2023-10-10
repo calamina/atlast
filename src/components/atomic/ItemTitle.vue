@@ -22,7 +22,7 @@ const props = defineProps<{
   font-size: 1.5rem;
   margin-top: 0.1rem;
   margin-bottom: -0.25rem;
-  font-family: 'contaxBold', Arial, sans-serif;
+  font-family: var(--font-bold);
   text-transform: capitalize;
   text-decoration: none;
   color: black;

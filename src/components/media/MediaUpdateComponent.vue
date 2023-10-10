@@ -254,7 +254,7 @@ function deleteMedia(id: number) {
     font-size: 0.85rem;
     font-size: 1rem;
     height: 2.5rem;
-    font-family: 'contaxBold', Arial, sans-serif;
+    font-family: var(--font-bold);
   }
 
   &__actions {
@@ -285,7 +285,7 @@ function deleteMedia(id: number) {
   gap: 0.25rem;
 
   & .rating {
-    font-family: 'contaxBold', Arial, sans-serif;
+    font-family: var(--font-bold);
     font-size: 1rem;
     padding: 0.1rem 1rem;
     height: 2rem;

@@ -41,7 +41,7 @@ onMounted(() => {
   background-color: var(--highlight);
 
   &__message {
-    font-family: 'contaxBold', 'Arial', sans-serif;
+    font-family: var(--font-bold);
   }
 }
 </style>

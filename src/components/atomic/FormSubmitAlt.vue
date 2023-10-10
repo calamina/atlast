@@ -18,7 +18,7 @@ const props = defineProps<{
   background-color: transparent;
 
   span {
-    font-family: 'contaxBold', 'Arial', sans-serif;
+    font-family: var(--font-bold);
   }
 }
 </style>

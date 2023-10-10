@@ -16,7 +16,7 @@ const props = defineProps<{
 <style scoped lang="scss">
 .primary {
   margin-top: 0.5rem;
-  font-family: 'contaxBold', 'Arial', sans-serif;
+  font-family: var(--font-bold);
   font-size: 1.1rem;
   border-radius: 2rem;
   padding: 0.4rem 1.5rem;

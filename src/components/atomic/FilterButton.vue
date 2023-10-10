@@ -27,12 +27,12 @@ const props = defineProps<{
   }
 
   &__name {
-    font-family: 'contaxBold', Arial, sans-serif;
+    font-family: var(--font-bold);
     font-size: 1rem;
     text-transform: capitalize;
   }
   &__info {
-    font-family: 'contaxBold', Arial, sans-serif;
+    font-family: var(--font-bold);
     opacity: 0.5;
   }
 }

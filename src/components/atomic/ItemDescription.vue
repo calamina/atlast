@@ -11,7 +11,7 @@ const props = defineProps<{
 
 <style scoped lang="scss">
 .description {
-  font-family: 'contaxItalic', Arial, sans-serif;
+  font-family: var(--font-italic);
   opacity: 0.7;
 }
 </style>

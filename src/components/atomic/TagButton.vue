@@ -16,7 +16,7 @@ const props = defineProps<{
   padding: 0.25rem 1rem;
   background-color: #ddd;
   width: fit-content;
-  font-family: 'contaxBold', Arial, sans-serif;
+  font-family: var(--font-bold);
   color: #777;
   border-radius: 1rem;
   font-size: 0.85rem;

@@ -41,7 +41,7 @@ const emits = defineEmits(['update:modelValue'])
   overflow: hidden;
 
   &__name {
-    font-family: 'contaxBold', 'Arial', sans-serif;
+    font-family: var(--font-bold);
     animation: translateIn 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
     color: #999;
   }
