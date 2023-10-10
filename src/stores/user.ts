@@ -1,4 +1,5 @@
 import { useNotificationStore } from '@/stores/notification'
+import { useMediaStore } from '@/stores/media'
 import { defineStore } from 'pinia'
 import { ref, type Ref } from 'vue'
 import router from '@/router/index'
@@ -80,6 +81,9 @@ export const useUserStore = defineStore('users', () => {
       })
       connectedUser.value = null
       connectedUserToken.value = null
+      const media = useMediaStore()
+      media.list = []
+      media.filteredList = []
     })
   }
 
