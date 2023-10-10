@@ -13,8 +13,8 @@ const { login } = useUserStore()
 const emits = defineEmits(['toggleRegister'])
 
 const form: Ref<User> = ref({
-  username: 'cala',
-  password: 'password',
+  username: '',
+  password: '',
   email: ''
 })
 </script>
