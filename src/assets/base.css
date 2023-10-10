@@ -5,13 +5,13 @@
   font-style: normal;
   font-display: swap;
 }
-@font-face {
+/* @font-face {
   font-family: 'contax_pro_75_boldregular';
   src: url('/src/assets/fonts/contaxBold.OTF');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
-}
+} */
 @font-face {
   font-family: 'contax_pro_66_med_italicIt';
   src: url('/src/assets/fonts/contaxItalic.otf');
@@ -27,7 +27,7 @@
   font-weight: normal;
   font-style: normal;
   font-display: swap;
-}
+} */
 
 @font-face {
   font-family: 'contax_pro_75_boldregular';
@@ -38,7 +38,7 @@
   font-display: swap;
 }
 
-@font-face {
+/* @font-face {
   font-family: 'contax_pro_66_med_italicIt';
   src: url('/src/assets/fonts/contaxitalic-webfont.woff2') format('woff2'),
        url('/src/assets/fonts/contaxitalic-webfont.woff') format('woff');
