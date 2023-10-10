@@ -129,6 +129,7 @@ function addMedia(media: MediaModel, action: string) {
   display: flex;
   flex-flow: column;
   gap: 0.5rem;
+  border-radius: 1rem;
   overflow-y: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
