@@ -7,6 +7,7 @@ Personnal Knowledge Database made with Vue3 and Strapi
 - [ ] fix font render
 
 # search
+- [ ] collection results appear in search :(
 - [ ] either close or rerender on delete !
 
 # mediaView
