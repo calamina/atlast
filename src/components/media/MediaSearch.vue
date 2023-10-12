@@ -6,7 +6,7 @@ import { watchDebounced } from '@vueuse/shared'
 import { useWikiService } from '@/services/wiki.service'
 import { useMediaStore } from '@/stores/media'
 import { useUserStore } from '@/stores/user'
-import { useLoadingStore } from '@/stores/Loading'
+import { useLoadingStore } from '@/stores/loading'
 
 import type { MediaModel } from '@/models/media.model'
 
