@@ -7,12 +7,14 @@ let loginRegister = ref(true)
 </script>
 
 <template>
-  <main class="auth">
-    <Transition mode="out-in" name="auth">
-      <UserLogin class="userForm" v-if="loginRegister" @toggleRegister="loginRegister = false" />
-      <UserRegister class="userForm" v-else @toggleLogin="loginRegister = true" />
-    </Transition>
-  </main>
+  <Transition name="auth-in" appear>
+    <main class="auth">
+      <Transition mode="out-in" name="auth">
+        <UserLogin class="userForm" v-if="loginRegister" @toggleRegister="loginRegister = false" />
+        <UserRegister class="userForm" v-else @toggleLogin="loginRegister = true" />
+      </Transition>
+    </main>
+  </Transition>
 </template>
 
 <style lang="scss" scoped>

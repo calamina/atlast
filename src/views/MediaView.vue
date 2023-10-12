@@ -72,8 +72,8 @@ function editMedia(index: number) {
       <div class="medias" v-if="loading">
         <MediaMock v-for="i of filteredList?.length" :key="i" />
       </div>
-      <div v-else>
-        <div class="medias" v-if="filteredList?.length !== 0">
+      <div class="medias" v-else>
+        <div v-if="filteredList?.length !== 0">
           <div class="media__switch" v-for="(media, index) of filteredMedia" :key="media.id">
             <MediaComponent
               v-if="show !== index"
@@ -91,7 +91,7 @@ function editMedia(index: number) {
             />
           </div>
         </div>
-        <div class="medias" v-else>
+        <div v-else>
           <MediaMock v-for="i of 2" :key="i" />
         </div>
       </div>
@@ -124,6 +124,11 @@ main {
   flex-flow: column;
   align-items: center;
   gap: 0.25rem;
+  width: 45rem;
+}
+
+.media__switch {
+  width: 45rem;
 }
 
 .media__search {
@@ -150,6 +155,22 @@ main {
 
   .button-icon {
     cursor: pointer;
+  }
+}
+
+@media (max-width: 1250px) {
+  main {
+    grid-template-columns: 1fr;
+  }
+
+  .media__switch,
+  .medias {
+    width: 100%;
+    padding: 0 0.25rem;
+  }
+
+  .media__search {
+    width: 100%;
   }
 }
 </style>

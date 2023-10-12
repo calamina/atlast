@@ -120,9 +120,21 @@ input[type="text"], input[type="password"], input[type="date"], textarea, select
   width: 100%;
   border: none;
   outline: none;
-  /* margin-bottom: 0.5rem; */
 }
 
 input[type="date"] {
   width: auto;
+}
+
+
+@media (max-width: 1250px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 900px) {
+  html {
+    font-size: 12px;
+  }
 }

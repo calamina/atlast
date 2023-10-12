@@ -22,8 +22,8 @@ h3 {
   text-transform: capitalize;
   font-weight: 400;
   font-size: 1rem;
-  font-family: 'contaxItalic', 'Arial', sans-serif;
+  font-family: 'contax_pro_66_med_italicIt', 'Arial', sans-serif;
   color: #999;
-  padding: 0 1rem 0.25rem;
+  padding: 0 1rem;
 }
 </style>

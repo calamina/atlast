@@ -141,6 +141,7 @@ nav {
 }
 
 #menu-search {
+  display: flex;
   margin: 0 auto;
 }
 
@@ -150,5 +151,35 @@ nav {
   padding: 0.25rem;
   position: relative;
   z-index: 1;
+}
+
+@media (max-width: 1250px) {
+  nav {
+    padding: 1rem 1rem 0;
+    grid-template-columns: 3rem 1fr 3rem;
+  }
+
+  // .submenu,
+  .types,
+  .user__info {
+    display: none;
+  }
+
+  .user {
+    transform: translateX(0);
+  }
+  .user__actions {
+    height: 3rem;
+    width: 3rem;
+    background-color: #fff;
+    justify-content: center;
+    padding-right: 0;
+    border-radius: 2rem;
+  }
+
+  #menu-search {
+    width: 100%;
+    justify-content: center;
+  }
 }
 </style>

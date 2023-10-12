@@ -4,7 +4,6 @@ import { computed, ref, type Ref } from 'vue'
 import type { MediaModel } from '@/models/media.model'
 
 import actions from '@/utils/media-actions'
-import categs from '@/utils/media-categs'
 
 import IconEditVue from '@/components/icons/IconEdit.vue'
 import IconLikeFull from '@/components/icons/IconLikeFull.vue'
@@ -77,7 +76,6 @@ const expanded: Ref<boolean | null> = ref(null)
   animation: enter 0.3s ease-in-out;
   transform-origin: left;
   position: relative;
-  width: 45rem;
   display: flex;
   flex-flow: row;
   gap: 0.75rem;
@@ -219,12 +217,12 @@ const expanded: Ref<boolean | null> = ref(null)
   padding: 0;
 }
 
-@keyframes enter {
-  0% {
-    transform: scale(0.8);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
+// @keyframes enter {
+//   0% {
+//     transform: scale(0.8);
+//   }
+//   100% {
+//     transform: scale(1);
+//   }
+// }
 </style>

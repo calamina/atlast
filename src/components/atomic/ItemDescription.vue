@@ -14,4 +14,12 @@ const props = defineProps<{
   font-family: var(--font-italic);
   opacity: 0.7;
 }
+
+@media (max-width: 1250px) {
+  .description {
+    white-space: nowrap;
+    overflow: scroll;
+    text-overflow: ellipsis;
+  }
+}
 </style>

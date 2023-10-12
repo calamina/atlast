@@ -130,7 +130,18 @@ function updateFilters(property: any, value: string | boolean | null) {
   display: flex;
   flex-flow: column;
   padding: 1rem;
-  gap: 1rem;
+  gap: 0.5rem;
   transition: opacity 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
+  width: 18rem;
+
+  & > :last-child {
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 1250px) {
+  .filter-wrapper {
+    display: none;
+  }
 }
 </style>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps<{
   maxHeight: boolean
 }>()
@@ -11,6 +12,7 @@ const props = defineProps<{
 <style scope lang="scss">
 .tags {
   display: flex;
+  flex-flow: row wrap;
   gap: 0.5rem;
 }
 

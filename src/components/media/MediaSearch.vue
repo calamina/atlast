@@ -6,6 +6,7 @@ import { watchDebounced } from '@vueuse/shared'
 import { useWikiService } from '@/services/wiki.service'
 import { useMediaStore } from '@/stores/media'
 import { useUserStore } from '@/stores/user'
+import { useLoadingStore } from '@/stores/Loading'
 
 import type { MediaModel } from '@/models/media.model'
 
@@ -20,6 +21,7 @@ const { getWikiByname } = useWikiService()
 const { connectedUser } = useUserStore()
 const mediastore = useMediaStore()
 const { search } = storeToRefs(mediastore)
+const { loading } = storeToRefs(useLoadingStore())
 
 let wikiList: Ref<MediaModel[]> = ref([])
 let mediaList: Ref<MediaModel[]> = ref([])
@@ -67,39 +69,40 @@ function addMedia(media: MediaModel, action: string) {
 </script>
 
 <template>
-  <div class="wrapper-search">
-    <div class="results" v-if="!activeMedia">
-      <div class="collection" v-if="mediaList.length">
-        <MediaComponent
-          v-for="media of mediaList"
-          class="background__media"
-          :media="media"
-          :key="media.id"
-          @enableEdit="addMedia(media, 'editMedia')"
-        />
+  <transition name="fade">
+    <div class="wrapper-search" v-if="!loading">
+      <div class="results" v-if="!activeMedia">
+        <div class="collection" v-if="mediaList.length">
+          <MediaComponent
+            v-for="media of mediaList"
+            class="background__media"
+            :media="media"
+            :key="media.id"
+            @enableEdit="addMedia(media, 'editMedia')"
+          />
+        </div>
+        <div class="medias" v-if="wikiList.length">
+          <MediaSimple
+            v-for="(media, index) of wikiList"
+            :key="index"
+            :media="media"
+            @click="addMedia(media, 'createMedia')"
+          />
+        </div>
+        <div class="medias" v-if="!mediaList.length && !wikiList.length">
+          <p>No results</p>
+        </div>
       </div>
-      <div class="medias" v-if="wikiList.length">
-        <MediaSimple
-          v-for="(media, index) of wikiList"
-          :key="index"
-          :media="media"
-          @click="addMedia(media, 'createMedia')"
-        />
-      </div>
-      <!-- <div class="medias" v-if="!mediaList.length && !wikiList.length">
-        TODO: separate no results / loading
-        <p>No results</p>
-      </div> -->
+      <MediaUpdateComponent
+        v-if="activeMedia"
+        :media="activeMedia"
+        :action="createOrUpdate"
+        :key="activeMedia.key"
+        @confirm="$emit('exit')"
+        @cancel="activeMedia = null"
+      />
     </div>
-    <MediaUpdateComponent
-      v-if="activeMedia"
-      :media="activeMedia"
-      :action="createOrUpdate"
-      :key="activeMedia.key"
-      @confirm="$emit('exit')"
-      @cancel="activeMedia = null"
-    />
-  </div>
+  </transition>
 </template>
 
 <style lang="scss" scoped>
@@ -164,6 +167,22 @@ function addMedia(media: MediaModel, action: string) {
   scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
+  }
+}
+
+@media (max-width: 1250px) {
+  .wrapper-search {
+    width: 100%;
+  }
+  .medias {
+    width: 100%;
+  }
+  .results {
+    flex-flow: column;
+  }
+  .collection {
+    height: 100%;
+    overflow: hidden;
   }
 }
 </style>
