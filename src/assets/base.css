@@ -132,9 +132,3 @@ input[type="date"] {
     font-size: 14px;
   }
 }
-
-@media (max-width: 900px) {
-  html {
-    font-size: 12px;
-  }
-}
