@@ -310,8 +310,29 @@ const deleteMedia = useThrottleFn((id: number) => {
 }
 
 @media (max-width: 1250px) {
+  .media__content {
+    margin-top: -0.5rem;
+  }
+  ItemPicture {
+    display: none;
+  }
+  .choices .rating {
+    height: 2.5rem;
+    border-radius: 2.5rem;
+  }
   .choices {
     flex-flow: row wrap;
+    gap: 0.5rem;
+  }
+  .media__form {
+    padding-top: 0.5rem;
+    gap: 1rem;
+  }
+  .media__extract {
+    display: none;
+  }
+  .media__footer {
+    gap: 1rem;
   }
 }
 </style>
