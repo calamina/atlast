@@ -33,7 +33,10 @@ const props = defineProps<{ media: MediaModel }>()
     background-color: #efefef;
   }
   &__content {
+    display: flex;
+    flex-flow: column;
     min-width: 0;
+    gap: 0.25rem;
   }
 }
 </style>
