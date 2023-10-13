@@ -32,5 +32,8 @@ const props = defineProps<{ media: MediaModel }>()
   &:hover {
     background-color: #efefef;
   }
+  &__content {
+    min-width: 0;
+  }
 }
 </style>
