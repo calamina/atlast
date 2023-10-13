@@ -19,7 +19,7 @@ const props = defineProps<{
 <style scoped lang="scss">
 .title {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 0.5rem;
   width: fit-content;
   line-height: 1.55rem;
