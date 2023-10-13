@@ -18,7 +18,7 @@ const props = defineProps<{
 @media (max-width: 1250px) {
   .description {
     white-space: nowrap;
-    overflow: scroll;
+    overflow: hidden;
     text-overflow: ellipsis;
   }
 }

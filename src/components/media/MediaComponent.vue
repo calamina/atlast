@@ -209,7 +209,7 @@ const toggleEdit = useThrottleFn(() => {
 // }
 @media (max-width: 1250px) {
   .media__extract {
-    max-height: 120rem;
+    max-height: 40rem;
   }
   .media__actions {
     position: relative;
