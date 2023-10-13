@@ -313,16 +313,16 @@ const deleteMedia = useThrottleFn((id: number) => {
   .media__content {
     margin-top: -0.5rem;
   }
-  img {
-    display: none;
-  }
+  // img {
+  //   display: none;
+  // }
   .choices .rating {
     height: 2.5rem;
     border-radius: 2.5rem;
   }
   .choices {
     flex-flow: row wrap;
-    gap: 0.5rem;
+    // gap: 0.5rem;
   }
   .media__form {
     padding-top: 0.5rem;
