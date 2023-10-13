@@ -313,7 +313,7 @@ const deleteMedia = useThrottleFn((id: number) => {
   .media__content {
     margin-top: -0.5rem;
   }
-  ItemPicture {
+  img {
     display: none;
   }
   .choices .rating {
