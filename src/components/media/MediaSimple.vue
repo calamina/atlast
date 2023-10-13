@@ -11,10 +11,8 @@ const props = defineProps<{ media: MediaModel }>()
   <div class="media">
     <ItemPicture :src="props.media.thumbnail?.url ?? null" :small="true" />
     <div class="media__content">
-      <ItemTitle
-        :title="props.media.title ?? null"
-        :url="`http://en.wikipedia.com/wiki/${props.media.key}` ?? null"
-      />
+      <ItemTitle :title="props.media.title ?? null" />
+      <!-- :url="`http://en.wikipedia.com/wiki/${props.media.key}` ?? null" -->
       <ItemDescription :description="props.media.description ?? null" />
     </div>
   </div>

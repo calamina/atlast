@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, type Ref } from 'vue'
+import { useThrottleFn } from '@vueuse/core'
 
 import type { MediaModel } from '@/models/media.model'
 
@@ -24,13 +25,18 @@ const status = computed(() => {
 })
 
 const expanded: Ref<boolean | null> = ref(null)
+
+const toggleEdit = useThrottleFn(() => {
+  emits('enableEdit')
+}, 500)
 </script>
 
 <template>
   <div class="media" v-if="media.id" @click="expanded = !expanded">
     <ItemPicture :src="media.thumbnail ?? null" :small="false" />
     <div class="media__content">
-      <ItemTitle :title="media.title ?? null" :url="media.url ?? null">
+      <!-- <ItemTitle :title="media.title ?? null" :url="media.url ?? null"> -->
+      <ItemTitle :title="media.title ?? null">
         <IconLikeFull class="media__favorite" v-if="media.like" />
       </ItemTitle>
       <ItemDescription :description="media.description ?? null" />
@@ -56,7 +62,7 @@ const expanded: Ref<boolean | null> = ref(null)
       </div>
     </div>
     <div class="media__actions">
-      <button class="button-icon media__action" type="button" @click="$emit('enableEdit')">
+      <button class="button-icon media__action" type="button" @click="toggleEdit">
         <IconEditVue />
       </button>
     </div>
@@ -201,4 +207,9 @@ const expanded: Ref<boolean | null> = ref(null)
 //     transform: scale(1);
 //   }
 // }
+@media (max-width: 1250px) {
+  .media__extract {
+    max-height: 120rem;
+  }
+}
 </style>

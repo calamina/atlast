@@ -58,8 +58,8 @@ export const useMediaStore = defineStore('media', () => {
       })
   }
 
-  async function getFilteredMediaByUser(user: string): Promise<any> {
-    setLoading(true)
+  async function getFilteredMediaByUser(user: string, reload: boolean): Promise<any> {
+    if (reload) setLoading(true)
     let filter: string = ''
     if (filters.value?.categ) {
       filter += `&filters[categ][$eq]=${filters.value.categ}`
@@ -80,7 +80,7 @@ export const useMediaStore = defineStore('media', () => {
     return http
       .get<Array<any>>('medias' + filterSort, headers)
       .then((response: any) => {
-        setLoading(false)
+        if (reload) setLoading(false)
         const result = response.data.data.filter((media: any) => {
           return media.attributes.user === user
         })
@@ -88,65 +88,54 @@ export const useMediaStore = defineStore('media', () => {
         return result
       })
       .catch((error) => {
-        setLoading(false)
+        if (reload) setLoading(false)
         notification.addNotification({ type: 'error', message: error.response })
       })
   }
 
   async function addUserMedia(media: any): Promise<any> {
-    setLoading(true)
     return http
       .post(`medias`, { data: media }, headers)
       .then((response) => {
         notification.addNotification({ type: 'alert', message: 'Media added !' })
-        getFilteredMediaByUser(user.connectedUser.username)
-        getMediaByUser(user.connectedUser.username)
-        setLoading(false)
+        getFilteredMediaByUser(user.connectedUser.username, false)
         return response.data
       })
       .catch((error) => {
-        setLoading(false)
         notification.addNotification({ type: 'error', message: error })
         return error.response
       })
   }
 
   async function editUserMedia(media: any): Promise<any> {
-    setLoading(true)
     return http
       .put(`medias/${media.id}`, { data: media }, headers)
       .then((response) => {
-        setLoading(false)
         notification.addNotification({ type: 'alert', message: 'Media edited !' })
-        getFilteredMediaByUser(user.connectedUser.username)
+        getFilteredMediaByUser(user.connectedUser.username, false)
         return response.data
       })
       .catch((error) => {
-        setLoading(false)
         notification.addNotification({ type: 'error', message: 'oops wrong media !!' })
         return error.response
       })
   }
 
   async function deleteUserMedia(id: number): Promise<any> {
-    setLoading(true)
     return http
       .delete(`medias/${id}`, headers)
       .then(() => {
-        setLoading(false)
         notification.addNotification({ type: 'alert', message: 'Media deleted !' })
-        getMediaByUser(user.connectedUser.username)
-        getFilteredMediaByUser(user.connectedUser.username)
+        getFilteredMediaByUser(user.connectedUser.username, false)
       })
       .catch((error) => {
-        setLoading(false)
         notification.addNotification({ type: 'error', message: error.response })
       })
   }
 
   async function updateFilters(newFilters: FilterModel): Promise<any> {
     filters.value = newFilters
-    getFilteredMediaByUser(user.connectedUser.username)
+    getFilteredMediaByUser(user.connectedUser.username, true)
   }
 
   async function resetFilters(): Promise<any> {
@@ -154,7 +143,7 @@ export const useMediaStore = defineStore('media', () => {
     filters.value.categ = null
     filters.value.like = null
     filters.value.tag = null
-    getFilteredMediaByUser(user.connectedUser.username)
+    getFilteredMediaByUser(user.connectedUser.username, true)
   }
 
   function updateSearch(value: string) {

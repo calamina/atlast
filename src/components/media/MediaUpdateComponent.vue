@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, type Ref } from 'vue'
+import { useThrottleFn } from '@vueuse/core'
 
 import { useUserStore } from '@/stores/user'
 import { useMediaStore } from '@/stores/media'
@@ -73,7 +74,7 @@ onMounted(() => {
     })
 })
 
-function addMedia(media: MediaModel) {
+const addMedia = useThrottleFn((media: MediaModel) => {
   if (media.action === 'planning') media.score = 0
   media.tags = media.tagstring ? media.tagstring.split(' ') : null
   media.user = user.connectedUser.username
@@ -85,9 +86,9 @@ function addMedia(media: MediaModel) {
     .catch((error) => {
       notification.addNotification({ message: error, type: 'error' })
     })
-}
+}, 500)
 
-function editMedia(media?: MediaModel) {
+const editMedia = useThrottleFn((media?: MediaModel) => {
   if (!media) return
   if (media.action === 'planning') media.score = 0
   media.tags = media.tagstring ? media.tagstring.split(' ') : null
@@ -99,18 +100,19 @@ function editMedia(media?: MediaModel) {
     .catch((error) => {
       notification.addNotification({ message: error, type: 'error' })
     })
-}
+}, 500)
 
-function deleteMedia(id: number) {
+const deleteMedia = useThrottleFn((id: number) => {
   mediastore.deleteUserMedia(id)
   emits('cancel')
-}
+}, 500)
 </script>
 <template>
   <div class="media" v-if="media">
     <ItemPicture :src="media.image ?? null" :small="false" />
     <div class="media__content">
-      <ItemTitle :title="media.title ?? null" :url="media.url ?? null" />
+      <ItemTitle :title="media.title ?? null" />
+      <!-- <ItemTitle :title="media.title ?? null" :url="media.url ?? null" /> -->
       <ItemDescription :description="media.description ?? null" />
       <p class="media__extract">{{ media.extract }}</p>
       <button class="media__favorite button-icon" type="button" @click="media.like = !media.like">
