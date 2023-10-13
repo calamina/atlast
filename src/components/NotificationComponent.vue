@@ -11,7 +11,7 @@ const props = defineProps<{
 onMounted(() => {
   setTimeout(() => {
     notifications.removeNotification(props.notification)
-  }, 3500)
+  }, 2500)
 })
 </script>
 

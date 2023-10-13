@@ -70,7 +70,8 @@ function editMedia(index: number) {
     <MediaFilters />
     <transition name="fade" mode="out-in">
       <div class="medias" v-if="loading">
-        <MediaMock v-for="i of filteredList?.length" :key="i" />
+        <!-- <MediaMock v-for="i of filteredList?.length" :key="i" /> -->
+        <MediaMock v-for="i of 5" :key="i" />
       </div>
       <div class="medias" v-else-if="filteredList?.length !== 0">
         <div class="media__switch" v-for="(media, index) of filteredMedia" :key="media.id">

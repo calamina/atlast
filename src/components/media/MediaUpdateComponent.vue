@@ -308,4 +308,10 @@ const deleteMedia = useThrottleFn((id: number) => {
     background-color: #dc956366;
   }
 }
+
+@media (max-width: 1250px) {
+  .choices {
+    flex-flow: row wrap;
+  }
+}
 </style>

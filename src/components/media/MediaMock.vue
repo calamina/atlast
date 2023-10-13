@@ -16,9 +16,9 @@
 <style lang="scss" scoped>
 .media {
   position: relative;
-  width: 45rem;
   display: flex;
   flex-flow: row;
+  width: 100%;
   gap: 0.75rem;
   padding: 1rem;
   border-radius: 1.5rem;
@@ -71,12 +71,12 @@
   }
 }
 
-@keyframes enter {
-  0% {
-    transform: scale(0.8);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
+// @keyframes enter {
+//   0% {
+//     transform: scale(0.8);
+//   }
+//   100% {
+//     transform: scale(1);
+//   }
+// }
 </style>

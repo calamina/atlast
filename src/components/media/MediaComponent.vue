@@ -211,5 +211,8 @@ const toggleEdit = useThrottleFn(() => {
   .media__extract {
     max-height: 120rem;
   }
+  .media__actions {
+    position: relative;
+  }
 }
 </style>
