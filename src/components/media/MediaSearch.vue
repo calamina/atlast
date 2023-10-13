@@ -70,9 +70,9 @@ function addMedia(media: MediaModel, action: string) {
 
 <template>
   <transition name="fade">
-    <div class="wrapper-search" v-if="!loading">
+    <div class="wrapper-search">
       <div class="results" v-if="!activeMedia">
-        <div class="collection" v-if="mediaList.length">
+        <div class="medias" v-if="mediaList.length">
           <MediaComponent
             v-for="media of mediaList"
             class="background__media"
@@ -81,7 +81,7 @@ function addMedia(media: MediaModel, action: string) {
             @enableEdit="addMedia(media, 'editMedia')"
           />
         </div>
-        <div class="medias" v-if="wikiList.length">
+        <div class="medias media-small" v-if="wikiList.length">
           <MediaSimple
             v-for="(media, index) of wikiList"
             :key="index"
@@ -89,63 +89,42 @@ function addMedia(media: MediaModel, action: string) {
             @click="addMedia(media, 'createMedia')"
           />
         </div>
-        <div class="medias" v-if="!mediaList.length && !wikiList.length">
+        <div class="medias" v-if="!mediaList.length && !wikiList.length && !loading">
           <p>No results</p>
         </div>
       </div>
-      <MediaUpdateComponent
-        v-if="activeMedia"
-        :media="activeMedia"
-        :action="createOrUpdate"
-        :key="activeMedia.key"
-        @confirm="$emit('exit')"
-        @cancel="activeMedia = null"
-      />
+      <div class="results" v-if="activeMedia">
+        <MediaUpdateComponent
+          :media="activeMedia"
+          :action="createOrUpdate"
+          :key="activeMedia.key"
+          @confirm="$emit('exit')"
+          @cancel="activeMedia = null"
+        />
+      </div>
     </div>
   </transition>
 </template>
 
 <style lang="scss" scoped>
 .wrapper-search {
+  width: 100%;
   display: flex;
-  gap: 2rem;
-  align-items: center;
-  display: flex;
-  flex-flow: column;
   min-height: 100%;
   padding: 2rem;
-  border-radius: 1rem;
-  gap: 1rem;
-  // overflow-y: auto;
-  // -ms-overflow-style: none;
-  // scrollbar-width: none;
-  // &::-webkit-scrollbar {
-  //   display: none;
-  // }
 }
 
 .background__media {
   background-color: #fff;
 }
 
-.collection {
+.results {
+  width: 100%;
   display: flex;
   flex-flow: column;
+  align-items: center;
   gap: 0.5rem;
-  border-radius: 1rem;
-  overflow-y: auto;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-.results {
-  // width: 45rem;
-  // flex-flow: column;
-  display: flex;
-  gap: 1rem;
+  background-color: #efefef;
   overflow-y: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -159,15 +138,12 @@ function addMedia(media: MediaModel, action: string) {
   display: flex;
   flex-flow: column;
   gap: 0.5rem;
-  padding: 1rem;
-  border-radius: 1rem;
+  border-radius: 1.5rem;
+}
+
+.media-small {
+  padding: 0.5rem;
   background-color: #fff;
-  overflow-y: auto;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
 }
 
 @media (max-width: 1250px) {

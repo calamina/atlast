@@ -30,4 +30,10 @@ const { notifications } = useNotificationStore()
   z-index: 1000;
   gap: 0.5rem;
 }
+
+@media (max-width: 1250px) {
+  .notification {
+    width: calc(100vw - 2rem));
+  }
+}
 </style>

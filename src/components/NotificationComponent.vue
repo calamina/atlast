@@ -44,4 +44,10 @@ onMounted(() => {
     font-family: var(--font-bold);
   }
 }
+
+@media (max-width: 1250px) {
+  .notification {
+    width: 100%;
+  }
+}
 </style>

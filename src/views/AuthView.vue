@@ -27,4 +27,10 @@ let loginRegister = ref(true)
   margin: 0 auto;
   height: calc(100vh - 2rem);
 }
+
+@media (max-width: 1250px) {
+  .auth {
+    width: calc(100vw - 2rem);
+  }
+}
 </style>

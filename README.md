@@ -3,6 +3,11 @@ Personnal Knowledge Database made with Vue3 and Strapi
 [atlast.vercel.app](https://atlast.vercel.app)
 ![atlast preview](atlast2.png?raw=true "Atlast preview")
 
+# IMPORTANT
+- [ ] ajout du lien dans le media
+- [ ] ajout filtres toggle
+- [ ] ajout user toggle
+
 # fonts
 - [ ] fix font render
 

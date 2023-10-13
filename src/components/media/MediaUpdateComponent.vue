@@ -203,7 +203,6 @@ function deleteMedia(id: number) {
 <style lang="scss" scoped>
 .media {
   position: relative;
-  width: 45rem;
   display: flex;
   flex-flow: row;
   gap: 0.75rem;

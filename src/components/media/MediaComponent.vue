@@ -7,8 +7,6 @@ import actions from '@/utils/media-actions'
 
 import IconEditVue from '@/components/icons/IconEdit.vue'
 import IconLikeFull from '@/components/icons/IconLikeFull.vue'
-import IconPlus from '../icons/IconPlus.vue'
-import IconMinus from '../icons/IconMinus.vue'
 import IconRating from '../icons/IconRating.vue'
 
 import ItemTitle from '@/components/atomic/ItemTitle.vue'
@@ -29,13 +27,7 @@ const expanded: Ref<boolean | null> = ref(null)
 </script>
 
 <template>
-  <div class="media" v-if="media.id">
-    <div class="media__expand" @click="expanded = !expanded">
-      <button class="button-icon media__expand--icon" type="button">
-        <IconPlus v-if="!expanded" />
-        <IconMinus v-else />
-      </button>
-    </div>
+  <div class="media" v-if="media.id" @click="expanded = !expanded">
     <ItemPicture :src="media.thumbnail ?? null" :small="false" />
     <div class="media__content">
       <ItemTitle :title="media.title ?? null" :url="media.url ?? null">
@@ -82,29 +74,13 @@ const expanded: Ref<boolean | null> = ref(null)
   padding: 1rem;
   background-color: #efefef;
   border-radius: 1.5rem;
+  cursor: pointer;
+
   &:hover {
     background-color: #fff;
     .media__actions,
     .media__expand {
       display: flex;
-    }
-  }
-
-  &__expand {
-    position: absolute;
-    top: 2.5rem;
-    left: 2.5rem;
-    z-index: 600;
-    display: none;
-    gap: 0.25rem;
-    border-radius: 100%;
-
-    &--icon {
-      background-color: #fff;
-      width: 2.5rem;
-      height: 2.5rem;
-      padding: 0.55rem;
-      border-radius: 100%;
     }
   }
 
