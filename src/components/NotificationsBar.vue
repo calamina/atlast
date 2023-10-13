@@ -33,7 +33,7 @@ const { notifications } = useNotificationStore()
 
 @media (max-width: 1250px) {
   .notification {
-    width: calc(100vw - 2rem));
+    width: calc(100vw - 2rem);
   }
 }
 </style>
