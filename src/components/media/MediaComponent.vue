@@ -215,7 +215,7 @@ const toggleEdit = useThrottleFn(() => {
     left: 2.5rem;
     top: 2.5rem;
     border-radius: 0.5rem;
-    z-index: 200;
+    z-index: 30;
     display: flex;
   }
 }

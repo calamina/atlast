@@ -13,11 +13,8 @@ Personnal Knowledge Database made with Vue3 and Strapi
 - [ ] fix font render
 
 # search
-- [ ] collection results appear in search :(
 - [ ] either close or rerender on delete !
-
-# mediaView
-- [ ] remove active media on edit (regression)
+- [ ] collection results appear in search :(
 
 # atomic
 - [ ] menu buttons (icon / text / texticon) maybe ...

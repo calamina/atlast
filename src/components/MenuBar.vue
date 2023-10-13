@@ -142,7 +142,8 @@ nav {
 
 #menu-search {
   display: flex;
-  margin: 0 auto;
+  width: 100%;
+  justify-content: center;
 }
 
 .menu-icon {

@@ -6,7 +6,7 @@ import { watchDebounced } from '@vueuse/shared'
 import { useWikiService } from '@/services/wiki.service'
 import { useMediaStore } from '@/stores/media'
 import { useUserStore } from '@/stores/user'
-import { useLoadingStore } from '@/stores/loading'
+// import { useLoadingStore } from '@/stores/loading'
 
 import type { MediaModel } from '@/models/media.model'
 
@@ -21,7 +21,7 @@ const { getWikiByname } = useWikiService()
 const { connectedUser } = useUserStore()
 const mediastore = useMediaStore()
 const { search } = storeToRefs(mediastore)
-const { loading } = storeToRefs(useLoadingStore())
+// const { loading } = storeToRefs(useLoadingStore())
 
 let wikiList: Ref<MediaModel[]> = ref([])
 let mediaList: Ref<MediaModel[]> = ref([])
@@ -147,6 +147,7 @@ function addMedia(media: MediaModel, action: string) {
 .media-small {
   padding: 0.5rem;
   background-color: #fff;
+  gap: 0.25rem;
 }
 
 @media (max-width: 1250px) {

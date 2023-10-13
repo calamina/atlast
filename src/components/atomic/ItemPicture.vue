@@ -18,6 +18,7 @@ const props = defineProps<{
   filter: saturate(0);
   border-radius: 1rem;
   background-color: #ddd;
+  flex-shrink: 0;
 }
 
 .imagesmall {
