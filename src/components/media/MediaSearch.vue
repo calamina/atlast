@@ -153,6 +153,7 @@ function addMedia(media: MediaModel, action: string) {
 @media (max-width: 1250px) {
   .wrapper-search {
     width: 100%;
+    padding: 2rem 1rem 5rem;
   }
   .medias {
     width: 100%;
