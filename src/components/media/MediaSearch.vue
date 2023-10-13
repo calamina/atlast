@@ -89,18 +89,21 @@ function addMedia(media: MediaModel, action: string) {
             @click="addMedia(media, 'createMedia')"
           />
         </div>
-        <div class="medias" v-if="!mediaList.length && !wikiList.length && !loading">
+        <!-- TODO : display only when request finishes -->
+        <!-- <div class="medias" v-if="!mediaList.length && !wikiList.length && !loading">
           <p>No results</p>
-        </div>
+        </div> -->
       </div>
       <div class="results" v-if="activeMedia">
-        <MediaUpdateComponent
-          :media="activeMedia"
-          :action="createOrUpdate"
-          :key="activeMedia.key"
-          @confirm="$emit('exit')"
-          @cancel="activeMedia = null"
-        />
+        <div class="medias">
+          <MediaUpdateComponent
+            :media="activeMedia"
+            :action="createOrUpdate"
+            :key="activeMedia.key"
+            @confirm="$emit('exit')"
+            @cancel="activeMedia = null"
+          />
+        </div>
       </div>
     </div>
   </transition>

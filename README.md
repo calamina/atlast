@@ -4,6 +4,7 @@ Personnal Knowledge Database made with Vue3 and Strapi
 ![atlast preview](atlast2.png?raw=true "Atlast preview")
 
 # IMPORTANT
+- [ ] disable edit if same object
 - [ ] ajout du lien dans le media
 - [ ] ajout filtres toggle
 - [ ] ajout user toggle
