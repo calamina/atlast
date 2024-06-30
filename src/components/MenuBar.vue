@@ -13,21 +13,35 @@ const { connectedUser } = storeToRefs(useUserStore())
 <template>
   <nav>
     <div class="submenu" v-if="connectedUser">
-      <div class="menu-icon">
-        <button class="button-icon"><IconGlobe /></button>
-      </div>
+      <!-- <p class="user__name">{{ connectedUser?.username }}'s library</p> -->
       <div class="types">
-        <router-link class="type" to="media"> media </router-link>
-        <router-link class="type" to="links"> links </router-link>
+        <router-link class="type" :to="{ name: 'media', params: { username: connectedUser.username } }">
+          <div class="button-icon"><IconGlobe /></div>
+          <span>media</span>
+        </router-link>
+        <!-- <router-link        class="type user__info"        :to="{ name: 'user', params: { username: connectedUser.username } }">
+          <div class="menu-icon">
+            <div class="button-icon"><IconUser /></div>
+          </div>
+          user
+        </router-link> -->
+        <!-- <router-link
+          class="type"
+          :to="{ name: 'media', params: { username: connectedUser.username } }"
+        >
+          media
+        </router-link> -->
+        <!-- <router-link class="type" :to="{ name: 'media', params: { username: 'test' } }">
+          test's library
+        </router-link> -->
+        <!-- <router-link class="type" to="/links"> links </router-link> -->
       </div>
     </div>
     <div id="menu-search"></div>
     <div class="user" v-if="connectedUser">
-      <div class="user__info">
-        <div class="menu-icon">
-          <div class="button-icon"><IconUser /></div>
-        </div>
-        <p class="user__name">{{ connectedUser?.username }}</p>
+      <div class="menu-icon">
+        <p>{{ connectedUser.username }}</p>
+        <div class="button-icon"><IconUser /></div>
       </div>
       <div class="user__actions">
         <button class="button-icon" type="button" @click="logout()">
@@ -70,12 +84,15 @@ nav {
   height: 3rem;
   background-color: #ddd;
   transition: filter 0.3s;
-  padding: 0.6rem 1rem;
-  width: 8rem;
-  font-family: var(--font-bold);
-  color: #343434;
-  text-decoration: none;
   transition: background-color 0.2s;
+  text-decoration: none;
+  
+  span {
+    padding-right: 1rem;
+    padding-bottom: 0.15rem;
+    font-family: var(--font-bold);
+    color: #343434;
+  }
 }
 
 .router-link-active,
@@ -87,6 +104,7 @@ nav {
 .user {
   justify-self: end;
   display: flex;
+  align-items: center;
   gap: 1rem;
   transform: translateX(3.5rem);
   transition: transform 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
@@ -151,7 +169,15 @@ nav {
   border-radius: 2rem;
   padding: 0.25rem;
   position: relative;
+  display: flex;
+  align-items: center;
   z-index: 1;
+
+  p {
+    padding-left: 1rem;
+    padding-bottom: 0.25rem;
+    font-family: var(--font-bold);
+  }
 }
 
 @media (max-width: 1250px) {

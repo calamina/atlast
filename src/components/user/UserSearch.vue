@@ -8,12 +8,11 @@ import { useMediaStore } from '@/stores/media'
 import { useUserStore } from '@/stores/user'
 // import { useLoadingStore } from '@/stores/loading'
 
-import type { MediaModel } from '@/models/media.model'
+import type { UserModel } from '@/models/user.model'
 
-import MediaUpdateComponent from '@/components/media/MediaUpdateComponent.vue'
-import MediaComponent from './MediaComponent.vue'
-import MediaSimple from './MediaSimple.vue'
+import UserComponent from './UserComponent.vue'
 import { storeToRefs } from 'pinia'
+import { MediaModel } from '@/models/media.model'
 
 const emits = defineEmits(['exit'])
 
@@ -73,23 +72,37 @@ function addMedia(media: MediaModel, action: string) {
     <div class="wrapper-search">
       <div class="results" v-if="!activeMedia">
         <div class="medias" v-if="mediaList.length">
-          <MediaComponent v-for="media of mediaList" class="background__media" :media="media" :key="media.id"
-            @enableEdit="addMedia(media, 'editMedia')" />
+          <MediaComponent
+            v-for="media of mediaList"
+            class="background__media"
+            :media="media"
+            :key="media.id"
+            @enableEdit="addMedia(media, 'editMedia')"
+          />
         </div>
         <div class="medias media-small" v-if="wikiList.length">
-          <MediaSimple v-for="(media, index) of wikiList" :key="index" :media="media"
-            @click="addMedia(media, 'createMedia')" />
+          <MediaSimple
+            v-for="(media, index) of wikiList"
+            :key="index"
+            :media="media"
+            @click="addMedia(media, 'createMedia')"
+          />
         </div>
       </div>
       <!-- TODO : display only when request finishes -->
       <!-- <div class="medias" v-if="!mediaList.length && !wikiList.length && !loading">
           <p>No results</p>
         </div> -->
-      <!-- <div class="results" v-else :key="no"> -->
       <div class="results" v-else>
+      <!-- <div class="results" v-else :key="no"> -->
         <div class="medias">
-          <MediaUpdateComponent :media="activeMedia" :action="createOrUpdate" :key="activeMedia.key"
-            @confirm="$emit('exit')" @cancel="activeMedia = null" />
+          <MediaUpdateComponent
+            :media="activeMedia"
+            :action="createOrUpdate"
+            :key="activeMedia.key"
+            @confirm="$emit('exit')"
+            @cancel="activeMedia = null"
+          />
         </div>
       </div>
     </div>
@@ -118,7 +131,6 @@ function addMedia(media: MediaModel, action: string) {
   overflow-y: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
-
   &::-webkit-scrollbar {
     display: none;
   }
@@ -143,7 +155,6 @@ function addMedia(media: MediaModel, action: string) {
   from {
     opacity: 0;
   }
-
   to {
     opacity: 1;
   }
@@ -154,15 +165,12 @@ function addMedia(media: MediaModel, action: string) {
     width: 100%;
     padding: 2rem 1rem 5rem;
   }
-
   .medias {
     width: 100%;
   }
-
   .results {
     flex-flow: column;
   }
-
   .collection {
     height: 100%;
     overflow: hidden;

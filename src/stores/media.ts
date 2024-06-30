@@ -12,8 +12,10 @@ import { useLoadingStore } from '@/stores/loading'
 export const useMediaStore = defineStore('media', () => {
   const list: Ref<Array<MediaModel>> = ref([])
   const filteredList: Ref<Array<MediaModel>> = ref([])
+  const count: Ref<number> = ref(0)
   const filters: Ref<FilterModel> = ref({ sort: 'createdAt', order: 'desc' })
   const search: Ref<string> = ref('')
+  const pagination: Ref<{page: number, pageCount: number}> = ref({page: 1, pageCount: 1});
 
   const notification = useNotificationStore()
   const user = useUserStore()
@@ -38,23 +40,31 @@ export const useMediaStore = defineStore('media', () => {
       })
       .catch((error) => {
         setLoading(false)
-        notification.addNotification({ type: 'error', message: error.response })
+        notification.addNotification({ type: 'error', message: "Cannot get media :(" })
       })
   }
 
-  async function getMediaByUser(user: string): Promise<any> {
+  async function getMediaByUser(user: string, page?: number): Promise<MediaModel[]> {
+    const query = page ? 
+    'medias?sort=createdAt:desc&filters[user][$eq]=' + user + '&pagination[page]=' + page : 
+    'medias?sort=createdAt:desc&filters[user][$eq]=' + user
+
     setLoading(true)
     return http
-      .get<Array<any>>('medias?sort=createdAt:desc', headers)
+      .get<Array<any>>(query, headers)
       .then((response: any) => {
         const result = response.data.data.filter((media: any) => media.attributes.user === user)
         list.value = result
+        count.value = response.data?.meta?.pagination?.total
+        pagination.value.pageCount = response.data?.meta?.pagination?.pageCount
+        console.debug(response.data);
+        console.debug(response);
         setLoading(false)
         return result
       })
       .catch((error) => {
         setLoading(false)
-        notification.addNotification({ type: 'error', message: error.response })
+        notification.addNotification({ type: 'error', message: "Cannot get media :(" })
       })
   }
 
@@ -85,6 +95,7 @@ export const useMediaStore = defineStore('media', () => {
           return media.attributes.user === user
         })
         filteredList.value = result
+        // count.value = response.data?.meta?.pagination?.total
         return result
       })
       .catch((error) => {
@@ -98,11 +109,13 @@ export const useMediaStore = defineStore('media', () => {
       .post(`medias`, { data: media }, headers)
       .then((response) => {
         notification.addNotification({ type: 'alert', message: 'Media added !' })
-        getFilteredMediaByUser(user.connectedUser.username, false)
+        getFilteredMediaByUser(user.connectedUser!.username, false)
+        count.value = response.data?.meta?.pagination?.total
+        pagination.value.pageCount = response.data?.meta?.pagination?.pageCount
         return response.data
       })
       .catch((error) => {
-        notification.addNotification({ type: 'error', message: error })
+        notification.addNotification({ type: 'error', message: error.response })
         return error.response
       })
   }
@@ -112,7 +125,7 @@ export const useMediaStore = defineStore('media', () => {
       .put(`medias/${media.id}`, { data: media }, headers)
       .then((response) => {
         notification.addNotification({ type: 'alert', message: 'Media edited !' })
-        getFilteredMediaByUser(user.connectedUser.username, false)
+        getFilteredMediaByUser(user.connectedUser!.username, false)
         return response.data
       })
       .catch((error) => {
@@ -124,26 +137,29 @@ export const useMediaStore = defineStore('media', () => {
   async function deleteUserMedia(id: number): Promise<any> {
     return http
       .delete(`medias/${id}`, headers)
-      .then(() => {
+      .then((response) => {
         notification.addNotification({ type: 'alert', message: 'Media deleted !' })
-        getFilteredMediaByUser(user.connectedUser.username, false)
+        getFilteredMediaByUser(user.connectedUser!.username, false)
+        count.value = response.data?.meta?.pagination?.total
+        pagination.value.pageCount = response.data?.meta?.pagination?.pageCount
       })
       .catch((error) => {
         notification.addNotification({ type: 'error', message: error.response })
+        return error.response
       })
   }
 
-  async function updateFilters(newFilters: FilterModel): Promise<any> {
+  async function updateFilters(newFilters: FilterModel, user: string): Promise<any> {
     filters.value = newFilters
-    getFilteredMediaByUser(user.connectedUser.username, true)
+    getFilteredMediaByUser(user, true)
   }
 
-  async function resetFilters(): Promise<any> {
+  async function resetFilters(user: string): Promise<any> {
     filters.value.action = null
     filters.value.categ = null
     filters.value.like = null
     filters.value.tag = null
-    getFilteredMediaByUser(user.connectedUser.username, true)
+    getFilteredMediaByUser(user, true)
   }
 
   function updateSearch(value: string) {
@@ -151,6 +167,8 @@ export const useMediaStore = defineStore('media', () => {
   }
 
   return {
+    pagination,
+    count,
     list,
     filteredList,
     filters,

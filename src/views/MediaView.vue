@@ -2,32 +2,41 @@
 import { computed, onMounted, ref, type ComputedRef, type Ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import type { MediaModel } from '@/models/media.model'
-import { useUserStore } from '@/stores/user'
+import { useRoute } from 'vue-router'
 import { useMediaStore } from '@/stores/media'
 import { useLoadingStore } from '@/stores/loading'
 import MediaComponent from '@/components/media/MediaComponent.vue'
 import MediaMock from '@/components/media/MediaMock.vue'
 import MediaUpdateComponent from '@/components/media/MediaUpdateComponent.vue'
 import MediaFilters from '@/components/media/MediaFilters.vue'
-import MediaSearch from '@/components/media/MediaSearch.vue'
-import ActionOverlay from '@/components/ActionOverlay.vue'
-import IconCancel from '@/components/icons/IconCancel.vue'
-import IconSearch from '@/components/icons/IconSearch.vue'
+import MediaSearchBar from '@/components/media/MediaSearchBar.vue'
+import { watchDeep } from '@vueuse/core'
+// import MediaPagination from '@/components/media/MediaPagination.vue'
 
-const { filteredList } = storeToRefs(useMediaStore())
+const route = useRoute()
+const { filteredList, count, pagination } = storeToRefs(useMediaStore())
 const { getMediaByUser, updateSearch } = useMediaStore()
-const { connectedUser } = useUserStore()
 const { loading } = storeToRefs(useLoadingStore())
 
 const show: Ref<number | null> = ref(null)
 let search = ref('')
 
 onMounted(() => {
-  if (filteredList?.value.length === 0) {
-    getMediaByUser(connectedUser?.username).then((result) => {
+  if (
+    filteredList?.value.length === 0 ||
+    route.params.user !== filteredList?.value[0]?.user
+  ) {
+    getMediaByUser((route.params.username) as string).then((result) => {
       filteredList.value = result
     })
   }
+})
+
+watch(route, () => {
+  show.value = null
+  getMediaByUser((route.params.username) as string).then((result) => {
+    filteredList.value = result
+  })
 })
 
 const filteredMedia: ComputedRef<MediaModel[]> = computed(() => {
@@ -41,9 +50,20 @@ const filteredMedia: ComputedRef<MediaModel[]> = computed(() => {
 
 watch(search, () => {
   updateSearch(search.value)
+  show.value = null
   search.value.length > 0
     ? (document.documentElement.style.overflow = 'hidden')
     : (document.documentElement.style.overflow = 'auto')
+})
+
+watch(filteredMedia, () => {
+  show.value = null
+})
+
+watchDeep(pagination, () => {
+  getMediaByUser((route.params.username) as string, pagination.value.page).then((result) => {
+    filteredList.value = result
+  })
 })
 
 function editMedia(index: number) {
@@ -53,20 +73,7 @@ function editMedia(index: number) {
 
 <template>
   <main>
-    <teleport to="#menu-search">
-      <div class="media__search">
-        <input
-          type="text"
-          name="search"
-          v-model="search"
-          id="search"
-          placeholder="Search"
-          autocomplete="off"
-        />
-        <IconSearch v-if="!search.length" class="button-icon" />
-        <IconCancel v-if="!!search.length" class="button-icon" @click="search = ''" />
-      </div>
-    </teleport>
+    <MediaSearchBar v-model="search" />
     <MediaFilters />
     <transition name="fade" mode="out-in">
       <div class="medias" v-if="loading">
@@ -90,18 +97,13 @@ function editMedia(index: number) {
             @cancel="editMedia(index)"
           />
         </div>
+        <!-- <MediaPagination v-if="count > 25" v-model="page" /> -->
       </div>
       <div class="medias" v-else>
         <MediaMock v-for="i of 2" :key="i" />
+        <!-- TODO :: info on adding media -->
+         <p>Add some media by searching :)</p>
       </div>
-    </transition>
-    <transition name="search" mode="out-in">
-      <ActionOverlay
-        v-if="!!search.length"
-        class="overlay"
-        :component="MediaSearch"
-        @exit="search = ''"
-      />
     </transition>
   </main>
 </template>
@@ -131,33 +133,6 @@ main {
   flex-flow: column;
   width: 45rem;
   gap: 0.25rem;
-}
-
-.media__search {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background-color: #fff;
-  width: fit-content;
-  padding: 0 0.5rem;
-  border-radius: 3rem;
-  width: 25rem;
-  height: 3rem;
-  z-index: 800;
-
-  input[type='text'] {
-    padding: 0 1rem;
-    text-align: center;
-    font-size: 1.1rem;
-    border-radius: 3rem;
-    height: 3rem;
-    font-family: var(--font-bold);
-  }
-
-  .button-icon {
-    cursor: pointer;
-  }
 }
 
 @media (max-width: 1250px) {

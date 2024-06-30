@@ -4,17 +4,31 @@ Personnal Knowledge Database made with Vue3 and Strapi
 ![atlast preview](atlast2.png?raw=true "Atlast preview")
 
 # IMPORTANT
-- [ ] disable edit if same object
+- [ ] add user filteredlist !!
+
+- [ ] on different user media, search user media, or mine ???
+- [ ] on different user media, see if in my library ?
+- [ ] on different user media, add filter for common media ?
+- [ ] add option to make library public/private
+
+- [ ] disable adding same media to library
+- [ ] disable edit if same object ?
+
+- [ ] credentials not updating on new account creation :/
+- [ ] list forever loading on new account creation :/
+- [ ] rework links like medias
 - [ ] ajout du lien dans le media
 - [ ] ajout filtres toggle
 - [ ] ajout user toggle
+
+# ???
+- [ ] add config panel to create new collections ? like links and media
 
 # fonts
 - [ ] fix font render
 
 # search
-- [ ] either close or rerender on delete !
-- [ ] collection results appear in search :(
+- [ ] either close or rerender on delete/add/edit !
 
 # atomic
 - [ ] menu buttons (icon / text / texticon) maybe ...

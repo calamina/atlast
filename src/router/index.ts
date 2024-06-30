@@ -18,15 +18,6 @@ const router = createRouter({
       name: 'auth',
       component: () => import('../views/AuthView.vue')
     },
-
-    {
-      path: '/media',
-      name: 'media',
-      meta: {
-        requiresAuth: true
-      },
-      component: () => import('../views/MediaView.vue')
-    },
     {
       path: '/links',
       name: 'links',
@@ -34,6 +25,22 @@ const router = createRouter({
         requiresAuth: true
       },
       component: () => import('../views/LinkView.vue')
+    },
+    {
+      path: '/media/:username',
+      name: 'media',
+      meta: {
+        requiresAuth: true
+      },
+      component: () => import('../views/MediaView.vue')
+    },
+    {
+      path: '/user/:username',
+      name: 'user',
+      meta: {
+        requiresAuth: true
+      },
+      component: () => import('../views/UserView.vue')
     },
     {
       path: '/notes',

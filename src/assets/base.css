@@ -57,13 +57,13 @@
   --font-bold: 'contax_pro_75_boldregular', Arial, sans-serif;
 }
 
-
 p, a, h1, h2, h3, h4, span, label, input, button, select, textarea {
   font-family: 'contax_pro_55regular', Arial, sans-serif;
   color: var(--text);
 }
 
 html {
+  background-color: #efefef;
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
@@ -76,7 +76,7 @@ html::-webkit-scrollbar {
   margin: 0;
   /* background-color: var(--background); */
   /* background-color: #fff; */
-  background-color: #efefef;
+  /* background-color: #efefef; */
   min-height: 100vh;
   display: flex;
   flex-flow: column;

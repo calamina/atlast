@@ -11,9 +11,11 @@ const props = defineProps<{
 </template>
 <style scope lang="scss">
 .media__tag {
+  display: flex;
+  align-items: center;
   height: 1.75rem;
   font-size: 0.9rem;
-  padding: 0.25rem 1rem;
+  padding: 0.25rem 1rem 0.4rem;
   background-color: #ddd;
   width: fit-content;
   font-family: var(--font-bold);

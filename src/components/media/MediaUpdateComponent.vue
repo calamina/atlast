@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, type Ref } from 'vue'
 import { useThrottleFn } from '@vueuse/core'
+import { useRoute } from 'vue-router'
 
 import { useUserStore } from '@/stores/user'
 import { useMediaStore } from '@/stores/media'
@@ -22,6 +23,8 @@ import IconRating from '../icons/IconRating.vue'
 import IconDelete from '@/components/icons/IconDelete.vue'
 import IconLikeFull from '@/components/icons/IconLikeFull.vue'
 
+const route = useRoute()
+
 const user = useUserStore()
 const mediastore = useMediaStore()
 const notification = useNotificationStore()
@@ -40,7 +43,7 @@ const categories: string[] = ['movie', 'series', 'game', 'book', 'comic']
 const media: Ref<MediaModel> = ref({})
 
 onMounted(() => {
-  if (props.action === 'editMedia') {
+  if (props.action === 'editMedia' && route.params.username === user.connectedUser!.username) {
     media.value = {
       id: props.media?.id,
       title: props.media?.title,
@@ -55,7 +58,7 @@ onMounted(() => {
       image: props.media?.image,
       key: props.media?.key
     }
-  } else if (props.action === 'createMedia')
+  } else
     wikiservice.getWikiByLink(props.media.key!).then((data) => {
       media.value = {
         id: data.id,
@@ -77,7 +80,7 @@ onMounted(() => {
 const addMedia = useThrottleFn((media: MediaModel) => {
   if (media.action === 'planning') media.score = 0
   media.tags = media.tagstring ? media.tagstring.split(' ') : null
-  media.user = user.connectedUser.username
+  media.user = user.connectedUser!.username
   mediastore
     .addUserMedia(media)
     .then(() => {
@@ -287,6 +290,7 @@ const deleteMedia = useThrottleFn((id: number) => {
     font-family: var(--font-bold);
     font-size: 1rem;
     padding: 0.1rem 1rem;
+    padding: 0.1rem 1rem 0.2rem;
     height: 2rem;
     border-radius: 1rem;
     color: #999;

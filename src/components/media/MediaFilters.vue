@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { type Ref, ref, type ComputedRef, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import type { FilterModel } from '@/models/filter.model'
 import { useMediaStore } from '@/stores/media'
 import FilterButton from '@/components/atomic/FilterButton.vue'
@@ -7,6 +8,12 @@ import FilterGroup from '@/components/atomic/FilterGroup.vue'
 import TagButton from '@/components/atomic/TagButton.vue'
 import TagGroup from '@/components/atomic/TagGroup.vue'
 import sorts from '@/utils/media-sorts'
+import { storeToRefs } from 'pinia'
+import MediaPagination from '@/components/media/MediaPagination.vue'
+
+const { count } = storeToRefs(useMediaStore())
+
+const route = useRoute()
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emits = defineEmits(['refreshList'])
@@ -41,6 +48,9 @@ function countElements(property: string) {
         return mapping
       }, {})
   )
+  // const list = mediastore.filteredList.map((media) => media.attributes)
+  // const result = Object.groupBy(list, (media) => media[property])
+  // return result[property]
 }
 
 function updateFilters(property: any, value: string | boolean | null) {
@@ -49,20 +59,20 @@ function updateFilters(property: any, value: string | boolean | null) {
   } else {
     filters.value[property] = filters.value[property] === value ? null : value
   }
-  mediastore.updateFilters(filters.value)
+  mediastore.updateFilters(filters.value, (route.params.username) as string)
 }
 </script>
 
 <template>
   <div class="filter-wrapper">
-    <div class="filters" v-if="!!mediastore.filteredList?.length">
+    <div class="filters" v-if="!!mediastore.count">
       <FilterGroup :title="''">
         <FilterButton
           :selected="mediastore.filteredList.length === mediastore.list.length"
           :name="'All'"
-          :info="mediastore.list.length"
-          @click="mediastore.resetFilters()"
-        />
+          :info="count"
+          @click="mediastore.resetFilters((route.params.username) as string)"
+          />
       </FilterGroup>
       <FilterGroup :title="'favorites'" v-if="favorites > 0">
         <FilterButton
@@ -112,6 +122,9 @@ function updateFilters(property: any, value: string | boolean | null) {
           @click="updateFilters('tag', tag)"
         />
       </TagGroup>
+      <FilterGroup :title="'page'">
+        <MediaPagination />
+      </FilterGroup>
     </div>
   </div>
 </template>
@@ -124,9 +137,9 @@ function updateFilters(property: any, value: string | boolean | null) {
 }
 
 .filters {
+  height: calc(100vh - 6rem);
   position: sticky;
   top: 1rem;
-  height: fit-content;
   display: flex;
   flex-flow: column;
   padding: 1rem;

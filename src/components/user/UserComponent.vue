@@ -1,38 +1,19 @@
 <script setup lang="ts">
-import { computed, ref, type Ref } from 'vue'
-import { useThrottleFn } from '@vueuse/core'
-import { useRoute } from 'vue-router'
-import { storeToRefs } from 'pinia'
+import { useThrottleFn, useDateFormat } from '@vueuse/core'
 
-import { useUserStore } from '@/stores/user'
+import type { UserModel } from '@/models/user.model'
 
-import type { MediaModel } from '@/models/media.model'
-
-import actions from '@/utils/media-actions'
-
-import IconEdit from '@/components/icons/IconEdit.vue'
 import IconPlus from '@/components/icons/IconPlus.vue'
 import IconLikeFull from '@/components/icons/IconLikeFull.vue'
-import IconRating from '../icons/IconRating.vue'
 
 import ItemTitle from '@/components/atomic/ItemTitle.vue'
 import ItemDescription from '@/components/atomic/ItemDescription.vue'
 import ItemPicture from '@/components/atomic/ItemPicture.vue'
-import TagButton from '@/components/atomic/TagButton.vue'
-import TagGroup from '@/components/atomic/TagGroup.vue'
-
-const route = useRoute()
-const { connectedUser } = storeToRefs(useUserStore())
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emits = defineEmits(['enableEdit'])
-const props = defineProps<{ media: MediaModel }>()
-
-const status = computed(() => {
-  return actions.find((action: { name: string }) => action.name === props.media.action)
-})
-
-const expanded: Ref<boolean | null> = ref(null)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const props = defineProps<{ user: UserModel }>()
 
 const toggleEdit = useThrottleFn(() => {
   emits('enableEdit')
@@ -40,45 +21,25 @@ const toggleEdit = useThrottleFn(() => {
 </script>
 
 <template>
-  <div class="media" v-if="media.id" @click="expanded = !expanded">
-    <ItemPicture :src="media.thumbnail ?? null" :small="false" />
+  <div
+    class="media"
+    v-if="user.id"
+    @click="this.$router.push({ name: 'media', params: { username: user.username } })"
+  >
+    <ItemPicture :src="user.thumbnail ?? null" :small="false" />
     <div class="media__content">
-      <!-- <ItemTitle :title="media.title ?? null" :url="media.url ?? null"> -->
-      <ItemTitle :title="media.title ?? null">
-        <IconLikeFull class="media__favorite" v-if="media.like" />
+      <ItemTitle :title="user.username ?? null">
+        <IconLikeFull class="media__favorite" v-if="user.like" />
       </ItemTitle>
-      <ItemDescription :description="media.description ?? null" />
-      <TransitionGroup name="reveal">
-        <TagGroup v-if="expanded && media.tags?.length" :max-height="true">
-          <TagButton v-for="tag in media.tags" :key="tag" :name="tag" :selected="false" />
-        </TagGroup>
-        <p class="media__extract" v-if="expanded">{{ media.extract }}</p>
-      </TransitionGroup>
+      <ItemDescription :description="'heyo :)' ?? null" />
       <div class="media__footer">
-        <component
-          class="media__status"
-          :is="status!.component"
-          :style="{ backgroundColor: status!.color }"
-        />
         <p class="media__categ">
-          {{ media.categ }}
+          {{ useDateFormat(user.createdAt, 'DD/MM/YY') }}
         </p>
-        <div class="media__score" v-if="media.score">
-          <IconRating v-for="score in media.score" :key="score" class="media__score-icon" />
-          <!-- <p class="media__score-text">{{ media.score }}</p> -->
-        </div>
       </div>
     </div>
     <div class="media__actions">
-      <button
-        v-if="connectedUser?.username === route.params.username"
-        class="button-icon media__action"
-        type="button"
-        @click="toggleEdit"
-      >
-        <IconEdit />
-      </button>
-      <button v-else class="button-icon media__action" type="button" @click="toggleEdit">
+      <button class="button-icon media__action" type="button" @click="toggleEdit">
         <IconPlus />
       </button>
     </div>
@@ -93,6 +54,7 @@ const toggleEdit = useThrottleFn(() => {
   display: flex;
   flex-flow: row;
   gap: 0.75rem;
+  width: 100%;
   padding: 1rem;
   background-color: #efefef;
   border-radius: 1.5rem;
@@ -145,8 +107,7 @@ const toggleEdit = useThrottleFn(() => {
     gap: 0.25rem;
     height: 1.75rem;
     font-size: 0.9rem;
-    // padding: 0.25rem 1rem;
-    padding: 0 0 0.25rem;
+    padding: 0.25rem 1rem;
     width: 6rem;
     font-family: var(--font-bold);
     background-color: #ddd;
