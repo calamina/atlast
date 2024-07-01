@@ -9,7 +9,6 @@ import FormSubmitAlt from '@/components/atomic/FormSubmitAlt.vue'
 
 const { login } = useUserStore()
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emits = defineEmits(['toggleRegister'])
 
 const form: Ref<UserModel> = ref({
