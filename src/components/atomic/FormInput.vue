@@ -1,18 +1,17 @@
 <script setup lang="ts">
 const props = defineProps<{
-  modelValue: string
   type: string
   name: string
 }>()
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const emits = defineEmits(['update:modelValue'])
+
+const value = defineModel<string>({required: true, default: ''})
 </script>
 
 <template>
   <div>
     <input
       class="input"
-      :value="props.modelValue"
+      :value="value"
       :type="props.type"
       :name="props.name"
       :id="props.name"
