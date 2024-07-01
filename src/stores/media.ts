@@ -13,9 +13,10 @@ export const useMediaStore = defineStore('media', () => {
   const list: Ref<Array<MediaModel>> = ref([])
   const filteredList: Ref<Array<MediaModel>> = ref([])
   const count: Ref<number> = ref(0)
+  const filteredCount: Ref<number> = ref(0)
   const filters: Ref<FilterModel> = ref({ sort: 'createdAt', order: 'desc' })
   const search: Ref<string> = ref('')
-  const pagination: Ref<{page: number, pageCount: number}> = ref({page: 1, pageCount: 1});
+  const pagination: Ref<{ page: number, pageCount: number }> = ref({ page: 1, pageCount: 1 });
 
   const notification = useNotificationStore()
   const user = useUserStore()
@@ -45,9 +46,9 @@ export const useMediaStore = defineStore('media', () => {
   }
 
   async function getMediaByUser(user: string, page?: number): Promise<MediaModel[]> {
-    const query = page ? 
-    'medias?sort=createdAt:desc&filters[user][$eq]=' + user + '&pagination[page]=' + page : 
-    'medias?sort=createdAt:desc&filters[user][$eq]=' + user
+    const query = page ?
+      'medias?sort=createdAt:desc&filters[user][$eq]=' + user + '&pagination[page]=' + page :
+      'medias?sort=createdAt:desc&filters[user][$eq]=' + user
 
     setLoading(true)
     return http
@@ -57,8 +58,6 @@ export const useMediaStore = defineStore('media', () => {
         list.value = result
         count.value = response.data?.meta?.pagination?.total
         pagination.value.pageCount = response.data?.meta?.pagination?.pageCount
-        console.debug(response.data);
-        console.debug(response);
         setLoading(false)
         return result
       })
@@ -68,9 +67,9 @@ export const useMediaStore = defineStore('media', () => {
       })
   }
 
-  async function getFilteredMediaByUser(user: string, reload: boolean): Promise<any> {
+  async function getFilteredMediaByUser(user: string, reload: boolean, page?: number): Promise<any> {
     if (reload) setLoading(true)
-    let filter: string = ''
+    let filter: string = `&filters[user][$eq]=${user}`
     if (filters.value?.categ) {
       filter += `&filters[categ][$eq]=${filters.value.categ}`
     }
@@ -82,6 +81,9 @@ export const useMediaStore = defineStore('media', () => {
     }
     if (filters.value?.tag) {
       filter += `&filters[tags][$contains]=${filters.value.tag}`
+    }
+    if (page) {
+      filter += `&pagination[page]=${page}`
     }
 
     const sort = filters?.value!.sort ? `?sort=${filters.value.sort}:${filters.value.order}` : ''
@@ -95,7 +97,11 @@ export const useMediaStore = defineStore('media', () => {
           return media.attributes.user === user
         })
         filteredList.value = result
-        // count.value = response.data?.meta?.pagination?.total
+        filteredCount.value = response.data?.meta?.pagination?.total
+        pagination.value.pageCount = response.data?.meta?.pagination?.pageCount
+        if(pagination.value.pageCount === 1) {
+          pagination.value.page = 1
+        }
         return result
       })
       .catch((error) => {
@@ -159,6 +165,7 @@ export const useMediaStore = defineStore('media', () => {
     filters.value.categ = null
     filters.value.like = null
     filters.value.tag = null
+    pagination.value.page = 1
     getFilteredMediaByUser(user, true)
   }
 
@@ -169,6 +176,7 @@ export const useMediaStore = defineStore('media', () => {
   return {
     pagination,
     count,
+    filteredCount,
     list,
     filteredList,
     filters,

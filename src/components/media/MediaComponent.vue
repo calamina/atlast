@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed, ref, type Ref } from 'vue'
-import { useThrottleFn } from '@vueuse/core'
+import { useMouseInElement, useThrottleFn } from '@vueuse/core'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 
 import { useUserStore } from '@/stores/user'
+import { useTooltipStore } from '@/stores/tooltip'
 
 import type { MediaModel } from '@/models/media.model'
 
@@ -23,6 +24,7 @@ import TagGroup from '@/components/atomic/TagGroup.vue'
 
 const route = useRoute()
 const { connectedUser } = storeToRefs(useUserStore())
+const { setTooltip, resetTooltip } = useTooltipStore()
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emits = defineEmits(['enableEdit'])
@@ -35,6 +37,7 @@ const status = computed(() => {
 const expanded: Ref<boolean | null> = ref(null)
 
 const toggleEdit = useThrottleFn(() => {
+  resetTooltip()
   emits('enableEdit')
 }, 500)
 </script>
@@ -59,11 +62,13 @@ const toggleEdit = useThrottleFn(() => {
           class="media__status"
           :is="status!.component"
           :style="{ backgroundColor: status!.color }"
+          @mouseover="setTooltip(status!.name + ' — ' + media.createdAt)" @mouseleave="resetTooltip()"
         />
+        <!-- TODO ::: createdAt : updatedOn !!! (and display dates) -->
         <p class="media__categ">
           {{ media.categ }}
         </p>
-        <div class="media__score" v-if="media.score">
+        <div class="media__score" v-if="media.score" @mouseover="setTooltip(media.score + ' / 10')" @mouseleave="resetTooltip()">
           <IconRating v-for="score in media.score" :key="score" class="media__score-icon" />
           <!-- <p class="media__score-text">{{ media.score }}</p> -->
         </div>
@@ -75,6 +80,7 @@ const toggleEdit = useThrottleFn(() => {
         class="button-icon media__action"
         type="button"
         @click="toggleEdit"
+        @mouseover="setTooltip('Edit')" @mouseleave="resetTooltip()"
       >
         <IconEdit />
       </button>

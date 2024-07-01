@@ -3,32 +3,26 @@ import { type Ref, ref, type ComputedRef, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import type { FilterModel } from '@/models/filter.model'
 import { useMediaStore } from '@/stores/media'
+import { storeToRefs } from 'pinia'
 import FilterButton from '@/components/atomic/FilterButton.vue'
 import FilterGroup from '@/components/atomic/FilterGroup.vue'
 import TagButton from '@/components/atomic/TagButton.vue'
 import TagGroup from '@/components/atomic/TagGroup.vue'
 import sorts from '@/utils/media-sorts'
-import { storeToRefs } from 'pinia'
 import MediaPagination from '@/components/media/MediaPagination.vue'
-
-const { count } = storeToRefs(useMediaStore())
+import mediaCategs from '@/utils/media-categs'
+import mediaActions from '@/utils/media-actions'
 
 const route = useRoute()
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emits = defineEmits(['refreshList'])
 const mediastore = useMediaStore()
+const { pagination } = storeToRefs(useMediaStore())
+
 const filters: Ref<FilterModel> = ref({ sort: 'createdAt', order: 'asc' })
 
-const categs: ComputedRef<{ name: string; number: number }[]> = computed(() => {
-  return countElements('categ') as { name: string; number: number }[]
-})
-const actions: ComputedRef<{ name: string; number: number }[]> = computed(() => {
-  return countElements('action') as { name: string; number: number }[]
-})
-const favorites: ComputedRef<number> = computed(() => {
-  return mediastore.filteredList.filter((media) => media.attributes.like === true).length
-})
+const categs = mediaCategs.map(categ => categ.name)
+const actions = mediaActions.map(action => action.name)
 
 const tags: ComputedRef<any> = computed(() => {
   const tags = new Set()
@@ -37,21 +31,6 @@ const tags: ComputedRef<any> = computed(() => {
   })
   return tags
 })
-
-function countElements(property: string) {
-  return Object.values(
-    mediastore.filteredList
-      .map((media) => media.attributes[property])
-      .reduce((mapping: any, item: string) => {
-        const { [item]: matchingItem } = mapping
-        matchingItem ? matchingItem.number++ : (mapping[item] = { name: item, number: 1 })
-        return mapping
-      }, {})
-  )
-  // const list = mediastore.filteredList.map((media) => media.attributes)
-  // const result = Object.groupBy(list, (media) => media[property])
-  // return result[property]
-}
 
 function updateFilters(property: any, value: string | boolean | null) {
   if (property === 'sort' && filters.value[property] === value) {
@@ -67,64 +46,30 @@ function updateFilters(property: any, value: string | boolean | null) {
   <div class="filter-wrapper">
     <div class="filters" v-if="!!mediastore.count">
       <FilterGroup :title="''">
-        <FilterButton
-          :selected="mediastore.filteredList.length === mediastore.list.length"
-          :name="'All'"
-          :info="count"
-          @click="mediastore.resetFilters((route.params.username) as string)"
-          />
+        <FilterButton :selected="mediastore.filteredCount === mediastore.count" :name="'All'" :info="mediastore.count"
+          @click="mediastore.resetFilters((route.params.username) as string)" />
       </FilterGroup>
-      <FilterGroup :title="'favorites'" v-if="favorites > 0">
-        <FilterButton
-          :selected="filters.like === true"
-          :name="'favorite'"
-          :info="favorites"
-          @click="updateFilters('like', true)"
-        />
+      <FilterGroup :title="'favorites'">
+        <FilterButton :selected="filters.like === true" :name="'favorites'" :info="''"
+          @click="updateFilters('like', true)" />
       </FilterGroup>
       <FilterGroup :title="'category'">
-        <FilterButton
-          v-for="categ in categs"
-          :key="categ.name"
-          :selected="filters.categ === categ.name"
-          :name="categ.name"
-          :info="categ.number"
-          @click="updateFilters('categ', categ.name)"
-        />
+        <FilterButton v-for="categ in categs" :key="categ" :selected="filters.categ === categ"
+          :name="categ" :info="''" @click="updateFilters('categ', categ)" />
       </FilterGroup>
       <FilterGroup :title="'status'">
-        <FilterButton
-          v-for="action in actions"
-          :key="action.name"
-          :selected="filters.action === action.name"
-          :name="action.name"
-          :info="action.number"
-          @click="updateFilters('action', action.name)"
-        />
+        <FilterButton v-for="action in actions" :key="action" :selected="filters.action === action"
+          :name="action" :info="''" @click="updateFilters('action', action)" />
       </FilterGroup>
-
       <FilterGroup :title="'sort by'">
-        <FilterButton
-          v-for="sort in sorts"
-          :key="sort.name"
-          :selected="filters.sort === sort.name"
-          :name="sort.title"
-          :info="filters.order === 'asc' ? sort.orderAsc : sort.orderDesc"
-          @click="updateFilters('sort', sort.name)"
-        />
+        <FilterButton v-for="sort in sorts" :key="sort.name" :selected="filters.sort === sort.name" :name="sort.title"
+          :info="filters.order === 'asc' ? sort.orderAsc : sort.orderDesc" @click="updateFilters('sort', sort.name)" />
       </FilterGroup>
       <TagGroup v-if="tags.size" :maxHeight="false">
-        <TagButton
-          v-for="tag in tags"
-          :key="tag.name"
-          :name="tag"
-          :selected="filters.tag === tag"
-          @click="updateFilters('tag', tag)"
-        />
+        <TagButton v-for="tag in tags" :key="tag.name" :name="tag" :selected="filters.tag === tag"
+          @click="updateFilters('tag', tag)" />
       </TagGroup>
-      <FilterGroup :title="'page'">
-        <MediaPagination />
-      </FilterGroup>
+      <MediaPagination v-if="pagination.pageCount > 1" />
     </div>
   </div>
 </template>
@@ -147,7 +92,7 @@ function updateFilters(property: any, value: string | boolean | null) {
   transition: opacity 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
   width: 18rem;
 
-  & > :last-child {
+  &> :last-child {
     margin-top: 1rem;
   }
 }

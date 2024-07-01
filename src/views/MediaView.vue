@@ -15,7 +15,7 @@ import { watchDeep } from '@vueuse/core'
 
 const route = useRoute()
 const { filteredList, count, pagination } = storeToRefs(useMediaStore())
-const { getMediaByUser, updateSearch } = useMediaStore()
+const { getMediaByUser, updateSearch, getFilteredMediaByUser } = useMediaStore()
 const { loading } = storeToRefs(useLoadingStore())
 
 const show: Ref<number | null> = ref(null)
@@ -61,7 +61,7 @@ watch(filteredMedia, () => {
 })
 
 watchDeep(pagination, () => {
-  getMediaByUser((route.params.username) as string, pagination.value.page).then((result) => {
+  getFilteredMediaByUser((route.params.username) as string, true, pagination.value.page).then((result) => {
     filteredList.value = result
   })
 })
@@ -97,12 +97,12 @@ function editMedia(index: number) {
             @cancel="editMedia(index)"
           />
         </div>
-        <!-- <MediaPagination v-if="count > 25" v-model="page" /> -->
       </div>
       <div class="medias" v-else>
         <MediaMock v-for="i of 2" :key="i" />
         <!-- TODO :: info on adding media -->
-         <p>Add some media by searching :)</p>
+         <!-- <p>Add some media by searching :)</p> -->
+         <p>Empty for now ( • ᴖ • ｡)</p>
       </div>
     </transition>
   </main>
@@ -126,6 +126,12 @@ main {
   align-items: center;
   gap: 0.25rem;
   width: 45rem;
+
+  p {
+    padding-top: 2rem;
+    font-family: var(--font-bold);
+    opacity: 0.5;
+  }
 }
 
 .media__switch {

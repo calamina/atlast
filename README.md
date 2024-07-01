@@ -4,6 +4,7 @@ Personnal Knowledge Database made with Vue3 and Strapi
 ![atlast preview](atlast2.png?raw=true "Atlast preview")
 
 # IMPORTANT
+- [ ] fix filter count :(
 - [ ] add user filteredlist !!
 
 - [ ] on different user media, search user media, or mine ???

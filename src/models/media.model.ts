@@ -15,4 +15,5 @@ export interface MediaModel {
   like?: boolean
   attributes?: any
   key?: string
+  createdAt?: Date
 }

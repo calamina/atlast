@@ -4,7 +4,7 @@ import { storeToRefs } from 'pinia';
 import IconPlus from '../icons/IconPlus.vue';
 import IconMinus from '../icons/IconMinus.vue';
 
-const { count, pagination } = storeToRefs(useMediaStore())
+const { pagination } = storeToRefs(useMediaStore())
 </script>
 
 <template>
@@ -17,7 +17,7 @@ const { count, pagination } = storeToRefs(useMediaStore())
 
 <style lang="scss" scoped>
 div {
-    // flex: 1;
+    padding-top: 2rem;
     display: flex;
     width: 100%;
     align-items: center;
