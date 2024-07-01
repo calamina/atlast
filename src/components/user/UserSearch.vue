@@ -8,11 +8,11 @@ import { useMediaStore } from '@/stores/media'
 import { useUserStore } from '@/stores/user'
 // import { useLoadingStore } from '@/stores/loading'
 
-import type { UserModel } from '@/models/user.model'
+// import type { UserModel } from '@/models/user.model'
 
-import UserComponent from './UserComponent.vue'
+// import UserComponent from './UserComponent.vue'
 import { storeToRefs } from 'pinia'
-import { MediaModel } from '@/models/media.model'
+import type { MediaModel } from '@/models/media.model'
 
 const emits = defineEmits(['exit'])
 

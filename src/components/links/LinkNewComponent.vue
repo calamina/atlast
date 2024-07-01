@@ -5,7 +5,7 @@ import router from '@/router/index'
 
 import { useUserStore } from '@/stores/user'
 import { useLinkStore } from '@/stores/link'
-import { useNotificationStore } from '@/stores/notification'
+// import { useNotificationStore } from '@/stores/notification'
 
 import categs from '@/utils/link-categs'
 
@@ -19,7 +19,7 @@ const props = defineProps<{
 const emits = defineEmits(['exit'])
 
 const linkStore = useLinkStore()
-const notification = useNotificationStore()
+// const notification = useNotificationStore()
 const user = useUserStore()
 
 let linkEdit: Ref<LinkModel> = ref({
@@ -43,7 +43,7 @@ function linkFocus() {
 
 function addLink(link: LinkModel) {
   link.tags = link.tagstring ? link.tagstring.split(' ') : null
-  link.user = user.connectedUser.username
+  link.user = user.connectedUser!.username
   linkStore
     .addUserLink(link)
     .then(() => {

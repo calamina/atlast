@@ -5,8 +5,8 @@ import { ref, type Ref } from 'vue'
 import router from '@/router/index'
 import http from '@/utils/http-common'
 import type { UserModel } from '@/models/user.model'
-import { MediaModel } from '@/models/media.model'
-import { FilterModel } from '@/models/filter.model'
+import type { MediaModel } from '@/models/media.model'
+import type { FilterModel } from '@/models/filter.model'
 
 export const useUserStore = defineStore('users', () => {
   const notification = useNotificationStore()
@@ -21,7 +21,7 @@ export const useUserStore = defineStore('users', () => {
   const search: Ref<string> = ref('')
 
   const list: Ref<Array<MediaModel>> = ref([])
-  const filteredList: Ref<Array<MediaModel>> = ref([])
+  const filteredList: Ref<Array<UserModel>> = ref([])
   const filters: Ref<FilterModel> = ref({ sort: 'createdAt', order: 'desc' })
 
   const headers = {

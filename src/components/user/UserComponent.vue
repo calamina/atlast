@@ -24,19 +24,19 @@ const toggleEdit = useThrottleFn(() => {
   <div
     class="media"
     v-if="user.id"
-    @click="this.$router.push({ name: 'media', params: { username: user.username } })"
+    :to="{ name: 'media', params: { username: user.username } }"
   >
-    <ItemPicture :src="user.thumbnail ?? null" :small="false" />
+    <!-- <ItemPicture :src="user.thumbnail ?? null" :small="false" /> -->
     <div class="media__content">
       <ItemTitle :title="user.username ?? null">
-        <IconLikeFull class="media__favorite" v-if="user.like" />
+        <!-- <IconLikeFull class="media__favorite" v-if="user.like" /> -->
       </ItemTitle>
       <ItemDescription :description="'heyo :)' ?? null" />
-      <div class="media__footer">
+      <!-- <div class="media__footer">
         <p class="media__categ">
           {{ useDateFormat(user.createdAt, 'DD/MM/YY') }}
         </p>
-      </div>
+      </div> -->
     </div>
     <div class="media__actions">
       <button class="button-icon media__action" type="button" @click="toggleEdit">

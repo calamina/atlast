@@ -16,7 +16,7 @@ const user = useUserStore()
 
 onMounted(() => {
   if (linkstore.list.length === 0) {
-    linkstore.getLinksByUser(user.connectedUser.username).then((result) => {
+    linkstore.getLinksByUser(user.connectedUser!.username).then((result) => {
       linkstore.list = result
       linkstore.filteredList = result
     })

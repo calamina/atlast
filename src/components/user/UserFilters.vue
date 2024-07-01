@@ -21,7 +21,7 @@ function updateFilters(property: any, value: string | boolean | null) {
   } else {
     filters.value[property] = filters.value[property] === value ? null : value
   }
-  mediastore.updateFilters(filters.value)
+  // mediastore.updateFilters(filters.value)
 }
 </script>
 
@@ -33,8 +33,8 @@ function updateFilters(property: any, value: string | boolean | null) {
           :selected="userStore.filteredList.length === userStore.list.length"
           :name="'All'"
           :info="userStore.list.length"
-          @click="userStore.resetFilters()"
-        />
+          />
+          <!-- @click="userStore.resetFilters()" -->
       </FilterGroup>
       <FilterGroup :title="'friends'" v-if="friends > 0">
         <FilterButton

@@ -59,7 +59,7 @@ export const useLinkStore = defineStore('links', () => {
       .post(`links`, { data: link })
       .then((response) => {
         notification.addNotification({ type: 'alert', message: 'Link added !' })
-        getLinksByUser(user.connectedUser.username)
+        getLinksByUser(user.connectedUser!.username)
         return response.data
       })
       .catch((error) => {
@@ -73,7 +73,7 @@ export const useLinkStore = defineStore('links', () => {
       .put(`links/${link.id}`, { data: link })
       .then((response) => {
         notification.addNotification({ type: 'alert', message: 'Link updated !' })
-        getLinksByUser(user.connectedUser.username)
+        getLinksByUser(user.connectedUser!.username)
         return response.data
       })
       .catch((error) => {
@@ -87,7 +87,7 @@ export const useLinkStore = defineStore('links', () => {
       .delete(`links/${id}`)
       .then(() => {
         notification.addNotification({ type: 'alert', message: 'Link deleted !' })
-        getLinksByUser(user.connectedUser.username)
+        getLinksByUser(user.connectedUser!.username)
       })
       .catch((error) => {
         notification.addNotification({ type: 'error', message: error.response })
