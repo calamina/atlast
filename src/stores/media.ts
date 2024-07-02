@@ -41,7 +41,7 @@ export const useMediaStore = defineStore('media', () => {
       })
       .catch((error) => {
         setLoading(false)
-        notification.addNotification({ type: 'error', message: "Cannot get media :(" })
+        notification.addNotification("Cannot get media :(")
       })
   }
 
@@ -63,7 +63,7 @@ export const useMediaStore = defineStore('media', () => {
       })
       .catch((error) => {
         setLoading(false)
-        notification.addNotification({ type: 'error', message: "Cannot get media :(" })
+        notification.addNotification("Cannot get media :(")
       })
   }
 
@@ -106,7 +106,7 @@ export const useMediaStore = defineStore('media', () => {
       })
       .catch((error) => {
         if (reload) setLoading(false)
-        notification.addNotification({ type: 'error', message: error.response })
+        notification.addNotification(error.response)
       })
   }
 
@@ -114,14 +114,14 @@ export const useMediaStore = defineStore('media', () => {
     return http
       .post(`medias`, { data: media }, headers)
       .then((response) => {
-        notification.addNotification({ type: 'alert', message: 'Media added !' })
+        notification.addNotification('Media added !')
         getFilteredMediaByUser(user.connectedUser!.username, false)
         count.value = response.data?.meta?.pagination?.total
         pagination.value.pageCount = response.data?.meta?.pagination?.pageCount
         return response.data
       })
       .catch((error) => {
-        notification.addNotification({ type: 'error', message: error.response })
+        notification.addNotification(error.response)
         return error.response
       })
   }
@@ -130,12 +130,12 @@ export const useMediaStore = defineStore('media', () => {
     return http
       .put(`medias/${media.id}`, { data: media }, headers)
       .then((response) => {
-        notification.addNotification({ type: 'alert', message: 'Media edited !' })
+        notification.addNotification('Media edited !')
         getFilteredMediaByUser(user.connectedUser!.username, false)
         return response.data
       })
       .catch((error) => {
-        notification.addNotification({ type: 'error', message: 'oops wrong media !!' })
+        notification.addNotification('oops wrong media !!')
         return error.response
       })
   }
@@ -144,13 +144,13 @@ export const useMediaStore = defineStore('media', () => {
     return http
       .delete(`medias/${id}`, headers)
       .then((response) => {
-        notification.addNotification({ type: 'alert', message: 'Media deleted !' })
+        notification.addNotification('Media deleted !')
         getFilteredMediaByUser(user.connectedUser!.username, false)
         count.value = response.data?.meta?.pagination?.total
         pagination.value.pageCount = response.data?.meta?.pagination?.pageCount
       })
       .catch((error) => {
-        notification.addNotification({ type: 'error', message: error.response })
+        notification.addNotification(error.response)
         return error.response
       })
   }

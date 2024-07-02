@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { useNotificationStore } from '@/stores/notification'
+import strings from '@/utils/strings'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -63,7 +64,7 @@ router.beforeEach((to) => {
   const { connectedUser } = useUserStore()
   const { addNotification } = useNotificationStore()
   if (!connectedUser && to.meta.requiresAuth) {
-    addNotification({ type: 'error', message: 'log in to access this page :)' })
+    addNotification('Log in to access this page', strings.HAPPY)
     return { name: 'auth' }
   }
 })

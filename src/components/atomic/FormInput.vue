@@ -2,24 +2,20 @@
 const props = defineProps<{
   type: string
   name: string
+  required?: boolean
 }>()
 
-const value = defineModel<string>({required: true, default: ''})
+const value = defineModel<string>({ required: true })
 </script>
 
 <template>
   <div>
-    <input
-      class="input"
-      :value="value"
-      :type="props.type"
-      :name="props.name"
-      :id="props.name"
-      :placeholder="props.name"
-      @input="$emit('update:modelValue', ($event.target as HTMLInputElement)!.value)"
-    />
+    <input class="input" :value="value" :type="props.type" :name="props.name" :id="props.name" :placeholder="props.name"
+      @input="$emit('update:modelValue', ($event.target as HTMLInputElement)!.value)" :required="required" />
     <label class="label" :for="props.name">
-      <p class="label__name">{{ name }}</p>
+      <p class="label__name">{{ name }}
+        <!-- <span class="label__required" v-if="required">{{ '*' }}</span> -->
+      </p>
     </label>
   </div>
 </template>
@@ -43,6 +39,12 @@ const value = defineModel<string>({required: true, default: ''})
     font-family: var(--font-bold);
     animation: translateIn 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
     color: #999;
+    }
+    
+    &__required {
+    font-family: var(--font-bold);
+    color: #999;
+    // color: var(--highlight);
   }
 }
 
@@ -50,9 +52,11 @@ const value = defineModel<string>({required: true, default: ''})
   0% {
     transform: translateY(-2rem);
   }
+
   50% {
     transform: translateY(-2rem);
   }
+
   100% {
     transform: translateY(0);
   }

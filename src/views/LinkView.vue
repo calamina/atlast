@@ -74,7 +74,7 @@ const filteredLinks: ComputedRef<LinkModel[]> = computed(() => {
       </TransitionGroup>
     </div>
     <div v-else>
-      <p>Empty list ... You could add a link :)</p>
+      <p>Empty list ... You could add a link (˶ᵔᵕᵔ˶)</p>
     </div>
   </main>
 </template>

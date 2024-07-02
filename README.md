@@ -4,16 +4,17 @@ Personnal Knowledge Database made with Vue3 and Strapi
 ![atlast preview](atlast2.png?raw=true "Atlast preview")
 
 # IMPORTANT
+- [ ] update media.ts / mediaUpdateComponent / link / wiki.service notifications and errors !!!
+
 - [ ] fix filter count :(
-- [ ] add user filteredlist !!
+- [ ] add user filteredlist ?
 
 - [ ] on different user media, search user media, or mine ???
 - [ ] on different user media, see if in my library ?
 - [ ] on different user media, add filter for common media ?
-- [ ] add option to make library public/private
+- [ ] add option to make library public/private ?
 
-- [ ] disable adding same media to library
-- [ ] disable edit if same object ?
+- [ ] disable edit if same object ????
 
 - [ ] credentials not updating on new account creation :/
 - [ ] list forever loading on new account creation :/

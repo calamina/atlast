@@ -2,7 +2,7 @@
 
 <template>
   <main>
-    <h1>hello :)</h1>
+    <h1>hello (˶ᵔᵕᵔ˶)</h1>
   </main>
 </template>
 

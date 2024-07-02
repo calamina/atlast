@@ -101,8 +101,8 @@ function editMedia(index: number) {
       <div class="medias" v-else>
         <MediaMock v-for="i of 2" :key="i" />
         <!-- TODO :: info on adding media -->
-         <!-- <p>Add some media by searching :)</p> -->
-         <p>Empty for now ( • ᴖ • ｡)</p>
+        <p v-if="count">Empty for now (•ᴖ•｡)</p>
+        <p v-else>Add some media by searching (˶ᵔᵕᵔ˶)</p>
       </div>
     </transition>
   </main>

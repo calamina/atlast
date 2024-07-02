@@ -4,9 +4,11 @@ import { defineStore } from 'pinia'
 import { ref, type Ref } from 'vue'
 import router from '@/router/index'
 import http from '@/utils/http-common'
+import strings from '@/utils/strings'
 import type { UserModel } from '@/models/user.model'
 import type { MediaModel } from '@/models/media.model'
 import type { FilterModel } from '@/models/filter.model'
+import errorManager from '@/utils/error-manager'
 
 export const useUserStore = defineStore('users', () => {
   const notification = useNotificationStore()
@@ -23,10 +25,11 @@ export const useUserStore = defineStore('users', () => {
   const list: Ref<Array<MediaModel>> = ref([])
   const filteredList: Ref<Array<UserModel>> = ref([])
   const filters: Ref<FilterModel> = ref({ sort: 'createdAt', order: 'desc' })
+  const { errorMessage, errorsMessages } = errorManager;
 
   const headers = {
-    headers: {
-      Authorization: 'Bearer ' + connectedUserToken.value
+    headers: { 
+      Authorization: 'Bearer ' + connectedUserToken.value 
     }
   }
 
@@ -37,7 +40,10 @@ export const useUserStore = defineStore('users', () => {
         return response.data.filter((user: any) => user.id !== connectedUser?.value?.id)
       })
       .catch((error) => {
-        notification.addNotification({ type: 'error', message: 'no users or error :(' })
+        notification.addNotification('no users or error ')
+        errorsMessages(error).length ?
+          notification.addErrorsNotifications(errorsMessages(error)) :
+          notification.addErrorNotification(errorMessage(error))
       })
   }
 
@@ -48,17 +54,14 @@ export const useUserStore = defineStore('users', () => {
         email,
         password
       })
-      .then((response) => {
-        connectedUser.value = response.data.user
-        localStorage.setItem('user', JSON.stringify(response.data.user))
-        notification.addNotification({
-          type: 'alert',
-          message: 'User created: ' + response.data.user.username
-        })
-        router.push('/')
+      .then((response): void => {
+        setAndRedirectUser(response, username, `Welcome ${response.data.user.username}`)
       })
-      .catch((error) => {
-        notification.addNotification({ type: 'error', message: 'Wrong info :(' })
+      .catch((error): void => {
+        notification.addNotification('Wrong info ', strings.SAD)
+        errorsMessages(error).length ?
+          notification.addErrorsNotifications(errorsMessages(error)) :
+          notification.addErrorNotification(errorMessage(error))
       })
   }
 
@@ -68,19 +71,14 @@ export const useUserStore = defineStore('users', () => {
         identifier: username,
         password
       })
-      .then((response) => {
-        connectedUser.value = response.data.user
-        connectedUserToken.value = response.data.jwt
-        localStorage.setItem('user', JSON.stringify(response.data.user))
-        localStorage.setItem('userToken', JSON.stringify(response.data.jwt))
-        notification.addNotification({
-          type: 'alert',
-          message: 'Welcome back ' + response.data.user.username + ' :)'
-        })
-        router.push('/media/' + username)
+      .then((response): void => {
+        setAndRedirectUser(response, username, `Welcome back ${response.data.user.username}`)
       })
-      .catch(() => {
-        notification.addNotification({ type: 'error', message: 'Wrong login info :(' })
+      .catch((error): void => {
+        notification.addNotification('Wrong login info ', strings.SAD)
+        errorsMessages(error).length ?
+          notification.addErrorsNotifications(errorsMessages(error)) :
+          notification.addErrorNotification(errorMessage(error))
       })
   }
 
@@ -88,10 +86,7 @@ export const useUserStore = defineStore('users', () => {
     router.push('/auth').then(() => {
       localStorage.removeItem('user')
       localStorage.removeItem('userToken')
-      notification.addNotification({
-        type: 'alert',
-        message: 'Goodbye ' + connectedUser?.value?.username + ' !'
-      })
+      notification.addNotification(`Goodbye ${connectedUser?.value?.username}`, strings.HEY)
       connectedUser.value = null
       connectedUserToken.value = null
       const media = useMediaStore()
@@ -102,6 +97,15 @@ export const useUserStore = defineStore('users', () => {
 
   function updateSearch(value: string) {
     search.value = value
+  }
+
+  function setAndRedirectUser(response: any, username: string, message: string): void {
+    connectedUser.value = response.data.user
+    connectedUserToken.value = response.data.jwt
+    localStorage.setItem('user', JSON.stringify(response.data.user))
+    localStorage.setItem('userToken', JSON.stringify(response.data.jwt))
+    notification.addNotification(message, strings.HEY)
+    router.push('/media/' + username)
   }
 
   return {

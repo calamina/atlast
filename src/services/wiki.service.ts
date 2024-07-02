@@ -18,7 +18,7 @@ async function getWikiByLink(link: string): Promise<any> {
       return response.data
     })
     .catch((error) => {
-      notification.addNotification({ message: error.response, type: 'error' })
+      notification.addNotification(error.response)
     })
 }
 
@@ -29,7 +29,7 @@ async function getWikiByname(name: string): Promise<any> {
       return response.data
     })
     .catch((error) => {
-      notification.addNotification({ message: error.response, type: 'error' })
+      notification.addNotification(error.response)
     })
 }
 

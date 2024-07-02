@@ -87,7 +87,7 @@ const addMedia = useThrottleFn((media: MediaModel) => {
       emits('confirm')
     })
     .catch((error) => {
-      notification.addNotification({ message: error, type: 'error' })
+      notification.addNotification(error)
     })
 }, 500)
 
@@ -101,7 +101,7 @@ const editMedia = useThrottleFn((media?: MediaModel) => {
       emits('confirm')
     })
     .catch((error) => {
-      notification.addNotification({ message: error, type: 'error' })
+      notification.addNotification(error)
     })
 }, 500)
 

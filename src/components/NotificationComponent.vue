@@ -11,7 +11,7 @@ const props = defineProps<{
 onMounted(() => {
   setTimeout(() => {
     notifications.removeNotification(props.notification)
-  }, 2500)
+  }, props.notification.long ? 5000 : 2500)
 })
 </script>
 
@@ -42,8 +42,19 @@ onMounted(() => {
 
   &__message {
     font-family: var(--font-bold);
+    &::first-letter {
+      text-transform: capitalize;
+    }
   }
 }
+
+.error {
+  background-color: #ddd !important;
+}
+
+// .error {
+//   background-color: #e8cfcf !important;
+// }
 
 @media (max-width: 1250px) {
   .notification {

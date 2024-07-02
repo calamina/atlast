@@ -26,7 +26,7 @@ const { notifications } = useNotificationStore()
   right: 1rem;
   display: flex;
   flex-flow: column;
-  align-items: center;
+  align-items: flex-end;
   z-index: 1000;
   gap: 0.5rem;
 }
