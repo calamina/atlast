@@ -4,22 +4,21 @@ Personnal Knowledge Database made with Vue3 and Strapi
 ![atlast preview](atlast2.png?raw=true "Atlast preview")
 
 # IMPORTANT
-- [ ] update media.ts / mediaUpdateComponent / link / wiki.service notifications and errors !!!
-
+- [ ] ajout du lien dans le media
 - [ ] fix filter count :(
 - [ ] add user filteredlist ?
+- [ ] add confirmation dialog
+
 
 - [ ] on different user media, search user media, or mine ???
 - [ ] on different user media, see if in my library ?
 - [ ] on different user media, add filter for common media ?
 - [ ] add option to make library public/private ?
-
 - [ ] disable edit if same object ????
 
 - [ ] credentials not updating on new account creation :/
 - [ ] list forever loading on new account creation :/
 - [ ] rework links like medias
-- [ ] ajout du lien dans le media
 - [ ] ajout filtres toggle
 - [ ] ajout user toggle
 
@@ -34,21 +33,14 @@ Personnal Knowledge Database made with Vue3 and Strapi
 
 # atomic
 - [ ] menu buttons (icon / text / texticon) maybe ...
-- [ ] menu search maybe ...
 
 # css
 - [ ] clean & refactor css
 - [ ] bem everywhere
 - [ ] responsive
 
-# utils
-- [ ] add confirmation dialog
-
 # models
 - [ ] change actions name to status
-
-# media
-- [ ] fix message/loading when empty list
 
 # Accessibility
 - [ ] aria and focus and img alt and link hover

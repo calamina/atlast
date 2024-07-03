@@ -3,7 +3,7 @@ import { ref, type Ref } from 'vue'
 import { onKeyStroke, useKeyModifier } from '@vueuse/core'
 import { watchDebounced } from '@vueuse/shared'
 
-import { useWikiService } from '@/services/wiki.service'
+import { useWiki } from '@/stores/wiki'
 import { useMediaStore } from '@/stores/media'
 import { useUserStore } from '@/stores/user'
 // import { useLoadingStore } from '@/stores/loading'
@@ -16,7 +16,7 @@ import type { MediaModel } from '@/models/media.model'
 
 const emits = defineEmits(['exit'])
 
-const { getWikiByname } = useWikiService()
+const { getWikiByname } = useWiki()
 const { connectedUser } = useUserStore()
 const mediastore = useMediaStore()
 const { search } = storeToRefs(mediastore)

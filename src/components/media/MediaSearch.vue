@@ -3,7 +3,7 @@ import { ref, type Ref } from 'vue'
 import { onKeyStroke, useKeyModifier } from '@vueuse/core'
 import { watchDebounced } from '@vueuse/shared'
 
-import { useWikiService } from '@/services/wiki.service'
+import { useWiki } from '@/stores/wiki'
 import { useMediaStore } from '@/stores/media'
 import { useUserStore } from '@/stores/user'
 // import { useLoadingStore } from '@/stores/loading'
@@ -17,7 +17,7 @@ import { storeToRefs } from 'pinia'
 
 const emits = defineEmits(['exit'])
 
-const { getWikiByname } = useWikiService()
+const { getWikiByname } = useWiki()
 const { connectedUser } = useUserStore()
 const mediastore = useMediaStore()
 const { search } = storeToRefs(mediastore)
@@ -48,9 +48,9 @@ async function getResults(value: string) {
     })
   })
 
-  getWikiByname(value).then((data) => {
+  getWikiByname(value).then((data: any) => {
     const mediaListKeys = new Set(mediaList.value.map((el) => el.key))
-    wikiList.value = data.pages.filter(({ key }: { key: string }) => !mediaListKeys.has(key))
+    wikiList.value = data.filter(({ key }: { key: string }) => !mediaListKeys.has(key))
   })
 }
 

@@ -2,11 +2,9 @@
 import { onMounted, ref, type Ref } from 'vue'
 import { useThrottleFn } from '@vueuse/core'
 import { useRoute } from 'vue-router'
-
 import { useUserStore } from '@/stores/user'
 import { useMediaStore } from '@/stores/media'
-import { useNotificationStore } from '@/stores/notification'
-import { useWikiService } from '@/services/wiki.service'
+import { useWiki } from '@/stores/wiki'
 
 import actions from '@/utils/media-actions'
 
@@ -22,28 +20,25 @@ import IconCheck from '@/components/icons/IconCheck.vue'
 import IconRating from '../icons/IconRating.vue'
 import IconDelete from '@/components/icons/IconDelete.vue'
 import IconLikeFull from '@/components/icons/IconLikeFull.vue'
+import mediaCategs from '@/utils/media-categs'
 
 const route = useRoute()
-
 const user = useUserStore()
 const mediastore = useMediaStore()
-const notification = useNotificationStore()
-
-const wikiservice = useWikiService()
+const wikiservice = useWiki()
 
 const props = defineProps<{
   media: MediaModel
   action: string
 }>()
-
 const emits = defineEmits(['cancel', 'confirm'])
 
-const categories: string[] = ['movie', 'series', 'game', 'book', 'comic']
-
+const categories = mediaCategs.map(categ => categ.name)
 const media: Ref<MediaModel> = ref({})
 
 onMounted(() => {
   if (props.action === 'editMedia' && route.params.username === user.connectedUser!.username) {
+    console.debug(props.media)
     media.value = {
       id: props.media?.id,
       title: props.media?.title,
@@ -58,17 +53,12 @@ onMounted(() => {
       image: props.media?.image,
       key: props.media?.key
     }
+    console.debug(media.value)
   } else
     wikiservice.getWikiByLink(props.media.key!).then((data) => {
       media.value = {
-        id: data.id,
-        title: data.title,
-        url: data.content_urls?.desktop?.page,
-        description: data.description,
+        ...data,
         tagstring: props.media.tags?.join(' '),
-        extract: data.extract,
-        image: data.originalimage?.source,
-        thumbnail: data.thumbnail?.source,
         score: 0,
         action: 'completed',
         categ: 'movie',
@@ -83,12 +73,7 @@ const addMedia = useThrottleFn((media: MediaModel) => {
   media.user = user.connectedUser!.username
   mediastore
     .addUserMedia(media)
-    .then(() => {
-      emits('confirm')
-    })
-    .catch((error) => {
-      notification.addNotification(error)
-    })
+    .then(() => emits('confirm'))
 }, 500)
 
 const editMedia = useThrottleFn((media?: MediaModel) => {
@@ -97,17 +82,13 @@ const editMedia = useThrottleFn((media?: MediaModel) => {
   media.tags = media.tagstring ? media.tagstring.split(' ') : null
   mediastore
     .editUserMedia(media)
-    .then(() => {
-      emits('confirm')
-    })
-    .catch((error) => {
-      notification.addNotification(error)
-    })
+    .then(() => emits('confirm'))
 }, 500)
 
 const deleteMedia = useThrottleFn((id: number) => {
-  mediastore.deleteUserMedia(id)
-  emits('cancel')
+  mediastore
+    .deleteUserMedia(id)
+    .then(() => emits('cancel'))
 }, 500)
 </script>
 <template>
@@ -124,57 +105,29 @@ const deleteMedia = useThrottleFn((id: number) => {
       </button>
       <div class="media__form">
         <div class="choices">
-          <button
-            v-for="action in actions"
-            type="button"
-            class="rating"
-            :key="action.name"
-            @click="media.action = action.name"
-            :style="{
+          <button v-for="action in actions" type="button" class="rating" :key="action.name"
+            @click="media.action = action.name" :style="{
               backgroundColor: media.action === action.name ? action.color : '#efefef'
-            }"
-            :class="{ active: media.action === action.name }"
-          >
+            }" :class="{ active: media.action === action.name }">
             {{ action.name }}
           </button>
         </div>
         <div class="choices">
-          <button
-            v-for="category in categories"
-            type="button"
-            class="rating"
-            :key="category"
-            @click="media.categ = category"
-            :class="{ active: media.categ === category }"
-          >
+          <button v-for="category in categories" type="button" class="rating" :key="category"
+            @click="media.categ = category" :class="{ active: media.categ === category }">
             {{ category }}
           </button>
         </div>
         <div class="choices" v-if="media.action !== 'planning'">
-          <button
-            v-for="index in 10"
-            type="button"
-            class="rating-icon"
-            :key="index"
-            @click="media.score = index"
-            :class="{ iconActive: media.score! >= index }"
-          >
+          <button v-for="index in 10" type="button" class="rating-icon" :key="index" @click="media.score = index"
+            :class="{ iconActive: media.score! >= index }">
             <IconRating />
           </button>
         </div>
         <div class="media__footer">
-          <input
-            placeholder="tags (separate with space)"
-            class="media__tags"
-            type="text"
-            v-model="media.tagstring"
-          />
+          <input placeholder="tags (separate with space)" class="media__tags" type="text" v-model="media.tagstring" />
           <div class="media__actions" v-if="props.action === 'createMedia'">
-            <button
-              class="button-icon media__cancel"
-              type="reset"
-              @click="$emit('cancel', props.media)"
-            >
+            <button class="button-icon media__cancel" type="reset" @click="$emit('cancel', props.media)">
               <IconBack />
             </button>
             <button class="button-icon media__submit" type="submit" @click="addMedia(media)">
@@ -182,18 +135,10 @@ const deleteMedia = useThrottleFn((id: number) => {
             </button>
           </div>
           <div class="media__actions" v-if="props.action === 'editMedia'">
-            <button
-              class="button-icon media__cancel"
-              type="reset"
-              @click="$emit('cancel', props.media)"
-            >
+            <button class="button-icon media__cancel" type="reset" @click="$emit('cancel', props.media)">
               <IconBack />
             </button>
-            <button
-              class="button-icon media__cancel"
-              type="button"
-              @click="deleteMedia(props.media.id!)"
-            >
+            <button class="button-icon media__cancel" type="button" @click="deleteMedia(props.media.id!)">
               <IconDelete />
             </button>
             <button class="button-icon media__submit" type="button" @click="editMedia(media)">
@@ -296,10 +241,12 @@ const deleteMedia = useThrottleFn((id: number) => {
     color: #999;
     background-color: #efefef;
   }
+
   & .active {
     background-color: var(--highlight);
     color: #323232;
   }
+
   & .rating-icon {
     width: 2.2rem;
     height: 2.2rem;
@@ -307,6 +254,7 @@ const deleteMedia = useThrottleFn((id: number) => {
     border-radius: 100%;
     background-color: #efefef;
   }
+
   & .iconActive {
     color: #b97749;
     background-color: #dc956366;
@@ -317,6 +265,7 @@ const deleteMedia = useThrottleFn((id: number) => {
   .media__content {
     margin-top: -0.5rem;
   }
+
   // img {
   //   display: none;
   // }
@@ -324,17 +273,21 @@ const deleteMedia = useThrottleFn((id: number) => {
     height: 2.5rem;
     border-radius: 2.5rem;
   }
+
   .choices {
     flex-flow: row wrap;
     // gap: 0.5rem;
   }
+
   .media__form {
     padding-top: 0.5rem;
     gap: 1rem;
   }
+
   .media__extract {
     display: none;
   }
+
   .media__footer {
     gap: 1rem;
   }

@@ -27,7 +27,7 @@ export const useNotificationStore = defineStore('notification', () => {
     const notification: Notification = {
       id: uuidv4(),
       type: 'info',
-      message: message + kao
+      message: message + (kao ?? null)
     }
     notifications?.value.push(notification)
   }

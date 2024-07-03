@@ -8,6 +8,8 @@ import http from '@/utils/http-common'
 import { useNotificationStore } from '@/stores/notification'
 import { useUserStore } from '@/stores/user'
 import { useLoadingStore } from '@/stores/loading'
+import { errorMessage, errorsMessages } from '@/utils/error-manager'
+import strings from '@/utils/strings'
 
 export const useMediaStore = defineStore('media', () => {
   const list: Ref<Array<MediaModel>> = ref([])
@@ -32,16 +34,18 @@ export const useMediaStore = defineStore('media', () => {
     setLoading(true)
     return http
       .get<Array<any>>(
-        'medias?filters[title][$containsi]=' + name + '&filters[user][$eq]=' + user,
-        headers
-      )
+        `medias?filters[title][$containsi]=${name}&filters[user][$eq]=${user}`,
+        headers)
       .then((response: any) => {
         setLoading(false)
         return response.data.data
       })
       .catch((error) => {
         setLoading(false)
-        notification.addNotification("Cannot get media :(")
+        notification.addNotification("cannot get media", strings.SAD)
+        errorsMessages(error).length ?
+          notification.addErrorsNotifications(errorsMessages(error)) :
+          notification.addErrorNotification(errorMessage(error))
       })
   }
 
@@ -63,7 +67,10 @@ export const useMediaStore = defineStore('media', () => {
       })
       .catch((error) => {
         setLoading(false)
-        notification.addNotification("Cannot get media :(")
+        notification.addNotification("cannot get media", strings.SAD)
+        errorsMessages(error).length ?
+          notification.addErrorsNotifications(errorsMessages(error)) :
+          notification.addErrorNotification(errorMessage(error))
       })
   }
 
@@ -99,14 +106,17 @@ export const useMediaStore = defineStore('media', () => {
         filteredList.value = result
         filteredCount.value = response.data?.meta?.pagination?.total
         pagination.value.pageCount = response.data?.meta?.pagination?.pageCount
-        if(pagination.value.pageCount === 1) {
+        if (pagination.value.pageCount === 1) {
           pagination.value.page = 1
         }
         return result
       })
       .catch((error) => {
         if (reload) setLoading(false)
-        notification.addNotification(error.response)
+        notification.addNotification("cannot get media", strings.SAD)
+        errorsMessages(error).length ?
+        notification.addErrorsNotifications(errorsMessages(error)) :
+        notification.addErrorNotification(errorMessage(error))
       })
   }
 
@@ -114,14 +124,17 @@ export const useMediaStore = defineStore('media', () => {
     return http
       .post(`medias`, { data: media }, headers)
       .then((response) => {
-        notification.addNotification('Media added !')
+        notification.addNotification('media added', strings.HAPPY)
         getFilteredMediaByUser(user.connectedUser!.username, false)
         count.value = response.data?.meta?.pagination?.total
         pagination.value.pageCount = response.data?.meta?.pagination?.pageCount
         return response.data
       })
       .catch((error) => {
-        notification.addNotification(error.response)
+        notification.addNotification("failed to add media", strings.SAD)
+        errorsMessages(error).length ?
+          notification.addErrorsNotifications(errorsMessages(error)) :
+          notification.addErrorNotification(errorMessage(error))
         return error.response
       })
   }
@@ -130,13 +143,15 @@ export const useMediaStore = defineStore('media', () => {
     return http
       .put(`medias/${media.id}`, { data: media }, headers)
       .then((response) => {
-        notification.addNotification('Media edited !')
+        notification.addNotification('media edited ', strings.HAPPY)
         getFilteredMediaByUser(user.connectedUser!.username, false)
         return response.data
       })
       .catch((error) => {
-        notification.addNotification('oops wrong media !!')
-        return error.response
+        notification.addNotification('failed to edit media', strings.SAD)
+        errorsMessages(error).length ?
+          notification.addErrorsNotifications(errorsMessages(error)) :
+          notification.addErrorNotification(errorMessage(error))
       })
   }
 
@@ -144,14 +159,16 @@ export const useMediaStore = defineStore('media', () => {
     return http
       .delete(`medias/${id}`, headers)
       .then((response) => {
-        notification.addNotification('Media deleted !')
+        notification.addNotification('media deleted', strings.HAPPY)
         getFilteredMediaByUser(user.connectedUser!.username, false)
         count.value = response.data?.meta?.pagination?.total
         pagination.value.pageCount = response.data?.meta?.pagination?.pageCount
       })
       .catch((error) => {
-        notification.addNotification(error.response)
-        return error.response
+        notification.addNotification("failed to delete media", strings.SAD)
+        errorsMessages(error).length ?
+          notification.addErrorsNotifications(errorsMessages(error)) :
+          notification.addErrorNotification(errorMessage(error))
       })
   }
 

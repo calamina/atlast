@@ -42,6 +42,13 @@ onMounted(() => {
 
   &__message {
     font-family: var(--font-bold);
+    width: 100%;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+
     &::first-letter {
       text-transform: capitalize;
     }

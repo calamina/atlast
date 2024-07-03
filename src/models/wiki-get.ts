@@ -1,4 +1,5 @@
 export interface WikiGet {
+  id?: string
   title: string
   wikibase_item?: string
   pageid?: number
@@ -19,6 +20,9 @@ export interface WikiGet {
       page: string
     }
   }
+  originalimage?: {
+    source: string
+  } 
   key?: string
   type?: string
 }

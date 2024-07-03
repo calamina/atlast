@@ -40,7 +40,7 @@ export const useUserStore = defineStore('users', () => {
         return response.data.filter((user: any) => user.id !== connectedUser?.value?.id)
       })
       .catch((error) => {
-        notification.addNotification('no users or error ')
+        notification.addNotification('no users or error', strings.SAD)
         errorsMessages(error).length ?
           notification.addErrorsNotifications(errorsMessages(error)) :
           notification.addErrorNotification(errorMessage(error))
