@@ -5,6 +5,7 @@ import { useUserStore } from '@/stores/user'
 import IconGlobe from '@/components/icons/IconGlobe.vue'
 import IconUser from '@/components/icons/IconUser.vue'
 import IconUserOff from '@/components/icons/IconUserOff.vue'
+// import IconLink from './icons/IconLink.vue'
 
 const { logout } = useUserStore()
 const { connectedUser } = storeToRefs(useUserStore())
@@ -19,6 +20,10 @@ const { connectedUser } = storeToRefs(useUserStore())
           <div class="button-icon"><IconGlobe /></div>
           <span>media</span>
         </router-link>
+        <!-- <router-link class="type" :to="{ name: 'links', params: { username: connectedUser.username } }">
+          <div class="button-icon"><IconLink /></div>
+          <span>links</span>
+        </router-link> -->
         <!-- <router-link        class="type user__info"        :to="{ name: 'user', params: { username: connectedUser.username } }">
           <div class="menu-icon">
             <div class="button-icon"><IconUser /></div>
@@ -34,7 +39,6 @@ const { connectedUser } = storeToRefs(useUserStore())
         <!-- <router-link class="type" :to="{ name: 'media', params: { username: 'test' } }">
           test's library
         </router-link> -->
-        <!-- <router-link class="type" to="/links"> links </router-link> -->
       </div>
     </div>
     <div id="menu-search"></div>

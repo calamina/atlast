@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, type Ref } from 'vue'
-import { useMouseInElement, useThrottleFn } from '@vueuse/core'
+import { useDateFormat, useMouseInElement, useThrottleFn, useTimeAgo } from '@vueuse/core'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 
@@ -21,6 +21,7 @@ import ItemDescription from '@/components/atomic/ItemDescription.vue'
 import ItemPicture from '@/components/atomic/ItemPicture.vue'
 import TagButton from '@/components/atomic/TagButton.vue'
 import TagGroup from '@/components/atomic/TagGroup.vue'
+import IconLink from '../icons/IconLink.vue'
 
 const route = useRoute()
 const { connectedUser } = storeToRefs(useUserStore())
@@ -40,6 +41,17 @@ const toggleEdit = useThrottleFn(() => {
   resetTooltip()
   emits('enableEdit')
 }, 500)
+
+// TODO :: move to utils ?
+function openLink(url: string | undefined) {
+  if (url) window.open(url, "_blank");
+}
+
+function formatDate(created?: Date, updated?: Date) : string {
+  if(!created) return ''
+  const date = updated ?? created
+  return useDateFormat(date, 'DD/MM/YY').value + ' — ' + useTimeAgo(date).value
+}
 </script>
 
 <template>
@@ -58,35 +70,29 @@ const toggleEdit = useThrottleFn(() => {
         <p class="media__extract" v-if="expanded">{{ media.extract }}</p>
       </TransitionGroup>
       <div class="media__footer">
-        <component
-          class="media__status"
-          :is="status!.component"
-          :style="{ backgroundColor: status!.color }"
-          @mouseover="setTooltip(status!.name + ' — ' + media.createdAt)" @mouseleave="resetTooltip()"
-        />
-        <!-- TODO ::: createdAt : updatedOn !!! (and display dates) -->
+        <component class="media__status" :is="status!.component" :style="{ backgroundColor: status!.color }"
+          @mouseover="setTooltip(status!.name + ' — ' + formatDate(media.createdAt, media.updatedAt))" @mouseleave="resetTooltip()" />
         <p class="media__categ">
           {{ media.categ }}
         </p>
-        <div class="media__score" v-if="media.score" @mouseover="setTooltip(media.score + ' / 10')" @mouseleave="resetTooltip()">
+        <div class="media__score" v-if="media.score" @mouseover="setTooltip(media.score + ' / 10')"
+          @mouseleave="resetTooltip()">
           <IconRating v-for="score in media.score" :key="score" class="media__score-icon" />
-          <!-- <p class="media__score-text">{{ media.score }}</p> -->
         </div>
       </div>
     </div>
     <div class="media__actions">
-      <button
-        v-if="connectedUser?.username === route.params.username"
-        class="button-icon media__action"
-        type="button"
-        @click="toggleEdit"
-        @mouseover="setTooltip('Edit')" @mouseleave="resetTooltip()"
-      >
+      <button v-if="connectedUser?.username === route.params.username" class="button-icon media__action" type="button"
+        @click="openLink(media.url)" @mouseover="setTooltip('Wikipedia link')" @mouseleave="resetTooltip()">
+        <IconLink />
+      </button>
+      <button v-if="connectedUser?.username === route.params.username" class="button-icon media__action" type="button"
+        @click="toggleEdit" @mouseover="setTooltip('Edit')" @mouseleave="resetTooltip()">
         <IconEdit />
       </button>
-      <button v-else class="button-icon media__action" type="button" @click="toggleEdit">
+      <!-- <button v-else class="button-icon media__action" type="button" @click="toggleAdd">
         <IconPlus />
-      </button>
+      </button> -->
     </div>
   </div>
 </template>
@@ -106,8 +112,7 @@ const toggleEdit = useThrottleFn(() => {
 
   &:hover {
     background-color: #fff;
-    .media__actions,
-    .media__expand {
+    .media__actions {
       display: flex;
     }
   }
@@ -151,7 +156,6 @@ const toggleEdit = useThrottleFn(() => {
     gap: 0.25rem;
     height: 1.75rem;
     font-size: 0.9rem;
-    // padding: 0.25rem 1rem;
     padding: 0 0 0.25rem;
     width: 6rem;
     font-family: var(--font-bold);
@@ -159,7 +163,7 @@ const toggleEdit = useThrottleFn(() => {
     border-radius: 1rem;
     cursor: default;
   }
-
+  
   &__actions {
     position: absolute;
     top: 0.75rem;
@@ -177,6 +181,12 @@ const toggleEdit = useThrottleFn(() => {
     height: 2.5rem;
     padding: 0.55rem;
     border-radius: 100%;
+    // transition: color 0.1s, background-color 0.1s;
+
+    // &:hover {
+    //   color: #fff;
+    //   background-color: var(--highlight);
+    // }
   }
 
   &__score {
@@ -191,12 +201,6 @@ const toggleEdit = useThrottleFn(() => {
     background-color: #dc956333;
     border-radius: 1rem;
     padding: 0 0.5rem;
-  }
-
-  &__score-text {
-    font-size: 0.9rem;
-    line-height: 1.25rem;
-    font-family: var(--font-bold);
   }
 
   &__score-icon {
@@ -215,31 +219,11 @@ const toggleEdit = useThrottleFn(() => {
     opacity 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53),
     padding 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
 }
+
 .reveal-enter-from,
 .reveal-leave-to {
   max-height: 0;
   opacity: 0;
   padding: 0;
-}
-
-// @keyframes enter {
-//   0% {
-//     transform: scale(0.8);
-//   }
-//   100% {
-//     transform: scale(1);
-//   }
-// }
-@media (max-width: 1250px) {
-  .media__extract {
-    max-height: 50rem;
-  }
-  .media__actions {
-    left: 2.5rem;
-    top: 2.5rem;
-    border-radius: 0.5rem;
-    z-index: 30;
-    display: flex;
-  }
 }
 </style>

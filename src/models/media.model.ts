@@ -16,4 +16,5 @@ export interface MediaModel {
   attributes?: any
   key?: string
   createdAt?: Date
+  updatedAt?: Date
 }

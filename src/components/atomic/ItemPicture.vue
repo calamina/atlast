@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import strings from '@/utils/strings';
+
 const props = defineProps<{
   src: string | null
   small: boolean | null
@@ -7,7 +9,7 @@ const props = defineProps<{
 
 <template>
   <img class="image" v-if="props.src" :src="props.src" :class="{ imagesmall: small }" />
-  <div class="image" v-else :class="{ imagesmall: small }" />
+  <div class="image empty" v-else :class="{ imagesmall: small }" >{{ strings.SAD }}</div>
 </template>
 
 <style scoped lang="scss">
@@ -19,6 +21,13 @@ const props = defineProps<{
   border-radius: 1rem;
   background-color: #ddd;
   flex-shrink: 0;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--active-plus)
 }
 
 .imagesmall {

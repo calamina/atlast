@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, type ComputedRef, type Ref } from 'vue'
+import { computed, onMounted, ref, watch, type ComputedRef, type Ref } from 'vue'
 
 import { useUserStore } from '@/stores/user'
 import { useLinkStore } from '@/stores/link'
@@ -8,19 +8,39 @@ import type { LinkModel } from '@/models/link.model'
 
 import LinkComponent from '@/components/links/LinkComponent.vue'
 import LinkEditComponent from '@/components/links/LinkEditComponent.vue'
+import { useRoute } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import MediaSearchBar from '@/components/media/MediaSearchBar.vue'
+import LinkNewComponent from '@/components/links/LinkNewComponent.vue'
+import MediaSearch from '@/components/media/MediaSearch.vue'
+import { useMediaStore } from '@/stores/media'
 
-const linkstore = useLinkStore()
-
-const show: Ref<number | null> = ref(null)
+const { filteredList, list } = storeToRefs(useLinkStore())
+const { editUserLink, getLinksByUser } = useLinkStore()
+const { mediaSearch } = storeToRefs(useMediaStore())
+const route = useRoute()
 const user = useUserStore()
 
+const show: Ref<number | null> = ref(null)
+
 onMounted(() => {
-  if (linkstore.list.length === 0) {
-    linkstore.getLinksByUser(user.connectedUser!.username).then((result) => {
-      linkstore.list = result
-      linkstore.filteredList = result
+  if (
+    list.value.length === 0 ||
+    route.params.user !== filteredList?.value[0]?.user
+  )
+  if (list.value.length === 0) {
+    getLinksByUser(user.connectedUser!.username).then((result) => {
+      list.value = result
+      filteredList.value = result
     })
   }
+})
+
+watch(mediaSearch, () => {
+  show.value = null
+  mediaSearch.value.length > 0
+    ? (document.documentElement.style.overflow = 'hidden')
+    : (document.documentElement.style.overflow = 'auto')
 })
 
 function editLink(index: number, link?: LinkModel) {
@@ -28,7 +48,7 @@ function editLink(index: number, link?: LinkModel) {
     let url = link.url?.replace(/^https?:\/\//i, '')
     link.tags = link.tagstring ? link.tagstring.split(' ') : null
     link.favicon = `https://www.google.com/s2/favicons?domain=${url}&sz=512`
-    linkstore.editUserLink(link).then((response) => {
+    editUserLink(link).then((response) => {
       if (!response.data.error) {
         show.value = null
       }
@@ -41,20 +61,22 @@ function editLink(index: number, link?: LinkModel) {
 }
 
 const filteredLinks: ComputedRef<LinkModel[]> = computed(() => {
-  let list: LinkModel[] = linkstore.filteredList
-  list = list.map((link) => {
+  let links: LinkModel[] = filteredList.value
+  links = links.map((link) => {
     const id = link.id
     link = link.attributes
     link.id = id
     return link
   })
-  return list
+  return links
 })
 </script>
 
 <template>
   <main>
-    <div class="links" v-if="linkstore.filteredList.length !== 0">
+    <MediaSearchBar v-model="mediaSearch" :placeholder="'Search links'" :component="MediaSearch"/>
+    <LinkNewComponent />
+    <div class="links" v-if="filteredList.length">
       <TransitionGroup name="list">
         <div class="link__switch" v-for="(link, index) of filteredLinks" :key="link.id">
           <LinkComponent

@@ -11,15 +11,15 @@ import MediaUpdateComponent from '@/components/media/MediaUpdateComponent.vue'
 import MediaFilters from '@/components/media/MediaFilters.vue'
 import MediaSearchBar from '@/components/media/MediaSearchBar.vue'
 import { watchDeep } from '@vueuse/core'
+import MediaSearch from '@/components/media/MediaSearch.vue'
 // import MediaPagination from '@/components/media/MediaPagination.vue'
 
 const route = useRoute()
-const { filteredList, count, pagination } = storeToRefs(useMediaStore())
-const { getMediaByUser, updateSearch, getFilteredMediaByUser } = useMediaStore()
+const { filteredList, count, pagination, mediaSearch } = storeToRefs(useMediaStore())
+const { getMediaByUser, getFilteredMediaByUser } = useMediaStore()
 const { loading } = storeToRefs(useLoadingStore())
 
 const show: Ref<number | null> = ref(null)
-let search = ref('')
 
 onMounted(() => {
   if (
@@ -48,10 +48,9 @@ const filteredMedia: ComputedRef<MediaModel[]> = computed(() => {
   })
 })
 
-watch(search, () => {
-  updateSearch(search.value)
+watch(mediaSearch, () => {
   show.value = null
-  search.value.length > 0
+  mediaSearch.value.length > 0
     ? (document.documentElement.style.overflow = 'hidden')
     : (document.documentElement.style.overflow = 'auto')
 })
@@ -73,7 +72,7 @@ function editMedia(index: number) {
 
 <template>
   <main>
-    <MediaSearchBar v-model="search" />
+    <MediaSearchBar v-model="mediaSearch" :placeholder="'Search medias'" :component="MediaSearch" />
     <MediaFilters />
     <transition name="fade" mode="out-in">
       <div class="medias" v-if="loading">

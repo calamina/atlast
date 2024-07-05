@@ -1,4 +1,4 @@
-import IconWatching from '@/components/icons/IconWatching.vue'
+import IconOngoing from '@/components/icons/IconOngoing.vue'
 import IconPaused from '@/components/icons/IconPaused.vue'
 import IconCompleted from '@/components/icons/IconCompleted.vue'
 import IconDropped from '@/components/icons/IconDropped.vue'
@@ -17,8 +17,8 @@ export default [
   },
   {
     color: '#63cedc77',
-    name: 'watching',
-    component: IconWatching
+    name: 'ongoing',
+    component: IconOngoing
   },
   {
     // color: '#88888877 ',

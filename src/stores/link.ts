@@ -7,6 +7,8 @@ import { useNotificationStore } from '@/stores/notification'
 import { useUserStore } from '@/stores/user'
 
 import type { LinkModel } from '@/models/link.model'
+import strings from '@/utils/strings'
+import { errorMessage, errorsMessages } from '@/utils/error-manager'
 
 export const useLinkStore = defineStore('links', () => {
   const notification = useNotificationStore()
@@ -15,18 +17,29 @@ export const useLinkStore = defineStore('links', () => {
   const list: Ref<Array<LinkModel>> = ref([])
   const filteredList: Ref<Array<LinkModel>> = ref([])
 
+  const headers = {
+    headers: {
+      Authorization: 'Bearer ' + user.connectedUserToken
+    }
+  }
+
   async function getLinks(): Promise<any> {
     return http
-      .get<Array<any>>('/links')
+      .get<Array<any>>('/links', headers)
       .then((response: any) => {
         return response.data
       })
-      .catch((error) => notification.addNotification(error.response))
+      .catch((error) => {
+        notification.addNotification("cannot get links", strings.SAD)
+        errorsMessages(error).length ?
+          notification.addErrorsNotifications(errorsMessages(error)) :
+          notification.addErrorNotification(errorMessage(error))
+      })
   }
 
   async function getLinksByUser(user: string): Promise<any> {
     return http
-      .get<Array<any>>('links?sort=createdAt:desc')
+      .get<Array<any>>('/links?sort=createdAt:desc', headers)
       .then((response: any) => {
         const result = response.data.data.filter((link: any) => {
           return link.attributes.user === user
@@ -34,7 +47,12 @@ export const useLinkStore = defineStore('links', () => {
         list.value = result
         return result
       })
-      .catch((error) => notification.addNotification(error.response))
+      .catch((error): void => {
+        notification.addNotification("cannot get links", strings.SAD)
+        errorsMessages(error).length ?
+          notification.addErrorsNotifications(errorsMessages(error)) :
+          notification.addErrorNotification(errorMessage(error))
+      })
   }
 
   async function getFilteredLinksByUser(user: string, filters?: any): Promise<any> {
@@ -56,14 +74,17 @@ export const useLinkStore = defineStore('links', () => {
 
   async function addUserLink(link: any): Promise<any> {
     return http
-      .post(`links`, { data: link })
+      .post(`links`, { data: link }, headers)
       .then((response) => {
-        notification.addNotification('Link adde')
+        notification.addNotification('Link added', strings.HAPPY)
         getLinksByUser(user.connectedUser!.username)
         return response.data
       })
       .catch((error) => {
-        notification.addNotification(error.respons)
+        notification.addNotification("failed to add link", strings.SAD)
+        errorsMessages(error).length ?
+          notification.addErrorsNotifications(errorsMessages(error)) :
+          notification.addErrorNotification(errorMessage(error))
         return error.response
       })
   }

@@ -12,7 +12,8 @@ const router = createRouter({
       meta: {
         requiresAuth: true
       },
-      component: () => import('@/views/MediaView.vue')
+      // component: () => import('@/views/MediaView.vue')
+      component: () => import('@/views/AuthView.vue')
     },
     {
       path: '/auth',
@@ -20,7 +21,7 @@ const router = createRouter({
       component: () => import('../views/AuthView.vue')
     },
     {
-      path: '/links',
+      path: '/links/:username',
       name: 'links',
       meta: {
         requiresAuth: true

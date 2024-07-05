@@ -19,7 +19,7 @@ const emits = defineEmits(['exit'])
 const { getWikiByname } = useWiki()
 const { connectedUser } = useUserStore()
 const mediastore = useMediaStore()
-const { search } = storeToRefs(mediastore)
+const { userSearch } = storeToRefs(useUserStore())
 // const { loading } = storeToRefs(useLoadingStore())
 
 let wikiList: Ref<MediaModel[]> = ref([])
@@ -28,10 +28,10 @@ const activeMedia: Ref<MediaModel | null> = ref(null)
 const createOrUpdate: Ref<string> = ref('')
 
 watchDebounced(
-  search,
+  userSearch,
   () => {
-    activeMedia.value = null
-    search.value ? getResults(search.value) : ((wikiList.value = []), (mediaList.value = []))
+    // activeMedia.value = null
+    userSearch.value ? getResults(userSearch.value) : ((wikiList.value = []), (mediaList.value = []))
   },
   { debounce: 600, maxWait: 1200 }
 )

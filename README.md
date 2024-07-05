@@ -4,10 +4,14 @@ Personnal Knowledge Database made with Vue3 and Strapi
 ![atlast preview](atlast2.png?raw=true "Atlast preview")
 
 # IMPORTANT
-- [ ] ajout du lien dans le media
+- [ ] use css vars >:(
 - [ ] fix filter count :(
 - [ ] add user filteredlist ?
 - [ ] add confirmation dialog
+
+
+- [ ] update Links
+
 
 
 - [ ] on different user media, search user media, or mine ???

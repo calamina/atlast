@@ -20,7 +20,7 @@ export const useUserStore = defineStore('users', () => {
   const connectedUserToken: Ref<any> = ref(
     typeof storedUserToken === 'string' ? JSON.parse(storedUserToken) : null
   )
-  const search: Ref<string> = ref('')
+  const userSearch: Ref<string> = ref('')
 
   const list: Ref<Array<MediaModel>> = ref([])
   const filteredList: Ref<Array<UserModel>> = ref([])
@@ -90,13 +90,12 @@ export const useUserStore = defineStore('users', () => {
       connectedUser.value = null
       connectedUserToken.value = null
       const media = useMediaStore()
-      media.list = []
       media.filteredList = []
     })
   }
 
   function updateSearch(value: string) {
-    search.value = value
+    userSearch.value = value
   }
 
   function setAndRedirectUser(response: any, username: string, message: string): void {
@@ -119,6 +118,6 @@ export const useUserStore = defineStore('users', () => {
     list,
     filteredList,
     filters,
-    search
+    userSearch
   }
 })

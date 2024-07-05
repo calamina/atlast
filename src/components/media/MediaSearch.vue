@@ -6,7 +6,6 @@ import { watchDebounced } from '@vueuse/shared'
 import { useWiki } from '@/stores/wiki'
 import { useMediaStore } from '@/stores/media'
 import { useUserStore } from '@/stores/user'
-// import { useLoadingStore } from '@/stores/loading'
 
 import type { MediaModel } from '@/models/media.model'
 
@@ -20,8 +19,7 @@ const emits = defineEmits(['exit'])
 const { getWikiByname } = useWiki()
 const { connectedUser } = useUserStore()
 const mediastore = useMediaStore()
-const { search } = storeToRefs(mediastore)
-// const { loading } = storeToRefs(useLoadingStore())
+const { mediaSearch } = storeToRefs(mediastore)
 
 let wikiList: Ref<MediaModel[]> = ref([])
 let mediaList: Ref<MediaModel[]> = ref([])
@@ -29,10 +27,10 @@ const activeMedia: Ref<MediaModel | null> = ref(null)
 const createOrUpdate: Ref<string> = ref('')
 
 watchDebounced(
-  search,
+  mediaSearch,
   () => {
     activeMedia.value = null
-    search.value ? getResults(search.value) : ((wikiList.value = []), (mediaList.value = []))
+    mediaSearch.value ? getResults(mediaSearch.value) : ((wikiList.value = []), (mediaList.value = []))
   },
   { debounce: 600, maxWait: 1200 }
 )
@@ -81,11 +79,6 @@ function addMedia(media: MediaModel, action: string) {
             @click="addMedia(media, 'createMedia')" />
         </div>
       </div>
-      <!-- TODO : display only when request finishes -->
-      <!-- <div class="medias" v-if="!mediaList.length && !wikiList.length && !loading">
-          <p>No results</p>
-        </div> -->
-      <!-- <div class="results" v-else :key="no"> -->
       <div class="results" v-else>
         <div class="medias">
           <MediaUpdateComponent :media="activeMedia" :action="createOrUpdate" :key="activeMedia.key"

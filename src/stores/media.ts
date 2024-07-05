@@ -4,20 +4,19 @@ import type { MediaModel } from '@/models/media.model'
 import type { FilterModel } from '@/models/filter.model'
 
 import http from '@/utils/http-common'
+import { errorMessage, errorsMessages } from '@/utils/error-manager'
+import strings from '@/utils/strings'
 
 import { useNotificationStore } from '@/stores/notification'
 import { useUserStore } from '@/stores/user'
 import { useLoadingStore } from '@/stores/loading'
-import { errorMessage, errorsMessages } from '@/utils/error-manager'
-import strings from '@/utils/strings'
 
 export const useMediaStore = defineStore('media', () => {
-  const list: Ref<Array<MediaModel>> = ref([])
   const filteredList: Ref<Array<MediaModel>> = ref([])
   const count: Ref<number> = ref(0)
   const filteredCount: Ref<number> = ref(0)
   const filters: Ref<FilterModel> = ref({ sort: 'createdAt', order: 'desc' })
-  const search: Ref<string> = ref('')
+  const mediaSearch: Ref<string> = ref('')
   const pagination: Ref<{ page: number, pageCount: number }> = ref({ page: 1, pageCount: 1 });
 
   const notification = useNotificationStore()
@@ -40,13 +39,7 @@ export const useMediaStore = defineStore('media', () => {
         setLoading(false)
         return response.data.data
       })
-      .catch((error) => {
-        setLoading(false)
-        notification.addNotification("cannot get media", strings.SAD)
-        errorsMessages(error).length ?
-          notification.addErrorsNotifications(errorsMessages(error)) :
-          notification.addErrorNotification(errorMessage(error))
-      })
+      .catch((error) => manageError(error, 'failed to get media', strings.SAD))
   }
 
   async function getMediaByUser(user: string, page?: number): Promise<MediaModel[]> {
@@ -58,20 +51,12 @@ export const useMediaStore = defineStore('media', () => {
     return http
       .get<Array<any>>(query, headers)
       .then((response: any) => {
-        const result = response.data.data.filter((media: any) => media.attributes.user === user)
-        list.value = result
         count.value = response.data?.meta?.pagination?.total
         pagination.value.pageCount = response.data?.meta?.pagination?.pageCount
         setLoading(false)
-        return result
+        return response.data.data
       })
-      .catch((error) => {
-        setLoading(false)
-        notification.addNotification("cannot get media", strings.SAD)
-        errorsMessages(error).length ?
-          notification.addErrorsNotifications(errorsMessages(error)) :
-          notification.addErrorNotification(errorMessage(error))
-      })
+      .catch((error) => manageError(error, 'failed to get media', strings.SAD))
   }
 
   async function getFilteredMediaByUser(user: string, reload: boolean, page?: number): Promise<any> {
@@ -100,76 +85,36 @@ export const useMediaStore = defineStore('media', () => {
       .get<Array<any>>('medias' + filterSort, headers)
       .then((response: any) => {
         if (reload) setLoading(false)
-        const result = response.data.data.filter((media: any) => {
-          return media.attributes.user === user
-        })
-        filteredList.value = result
+        filteredList.value = response.data.data
         filteredCount.value = response.data?.meta?.pagination?.total
         pagination.value.pageCount = response.data?.meta?.pagination?.pageCount
         if (pagination.value.pageCount === 1) {
           pagination.value.page = 1
         }
-        return result
+        return response.data.data
       })
-      .catch((error) => {
-        if (reload) setLoading(false)
-        notification.addNotification("cannot get media", strings.SAD)
-        errorsMessages(error).length ?
-        notification.addErrorsNotifications(errorsMessages(error)) :
-        notification.addErrorNotification(errorMessage(error))
-      })
+      .catch((error) => manageError(error, 'failed to get media', strings.SAD))
   }
 
   async function addUserMedia(media: any): Promise<any> {
     return http
       .post(`medias`, { data: media }, headers)
-      .then((response) => {
-        notification.addNotification('media added', strings.HAPPY)
-        getFilteredMediaByUser(user.connectedUser!.username, false)
-        count.value = response.data?.meta?.pagination?.total
-        pagination.value.pageCount = response.data?.meta?.pagination?.pageCount
-        return response.data
-      })
-      .catch((error) => {
-        notification.addNotification("failed to add media", strings.SAD)
-        errorsMessages(error).length ?
-          notification.addErrorsNotifications(errorsMessages(error)) :
-          notification.addErrorNotification(errorMessage(error))
-        return error.response
-      })
+      .then(() => updateUserMedia('media added', strings.HAPPY))
+      .catch((error) => manageError(error, 'failed to add media', strings.SAD))
   }
 
   async function editUserMedia(media: any): Promise<any> {
     return http
       .put(`medias/${media.id}`, { data: media }, headers)
-      .then((response) => {
-        notification.addNotification('media edited ', strings.HAPPY)
-        getFilteredMediaByUser(user.connectedUser!.username, false)
-        return response.data
-      })
-      .catch((error) => {
-        notification.addNotification('failed to edit media', strings.SAD)
-        errorsMessages(error).length ?
-          notification.addErrorsNotifications(errorsMessages(error)) :
-          notification.addErrorNotification(errorMessage(error))
-      })
+      .then(() => updateUserMedia('media edited', strings.HAPPY))
+      .catch((error) => manageError(error, 'failed to edit media', strings.SAD))
   }
 
   async function deleteUserMedia(id: number): Promise<any> {
     return http
       .delete(`medias/${id}`, headers)
-      .then((response) => {
-        notification.addNotification('media deleted', strings.HAPPY)
-        getFilteredMediaByUser(user.connectedUser!.username, false)
-        count.value = response.data?.meta?.pagination?.total
-        pagination.value.pageCount = response.data?.meta?.pagination?.pageCount
-      })
-      .catch((error) => {
-        notification.addNotification("failed to delete media", strings.SAD)
-        errorsMessages(error).length ?
-          notification.addErrorsNotifications(errorsMessages(error)) :
-          notification.addErrorNotification(errorMessage(error))
-      })
+      .then(() => updateUserMedia('media deleted', strings.HAPPY))
+      .catch((error) => manageError(error, "failed to delete media", strings.SAD))
   }
 
   async function updateFilters(newFilters: FilterModel, user: string): Promise<any> {
@@ -186,15 +131,22 @@ export const useMediaStore = defineStore('media', () => {
     getFilteredMediaByUser(user, true)
   }
 
-  function updateSearch(value: string) {
-    search.value = value
+  function manageError(error: any, message: string, kao: string): void {
+    notification.addNotification(message, kao)
+    errorsMessages(error).length ?
+      notification.addErrorsNotifications(errorsMessages(error)) :
+      notification.addErrorNotification(errorMessage(error))
+  }
+
+  function updateUserMedia(message: string, kao: string): void {
+    notification.addNotification(message, kao)
+    getFilteredMediaByUser(user.connectedUser!.username, false)
   }
 
   return {
     pagination,
     count,
     filteredCount,
-    list,
     filteredList,
     filters,
     updateFilters,
@@ -205,7 +157,6 @@ export const useMediaStore = defineStore('media', () => {
     addUserMedia,
     editUserMedia,
     deleteUserMedia,
-    search,
-    updateSearch
+    mediaSearch,
   }
 })

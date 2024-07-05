@@ -38,7 +38,6 @@ const media: Ref<MediaModel> = ref({})
 
 onMounted(() => {
   if (props.action === 'editMedia' && route.params.username === user.connectedUser!.username) {
-    console.debug(props.media)
     media.value = {
       id: props.media?.id,
       title: props.media?.title,
@@ -53,7 +52,6 @@ onMounted(() => {
       image: props.media?.image,
       key: props.media?.key
     }
-    console.debug(media.value)
   } else
     wikiservice.getWikiByLink(props.media.key!).then((data) => {
       media.value = {

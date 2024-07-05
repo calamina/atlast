@@ -1,22 +1,26 @@
 <script setup lang="ts">
 import ActionOverlay from '@/components/ActionOverlay.vue'
-import MediaSearch from '@/components/media/MediaSearch.vue'
 import IconCancel from '@/components/icons/IconCancel.vue'
 import IconSearch from '@/components/icons/IconSearch.vue'
+import type { Component } from 'vue';
 
 const search = defineModel<string>({required: true})
+const props = defineProps<{
+  component: Component
+  placeholder: string
+}>()
 </script>
 
 <template>
   <teleport to="#menu-search">
     <div class="media__search">
-      <input type="text" name="search" v-model="search" id="search" placeholder="Search medias" autocomplete="off" />
+      <input type="text" name="search" v-model="search" id="search" :placeholder="props.placeholder" autocomplete="off" />
       <IconSearch v-if="!search.length" class="button-icon" />
       <IconCancel v-if="!!search.length" class="button-icon" @click="search = ''" />
     </div>
   </teleport>
   <transition name="search" mode="out-in">
-    <ActionOverlay v-if="!!search.length" class="overlay" :component="MediaSearch" @exit="search = ''" />
+    <ActionOverlay v-if="!!search.length" class="overlay" :component="props.component" @exit="search = ''" />
   </transition>
 </template>
 
