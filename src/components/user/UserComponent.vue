@@ -56,12 +56,12 @@ const toggleEdit = useThrottleFn(() => {
   gap: 0.75rem;
   width: 100%;
   padding: 1rem;
-  background-color: #efefef;
+  background-color: var(--background);
   border-radius: 1.5rem;
   cursor: pointer;
 
   &:hover {
-    background-color: #fff;
+    background-color: var(--white);
     .media__actions,
     .media__expand {
       display: flex;
@@ -79,7 +79,7 @@ const toggleEdit = useThrottleFn(() => {
   &__favorite {
     width: 1.1rem;
     height: 1.1rem;
-    color: #dc6389;
+    color: var(--favorite);
   }
 
   &__extract {
@@ -110,7 +110,7 @@ const toggleEdit = useThrottleFn(() => {
     padding: 0.25rem 1rem;
     width: 6rem;
     font-family: var(--font-bold);
-    background-color: #ddd;
+    background-color: var(--background-darker);
     border-radius: 1rem;
     cursor: default;
   }
@@ -127,7 +127,7 @@ const toggleEdit = useThrottleFn(() => {
   }
 
   &__action {
-    background-color: #efefef;
+    background-color: var(--background);
     width: 2.5rem;
     height: 2.5rem;
     padding: 0.55rem;
@@ -143,7 +143,7 @@ const toggleEdit = useThrottleFn(() => {
     height: 1.75rem;
     font-size: 0.9rem;
     font-family: var(--font-bold);
-    background-color: #dc956333;
+    background-color: var(--background-darker);
     border-radius: 1rem;
     padding: 0 0.5rem;
   }
@@ -159,7 +159,7 @@ const toggleEdit = useThrottleFn(() => {
     width: 1.25rem;
     height: 1.25rem;
     padding: 0;
-    color: #b97749aa;
+    color: var(--score);
   }
 }
 

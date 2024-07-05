@@ -27,10 +27,10 @@ const props = defineProps<{ media: MediaModel }>()
   cursor: pointer;
   gap: 0.5rem;
   border-radius: 1rem;
-  background-color: #fff;
+  background-color: var(--white);
 
   &:hover {
-    background-color: #efefef;
+    background-color: var(--background);
   }
   &__content {
     display: flex;

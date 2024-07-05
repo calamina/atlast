@@ -37,7 +37,7 @@ onMounted(() => {
   justify-content: center;
   border-radius: 2rem;
   height: 3rem;
-  background-color: #ddd;
+  background-color: var(--background-darker);
   background-color: var(--highlight);
 
   &__message {
@@ -56,7 +56,7 @@ onMounted(() => {
 }
 
 .error {
-  background-color: #ddd !important;
+  background-color: var(--background-darker) !important;
 }
 
 // .error {

@@ -22,8 +22,8 @@ const value = defineModel<string>({ required: true })
 <style lang="scss" scoped>
 .input {
   font-size: 1.1rem;
-  background-color: #fff;
-  color: #000;
+  background-color: var(--white);
+  color: var(--text);
   border-radius: 2rem;
   height: 3rem;
   padding: 0.25rem 1rem;
@@ -38,13 +38,12 @@ const value = defineModel<string>({ required: true })
   &__name {
     font-family: var(--font-bold);
     animation: translateIn 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
-    color: #999;
+    color: var(--active-plus);
     }
     
     &__required {
-    font-family: var(--font-bold);
-    color: #999;
-    // color: var(--highlight);
+      font-family: var(--font-bold);
+      color: var(--active-plus);
   }
 }
 

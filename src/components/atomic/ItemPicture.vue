@@ -19,7 +19,7 @@ const props = defineProps<{
   width: 5.5rem;
   filter: saturate(0);
   border-radius: 1rem;
-  background-color: #ddd;
+  background-color: var(--active);
   flex-shrink: 0;
 }
 

@@ -4,16 +4,20 @@ Personnal Knowledge Database made with Vue3 and Strapi
 ![atlast preview](atlast2.png?raw=true "Atlast preview")
 
 # IMPORTANT
-- [ ] use css vars >:(
-- [ ] fix filter count :(
-- [ ] add user filteredlist ?
-- [ ] add confirmation dialog
 
+- [ ] fix color names
+- [ ] add confirmation dialog
+- [ ] ajout filtres toggle
+- [ ] ajout user toggle ??
+- [ ] ajout indicateur librairie consultée ??
+
+- [ ] fix filter count :(
 
 - [ ] update Links
+- [ ] rework links like medias
 
-
-
+- [ ] update users
+- [ ] add user filteredlist ?
 - [ ] on different user media, search user media, or mine ???
 - [ ] on different user media, see if in my library ?
 - [ ] on different user media, add filter for common media ?
@@ -22,9 +26,6 @@ Personnal Knowledge Database made with Vue3 and Strapi
 
 - [ ] credentials not updating on new account creation :/
 - [ ] list forever loading on new account creation :/
-- [ ] rework links like medias
-- [ ] ajout filtres toggle
-- [ ] ajout user toggle
 
 # ???
 - [ ] add config panel to create new collections ? like links and media

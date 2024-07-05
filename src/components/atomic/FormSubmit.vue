@@ -21,7 +21,7 @@ const props = defineProps<{
   border-radius: 2rem;
   padding: 0.4rem 1.5rem;
   height: 3rem;
-  color: #000;
+  color: var(--text);
   background-color: var(--highlight);
 }
 </style>

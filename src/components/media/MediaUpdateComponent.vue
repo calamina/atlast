@@ -155,7 +155,7 @@ const deleteMedia = useThrottleFn((id: number) => {
   flex-flow: row;
   gap: 0.75rem;
   padding: 1rem;
-  background-color: #fff;
+  background-color: var(--white);
   border-radius: 1rem;
 
   &__content {
@@ -192,8 +192,8 @@ const deleteMedia = useThrottleFn((id: number) => {
 
   &__tags {
     padding: 0.5rem 1rem;
-    background-color: #efefef;
-    color: #323232;
+    background-color: var(--background);
+    color: var(--text);
     border-radius: 1rem;
     width: 100%;
     font-size: 0.85rem;
@@ -215,13 +215,13 @@ const deleteMedia = useThrottleFn((id: number) => {
   }
 
   &__cancel {
-    background-color: #efefef;
+    background-color: var(--background);
     border-radius: 100%;
   }
 }
 
 .love {
-  color: #dc6389;
+  color: var(--favorite);
 }
 
 .choices {
@@ -236,26 +236,26 @@ const deleteMedia = useThrottleFn((id: number) => {
     padding: 0.1rem 1rem 0.2rem;
     height: 2rem;
     border-radius: 1rem;
-    color: #999;
-    background-color: #efefef;
+    color: var(--active-plus);
+    background-color: var(--background);
   }
 
   & .active {
     background-color: var(--highlight);
-    color: #323232;
+    color: var(--text);
   }
 
   & .rating-icon {
     width: 2.2rem;
     height: 2.2rem;
-    color: #999;
+    color: var(--active-plus);
     border-radius: 100%;
-    background-color: #efefef;
+    background-color: var(--background);
   }
 
   & .iconActive {
-    color: #b97749;
-    background-color: #dc956366;
+    color: var(--score);
+    background-color: var(--score-background);
   }
 }
 

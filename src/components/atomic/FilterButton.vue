@@ -23,7 +23,7 @@ const props = defineProps<{
   border-radius: 2rem;
 
   &Selected {
-    background-color: #fff;
+    background-color: var(--white);
   }
 
   &__name {

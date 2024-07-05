@@ -106,7 +106,7 @@ main {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #fff;
+  background-color: var(--white);
   width: fit-content;
   padding: 0 0.5rem;
   border-radius: 3rem;

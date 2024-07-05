@@ -23,7 +23,7 @@ h3 {
   font-weight: 400;
   font-size: 1rem;
   font-family: 'contax_pro_66_med_italicIt', 'Arial', sans-serif;
-  color: #999;
+  color: var(--active-plus);
   padding: 0 1rem;
 }
 </style>

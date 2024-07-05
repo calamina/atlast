@@ -5,9 +5,15 @@ import MenuBar from '@/components/MenuBar.vue'
 import ElementTooltip from './components/atomic/ElementTooltip.vue';
 import { useTooltipStore } from './stores/tooltip';
 import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
+import { useFavicon } from '@vueuse/core';
 
 const { notifications } = useNotificationStore()
 const {tooltip} = storeToRefs(useTooltipStore())
+
+onMounted(() => 
+  useFavicon("../public/atlast.svg")
+)
 </script>
 
 <template>

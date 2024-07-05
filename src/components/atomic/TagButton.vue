@@ -16,10 +16,10 @@ const props = defineProps<{
   height: 1.75rem;
   font-size: 0.9rem;
   padding: 0.25rem 1rem 0.4rem;
-  background-color: #ddd;
+  background-color: var(--active);
   width: fit-content;
   font-family: var(--font-bold);
-  color: #777;
+  color: var(--text-light);
   border-radius: 1rem;
   font-size: 0.85rem;
   &::before {
@@ -28,6 +28,6 @@ const props = defineProps<{
 }
 
 .tagSelected {
-  background-color: #fff;
+  background-color: var(--white);
 }
 </style>

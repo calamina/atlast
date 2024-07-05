@@ -31,7 +31,7 @@ button {
     justify-content: center;
     height: 2rem;
     width: 2rem;
-    background-color: #ddd;
+    background-color: var(--background-darker);
     border-radius: 2rem;
     
     &:disabled {

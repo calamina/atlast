@@ -98,7 +98,7 @@ function addMedia(media: MediaModel, action: string) {
 }
 
 .background__media {
-  background-color: #fff;
+  background-color: var(--white);
 }
 
 .results {
@@ -107,7 +107,7 @@ function addMedia(media: MediaModel, action: string) {
   flex-flow: column;
   align-items: center;
   gap: 0.5rem;
-  background-color: #efefef;
+  background-color: var(--background);
   overflow-y: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -128,7 +128,7 @@ function addMedia(media: MediaModel, action: string) {
 
 .media-small {
   padding: 0.5rem;
-  background-color: #fff;
+  background-color: var(--white);
   gap: 0.25rem;
 }
 

@@ -22,7 +22,7 @@
   gap: 0.75rem;
   padding: 1rem;
   border-radius: 1.5rem;
-  background-color: #eeeeee;
+  background-color: var(--background);
   transform-origin: left;
   animation: enter 0.3s ease-in-out;
 
@@ -30,22 +30,22 @@
     height: 5.5rem;
     width: 5.5rem;
     border-radius: 1rem;
-    background-color: #ddd;
+    background-color: var(--background-darker);
   }
   &__title {
     width: 10rem;
     height: 1.75rem;
-    background-color: #ddd;
+    background-color: var(--background-darker);
   }
   &__description {
     width: 15rem;
     height: 1.25rem;
-    background-color: #ddd;
+    background-color: var(--background-darker);
   }
   &__categ {
     height: 1.75rem;
     width: 6rem;
-    background-color: #ddd;
+    background-color: var(--background-darker);
     border-radius: 1rem;
   }
 
@@ -67,7 +67,7 @@
     width: 1.5rem;
     padding: 0.25rem;
     border-radius: 1rem;
-    background-color: #ddd;
+    background-color: var(--background-darker);
   }
 }
 

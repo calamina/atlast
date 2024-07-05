@@ -86,7 +86,7 @@ nav {
   justify-content: center;
   border-radius: 2rem;
   height: 3rem;
-  background-color: #ddd;
+  background-color: var(--background-darker);
   transition: filter 0.3s;
   transition: background-color 0.2s;
   text-decoration: none;
@@ -95,14 +95,13 @@ nav {
     padding-right: 1rem;
     padding-bottom: 0.15rem;
     font-family: var(--font-bold);
-    color: #343434;
+    color: var(--text);
   }
 }
 
 .router-link-active,
 .type:hover {
   background-color: var(--highlight);
-  color: #000;
 }
 
 .user {
@@ -125,7 +124,7 @@ nav {
 
   &__info {
     display: flex;
-    background-color: #ddd;
+    background-color: var(--background-darker);
     border-radius: 2rem;
     padding: 0 1.5rem 0 0.25rem;
   }
@@ -134,7 +133,7 @@ nav {
     padding-right: 1rem;
     gap: 1rem;
     .button-icon {
-      background-color: #fff;
+      background-color: var(--white);
       border-radius: 2rem;
     }
   }
@@ -155,7 +154,7 @@ nav {
     height: 3rem;
     display: flex;
     align-items: center;
-    background-color: #fff;
+    background-color: var(--white);
     font-family: var(--font-bold);
     border-radius: 2rem;
     padding: 0 2rem;
@@ -169,7 +168,7 @@ nav {
 }
 
 .menu-icon {
-  background-color: #ddd;
+  background-color: var(--background-darker);
   border-radius: 2rem;
   padding: 0.25rem;
   position: relative;
@@ -202,7 +201,7 @@ nav {
   .user__actions {
     height: 3rem;
     width: 3rem;
-    background-color: #fff;
+    background-color: var(--white);
     justify-content: center;
     padding-right: 0;
     border-radius: 2rem;

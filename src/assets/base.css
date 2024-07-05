@@ -5,13 +5,7 @@
   font-style: normal;
   font-display: swap;
 }
-/* @font-face {
-  font-family: 'contax_pro_75_boldregular';
-  src: url('/src/assets/fonts/contaxBold.OTF');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-} */
+
 @font-face {
   font-family: 'contax_pro_66_med_italicIt';
   src: url('/src/assets/fonts/contaxItalic.otf');
@@ -20,53 +14,59 @@
   font-display: swap;
 }
 
-/* @font-face {
-  font-family: 'contax_pro_55regular';
-  src: url('/src/assets/fonts/contax-webfont.woff2') format('woff2'),
-       url('/src/assets/fonts/contax-webfont.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-} */
-
 @font-face {
   font-family: 'contax_pro_75_boldregular';
   src: url('/src/assets/fonts/contaxbold-webfont.woff2') format('woff2'),
-       url('/src/assets/fonts/contaxbold-webfont.woff') format('woff');
+    url('/src/assets/fonts/contaxbold-webfont.woff') format('woff');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
 }
 
-/* @font-face {
-  font-family: 'contax_pro_66_med_italicIt';
-  src: url('/src/assets/fonts/contaxitalic-webfont.woff2') format('woff2'),
-       url('/src/assets/fonts/contaxitalic-webfont.woff') format('woff');
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-} */
-
 :root {
-  --background: #ccc;
+  --white: #fff;
+
+  --background: #efefef;
+  --background-transparent: #efefefdd;
+
+  --background-darker: #ddd;
   --active: #ddd;
   --active-plus: #999;
+  --text-light: #666;
   --text: #323232;
+
   --highlight: #dfcfe8;
+  --favorite: #dc6389;
+  --score: #b97749cc;
+  --score-background: #dc956344;
   --font-italic: 'contax_pro_66_med_italicIt', Arial, sans-serif;
   --font-bold: 'contax_pro_75_boldregular', Arial, sans-serif;
 }
 
-p, a, h1, h2, h3, h4, span, label, input, button, select, textarea {
+p,
+a,
+h1,
+h2,
+h3,
+h4,
+span,
+label,
+input,
+button,
+select,
+textarea {
   font-family: 'contax_pro_55regular', Arial, sans-serif;
   color: var(--text);
 }
 
 html {
-  background-color: #efefef;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  background-color: var(--background);
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
+
 html::-webkit-scrollbar {
   display: none;
 }
@@ -74,9 +74,6 @@ html::-webkit-scrollbar {
 #app {
   width: 100%;
   margin: 0;
-  /* background-color: var(--background); */
-  /* background-color: #fff; */
-  /* background-color: #efefef; */
   min-height: 100vh;
   display: flex;
   flex-flow: column;
@@ -89,12 +86,6 @@ button {
   outline: none;
   background-color: transparent;
   cursor: pointer;
-}
-
-.button--main {
-  background-color: #c0a6cd;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
 }
 
 .button-icon {
@@ -116,7 +107,11 @@ input:autofill {
   padding: 0rem;
 }
 
-input[type="text"], input[type="password"], input[type="date"], textarea, select {
+input[type="text"],
+input[type="password"],
+input[type="date"],
+textarea,
+select {
   width: 100%;
   border: none;
   outline: none;

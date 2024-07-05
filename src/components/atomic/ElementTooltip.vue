@@ -18,8 +18,8 @@ p {
     width: fit-content;
     left: v-bind('x + 20 + "px"');
     top: v-bind('y - 15 + "px"');
-    background-color: #ddd;
-    color: #666;
+    background-color: var(--background-darker);
+    color: var(--text-light);
     font-size: 0.9rem;
     font-family: var(--font-bold);
     padding: 0.25rem 1.25rem 0.4rem;
