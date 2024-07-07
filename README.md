@@ -6,7 +6,6 @@ Personnal Knowledge Database made with Vue3 and Strapi
 # IMPORTANT
 
 - [ ] fix color names
-- [ ] add confirmation dialog
 - [ ] ajout filtres toggle
 - [ ] ajout user toggle ??
 - [ ] ajout indicateur librairie consultée ??

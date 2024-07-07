@@ -5,15 +5,12 @@ import MenuBar from '@/components/MenuBar.vue'
 import ElementTooltip from './components/atomic/ElementTooltip.vue';
 import { useTooltipStore } from './stores/tooltip';
 import { storeToRefs } from 'pinia';
-import { onMounted } from 'vue';
-import { useFavicon } from '@vueuse/core';
+import ConfirmationComponent from './components/ConfirmationComponent.vue';
+import { useConfirmStore } from './stores/confirm';
 
 const { notifications } = useNotificationStore()
 const {tooltip} = storeToRefs(useTooltipStore())
-
-onMounted(() => 
-  useFavicon("../public/atlast.svg")
-)
+const { isRevealed } = storeToRefs(useConfirmStore())
 </script>
 
 <template>
@@ -25,4 +22,5 @@ onMounted(() =>
     <component :is="Component" />
   </router-view>
   <ElementTooltip v-if="tooltip" />
+  <ConfirmationComponent v-if="isRevealed" />
 </template>

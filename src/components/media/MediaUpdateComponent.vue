@@ -21,11 +21,13 @@ import IconRating from '../icons/IconRating.vue'
 import IconDelete from '@/components/icons/IconDelete.vue'
 import IconLikeFull from '@/components/icons/IconLikeFull.vue'
 import mediaCategs from '@/utils/media-categs'
+import { useConfirmStore } from '@/stores/confirm'
 
 const route = useRoute()
 const user = useUserStore()
 const mediastore = useMediaStore()
 const wikiservice = useWiki()
+const { confirmOrCancel } = useConfirmStore()
 
 const props = defineProps<{
   media: MediaModel
@@ -84,9 +86,14 @@ const editMedia = useThrottleFn((media?: MediaModel) => {
 }, 500)
 
 const deleteMedia = useThrottleFn((id: number) => {
-  mediastore
-    .deleteUserMedia(id)
-    .then(() => emits('cancel'))
+  confirmOrCancel('Are you sure you want to delete this media ?')
+    .then((confirm: boolean) => {
+      if (confirm) {
+        mediastore
+          .deleteUserMedia(id)
+          .then(() => emits('cancel'))
+      }
+    })
 }, 500)
 </script>
 <template>
