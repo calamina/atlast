@@ -17,7 +17,9 @@ const { connectedUser } = storeToRefs(useUserStore())
       <!-- <p class="user__name">{{ connectedUser?.username }}'s library</p> -->
       <div class="types">
         <router-link class="type" :to="{ name: 'media', params: { username: connectedUser.username } }">
-          <div class="button-icon"><IconGlobe /></div>
+          <div class="button-icon">
+            <IconGlobe />
+          </div>
           <span>media</span>
         </router-link>
         <!-- <router-link class="type" :to="{ name: 'links', params: { username: connectedUser.username } }">
@@ -45,7 +47,9 @@ const { connectedUser } = storeToRefs(useUserStore())
     <div class="user" v-if="connectedUser">
       <div class="menu-icon">
         <p>{{ connectedUser.username }}</p>
-        <div class="button-icon"><IconUser /></div>
+        <div class="button-icon">
+          <IconUser />
+        </div>
       </div>
       <div class="user__actions">
         <button class="button-icon" type="button" @click="logout()">
@@ -58,6 +62,9 @@ const { connectedUser } = storeToRefs(useUserStore())
 
 <style lang="scss" scoped>
 nav {
+  position: sticky;
+  top: 0;
+  z-index: 500;
   width: 100vw;
   margin: 0 auto;
   padding: 1rem 0 1rem 1rem;
@@ -67,6 +74,8 @@ nav {
   display: grid;
   overflow: hidden;
   grid-template-columns: 1fr 1fr 1fr;
+  // backdrop-filter: blur(5px);
+  // -webkit-backdrop-filter: blur(5px)
 }
 
 .submenu {
@@ -90,7 +99,7 @@ nav {
   transition: filter 0.3s;
   transition: background-color 0.2s;
   text-decoration: none;
-  
+
   span {
     padding-right: 1rem;
     padding-bottom: 0.15rem;
@@ -132,6 +141,7 @@ nav {
   &__actions {
     padding-right: 1rem;
     gap: 1rem;
+
     .button-icon {
       background-color: var(--white);
       border-radius: 2rem;
@@ -198,6 +208,7 @@ nav {
   .user {
     transform: translateX(0);
   }
+
   .user__actions {
     height: 3rem;
     width: 3rem;

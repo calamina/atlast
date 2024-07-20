@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{
   title: string | null
+  size: boolean
   // url: string | null
 }>()
 </script>
@@ -11,7 +12,7 @@ const props = defineProps<{
     <slot />
   </a> -->
   <div v-if="props.title" class="title">
-    <h2>{{ props.title }}</h2>
+    <h2 :class="{smallTitle: !props.size}">{{ props.title }}</h2>
     <slot />
   </div>
 </template>
@@ -33,6 +34,10 @@ h2 {
   font-family: var(--font-bold);
   text-transform: capitalize;
   text-decoration: none;
-  color: black;
+  color: var(--text);
+
+  &.smallTitle {
+    font-size: 1.2rem;
+  }
 }
 </style>

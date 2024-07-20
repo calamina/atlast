@@ -1,28 +1,35 @@
 <script setup lang="ts">
 import { useMediaStore } from '@/stores/media';
 import { storeToRefs } from 'pinia';
-import IconPlus from '../icons/IconPlus.vue';
-import IconMinus from '../icons/IconMinus.vue';
+import IconBottom from '../icons/IconBottom.vue';
+import IconTop from '../icons/IconTop.vue';
 
 const { pagination } = storeToRefs(useMediaStore())
 </script>
 
 <template>
     <div>
-        <button :disabled="pagination.page === 1" @click="pagination.page--"><IconMinus /></button>
-        <p>{{ pagination.page }} / {{ pagination.pageCount }}</p>
-        <button :disabled="pagination.page === pagination.pageCount" @click="pagination.page++"><IconPlus /></button>
+        <button :disabled="pagination.page === 1" @click="pagination.page--"><IconTop /></button>
+        <p>{{ pagination.page }}/{{ pagination.pageCount }}</p>
+        <button :disabled="pagination.page === pagination.pageCount" @click="pagination.page++"><IconBottom /></button>
     </div>
 </template>
 
 <style lang="scss" scoped>
 div {
-    padding-top: 2rem;
     display: flex;
+    flex-flow: column;
     width: 100%;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
+    gap: 0.25rem;
+    padding: .25rem 0;
+    background-color: var(--background-darker);
+    // border-radius: 2rem;
+    border-bottom-left-radius: 2rem;
+    border-bottom-right-radius: 2rem;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
 }
 
 button {
@@ -31,11 +38,8 @@ button {
     justify-content: center;
     height: 2rem;
     width: 2rem;
-    background-color: var(--background-darker);
-    border-radius: 2rem;
     
     &:disabled {
-        background-color: transparent;
         opacity: 0.5;
         cursor: default;
     }
@@ -45,5 +49,6 @@ p {
     font-family: var(--font-bold);
     opacity: 0.5;
     padding-bottom: 0.2rem;
+    // font-size: 0.9rem;
 }
 </style>

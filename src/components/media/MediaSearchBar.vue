@@ -45,6 +45,7 @@ const props = defineProps<{
     border-radius: 3rem;
     height: 3rem;
     font-family: var(--font-bold);
+    background-color: var(--white);
   }
 
   .button-icon {

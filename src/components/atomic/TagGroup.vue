@@ -5,7 +5,7 @@ const props = defineProps<{
 }>()
 </script>
 <template>
-  <div class="tags" :class="{ tagsHeight: maxHeight }">
+  <div class="tags" :class="{ tagsHeight: props.maxHeight }">
     <slot />
   </div>
 </template>

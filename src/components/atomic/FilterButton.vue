@@ -16,7 +16,7 @@ const props = defineProps<{
 <style scoped lang="scss">
 .filter {
   padding: 0.35rem 1.25rem;
-  width: 15rem;
+  // width: 15rem;
   display: flex;
   align-items: center;
   justify-content: space-between;

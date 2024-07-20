@@ -12,7 +12,7 @@ import type { MediaModel } from '@/models/media.model'
 import actions from '@/utils/media-actions'
 
 import IconEdit from '@/components/icons/IconEdit.vue'
-import IconPlus from '@/components/icons/IconPlus.vue'
+// import IconPlus from '@/components/icons/IconPlus.vue'
 import IconLikeFull from '@/components/icons/IconLikeFull.vue'
 import IconRating from '../icons/IconRating.vue'
 
@@ -22,10 +22,12 @@ import ItemPicture from '@/components/atomic/ItemPicture.vue'
 import TagButton from '@/components/atomic/TagButton.vue'
 import TagGroup from '@/components/atomic/TagGroup.vue'
 import IconLink from '../icons/IconLink.vue'
+import { useStateStore } from '@/stores/state'
 
 const route = useRoute()
 const { connectedUser } = storeToRefs(useUserStore())
 const { setTooltip, resetTooltip } = useTooltipStore()
+const { size } = storeToRefs(useStateStore())
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emits = defineEmits(['enableEdit'])
@@ -55,11 +57,12 @@ function formatDate(created?: Date, updated?: Date) : string {
 </script>
 
 <template>
-  <div class="media" v-if="media.id" @click="expanded = !expanded">
-    <ItemPicture :src="media.thumbnail ?? null" :small="false" />
+  <div class="media" :class="{mediaSmall: !size}" v-if="media.id" @click="expanded = !expanded">
+    <!-- <ItemPicture :src="media.thumbnail ?? null" :small="false" /> -->
+    <ItemPicture v-if="size" :src="media.thumbnail ?? null" :small="false" />
     <div class="media__content">
       <!-- <ItemTitle :title="media.title ?? null" :url="media.url ?? null"> -->
-      <ItemTitle :title="media.title ?? null">
+      <ItemTitle :title="media.title ?? null" :size="size">
         <IconLikeFull class="media__favorite" v-if="media.like" />
       </ItemTitle>
       <ItemDescription :description="media.description ?? null" />
@@ -69,7 +72,7 @@ function formatDate(created?: Date, updated?: Date) : string {
         </TagGroup>
         <p class="media__extract" v-if="expanded">{{ media.extract }}</p>
       </TransitionGroup>
-      <div class="media__footer">
+      <div class="media__footer" v-if="size">
         <component class="media__status" :is="status!.component" :style="{ backgroundColor: status!.color }"
           @mouseover="setTooltip(status!.name + ' — ' + formatDate(media.createdAt, media.updatedAt))" @mouseleave="resetTooltip()" />
         <p class="media__categ">
@@ -109,6 +112,12 @@ function formatDate(created?: Date, updated?: Date) : string {
   background-color: var(--background);
   border-radius: 1.5rem;
   cursor: pointer;
+
+  &.mediaSmall {
+    padding: 0.25rem 1rem 0.5rem;
+    border-radius: 1rem;
+    // font-size: 0.8rem;
+  }
 
   &:hover {
     background-color: var(--white);

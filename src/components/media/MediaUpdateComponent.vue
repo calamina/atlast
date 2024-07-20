@@ -22,12 +22,15 @@ import IconDelete from '@/components/icons/IconDelete.vue'
 import IconLikeFull from '@/components/icons/IconLikeFull.vue'
 import mediaCategs from '@/utils/media-categs'
 import { useConfirmStore } from '@/stores/confirm'
+import { storeToRefs } from 'pinia'
+import { useStateStore } from '@/stores/state'
 
 const route = useRoute()
 const user = useUserStore()
 const mediastore = useMediaStore()
 const wikiservice = useWiki()
 const { confirmOrCancel } = useConfirmStore()
+const { size } = storeToRefs(useStateStore())
 
 const props = defineProps<{
   media: MediaModel
@@ -97,10 +100,10 @@ const deleteMedia = useThrottleFn((id: number) => {
 }, 500)
 </script>
 <template>
-  <div class="media" v-if="media">
-    <ItemPicture :src="media.image ?? null" :small="false" />
+  <div class="media" :class="{mediaSmall: !size}" v-if="media">
+    <ItemPicture :src="media.image ?? null" :small="false" v-if="size" />
     <div class="media__content">
-      <ItemTitle :title="media.title ?? null" />
+      <ItemTitle :title="media.title ?? null" :size="size" />
       <!-- <ItemTitle :title="media.title ?? null" :url="media.url ?? null" /> -->
       <ItemDescription :description="media.description ?? null" />
       <p class="media__extract">{{ media.extract }}</p>
@@ -112,7 +115,7 @@ const deleteMedia = useThrottleFn((id: number) => {
         <div class="choices">
           <button v-for="action in actions" type="button" class="rating" :key="action.name"
             @click="media.action = action.name" :style="{
-              backgroundColor: media.action === action.name ? action.color : '#efefef'
+              backgroundColor: media.action === action.name ? action.color : 'var(--background)'
             }" :class="{ active: media.action === action.name }">
             {{ action.name }}
           </button>
@@ -164,6 +167,27 @@ const deleteMedia = useThrottleFn((id: number) => {
   padding: 1rem;
   background-color: var(--white);
   border-radius: 1rem;
+
+  &.mediaSmall {
+    padding: 0.25rem 1rem 1rem;
+    border-radius: 1rem;
+    // font-size: 0.8rem;
+
+    .media__extract {
+      padding-bottom: 0.25rem;
+    }
+    .media__form {
+      gap: 0.25rem;
+    }
+    .rating, .media__tags, .media__footer {
+      height: 2rem;
+    }
+    .media__actions button {
+      height: 2rem;
+      width: 2rem;
+      padding: 0.3rem;
+    }
+  }
 
   &__content {
     display: flex;

@@ -5,6 +5,27 @@ Personnal Knowledge Database made with Vue3 and Strapi
 
 # IMPORTANT
 
+- [ ] try search in action bar (not convinced)
+- [ ] display library user in search bar if not me !!! (add name in placeholder ? colored)
+- [ ] add active state to actions (colors ? bg ?)
+- [ ] better page number for pagination
+- [ ] move actions to component
+- [ ] when adding / deleting media stay on current page
+
+- [ ] clean filter (css + html)
+- [ ] filter categs -> icons ???
+- [ ] check search > type seems to reset results ???
+- [ ] disable / hide menu elements when searching
+- [ ] search shortcut !!
+- [ ] media + update check if store is better than input for size
+
+
+- [ ] grid ?? : new display cause can't edit on place ://
+- [ ] State store registered localstorage
+- [ ] delete right extra cols on small screens
+
+- [ ] All media count doesn't update (add/delete)
+
 - [ ] fix color names
 - [ ] ajout filtres toggle
 - [ ] ajout user toggle ??

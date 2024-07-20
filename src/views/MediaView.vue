@@ -12,12 +12,19 @@ import MediaFilters from '@/components/media/MediaFilters.vue'
 import MediaSearchBar from '@/components/media/MediaSearchBar.vue'
 import { watchDeep } from '@vueuse/core'
 import MediaSearch from '@/components/media/MediaSearch.vue'
+import { useStateStore } from '@/stores/state'
+import IconDisplay from '@/components/icons/IconDisplay.vue'
+import IconDetail from '@/components/icons/IconDetail.vue'
+import IconFilters from '@/components/icons/IconFilters.vue'
+import MediaPagination from '@/components/media/MediaPagination.vue'
 // import MediaPagination from '@/components/media/MediaPagination.vue'
 
 const route = useRoute()
 const { filteredList, count, pagination, mediaSearch } = storeToRefs(useMediaStore())
 const { getMediaByUser, getFilteredMediaByUser } = useMediaStore()
 const { loading } = storeToRefs(useLoadingStore())
+const { toggleSize, toggleSidebar } = useStateStore()
+const { sidebar } = storeToRefs(useStateStore())
 
 const show: Ref<number | null> = ref(null)
 
@@ -74,6 +81,19 @@ function editMedia(index: number) {
   <main>
     <MediaSearchBar v-model="mediaSearch" :placeholder="'Search medias'" :component="MediaSearch" />
     <MediaFilters />
+    <div class="actionBar">
+      <div class="actions">
+        <div class="actions-display">
+          <button class="button-icon" @click="toggleSize()">
+            <IconDetail />
+          </button>
+          <button class="button-icon" @click="toggleSidebar()">
+            <IconFilters />
+          </button>
+        </div>
+        <MediaPagination v-if="pagination.pageCount > 1" />
+      </div>
+    </div>
     <transition name="fade" mode="out-in">
       <div class="medias" v-if="loading">
         <!-- <MediaMock v-for="i of filteredList?.length" :key="i" /> -->
@@ -81,20 +101,9 @@ function editMedia(index: number) {
       </div>
       <div class="medias" v-else-if="filteredList?.length !== 0">
         <div class="media__switch" v-for="(media, index) of filteredMedia" :key="media.id">
-          <MediaComponent
-            v-if="show !== index"
-            :media="media"
-            :key="media.id"
-            @enableEdit="editMedia(index)"
-          />
-          <MediaUpdateComponent
-            v-else
-            :media="media"
-            :action="'editMedia'"
-            :key="media.key"
-            @confirm="editMedia(index)"
-            @cancel="editMedia(index)"
-          />
+          <MediaComponent v-if="show !== index" :media="media" :key="media.id" @enableEdit="editMedia(index)" />
+          <MediaUpdateComponent v-else :media="media" :action="'editMedia'" :key="media.key" @confirm="editMedia(index)"
+            @cancel="editMedia(index)" />
         </div>
       </div>
       <div class="medias" v-else>
@@ -112,11 +121,38 @@ main {
   width: 100vw;
   padding: 1rem 0;
   scrollbar-width: none;
-  display: flex;
   justify-content: center;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 2rem;
+  grid-template-columns: 1fr 2.5rem 1fr 2.5rem 1fr;
+  gap: 3rem;
+}
+
+.actionBar {
+  position: relative;
+  display: flex;
+  flex-flow: column;
+}
+
+.actions {
+  position: fixed;
+  top: 7rem;
+  display: flex;
+  flex-flow: column;
+  gap: 0.25rem;
+  height: fit-content;
+  border-radius: 2rem;
+  // background-color: #fff;
+  padding: 0.25rem;
+}
+
+.actions-display {
+  padding: .25rem 0;
+  background-color: var(--background-darker);
+  // border-radius: 2rem;
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
 }
 
 .medias {
@@ -124,7 +160,9 @@ main {
   flex-flow: column;
   align-items: center;
   gap: 0.25rem;
-  width: 45rem;
+  flex: 1;
+  min-width: 40vw;
+  // width: fit-content;
 
   p {
     padding-top: 2rem;
@@ -136,13 +174,17 @@ main {
 .media__switch {
   display: flex;
   flex-flow: column;
-  width: 45rem;
+  width: 100%;
   gap: 0.25rem;
 }
 
 @media (max-width: 1250px) {
   main {
     grid-template-columns: 1fr;
+  }
+
+  .actionBar {
+    display: none;
   }
 
   .media__switch,

@@ -16,6 +16,7 @@ const props = defineProps<{
   display: flex;
   flex-flow: column;
   border-radius: 1rem;
+  width: 100%;
 }
 
 h3 {
