@@ -5,6 +5,9 @@ Personnal Knowledge Database made with Vue3 and Strapi
 
 # IMPORTANT
 
+- [ ] separate small from no picture mode (add picture mode to state !)
+- [ ] smaller search in small mode
+
 - [ ] try search in action bar (not convinced)
 - [ ] display library user in search bar if not me !!! (add name in placeholder ? colored)
 - [ ] add active state to actions (colors ? bg ?)

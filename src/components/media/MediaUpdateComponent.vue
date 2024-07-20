@@ -30,7 +30,7 @@ const user = useUserStore()
 const mediastore = useMediaStore()
 const wikiservice = useWiki()
 const { confirmOrCancel } = useConfirmStore()
-const { size } = storeToRefs(useStateStore())
+const { displaySmall, displayImages } = storeToRefs(useStateStore())
 
 const props = defineProps<{
   media: MediaModel
@@ -100,10 +100,10 @@ const deleteMedia = useThrottleFn((id: number) => {
 }, 500)
 </script>
 <template>
-  <div class="media" :class="{mediaSmall: !size}" v-if="media">
-    <ItemPicture :src="media.image ?? null" :small="false" v-if="size" />
+  <div class="media" :class="{mediaSmall: displaySmall}" v-if="media">
+    <ItemPicture :src="media.image ?? null" :small="displaySmall" v-if="displayImages" />
     <div class="media__content">
-      <ItemTitle :title="media.title ?? null" :size="size" />
+      <ItemTitle :title="media.title ?? null" :small="displaySmall" />
       <!-- <ItemTitle :title="media.title ?? null" :url="media.url ?? null" /> -->
       <ItemDescription :description="media.description ?? null" />
       <p class="media__extract">{{ media.extract }}</p>
@@ -169,7 +169,7 @@ const deleteMedia = useThrottleFn((id: number) => {
   border-radius: 1rem;
 
   &.mediaSmall {
-    padding: 0.25rem 1rem 1rem;
+    padding: 0.5rem;
     border-radius: 1rem;
     // font-size: 0.8rem;
 

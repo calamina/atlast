@@ -20,7 +20,7 @@ const route = useRoute()
 
 const emits = defineEmits(['refreshList'])
 const mediastore = useMediaStore()
-const { sidebar } = storeToRefs(useStateStore())
+const { displaySidebar } = storeToRefs(useStateStore())
 const { setTooltip, resetTooltip } = useTooltipStore()
 
 const filters: Ref<FilterModel> = ref({ sort: 'createdAt', order: 'asc' })
@@ -47,7 +47,7 @@ function updateFilters(property: any, value: string | boolean | null) {
 
 <template>
   <div class="filter-wrapper">
-    <div class="filters" v-if="!!mediastore.count && sidebar">
+    <div class="filters" v-if="!!mediastore.count && displaySidebar">
       <FilterGroup :title="''">
         <FilterButton :selected="mediastore.filteredCount === mediastore.count" :name="'All'" :info="mediastore.count"
           @click="mediastore.resetFilters((route.params.username) as string)" />

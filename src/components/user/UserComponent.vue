@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import { useThrottleFn, useDateFormat } from '@vueuse/core'
+import { useThrottleFn } from '@vueuse/core'
 
 import type { UserModel } from '@/models/user.model'
 
 import IconPlus from '@/components/icons/IconPlus.vue'
-import IconLikeFull from '@/components/icons/IconLikeFull.vue'
 
 import ItemTitle from '@/components/atomic/ItemTitle.vue'
 import ItemDescription from '@/components/atomic/ItemDescription.vue'
-import ItemPicture from '@/components/atomic/ItemPicture.vue'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emits = defineEmits(['enableEdit'])
@@ -26,17 +24,10 @@ const toggleEdit = useThrottleFn(() => {
     v-if="user.id"
     :to="{ name: 'media', params: { username: user.username } }"
   >
-    <!-- <ItemPicture :src="user.thumbnail ?? null" :small="false" /> -->
     <div class="media__content">
       <ItemTitle :title="user.username ?? null">
-        <!-- <IconLikeFull class="media__favorite" v-if="user.like" /> -->
       </ItemTitle>
       <ItemDescription :description="'heyo :)' ?? null" />
-      <!-- <div class="media__footer">
-        <p class="media__categ">
-          {{ useDateFormat(user.createdAt, 'DD/MM/YY') }}
-        </p>
-      </div> -->
     </div>
     <div class="media__actions">
       <button class="button-icon media__action" type="button" @click="toggleEdit">

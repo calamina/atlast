@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{
   title: string | null
-  size: boolean
+  small?: boolean
   // url: string | null
 }>()
 </script>
@@ -11,8 +11,8 @@ const props = defineProps<{
     {{ props.title }}
     <slot />
   </a> -->
-  <div v-if="props.title" class="title">
-    <h2 :class="{smallTitle: !props.size}">{{ props.title }}</h2>
+  <div v-if="props.title" class="title" :class="{smallTitle: props.small}">
+    <h2>{{ props.title }}</h2>
     <slot />
   </div>
 </template>
@@ -26,6 +26,14 @@ const props = defineProps<{
   line-height: 1.55rem;
   margin-top: 0.1rem;
   margin-bottom: -0.25rem;
+
+  &.smallTitle {
+    margin-top: -0.2rem;
+
+    h2 {
+      font-size: 1.2rem;
+    }
+  }
 }
 
 h2 {
@@ -36,8 +44,6 @@ h2 {
   text-decoration: none;
   color: var(--text);
 
-  &.smallTitle {
-    font-size: 1.2rem;
-  }
+  
 }
 </style>

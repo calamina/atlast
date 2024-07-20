@@ -33,5 +33,10 @@ const props = defineProps<{
 .imagesmall {
   height: 3rem;
   width: 3rem;
+  border-radius: 0.75rem;
+
+  &.empty {
+    font-size: 0.6rem;
+  }
 }
 </style>

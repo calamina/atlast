@@ -13,18 +13,16 @@ import MediaSearchBar from '@/components/media/MediaSearchBar.vue'
 import { watchDeep } from '@vueuse/core'
 import MediaSearch from '@/components/media/MediaSearch.vue'
 import { useStateStore } from '@/stores/state'
-import IconDisplay from '@/components/icons/IconDisplay.vue'
 import IconDetail from '@/components/icons/IconDetail.vue'
 import IconFilters from '@/components/icons/IconFilters.vue'
 import MediaPagination from '@/components/media/MediaPagination.vue'
-// import MediaPagination from '@/components/media/MediaPagination.vue'
+import IconImage from '@/components/icons/IconImage.vue'
 
 const route = useRoute()
 const { filteredList, count, pagination, mediaSearch } = storeToRefs(useMediaStore())
 const { getMediaByUser, getFilteredMediaByUser } = useMediaStore()
 const { loading } = storeToRefs(useLoadingStore())
-const { toggleSize, toggleSidebar } = useStateStore()
-const { sidebar } = storeToRefs(useStateStore())
+const { toggleSize, toggleSidebar, toggleImages } = useStateStore()
 
 const show: Ref<number | null> = ref(null)
 
@@ -86,6 +84,9 @@ function editMedia(index: number) {
         <div class="actions-display">
           <button class="button-icon" @click="toggleSize()">
             <IconDetail />
+          </button>
+          <button class="button-icon" @click="toggleImages()">
+            <IconImage />
           </button>
           <button class="button-icon" @click="toggleSidebar()">
             <IconFilters />
