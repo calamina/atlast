@@ -65,8 +65,8 @@ export const useMediaStore = defineStore('media', () => {
     if (filters.value?.categ) {
       filter += `&filters[categ][$eq]=${filters.value.categ}`
     }
-    if (filters.value?.action) {
-      filter += `&filters[action][$eq]=${filters.value.action}`
+    if (filters.value?.status) {
+      filter += `&filters[action][$eq]=${filters.value.status}`
     }
     if (filters.value?.like) {
       filter += `&filters[like][$eq]=${filters.value.like}`

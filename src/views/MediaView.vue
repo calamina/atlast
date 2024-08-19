@@ -1,40 +1,41 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, type ComputedRef, type Ref, watch } from 'vue'
-import { storeToRefs } from 'pinia'
-import type { MediaModel } from '@/models/media.model'
 import { useRoute } from 'vue-router'
+import { watchDeep } from '@vueuse/core'
+import { storeToRefs } from 'pinia'
+
+import type { MediaModel } from '@/models/media.model'
+
 import { useMediaStore } from '@/stores/media'
 import { useLoadingStore } from '@/stores/loading'
+import { useUserStore } from '@/stores/user'
+
 import MediaComponent from '@/components/media/MediaComponent.vue'
 import MediaMock from '@/components/media/MediaMock.vue'
 import MediaUpdateComponent from '@/components/media/MediaUpdateComponent.vue'
 import MediaFilters from '@/components/media/MediaFilters.vue'
 import MediaSearchBar from '@/components/media/MediaSearchBar.vue'
-import { watchDeep } from '@vueuse/core'
 import MediaSearch from '@/components/media/MediaSearch.vue'
-import { useStateStore } from '@/stores/state'
-import IconDetail from '@/components/icons/IconDetail.vue'
-import IconFilters from '@/components/icons/IconFilters.vue'
-import MediaPagination from '@/components/media/MediaPagination.vue'
-import IconImage from '@/components/icons/IconImage.vue'
+import ActionBar from '@/components/ActionBar.vue'
 
 const route = useRoute()
 const { filteredList, count, pagination, mediaSearch } = storeToRefs(useMediaStore())
 const { getMediaByUser, getFilteredMediaByUser } = useMediaStore()
 const { loading } = storeToRefs(useLoadingStore())
-const { toggleSize, toggleSidebar, toggleImages } = useStateStore()
+const { connectedUser } = storeToRefs(useUserStore())
 
 const show: Ref<number | null> = ref(null)
 
 onMounted(() => {
   if (
     filteredList?.value.length === 0 ||
-    route.params.user !== filteredList?.value[0]?.user
+    route.params.user !== connectedUser.value?.username
   ) {
     getMediaByUser((route.params.username) as string).then((result) => {
       filteredList.value = result
     })
   }
+  mediaSearch.value = '';
 })
 
 watch(route, () => {
@@ -79,39 +80,28 @@ function editMedia(index: number) {
   <main>
     <MediaSearchBar v-model="mediaSearch" :placeholder="'Search medias'" :component="MediaSearch" />
     <MediaFilters />
-    <div class="actionBar">
-      <div class="actions">
-        <div class="actions-display">
-          <button class="button-icon" @click="toggleSize()">
-            <IconDetail />
-          </button>
-          <button class="button-icon" @click="toggleImages()">
-            <IconImage />
-          </button>
-          <button class="button-icon" @click="toggleSidebar()">
-            <IconFilters />
-          </button>
-        </div>
-        <MediaPagination v-if="pagination.pageCount > 1" />
-      </div>
-    </div>
+    <ActionBar />
     <transition name="fade" mode="out-in">
       <div class="medias" v-if="loading">
-        <!-- <MediaMock v-for="i of filteredList?.length" :key="i" /> -->
         <MediaMock v-for="i of 5" :key="i" />
       </div>
       <div class="medias" v-else-if="filteredList?.length !== 0">
         <div class="media__switch" v-for="(media, index) of filteredMedia" :key="media.id">
           <MediaComponent v-if="show !== index" :media="media" :key="media.id" @enableEdit="editMedia(index)" />
-          <MediaUpdateComponent v-else :media="media" :action="'editMedia'" :key="media.key" @confirm="editMedia(index)"
-            @cancel="editMedia(index)" />
+          <MediaUpdateComponent v-else :media="media"
+            :action="route.params.username === connectedUser?.username ? 'editMedia' : 'createMedia'" :key="media.key"
+            @confirm="editMedia(index)" @cancel="editMedia(index)" />
         </div>
       </div>
       <div class="medias" v-else>
-        <MediaMock v-for="i of 2" :key="i" />
-        <!-- TODO :: info on adding media -->
-        <p v-if="count">Empty for now (•ᴖ•｡)</p>
-        <p v-else>Add some media by searching (˶ᵔᵕᵔ˶)</p>
+        <!-- TODO :: strings.SAD etc -->
+        <template v-if="count">
+          <p v-if="count">Empty for now (•ᴖ•｡)</p>
+        </template>
+        <template v-else>
+          <MediaMock v-for="i of 2" :key="i" />
+          <p>Add some media by searching (˶ᵔᵕᵔ˶)</p>
+        </template>
       </div>
     </transition>
   </main>
@@ -120,40 +110,12 @@ function editMedia(index: number) {
 <style lang="scss" scoped>
 main {
   width: 100vw;
-  padding: 1rem 0;
   scrollbar-width: none;
   justify-content: center;
   display: grid;
   grid-template-columns: 1fr 2.5rem 1fr 2.5rem 1fr;
-  gap: 3rem;
-}
-
-.actionBar {
-  position: relative;
-  display: flex;
-  flex-flow: column;
-}
-
-.actions {
-  position: fixed;
-  top: 7rem;
-  display: flex;
-  flex-flow: column;
-  gap: 0.25rem;
-  height: fit-content;
-  border-radius: 2rem;
-  // background-color: #fff;
-  padding: 0.25rem;
-}
-
-.actions-display {
-  padding: .25rem 0;
-  background-color: var(--background-darker);
-  // border-radius: 2rem;
-  border-top-left-radius: 2rem;
-  border-top-right-radius: 2rem;
-  border-bottom-left-radius: 0.5rem;
-  border-bottom-right-radius: 0.5rem;
+  grid-template-columns: 1fr 5.5rem 1fr 5.5rem 1fr;
+  transition: 0.3s;
 }
 
 .medias {
@@ -162,8 +124,8 @@ main {
   align-items: center;
   gap: 0.25rem;
   flex: 1;
-  min-width: 40vw;
-  // width: fit-content;
+  min-width: max(40vw, 45rem);
+  padding: 1rem;
 
   p {
     padding-top: 2rem;
@@ -181,17 +143,13 @@ main {
 
 @media (max-width: 1250px) {
   main {
-    grid-template-columns: 1fr;
-  }
-
-  .actionBar {
-    display: none;
+    grid-template-columns: 1fr 5.5rem 1fr;
   }
 
   .media__switch,
   .medias {
     width: 100%;
-    padding: 0 0.25rem;
+    padding: 0.25rem;
   }
 
   .media__search {

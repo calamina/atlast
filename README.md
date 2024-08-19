@@ -1,38 +1,42 @@
 # atlast
 Personnal Knowledge Database made with Vue3 and Strapi
+
 [atlast.vercel.app](https://atlast.vercel.app)
+( not working for now, no server for data waa waa :< )
+
 ![atlast preview](atlast2.png?raw=true "Atlast preview")
 
-# IMPORTANT
 
-- [ ] separate small from no picture mode (add picture mode to state !)
-- [ ] smaller search in small mode
+# TODO
 
-- [ ] try search in action bar (not convinced)
-- [ ] display library user in search bar if not me !!! (add name in placeholder ? colored)
-- [ ] add active state to actions (colors ? bg ?)
+add Landing page // debug connexion :x
+
+
+- [ ] component to enable/disable stuff ? size by size comparison
+- [ ] on different user page indicate if media is in my library as well
+    by making request if route.user != connecteduser and comparing results
+    add div if result matches 
+- [ ] add search on other person library
+    same, add user results in mediaSearch if not me
+- [ ] add shortcut / usage page / auto active on first connection ?
+
+
+- [ ] strange user behavior : click/routing not working at times ?
+- [ ] reload userlist when different user !!!
+
+
 - [ ] better page number for pagination
-- [ ] move actions to component
-- [ ] when adding / deleting media stay on current page
+- [ ] when adding / deleting media stay on current page (if  pagecount unchanged!)
+
 
 - [ ] clean filter (css + html)
 - [ ] filter categs -> icons ???
 - [ ] check search > type seems to reset results ???
-- [ ] disable / hide menu elements when searching
-- [ ] search shortcut !!
 - [ ] media + update check if store is better than input for size
-
-
-- [ ] grid ?? : new display cause can't edit on place ://
-- [ ] State store registered localstorage
-- [ ] delete right extra cols on small screens
 
 - [ ] All media count doesn't update (add/delete)
 
 - [ ] fix color names
-- [ ] ajout filtres toggle
-- [ ] ajout user toggle ??
-- [ ] ajout indicateur librairie consultée ??
 
 - [ ] fix filter count :(
 

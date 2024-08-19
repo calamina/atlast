@@ -15,16 +15,16 @@ const props = defineProps<{
 .filter-categ {
   display: flex;
   flex-flow: column;
-  border-radius: 1rem;
   width: 100%;
+  }
+  
+  h3 {
+    text-transform: capitalize;
+    font-weight: 400;
+    font-size: 1rem;
+    font-family: 'contax_pro_66_med_italicIt', 'Arial', sans-serif;
+    color: var(--active-plus);
+    padding: 0 1rem;
 }
 
-h3 {
-  text-transform: capitalize;
-  font-weight: 400;
-  font-size: 1rem;
-  font-family: 'contax_pro_66_med_italicIt', 'Arial', sans-serif;
-  color: var(--active-plus);
-  padding: 0 1rem;
-}
 </style>

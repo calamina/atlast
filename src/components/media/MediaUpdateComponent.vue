@@ -6,7 +6,7 @@ import { useUserStore } from '@/stores/user'
 import { useMediaStore } from '@/stores/media'
 import { useWiki } from '@/stores/wiki'
 
-import actions from '@/utils/media-actions'
+import actions from '@/utils/media-status'
 
 import type { MediaModel } from '@/models/media.model'
 
@@ -24,6 +24,7 @@ import mediaCategs from '@/utils/media-categs'
 import { useConfirmStore } from '@/stores/confirm'
 import { storeToRefs } from 'pinia'
 import { useStateStore } from '@/stores/state'
+import ItemExtract from '../atomic/ItemExtract.vue'
 
 const route = useRoute()
 const user = useUserStore()
@@ -65,7 +66,8 @@ onMounted(() => {
         score: 0,
         action: 'completed',
         categ: 'movie',
-        key: props.media.key
+        key: props.media.key,
+        user: user.connectedUser!.username,
       }
     })
 })
@@ -100,13 +102,12 @@ const deleteMedia = useThrottleFn((id: number) => {
 }, 500)
 </script>
 <template>
-  <div class="media" :class="{mediaSmall: displaySmall}" v-if="media">
+  <div class="media" :class="{ mediaSmall: displaySmall }" v-if="media">
     <ItemPicture :src="media.image ?? null" :small="displaySmall" v-if="displayImages" />
     <div class="media__content">
       <ItemTitle :title="media.title ?? null" :small="displaySmall" />
-      <!-- <ItemTitle :title="media.title ?? null" :url="media.url ?? null" /> -->
-      <ItemDescription :description="media.description ?? null" />
-      <p class="media__extract">{{ media.extract }}</p>
+      <ItemDescription :description="media.description ?? null" :small="displaySmall" />
+      <ItemExtract :extract="media.extract!" :small="displaySmall"/>
       <button class="media__favorite button-icon" type="button" @click="media.like = !media.like">
         <IconLikeFull class="love" v-if="media.like === true" />
         <IconLike v-else />
@@ -166,22 +167,31 @@ const deleteMedia = useThrottleFn((id: number) => {
   gap: 0.75rem;
   padding: 1rem;
   background-color: var(--white);
-  border-radius: 1rem;
+  border-radius: 1.5rem;
 
   &.mediaSmall {
     padding: 0.5rem;
     border-radius: 1rem;
-    // font-size: 0.8rem;
 
     .media__extract {
       padding-bottom: 0.25rem;
     }
+
     .media__form {
       gap: 0.25rem;
     }
-    .rating, .media__tags, .media__footer {
+
+    .rating,
+    .media__tags,
+    .media__footer {
       height: 2rem;
     }
+
+    .rating-icon {
+      width: 2rem;
+      height: 2rem;
+    }
+
     .media__actions button {
       height: 2rem;
       width: 2rem;
@@ -277,6 +287,10 @@ const deleteMedia = useThrottleFn((id: number) => {
   }
 
   & .rating-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1rem;
     width: 2.2rem;
     height: 2.2rem;
     color: var(--active-plus);
@@ -291,13 +305,6 @@ const deleteMedia = useThrottleFn((id: number) => {
 }
 
 @media (max-width: 1250px) {
-  .media__content {
-    margin-top: -0.5rem;
-  }
-
-  // img {
-  //   display: none;
-  // }
   .choices .rating {
     height: 2.5rem;
     border-radius: 2.5rem;
@@ -305,7 +312,6 @@ const deleteMedia = useThrottleFn((id: number) => {
 
   .choices {
     flex-flow: row wrap;
-    // gap: 0.5rem;
   }
 
   .media__form {

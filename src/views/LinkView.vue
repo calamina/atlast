@@ -75,7 +75,7 @@ const filteredLinks: ComputedRef<LinkModel[]> = computed(() => {
 <template>
   <main>
     <MediaSearchBar v-model="mediaSearch" :placeholder="'Search links'" :component="MediaSearch"/>
-    <LinkNewComponent />
+    <!-- <LinkNewComponent /> -->
     <div class="links" v-if="filteredList.length">
       <TransitionGroup name="list">
         <div class="link__switch" v-for="(link, index) of filteredLinks" :key="link.id">

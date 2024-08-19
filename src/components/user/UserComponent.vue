@@ -7,23 +7,22 @@ import IconPlus from '@/components/icons/IconPlus.vue'
 
 import ItemTitle from '@/components/atomic/ItemTitle.vue'
 import ItemDescription from '@/components/atomic/ItemDescription.vue'
+import router from '@/router'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emits = defineEmits(['enableEdit'])
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps<{ user: UserModel }>()
 
 const toggleEdit = useThrottleFn(() => {
   emits('enableEdit')
 }, 500)
+
+function openUser() {
+  router.push({ name: 'media', params: { username: props.user.username } })
+}
 </script>
 
 <template>
-  <div
-    class="media"
-    v-if="user.id"
-    :to="{ name: 'media', params: { username: user.username } }"
-  >
+  <div class="media" v-if="user.id" @click="openUser()">
     <div class="media__content">
       <ItemTitle :title="user.username ?? null">
       </ItemTitle>
@@ -53,6 +52,7 @@ const toggleEdit = useThrottleFn(() => {
 
   &:hover {
     background-color: var(--white);
+
     .media__actions,
     .media__expand {
       display: flex;
@@ -161,6 +161,7 @@ const toggleEdit = useThrottleFn(() => {
     opacity 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53),
     padding 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
 }
+
 .reveal-enter-from,
 .reveal-leave-to {
   max-height: 0;
@@ -180,6 +181,7 @@ const toggleEdit = useThrottleFn(() => {
   .media__extract {
     max-height: 50rem;
   }
+
   .media__actions {
     left: 2.5rem;
     top: 2.5rem;

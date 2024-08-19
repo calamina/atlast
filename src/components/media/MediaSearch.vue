@@ -39,28 +39,33 @@ async function getResults(value: string) {
   mediaList.value = []
   wikiList.value = []
 
-  mediastore.getMediaByUserAndName(connectedUser!.username, value).then((data: MediaModel[]) => {
+  const mediaTemp: MediaModel[] = []
+
+  mediastore.getMediaByUserAndName(connectedUser!.username, value)
+  .then((data: MediaModel[]) => {
     data?.forEach((element) => {
       element.attributes.id = element.id
-      mediaList.value.push(element.attributes)
+      mediaTemp.push(element.attributes)
+      // mediaList.value.push(element.attributes)
     })
   })
-
-  getWikiByname(value).then((data: any) => {
-    const mediaListKeys = new Set(mediaList.value.map((el) => el.key))
-    wikiList.value = data.filter(({ key }: { key: string }) => !mediaListKeys.has(key))
-  })
+  .then(() =>
+    getWikiByname(value).then((data: any) => {
+      const mediaListKeys = new Set(mediaList.value.map((el) => el.key))
+      wikiList.value = data.filter(({ key }: { key: string }) => !mediaListKeys.has(key))
+      mediaList.value = [...mediaTemp]
+    })
+  )
 }
 
-const ctrl = useKeyModifier('Control')
 onKeyStroke(['Escape'], (e) => {
-  if (ctrl.value || e.key === 'Escape') {
+  if (e.key === 'Escape') {
     e.preventDefault()
     emits('exit')
   }
 })
 
-function addMedia(media: MediaModel, action: string) {
+function upsertMedia(media: MediaModel, action: string) {
   activeMedia.value = media
   createOrUpdate.value = action
 }
@@ -71,12 +76,12 @@ function addMedia(media: MediaModel, action: string) {
     <div class="wrapper-search">
       <div class="results" v-if="!activeMedia">
         <div class="medias" v-if="mediaList.length">
-          <MediaComponent v-for="media of mediaList" class="background__media" :media="media" :key="media.id"
-            @enableEdit="addMedia(media, 'editMedia')" />
+          <MediaComponent v-for="media of mediaList" :media="media" :key="media.id"
+          @enableEdit="upsertMedia(media, 'editMedia')" />
         </div>
-        <div class="medias media-small" v-if="wikiList.length">
+        <div class="medias" v-if="wikiList.length">
           <MediaSimple v-for="(media, index) of wikiList" :key="index" :media="media"
-            @click="addMedia(media, 'createMedia')" />
+            @click="upsertMedia(media, 'createMedia')" />
         </div>
       </div>
       <div class="results" v-else>
@@ -94,20 +99,17 @@ function addMedia(media: MediaModel, action: string) {
   width: 100%;
   display: flex;
   min-height: 100%;
-  padding: 2rem;
-}
-
-.background__media {
-  background-color: var(--white);
+  padding: 1rem 0;
 }
 
 .results {
   width: 100%;
   display: flex;
-  flex-flow: column;
-  align-items: center;
+  // flex-flow: column;
+  // align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  background-color: var(--background);
+  // background-color: var(--background);
   overflow-y: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -118,18 +120,13 @@ function addMedia(media: MediaModel, action: string) {
 }
 
 .medias {
-  width: 45rem;
+  // width: 45rem;
+  width: max(40vw, 45rem);
   display: flex;
   flex-flow: column;
   gap: 0.5rem;
   border-radius: 1.5rem;
   animation: fade 0.3s ease-in-out;
-}
-
-.media-small {
-  padding: 0.5rem;
-  background-color: var(--white);
-  gap: 0.25rem;
 }
 
 @keyframes fade {
@@ -154,6 +151,7 @@ function addMedia(media: MediaModel, action: string) {
 
   .results {
     flex-flow: column;
+    justify-content: flex-start;
   }
 
   .collection {

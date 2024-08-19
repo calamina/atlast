@@ -3,6 +3,7 @@ import IconPaused from '@/components/icons/IconPaused.vue'
 import IconCompleted from '@/components/icons/IconCompleted.vue'
 import IconDropped from '@/components/icons/IconDropped.vue'
 import IconPlanning from '@/components/icons/IconPlanning.vue'
+import type { StatusModel } from '@/models/status.model'
 
 export default [
   {
@@ -31,4 +32,4 @@ export default [
     name: 'paused',
     component: IconPaused
   }
-]
+] as StatusModel[]

@@ -10,17 +10,19 @@ import TagButton from '@/components/atomic/TagButton.vue'
 import TagGroup from '@/components/atomic/TagGroup.vue'
 import sorts from '@/utils/media-sorts'
 import mediaCategs from '@/utils/media-categs'
-import mediaActions from '@/utils/media-actions'
+import mediaStatus from '@/utils/media-status'
 import { useStateStore } from '@/stores/state'
 import { useTooltipStore } from '@/stores/tooltip'
 import IconLike from '../icons/IconLike.vue'
 import IconLikeFull from '../icons/IconLikeFull.vue'
+import { useUserStore } from '@/stores/user'
 
 const route = useRoute()
 
 const emits = defineEmits(['refreshList'])
 const mediastore = useMediaStore()
 const { displaySidebar } = storeToRefs(useStateStore())
+const { connectedUser } = storeToRefs(useUserStore())
 const { setTooltip, resetTooltip } = useTooltipStore()
 
 const filters: Ref<FilterModel> = ref({ sort: 'createdAt', order: 'asc' })
@@ -48,34 +50,34 @@ function updateFilters(property: any, value: string | boolean | null) {
 <template>
   <div class="filter-wrapper">
     <div class="filters" v-if="!!mediastore.count && displaySidebar">
-      <FilterGroup :title="''">
-        <FilterButton :selected="mediastore.filteredCount === mediastore.count" :name="'All'" :info="mediastore.count"
-          @click="mediastore.resetFilters((route.params.username) as string)" />
-      </FilterGroup>
+      <FilterButton v-if="route.params.username !== connectedUser?.username" class="user" :name="route.params.username as string + '\'s library'" />
+      <FilterButton :selected="mediastore.filteredCount === mediastore.count" :name="'All'" :info="mediastore.count"
+        @click="mediastore.resetFilters((route.params.username) as string)" />
       <FilterGroup :title="'favorites'">
         <div class="icon-group">
-          <button class="icon-button" :class="{ activeStatus: filters.like }" @click="updateFilters('like', true)">
+          <button class="icon-button button-like" :class="{ activeStatus: filters.like }"
+            @click="updateFilters('like', true)">
             <IconLike v-if="!filters.like" class="icon" />
-            <IconLikeFull v-else class="icon icon-like" />
+            <IconLikeFull v-else class="icon" />
           </button>
         </div>
       </FilterGroup>
       <FilterGroup :title="'category'">
-        <FilterButton v-for="categ in categs" :key="categ" :selected="filters.categ === categ" :name="categ" :info="'0'"
+        <FilterButton v-for="categ in categs" :key="categ" :selected="filters.categ === categ" :name="categ"
           @click="updateFilters('categ', categ)" />
       </FilterGroup>
       <FilterGroup :title="'status'">
         <div class="icon-group">
-          <button class="icon-button" v-for="action in mediaActions"
-            :class="{ activeStatus: filters.action === action.name }" @click="updateFilters('action', action.name)">
-            <component class="icon" :is="action!.component" :style="{ backgroundColor: action!.color }"
-              @mouseover="setTooltip(action!.name)" @mouseleave="resetTooltip()" />
+          <button class="icon-button" v-for="status in mediaStatus"
+            :class="{ activeStatus: filters.status === status.name }" @click="updateFilters('status', status.name)">
+            <component class="icon" :is="status!.component" :style="{ backgroundColor: status!.color }"
+              @mouseover="setTooltip(status!.name)" @mouseleave="resetTooltip()" />
           </button>
         </div>
       </FilterGroup>
-      <FilterGroup :title="'sort by'">
+      <FilterGroup :title="'sort'">
         <FilterButton v-for="sort in sorts" :key="sort.name" :selected="filters.sort === sort.name" :name="sort.title"
-          :info="filters.order === 'asc' ? sort.orderAsc : sort.orderDesc" @click="updateFilters('sort', sort.name)" />
+          :sort="filters.order === 'asc' ? 'ascending' : 'descending'" @click="updateFilters('sort', sort.name)" />
       </FilterGroup>
       <FilterGroup :title="'tags'" v-if="tags.size">
         <TagGroup :maxHeight="false">
@@ -92,20 +94,27 @@ function updateFilters(property: any, value: string | boolean | null) {
   position: relative;
   display: flex;
   flex-flow: column;
-  width: 16rem;
+  width: 100%;
   justify-self: flex-end;
+  align-items: flex-end;
+  min-height: 90vh;
 }
 
 .filters {
-  position: fixed;
-  top: 7rem;
-  padding: 0 1rem;
+  position: sticky;
+  top: var(--fixed);
+  padding-left: 1rem;
   display: flex;
   flex-flow: column;
-  width: 16rem;
+  width: 18rem;
   gap: 0.5rem;
   height: fit-content;
   transition: opacity 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
+}
+
+.user {
+  background-color: var(--highlight);
+  cursor: default;
 }
 
 .icon-group {
@@ -123,9 +132,11 @@ function updateFilters(property: any, value: string | boolean | null) {
   padding: 0.35rem;
   cursor: pointer;
   border-radius: 2.5rem;
+  filter: saturate(0);
 
   &.activeStatus {
     background-color: var(--white);
+    filter: saturate(1);
   }
 }
 
@@ -135,14 +146,24 @@ function updateFilters(property: any, value: string | boolean | null) {
   border-radius: 1.5rem;
 }
 
-.icon-like {
-  color: var(--favorite);
-}
+.button-like {
+  padding: 0.5rem;
 
-
-@media (max-width: 1250px) {
-  .filter-wrapper {
-    display: none;
+  .icon {
+    width: 1.25rem;
+    height: 1.25rem;
   }
+
+  &.activeStatus .icon {
+    color: var(--favorite);
+  }
+
 }
+
+
+// @media (max-width: 1250px) {
+//   .filter-wrapper {
+//     display: none;
+//   }
+// }
 </style>

@@ -1,19 +1,17 @@
 <script setup lang="ts">
+import IconLikeFull from '../icons/IconLikeFull.vue';
+
 const props = defineProps<{
   title: string | null
+  like?: boolean | null
   small?: boolean
-  // url: string | null
 }>()
 </script>
 
 <template>
-  <!-- <a v-if="props.title && props.url" class="title" :href="props.url" target="_blank">
-    {{ props.title }}
-    <slot />
-  </a> -->
-  <div v-if="props.title" class="title" :class="{smallTitle: props.small}">
+  <div v-if="props.title" class="title" :class="{ smallTitle: props.small }">
     <h2>{{ props.title }}</h2>
-    <slot />
+    <IconLikeFull class="like" v-if="props.like" />
   </div>
 </template>
 
@@ -26,6 +24,8 @@ const props = defineProps<{
   line-height: 1.55rem;
   margin-top: 0.1rem;
   margin-bottom: -0.25rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 
   &.smallTitle {
     margin-top: -0.2rem;
@@ -43,7 +43,11 @@ h2 {
   text-transform: capitalize;
   text-decoration: none;
   color: var(--text);
+}
 
-  
+.like {
+  width: 1.1rem;
+  height: 1.1rem;
+  color: var(--favorite);
 }
 </style>

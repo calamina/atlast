@@ -147,7 +147,7 @@ function addMedia(media: MediaModel, action: string) {
 
 .media-small {
   padding: 0.5rem;
-  background-color: var(--white);
+  // background-color: var(--white);
   gap: 0.25rem;
 }
 

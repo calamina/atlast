@@ -25,16 +25,14 @@ onKeyStroke(['Escape'], (e) => {
 <style lang="scss" scoped>
 .overlay-background {
   top: 0;
-  // background-color: var(--background-transparent);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background-color: var(--background);
   position: fixed;
   display: flex;
   justify-content: center;
   width: 100vw;
   height: 100vh;
   overflow: auto;
-  padding: 3rem 0 0 0;
-  z-index: 100;
+  padding: 4rem 0 0 0;
+  z-index: 400;
 }
 </style>

@@ -29,6 +29,8 @@
   --background-transparent: #efefefdd;
   --background-darker: #ddd;
   --active: #ddd;
+  --border: #ddd;
+  --border: transparent;
   --active-plus: #999;
   --text-light: #666;
   --text: #323232;
@@ -36,20 +38,23 @@
   --favorite: #dc6389;
   --score: #b97749cc;
   --score-background: #dc956344;
+  --fixed: 5.5rem;
+  /* --fixed: 5rem; */
   
   --font-italic: 'contax_pro_66_med_italicIt', Arial, sans-serif;
   --font-bold: 'contax_pro_75_boldregular', Arial, sans-serif;
   
   /* DARK THEME */
-  /* --white: #31313d;
+  /* --white: #2d2d35;
   --background: #1E1E24;
   --background-transparent: #1E1E24dd;
-  --background-darker: #31313d;
-  --active: #31313d;
-  --active-plus: #31313d;
+  --background-darker: #2d2d35;
+  --active: #2d2d35;
+  --active-plus: #2d2d35;
   --text-light: #797983;
   --text: #a3a3b3;
-  --highlight: #49497a; */
+  --highlight: #49497a;
+  --border: #2d2d35; */
 }
 
 p,
@@ -71,9 +76,7 @@ textarea {
 html {
   background-color: var(--background);
   -ms-overflow-style: none;
-  /* IE and Edge */
   scrollbar-width: none;
-  /* Firefox */
 }
 
 html::-webkit-scrollbar {
@@ -92,10 +95,14 @@ html::-webkit-scrollbar {
 
 button {
   border: none;
-  outline: none;
+  /* outline: none; */
   background-color: transparent;
   cursor: pointer;
 }
+
+/* button:focus, a:focus {
+  outline: 2px solid var(--text);
+} */
 
 .button-icon {
   width: 2.5rem;

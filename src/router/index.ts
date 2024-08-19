@@ -12,8 +12,8 @@ const router = createRouter({
       meta: {
         requiresAuth: true
       },
-      // component: () => import('@/views/MediaView.vue')
-      component: () => import('@/views/AuthView.vue')
+      component: () => import('@/views/MediaView.vue')
+      // component: () => import('@/views/AuthView.vue')
     },
     {
       path: '/auth',
