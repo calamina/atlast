@@ -13,6 +13,8 @@ Personnal Knowledge Database made with Vue3 and Strapi
 
 # TODO
 
+ADD LOCAL DB
+
 add Landing page // debug connexion :x
 
 
