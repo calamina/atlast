@@ -3,7 +3,6 @@ import type { LinkModel } from '@/models/link.model'
 import { onMounted, ref, type Ref } from 'vue'
 import router from '@/router/index'
 
-import { useUserStore } from '@/stores/user'
 import { useLinkStore } from '@/stores/link'
 // import { useNotificationStore } from '@/stores/notification'
 
@@ -20,7 +19,6 @@ const emits = defineEmits(['exit'])
 
 const linkStore = useLinkStore()
 // const notification = useNotificationStore()
-const user = useUserStore()
 
 let linkEdit: Ref<LinkModel> = ref({
   id: props.link?.id,
@@ -43,7 +41,6 @@ function linkFocus() {
 
 function addLink(link: LinkModel) {
   link.tags = link.tagstring ? link.tagstring.split(' ') : null
-  link.user = user.connectedUser!.username
   linkStore
     .addUserLink(link)
     .then(() => {
@@ -58,14 +55,8 @@ function addLink(link: LinkModel) {
 <template>
   <div class="link-wrapper">
     <div class="categ">
-      <button
-        v-for="(categ, index) in categs"
-        :key="index"
-        type="button"
-        class="button-icon"
-        @click="linkEdit.category = categ.name"
-        :class="{ active: linkEdit.category === categ.name }"
-      >
+      <button v-for="(categ, index) in categs" :key="index" type="button" class="button-icon"
+        @click="linkEdit.category = categ.name" :class="{ active: linkEdit.category === categ.name }">
         <component :is="categ.component"></component>
       </button>
     </div>

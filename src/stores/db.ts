@@ -1,4 +1,4 @@
-import { type MediaModel } from '@/models/media.model';
+import type { MediaModel } from '@/models/media.model';
 import Dexie, { type EntityTable } from 'dexie';
 
 const db = new Dexie('mediasDatabase') as Dexie & {

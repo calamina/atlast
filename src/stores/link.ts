@@ -7,7 +7,6 @@ import { useNotificationStore } from '@/stores/notification'
 
 import type { LinkModel } from '@/models/link.model'
 import strings from '@/utils/strings'
-import { errorMessage, errorsMessages } from '@/utils/error-manager'
 
 export const useLinkStore = defineStore('links', () => {
   const notification = useNotificationStore()
@@ -23,9 +22,9 @@ export const useLinkStore = defineStore('links', () => {
       })
       .catch((error) => {
         notification.addNotification("cannot get links", strings.SAD)
-        errorsMessages(error).length ?
-          notification.addErrorsNotifications(errorsMessages(error)) :
-          notification.addErrorNotification(errorMessage(error))
+        // errorsMessages(error).length ?
+        //   notification.addErrorsNotifications(errorsMessages(error)) :
+        //   notification.addErrorNotification(errorMessage(error))
       })
   }
 
@@ -41,9 +40,9 @@ export const useLinkStore = defineStore('links', () => {
       })
       .catch((error): void => {
         notification.addNotification("cannot get links", strings.SAD)
-        errorsMessages(error).length ?
-          notification.addErrorsNotifications(errorsMessages(error)) :
-          notification.addErrorNotification(errorMessage(error))
+        // errorsMessages(error).length ?
+        //   notification.addErrorsNotifications(errorsMessages(error)) :
+        //   notification.addErrorNotification(errorMessage(error))
       })
   }
 
@@ -74,9 +73,9 @@ export const useLinkStore = defineStore('links', () => {
       })
       .catch((error) => {
         notification.addNotification("failed to add link", strings.SAD)
-        errorsMessages(error).length ?
-          notification.addErrorsNotifications(errorsMessages(error)) :
-          notification.addErrorNotification(errorMessage(error))
+        // errorsMessages(error).length ?
+        //   notification.addErrorsNotifications(errorsMessages(error)) :
+        //   notification.addErrorNotification(errorMessage(error))
         return error.response
       })
   }

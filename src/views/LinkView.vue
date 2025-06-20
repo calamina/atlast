@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch, type ComputedRef, type Ref } from 'vue'
 
-import { useUserStore } from '@/stores/user'
 import { useLinkStore } from '@/stores/link'
 
 import type { LinkModel } from '@/models/link.model'
@@ -19,7 +18,7 @@ const { filteredList, list } = storeToRefs(useLinkStore())
 const { editUserLink, getLinksByUser } = useLinkStore()
 const { mediaSearch } = storeToRefs(useMediaStore())
 const route = useRoute()
-const user = useUserStore()
+// const user = useUserStore()
 
 const show: Ref<number | null> = ref(null)
 
@@ -28,12 +27,12 @@ onMounted(() => {
     list.value.length === 0 ||
     route.params.user !== filteredList?.value[0]?.user
   )
-  if (list.value.length === 0) {
-    getLinksByUser(user.connectedUser!.username).then((result) => {
-      list.value = result
-      filteredList.value = result
-    })
-  }
+    if (list.value.length === 0) {
+      // getLinksByUser(user.connectedUser!.username).then((result) => {
+      //   list.value = result
+      //   filteredList.value = result
+      // })
+    }
 })
 
 watch(mediaSearch, () => {
@@ -74,24 +73,14 @@ const filteredLinks: ComputedRef<LinkModel[]> = computed(() => {
 
 <template>
   <main>
-    <MediaSearchBar v-model="mediaSearch" :placeholder="'Search links'" :component="MediaSearch"/>
+    <MediaSearchBar v-model="mediaSearch" :placeholder="'Search links'" :component="MediaSearch" />
     <!-- <LinkNewComponent /> -->
     <div class="links" v-if="filteredList.length">
       <TransitionGroup name="list">
         <div class="link__switch" v-for="(link, index) of filteredLinks" :key="link.id">
-          <LinkComponent
-            v-if="show !== index"
-            :link="link"
-            :key="link.id"
-            @enableEdit="editLink(index)"
-          />
-          <LinkEditComponent
-            v-else
-            :link="link"
-            :key="link.title"
-            @cancelEdit="editLink(index)"
-            @confirmEdit="(link: LinkModel) => editLink(index, link)"
-          />
+          <LinkComponent v-if="show !== index" :link="link" :key="link.id" @enableEdit="editLink(index)" />
+          <LinkEditComponent v-else :link="link" :key="link.title" @cancelEdit="editLink(index)"
+            @confirmEdit="(link: LinkModel) => editLink(index, link)" />
         </div>
       </TransitionGroup>
     </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ComputedRef, onMounted, ref, type Ref, watch } from 'vue'
+import { computed, type ComputedRef, onMounted, ref, type Ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 
@@ -13,7 +13,7 @@ import MediaFilters from '@/components/media/MediaFilters.vue'
 import MediaSearchBar from '@/components/media/MediaSearchBar.vue'
 import MediaSearch from '@/components/media/MediaSearch.vue'
 import ActionBar from '@/components/ActionBar.vue'
-import { MediaModel } from '@/models/media.model'
+import type { MediaModel } from '@/models/media.model'
 
 const route = useRoute()
 const { filteredList, count, mediaSearch } = storeToRefs(useMediaStore())

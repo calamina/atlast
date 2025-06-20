@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import UserLogin from '@/components/UserLogin.vue'
-import UserRegister from '@/components/UserRegister.vue'
 import { ref } from 'vue'
 
 let loginRegister = ref(true)
@@ -10,8 +8,8 @@ let loginRegister = ref(true)
   <Transition name="auth-in" appear>
     <main class="auth">
       <Transition mode="out-in" name="auth">
-        <UserLogin class="userForm" v-if="loginRegister" @toggleRegister="loginRegister = false" />
-        <UserRegister class="userForm" v-else @toggleLogin="loginRegister = true" />
+        <!-- <UserLogin class="userForm" v-if="loginRegister" @toggleRegister="loginRegister = false" />
+        <UserRegister class="userForm" v-else @toggleLogin="loginRegister = true" /> -->
       </Transition>
     </main>
   </Transition>

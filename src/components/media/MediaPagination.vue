@@ -4,14 +4,14 @@ import { storeToRefs } from 'pinia';
 import IconBottom from '../icons/IconBottom.vue';
 import IconTop from '../icons/IconTop.vue';
 
-const { pagination } = storeToRefs(useMediaStore())
+// const { pagination } = storeToRefs(useMediaStore())
 </script>
 
 <template>
     <div>
-        <button :disabled="pagination.page === 1" @click="pagination.page--"><IconTop /></button>
+        <!-- <button :disabled="pagination.page === 1" @click="pagination.page--"><IconTop /></button>
         <p>{{ pagination.page }}/{{ pagination.pageCount }}</p>
-        <button :disabled="pagination.page === pagination.pageCount" @click="pagination.page++"><IconBottom /></button>
+        <button :disabled="pagination.page === pagination.pageCount" @click="pagination.page++"><IconBottom /></button> -->
     </div>
 </template>
 
@@ -38,7 +38,7 @@ button {
     justify-content: center;
     height: 2rem;
     width: 2rem;
-    
+
     &:disabled {
         opacity: 0.5;
         cursor: default;
