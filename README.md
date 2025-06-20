@@ -15,6 +15,7 @@ Personnal Knowledge Database made with Vue3 and IndexedDB (local storage)
 ADD LOCAL DB
 CLEAN FONTS
 CLEAN USER DATA LEFTOVERS
+TEST BRANCH ACTIONS
 
 Add transitions on tooltips + menus
 
