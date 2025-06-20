@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{
-  extract: string | null
+  extract: string | null | undefined
   small?: boolean
 }>()
 </script>

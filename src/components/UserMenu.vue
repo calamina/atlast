@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { onClickOutside } from '@vueuse/core'
-import { useUserStore } from '@/stores/user';
-import IconUserOff from './icons/IconUserOff.vue';
 import IconUser from './icons/IconUser.vue';
+// import { useUserStore } from '@/stores/user';
+import IconUserOff from './icons/IconUserOff.vue';
 
-const { logout } = useUserStore()
+// const { logout } = useUserStore()
 const menu = ref(null)
 const isSubmenuVisible = ref(false)
 
@@ -15,7 +15,7 @@ onClickOutside(
 
 function disconnect() {
   isSubmenuVisible.value = false
-  logout()
+  // logout()
 }
 
 function openUserMenu() {
@@ -56,11 +56,10 @@ function openUserMenu() {
 .submenu {
   display: flex;
   align-items: flex-start;
-  
+
   button {
     background-color: var(--white);
     border-radius: 100%;
   }
 }
-
 </style>

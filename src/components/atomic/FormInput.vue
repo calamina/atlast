@@ -5,7 +5,7 @@ const props = defineProps<{
   required?: boolean
 }>()
 
-const value = defineModel<string>({ required: true })
+const value = defineModel<string | undefined>({ required: true })
 </script>
 
 <template>
@@ -39,11 +39,11 @@ const value = defineModel<string>({ required: true })
     font-family: var(--font-bold);
     animation: translateIn 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
     color: var(--active-plus);
-    }
-    
-    &__required {
-      font-family: var(--font-bold);
-      color: var(--active-plus);
+  }
+
+  &__required {
+    font-family: var(--font-bold);
+    color: var(--active-plus);
   }
 }
 

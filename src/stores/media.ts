@@ -3,160 +3,143 @@ import { ref, type Ref } from 'vue'
 import type { MediaModel } from '@/models/media.model'
 import type { FilterModel } from '@/models/filter.model'
 
-import http from '@/utils/http-common'
-import { errorMessage, errorsMessages } from '@/utils/error-manager'
 import strings from '@/utils/strings'
 
 import { useNotificationStore } from '@/stores/notification'
-import { useUserStore } from '@/stores/user'
 import { useLoadingStore } from '@/stores/loading'
+import { db } from './db'
 
 export const useMediaStore = defineStore('media', () => {
+  const allMedia: Ref<Array<MediaModel>> = ref([])
   const filteredList: Ref<Array<MediaModel>> = ref([])
   const count: Ref<number> = ref(0)
   const filteredCount: Ref<number> = ref(0)
   const filters: Ref<FilterModel> = ref({ sort: 'createdAt', order: 'desc' })
   const mediaSearch: Ref<string> = ref('')
-  const pagination: Ref<{ page: number, pageCount: number }> = ref({ page: 1, pageCount: 1 });
 
   const notification = useNotificationStore()
-  const user = useUserStore()
   const { setLoading } = useLoadingStore()
 
-  const headers = {
-    headers: {
-      Authorization: 'Bearer ' + user.connectedUserToken
-    }
+  async function getMedia(): Promise<MediaModel[]> {
+    setLoading(true)
+    return await db.medias
+      .toArray()
+      .then((response) => {
+        setLoading(false)
+        count.value = response.length
+        allMedia.value = response
+        applyMediaFilters(response)
+        return response
+      })
+      .catch((error) => {
+        manageError(error, 'failed to get media', strings.SAD)
+        setLoading(false)
+        return []
+      })
   }
 
-  async function getMediaByUserAndName(user: string, name: string): Promise<any> {
+  async function getMediaByTitle(title: string): Promise<MediaModel[]> {
     setLoading(true)
-    return http
-      .get<Array<any>>(
-        `medias?filters[title][$containsi]=${name}&filters[user][$eq]=${user}`,
-        headers)
+    return await db.medias
+      .filter((media) => {
+        if (media.title === undefined) return false
+        return media.title.toLowerCase().includes(title.toLowerCase())
+      })
+      .toArray()
       .then((response: any) => {
         setLoading(false)
-        return response.data.data
+        return response
       })
       .catch((error) => manageError(error, 'failed to get media', strings.SAD))
   }
 
-  async function getMediaByUser(user: string, page?: number): Promise<MediaModel[]> {
-    const query = page ?
-      'medias?sort=createdAt:desc&filters[user][$eq]=' + user + '&pagination[page]=' + page :
-      'medias?sort=createdAt:desc&filters[user][$eq]=' + user
-
-    setLoading(true)
-    return http
-      .get<Array<any>>(query, headers)
-      .then((response: any) => {
-        count.value = response.data?.meta?.pagination?.total
-        pagination.value.pageCount = response.data?.meta?.pagination?.pageCount
-        setLoading(false)
-        return response.data.data
-      })
-      .catch((error) => manageError(error, 'failed to get media', strings.SAD))
-  }
-
-  async function getFilteredMediaByUser(user: string, reload: boolean, page?: number): Promise<any> {
-    if (reload) setLoading(true)
-    let filter: string = `&filters[user][$eq]=${user}`
-    if (filters.value?.categ) {
-      filter += `&filters[categ][$eq]=${filters.value.categ}`
-    }
-    if (filters.value?.status) {
-      filter += `&filters[action][$eq]=${filters.value.status}`
-    }
-    if (filters.value?.like) {
-      filter += `&filters[like][$eq]=${filters.value.like}`
-    }
-    if (filters.value?.tag) {
-      filter += `&filters[tags][$contains]=${filters.value.tag}`
-    }
-    if (page) {
-      filter += `&pagination[page]=${page}`
+  async function addMedia(media: any): Promise<void> {
+    const existingMedia = await db.medias.where({ title: media.title }).first()
+    if (existingMedia) {
+      notification.addNotification('Media with this title already exists', strings.SAD)
+      return
     }
 
-    const sort = filters?.value!.sort ? `?sort=${filters.value.sort}:${filters.value.order}` : ''
-    const filterSort = sort + filter ?? ''
+    if (media.action === 'planning') media.score = 0
+    media.tags = media.tagstring ? media.tagstring.split(' ') : null
+    media.createdAt = new Date()
 
-    return http
-      .get<Array<any>>('medias' + filterSort, headers)
-      .then((response: any) => {
-        if (reload) setLoading(false)
-        filteredList.value = response.data.data
-        filteredCount.value = response.data?.meta?.pagination?.total
-        pagination.value.pageCount = response.data?.meta?.pagination?.pageCount
-        if (pagination.value.pageCount === 1) {
-          pagination.value.page = 1
-        }
-        return response.data.data
-      })
-      .catch((error) => manageError(error, 'failed to get media', strings.SAD))
-  }
-
-  async function addUserMedia(media: any): Promise<any> {
-    return http
-      .post(`medias`, { data: media }, headers)
-      .then(() => updateUserMedia('media added', strings.HAPPY))
+    await db.medias.add(media)
+      .then(() => updateMedia('media added', strings.HAPPY))
       .catch((error) => manageError(error, 'failed to add media', strings.SAD))
   }
 
-  async function editUserMedia(media: any): Promise<any> {
-    return http
-      .put(`medias/${media.id}`, { data: media }, headers)
-      .then(() => updateUserMedia('media edited', strings.HAPPY))
+  async function editMedia(media: MediaModel): Promise<void> {
+    if (media.action === 'planning') media.score = 0
+    media.tags = media.tagstring ? media.tagstring.split(' ') : null
+    media.updatedAt = new Date()
+
+    await db.medias.update(media.id, { ...media })
+      .then(() => updateMedia('media edited', strings.HAPPY))
       .catch((error) => manageError(error, 'failed to edit media', strings.SAD))
   }
 
-  async function deleteUserMedia(id: number): Promise<any> {
-    return http
-      .delete(`medias/${id}`, headers)
-      .then(() => updateUserMedia('media deleted', strings.HAPPY))
+  async function deleteMedia(id: number): Promise<any> {
+    await db.medias.delete(id)
+      .then(() => updateMedia('media deleted', strings.HAPPY))
       .catch((error) => manageError(error, "failed to delete media", strings.SAD))
   }
 
-  async function updateFilters(newFilters: FilterModel, user: string): Promise<any> {
+  async function updateFilters(newFilters: FilterModel): Promise<any> {
     filters.value = newFilters
-    getFilteredMediaByUser(user, true)
   }
 
-  async function resetFilters(user: string): Promise<any> {
-    filters.value.action = null
+  async function resetFilters(): Promise<any> {
+    filters.value.status = null
     filters.value.categ = null
     filters.value.like = null
     filters.value.tag = null
-    pagination.value.page = 1
-    getFilteredMediaByUser(user, true)
+    getMedia()
+  }
+
+  function applyMediaFilters(media: MediaModel[]): MediaModel[] {
+    let filtered = media
+    if (filters.value.status) {
+      filtered = filtered.filter((m) => m.action === filters.value.status)
+    }
+    if (filters.value.categ) {
+      filtered = filtered.filter((m) => m.categ === filters.value.categ)
+    }
+    if (filters.value.like) {
+      filtered = filtered.filter((m) => m.like === filters.value.like)
+    }
+    if (filters.value.tag) {
+      filtered = filtered.filter((m) => m.tags && m.tags.includes(filters.value.tag))
+    }
+
+    filteredCount.value = filtered.length
+    filteredList.value = filtered
+    return filtered
   }
 
   function manageError(error: any, message: string, kao: string): void {
     notification.addNotification(message, kao)
-    errorsMessages(error).length ?
-      notification.addErrorsNotifications(errorsMessages(error)) :
-      notification.addErrorNotification(errorMessage(error))
+    notification.addErrorNotification(error)
   }
 
-  function updateUserMedia(message: string, kao: string): void {
+  function updateMedia(message: string, kao: string): void {
     notification.addNotification(message, kao)
-    getFilteredMediaByUser(user.connectedUser!.username, false)
+    getMedia()
   }
 
   return {
-    pagination,
     count,
     filteredCount,
     filteredList,
+    allMedia,
+    getMedia,
+    getMediaByTitle,
     filters,
     updateFilters,
     resetFilters,
-    getFilteredMediaByUser,
-    getMediaByUser,
-    getMediaByUserAndName,
-    addUserMedia,
-    editUserMedia,
-    deleteUserMedia,
+    addMedia,
+    editMedia,
+    deleteMedia,
     mediaSearch,
   }
 })

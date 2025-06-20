@@ -5,7 +5,6 @@ import { watchDebounced } from '@vueuse/shared'
 
 import { useWiki } from '@/stores/wiki'
 import { useMediaStore } from '@/stores/media'
-import { useUserStore } from '@/stores/user'
 
 import type { MediaModel } from '@/models/media.model'
 
@@ -17,7 +16,6 @@ import { storeToRefs } from 'pinia'
 const emits = defineEmits(['exit'])
 
 const { getWikiByname } = useWiki()
-const { connectedUser } = useUserStore()
 const mediastore = useMediaStore()
 const { mediaSearch } = storeToRefs(mediastore)
 
@@ -41,21 +39,20 @@ async function getResults(value: string) {
 
   const mediaTemp: MediaModel[] = []
 
-  mediastore.getMediaByUserAndName(connectedUser!.username, value)
-  .then((data: MediaModel[]) => {
-    data?.forEach((element) => {
-      element.attributes.id = element.id
-      mediaTemp.push(element.attributes)
-      // mediaList.value.push(element.attributes)
+  mediastore.getMediaByTitle(value)
+    .then((data: MediaModel[]) => {
+      data?.forEach((element) => {
+        element.id = element.id
+        mediaTemp.push(element)
+      })
     })
-  })
-  .then(() =>
-    getWikiByname(value).then((data: any) => {
-      const mediaListKeys = new Set(mediaList.value.map((el) => el.key))
-      wikiList.value = data.filter(({ key }: { key: string }) => !mediaListKeys.has(key))
-      mediaList.value = [...mediaTemp]
-    })
-  )
+    .then(() =>
+      getWikiByname(value).then((data: any) => {
+        const mediaListKeys = new Set(mediaList.value.map((el) => el.key))
+        wikiList.value = data.filter(({ key }: { key: string }) => !mediaListKeys.has(key))
+        mediaList.value = [...mediaTemp]
+      })
+    )
 }
 
 onKeyStroke(['Escape'], (e) => {
@@ -77,7 +74,7 @@ function upsertMedia(media: MediaModel, action: string) {
       <div class="results" v-if="!activeMedia">
         <div class="medias" v-if="mediaList.length">
           <MediaComponent v-for="media of mediaList" :media="media" :key="media.id"
-          @enableEdit="upsertMedia(media, 'editMedia')" />
+            @enableEdit="upsertMedia(media, 'editMedia')" />
         </div>
         <div class="medias" v-if="wikiList.length">
           <MediaSimple v-for="(media, index) of wikiList" :key="index" :media="media"

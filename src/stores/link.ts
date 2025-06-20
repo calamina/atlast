@@ -4,7 +4,6 @@ import { ref, type Ref } from 'vue'
 import http from '@/utils/http-common'
 
 import { useNotificationStore } from '@/stores/notification'
-import { useUserStore } from '@/stores/user'
 
 import type { LinkModel } from '@/models/link.model'
 import strings from '@/utils/strings'
@@ -12,20 +11,13 @@ import { errorMessage, errorsMessages } from '@/utils/error-manager'
 
 export const useLinkStore = defineStore('links', () => {
   const notification = useNotificationStore()
-  const user = useUserStore()
 
   const list: Ref<Array<LinkModel>> = ref([])
   const filteredList: Ref<Array<LinkModel>> = ref([])
 
-  const headers = {
-    headers: {
-      Authorization: 'Bearer ' + user.connectedUserToken
-    }
-  }
-
   async function getLinks(): Promise<any> {
     return http
-      .get<Array<any>>('/links', headers)
+      .get<Array<any>>('/links')
       .then((response: any) => {
         return response.data
       })
@@ -39,7 +31,7 @@ export const useLinkStore = defineStore('links', () => {
 
   async function getLinksByUser(user: string): Promise<any> {
     return http
-      .get<Array<any>>('/links?sort=createdAt:desc', headers)
+      .get<Array<any>>('/links?sort=createdAt:desc')
       .then((response: any) => {
         const result = response.data.data.filter((link: any) => {
           return link.attributes.user === user
@@ -58,7 +50,7 @@ export const useLinkStore = defineStore('links', () => {
   async function getFilteredLinksByUser(user: string, filters?: any): Promise<any> {
     const filter = filters?.category ? `?filters[category][$eq]=${filters.category}` : ''
     const sort = filters?.sort ? `sort=${filters.sort}:desc` : ''
-    const filterSort = (filter ? filter + '&' : '?') + sort ?? ''
+    const filterSort = (filter ? filter + '&' : '?') + sort
 
     return http
       .get<Array<any>>('links' + filterSort)
@@ -74,10 +66,10 @@ export const useLinkStore = defineStore('links', () => {
 
   async function addUserLink(link: any): Promise<any> {
     return http
-      .post(`links`, { data: link }, headers)
+      .post(`links`, { data: link })
       .then((response) => {
         notification.addNotification('Link added', strings.HAPPY)
-        getLinksByUser(user.connectedUser!.username)
+        // getLinksByUser(user.connectedUser!.username)
         return response.data
       })
       .catch((error) => {
@@ -94,7 +86,7 @@ export const useLinkStore = defineStore('links', () => {
       .put(`links/${link.id}`, { data: link })
       .then((response) => {
         notification.addNotification('Link update')
-        getLinksByUser(user.connectedUser!.username)
+        // getLinksByUser(user.connectedUser!.username)
         return response.data
       })
       .catch((error) => {
@@ -108,7 +100,7 @@ export const useLinkStore = defineStore('links', () => {
       .delete(`links/${id}`)
       .then(() => {
         notification.addNotification('Link delete')
-        getLinksByUser(user.connectedUser!.username)
+        // getLinksByUser(user.connectedUser!.username)
       })
       .catch((error) => {
         notification.addNotification(error.respons)

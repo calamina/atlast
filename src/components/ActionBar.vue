@@ -13,13 +13,14 @@ import MediaPagination from './media/MediaPagination.vue';
 const { toggleSize, toggleSidebar, toggleImages } = useStateStore()
 const { displayActions } = storeToRefs(useStateStore())
 const { setTooltip, resetTooltip } = useTooltipStore()
-const { pagination } = storeToRefs(useMediaStore())
+// const { pagination } = storeToRefs(useMediaStore())
 </script>
 
 <template>
   <div class="actionBar">
     <div class="actions" v-if="displayActions">
-      <div class="actions-display" :class="{ smallRadius: pagination.pageCount > 1 }">
+      <!-- <div class="actions-display" :class="{ smallRadius: pagination.pageCount > 1 }"> -->
+      <div class="actions-display">
         <button class="button-icon" @click="toggleSize()" @mouseover="setTooltip('Toggle size')"
           @mouseleave="resetTooltip()">
           <IconDetail />
@@ -33,7 +34,7 @@ const { pagination } = storeToRefs(useMediaStore())
           <IconFilters />
         </button>
       </div>
-      <MediaPagination v-if="pagination.pageCount > 1" />
+      <!-- <MediaPagination v-if="pagination.pageCount > 1" /> -->
     </div>
   </div>
 </template>

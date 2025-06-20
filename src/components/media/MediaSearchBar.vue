@@ -57,6 +57,7 @@ whenever(keys.shift_s, () => {
 
   input[type='text'] {
     padding: 0 1rem;
+    // padding: 0;
     text-align: center;
     font-size: 1.1rem;
     border-radius: 3rem;

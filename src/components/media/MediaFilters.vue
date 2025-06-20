@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { type Ref, ref, type ComputedRef, computed } from 'vue'
-import { useRoute } from 'vue-router'
 import type { FilterModel } from '@/models/filter.model'
 import { useMediaStore } from '@/stores/media'
 import { storeToRefs } from 'pinia'
@@ -15,14 +14,11 @@ import { useStateStore } from '@/stores/state'
 import { useTooltipStore } from '@/stores/tooltip'
 import IconLike from '../icons/IconLike.vue'
 import IconLikeFull from '../icons/IconLikeFull.vue'
-import { useUserStore } from '@/stores/user'
-
-const route = useRoute()
 
 const emits = defineEmits(['refreshList'])
 const mediastore = useMediaStore()
+const { allMedia } = storeToRefs(useMediaStore())
 const { displaySidebar } = storeToRefs(useStateStore())
-const { connectedUser } = storeToRefs(useUserStore())
 const { setTooltip, resetTooltip } = useTooltipStore()
 
 const filters: Ref<FilterModel> = ref({ sort: 'createdAt', order: 'asc' })
@@ -32,7 +28,7 @@ const categs = mediaCategs.map(categ => categ.name)
 const tags: ComputedRef<any> = computed(() => {
   const tags = new Set()
   mediastore.filteredList.map((media) => {
-    media.attributes.tags?.forEach((tag: string) => tags.add(tag))
+    media.tags?.forEach((tag: string) => tags.add(tag))
   })
   return tags
 })
@@ -43,16 +39,25 @@ function updateFilters(property: any, value: string | boolean | null) {
   } else {
     filters.value[property] = filters.value[property] === value ? null : value
   }
-  mediastore.updateFilters(filters.value, (route.params.username) as string)
+  mediastore.updateFilters(filters.value)
 }
+
+const countByCateg: ComputedRef<Record<string, number>> = computed(() => {
+  const counts: Record<string, number> = {}
+  allMedia.value.forEach(media => {
+    if (media.categ) {
+      counts[media.categ] = (counts[media.categ] || 0) + 1
+    }
+  })
+  return counts
+})
 </script>
 
 <template>
   <div class="filter-wrapper">
-    <div class="filters" v-if="!!mediastore.count && displaySidebar">
-      <FilterButton v-if="route.params.username !== connectedUser?.username" class="user" :name="route.params.username as string + '\'s library'" />
+    <div class="filters" v-if="displaySidebar">
       <FilterButton :selected="mediastore.filteredCount === mediastore.count" :name="'All'" :info="mediastore.count"
-        @click="mediastore.resetFilters((route.params.username) as string)" />
+        @click="mediastore.resetFilters()" />
       <FilterGroup :title="'favorites'">
         <div class="icon-group">
           <button class="icon-button button-like" :class="{ activeStatus: filters.like }"
@@ -64,7 +69,7 @@ function updateFilters(property: any, value: string | boolean | null) {
       </FilterGroup>
       <FilterGroup :title="'category'">
         <FilterButton v-for="categ in categs" :key="categ" :selected="filters.categ === categ" :name="categ"
-          @click="updateFilters('categ', categ)" />
+          :info="countByCateg[categ]" @click="updateFilters('categ', categ)" />
       </FilterGroup>
       <FilterGroup :title="'status'">
         <div class="icon-group">
@@ -159,11 +164,4 @@ function updateFilters(property: any, value: string | boolean | null) {
   }
 
 }
-
-
-// @media (max-width: 1250px) {
-//   .filter-wrapper {
-//     display: none;
-//   }
-// }
 </style>

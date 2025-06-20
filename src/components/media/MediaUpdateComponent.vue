@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, type Ref } from 'vue'
 import { useThrottleFn } from '@vueuse/core'
-import { useRoute } from 'vue-router'
-import { useUserStore } from '@/stores/user'
 import { useMediaStore } from '@/stores/media'
 import { useWiki } from '@/stores/wiki'
 
@@ -26,8 +24,6 @@ import { storeToRefs } from 'pinia'
 import { useStateStore } from '@/stores/state'
 import ItemExtract from '../atomic/ItemExtract.vue'
 
-const route = useRoute()
-const user = useUserStore()
 const mediastore = useMediaStore()
 const wikiservice = useWiki()
 const { confirmOrCancel } = useConfirmStore()
@@ -43,7 +39,7 @@ const categories = mediaCategs.map(categ => categ.name)
 const media: Ref<MediaModel> = ref({})
 
 onMounted(() => {
-  if (props.action === 'editMedia' && route.params.username === user.connectedUser!.username) {
+  if (props.action === 'editMedia') {
     media.value = {
       id: props.media?.id,
       title: props.media?.title,
@@ -67,7 +63,6 @@ onMounted(() => {
         action: 'completed',
         categ: 'movie',
         key: props.media.key,
-        user: user.connectedUser!.username,
       }
     })
 })
@@ -75,9 +70,8 @@ onMounted(() => {
 const addMedia = useThrottleFn((media: MediaModel) => {
   if (media.action === 'planning') media.score = 0
   media.tags = media.tagstring ? media.tagstring.split(' ') : null
-  media.user = user.connectedUser!.username
   mediastore
-    .addUserMedia(media)
+    .addMedia(media)
     .then(() => emits('confirm'))
 }, 500)
 
@@ -86,7 +80,7 @@ const editMedia = useThrottleFn((media?: MediaModel) => {
   if (media.action === 'planning') media.score = 0
   media.tags = media.tagstring ? media.tagstring.split(' ') : null
   mediastore
-    .editUserMedia(media)
+    .editMedia(media)
     .then(() => emits('confirm'))
 }, 500)
 
@@ -95,7 +89,7 @@ const deleteMedia = useThrottleFn((id: number) => {
     .then((confirm: boolean) => {
       if (confirm) {
         mediastore
-          .deleteUserMedia(id)
+          .deleteMedia(id)
           .then(() => emits('cancel'))
       }
     })
@@ -107,7 +101,7 @@ const deleteMedia = useThrottleFn((id: number) => {
     <div class="media__content">
       <ItemTitle :title="media.title ?? null" :small="displaySmall" />
       <ItemDescription :description="media.description ?? null" :small="displaySmall" />
-      <ItemExtract :extract="media.extract!" :small="displaySmall"/>
+      <ItemExtract :extract="media.extract!" :small="displaySmall" />
       <button class="media__favorite button-icon" type="button" @click="media.like = !media.like">
         <IconLikeFull class="love" v-if="media.like === true" />
         <IconLike v-else />

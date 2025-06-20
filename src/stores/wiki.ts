@@ -2,7 +2,6 @@ import http from '@/utils/http-common'
 import type { WikiGet } from '@/models/wiki-get'
 import { useNotificationStore } from '@/stores/notification'
 import strings from '@/utils/strings'
-import { errorMessage, errorsMessages } from '@/utils/error-manager'
 
 const notification = useNotificationStore()
 
@@ -18,23 +17,21 @@ async function getWikiByLink(link: string): Promise<any> {
     // .get<any>(title)
     .get<WikiGet>(title)
     .then((response) => {
-      const object = { 
-          id: response.data.id,
-          title: response.data.title,
-          url: response.data.content_urls?.desktop?.page,
-          description: response.data.description,
-          extract: response.data.extract,
-          image: response.data.originalimage?.source,
-          thumbnail: response.data.thumbnail?.source,
-          // key: response.data.key,
+      const object = {
+        id: response.data.id,
+        title: response.data.title,
+        url: response.data.content_urls?.desktop?.page,
+        description: response.data.description,
+        extract: response.data.extract,
+        image: response.data.originalimage?.source,
+        thumbnail: response.data.thumbnail?.source,
+        // key: response.data.key,
       }
       return object
     })
     .catch((error) => {
       notification.addNotification('can\'t get wikis', strings.SAD)
-      errorsMessages(error).length ?
-        notification.addErrorsNotifications(errorsMessages(error)) :
-        notification.addErrorNotification(errorMessage(error))
+      notification.addErrorNotification(error)
     })
 }
 
@@ -46,9 +43,7 @@ async function getWikiByname(name: string): Promise<any> {
     })
     .catch((error) => {
       notification.addNotification('can\'t get wikis', strings.SAD)
-        errorsMessages(error).length ?
-          notification.addErrorsNotifications(errorsMessages(error)) :
-          notification.addErrorNotification(errorMessage(error))
+      notification.addErrorNotification(error)
     })
 }
 

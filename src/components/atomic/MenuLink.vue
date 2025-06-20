@@ -1,9 +1,5 @@
 <script setup lang="ts">
 import type { Component } from 'vue';
-import { storeToRefs } from 'pinia';
-import { useUserStore } from '@/stores/user';
-
-const { connectedUser } = storeToRefs(useUserStore())
 
 const props = defineProps<{
   route: string
@@ -13,7 +9,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <router-link class="type" :to="{ name: props.route, params: { username: connectedUser?.username } }">
+  <router-link class="type" :to="{ name: props.route }">
     <div class="button-icon">
       <component :is="props.icon" />
     </div>
@@ -48,7 +44,6 @@ const props = defineProps<{
 .type:hover {
   background-color: var(--highlight);
 }
-
 
 .button-icon {
   background-color: transparent;

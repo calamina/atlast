@@ -41,23 +41,24 @@ const toggleEdit = useThrottleFn(() => {
     <div class="content">
       <ItemTitle :title="props.media.title ?? null" :like="props.media.like ?? null" :small="displaySmall" />
       <Transition name="reveal">
-      <ItemDescription v-if="!displaySmall || expanded && displaySmall" :description="props.media.description ?? null" :small="displaySmall" />
+        <ItemDescription v-if="!displaySmall || expanded && displaySmall" :description="props.media.description ?? null"
+          :small="displaySmall" />
       </Transition>
       <TransitionGroup name="reveal">
         <!-- <ItemDescription v-if="expanded && displaySmall" :description="props.media.description ?? null" :small="displaySmall" /> -->
         <TagGroup v-if="expanded && props.media.tags?.length" :max-height="true">
           <TagButton v-for="tag in props.media.tags" :key="tag" :name="tag" :selected="false" />
         </TagGroup>
-        <ItemExtract v-if="expanded" :extract="props.media.extract!" :small="displaySmall"/>
+        <ItemExtract v-if="expanded" :extract="props.media.extract!" :small="displaySmall" />
       </TransitionGroup>
       <div class="footer" :class="{ smallFooter: displaySmall }">
         <ItemStatus :status="props.media.action!"
-          :dates="{ created: props.media.createdAt!, updated: props.media.updatedAt! }" :small="displaySmall" />
+          :dates="{ created: props.media.createdAt, updated: props.media.updatedAt }" :small="displaySmall" />
         <ItemCateg :categ="props.media.categ" :small="displaySmall" />
         <ItemRating :score="props.media.score!" :small="displaySmall" />
       </div>
     </div>
-    <ItemActions v-if="displayActions" :url="media.url!" :user="media.user!" @enableEdit="toggleEdit()" />
+    <ItemActions v-if="displayActions" :url="media.url!" @enableEdit="toggleEdit()" />
   </div>
 </template>
 

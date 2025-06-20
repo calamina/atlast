@@ -9,7 +9,7 @@ import ConfirmationComponent from './components/ConfirmationComponent.vue';
 import { useConfirmStore } from './stores/confirm';
 
 const { notifications } = useNotificationStore()
-const {tooltip} = storeToRefs(useTooltipStore())
+const { tooltip } = storeToRefs(useTooltipStore())
 const { isRevealed } = storeToRefs(useConfirmStore())
 </script>
 

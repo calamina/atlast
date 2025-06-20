@@ -1,8 +1,7 @@
 # atlast
-Personnal Knowledge Database made with Vue3 and Strapi
+Personnal Knowledge Database made with Vue3 and IndexedDB (local storage)
 
 [atlast.vercel.app](https://atlast.vercel.app)
-( not working for now, no server for data waa waa :< )
 
 ![atlast preview](atlast.png?raw=true "Atlast preview")
 ---
@@ -14,26 +13,14 @@ Personnal Knowledge Database made with Vue3 and Strapi
 # TODO
 
 ADD LOCAL DB
+CLEAN FONTS
 
-add Landing page // debug connexion :x
+Add transitions on tooltips + menus
 
+- [ ] expand categories to other things (links ? / uncategorized / Nature / ...)
 
 - [ ] component to enable/disable stuff ? size by size comparison
-- [ ] on different user page indicate if media is in my library as well
-    by making request if route.user != connecteduser and comparing results
-    add div if result matches 
-- [ ] add search on other person library
-    same, add user results in mediaSearch if not me
 - [ ] add shortcut / usage page / auto active on first connection ?
-
-
-- [ ] strange user behavior : click/routing not working at times ?
-- [ ] reload userlist when different user !!!
-
-
-- [ ] better page number for pagination
-- [ ] when adding / deleting media stay on current page (if  pagecount unchanged!)
-
 
 - [ ] clean filter (css + html)
 - [ ] filter categs -> icons ???
@@ -48,17 +35,6 @@ add Landing page // debug connexion :x
 
 - [ ] update Links
 - [ ] rework links like medias
-
-- [ ] update users
-- [ ] add user filteredlist ?
-- [ ] on different user media, search user media, or mine ???
-- [ ] on different user media, see if in my library ?
-- [ ] on different user media, add filter for common media ?
-- [ ] add option to make library public/private ?
-- [ ] disable edit if same object ????
-
-- [ ] credentials not updating on new account creation :/
-- [ ] list forever loading on new account creation :/
 
 # ???
 - [ ] add config panel to create new collections ? like links and media

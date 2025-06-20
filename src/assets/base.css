@@ -16,8 +16,9 @@
 
 @font-face {
   font-family: 'contax_pro_75_boldregular';
-  src: url('/src/assets/fonts/contaxbold-webfont.woff2') format('woff2'),
-    url('/src/assets/fonts/contaxbold-webfont.woff') format('woff');
+  /* src: url('/src/assets/fonts/contaxbold-webfont.woff2') format('woff2'),
+    url('/src/assets/fonts/contaxbold-webfont.woff') format('woff'); */
+  src: url('/src/assets/fonts/contaxMed.otf');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
@@ -39,11 +40,10 @@
   --score: #b97749cc;
   --score-background: #dc956344;
   --fixed: 5.5rem;
-  /* --fixed: 5rem; */
-  
+
   --font-italic: 'contax_pro_66_med_italicIt', Arial, sans-serif;
   --font-bold: 'contax_pro_75_boldregular', Arial, sans-serif;
-  
+
   /* DARK THEME */
   /* --white: #2d2d35;
   --background: #1E1E24;
@@ -90,6 +90,8 @@ html::-webkit-scrollbar {
   display: flex;
   flex-flow: column;
   background-size: cover;
+  display: grid;
+  grid-template-columns: 1fr 5.5rem 1fr 5.5rem 1fr;
 }
 
 
@@ -141,5 +143,9 @@ input[type="date"] {
 @media (max-width: 1250px) {
   html {
     font-size: 14px;
+  }
+
+  #app {
+    grid-template-columns: 0 5.5rem 1fr 5.5rem 1fr;
   }
 }
