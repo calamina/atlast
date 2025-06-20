@@ -8,6 +8,7 @@ import strings from '@/utils/strings'
 import { useNotificationStore } from '@/stores/notification'
 import { useLoadingStore } from '@/stores/loading'
 import { db } from './db'
+import { get } from '@vueuse/core'
 
 export const useMediaStore = defineStore('media', () => {
   const allMedia: Ref<Array<MediaModel>> = ref([])
@@ -87,6 +88,7 @@ export const useMediaStore = defineStore('media', () => {
 
   async function updateFilters(newFilters: FilterModel): Promise<any> {
     filters.value = newFilters
+    getMedia()
   }
 
   async function resetFilters(): Promise<any> {

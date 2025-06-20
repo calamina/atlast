@@ -16,8 +16,6 @@
 
 @font-face {
   font-family: 'contax_pro_75_boldregular';
-  /* src: url('/src/assets/fonts/contaxbold-webfont.woff2') format('woff2'),
-    url('/src/assets/fonts/contaxbold-webfont.woff') format('woff'); */
   src: url('/src/assets/fonts/contaxMed.otf');
   font-weight: 100;
   font-style: normal;
