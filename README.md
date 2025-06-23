@@ -11,12 +11,9 @@ Personnal Knowledge Database made with Vue3 and IndexedDB (local storage)
 
 
 # TODO
-
-ADD LOCAL DB
-CLEAN FONTS
+MOVE DB IMPORT/EXPORT TO STORE
 CLEAN USER DATA LEFTOVERS
-TEST BRANCH ACTIONS
-
+FIX SORTING
 Add transitions on tooltips + menus
 
 - [ ] expand categories to other things (links ? / uncategorized / Nature / ...)

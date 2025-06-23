@@ -49,12 +49,10 @@ const { setTooltip, resetTooltip } = useTooltipStore()
 }
 
 .actions {
-  position: sticky;
+  position: fixed;
   top: var(--fixed);
   display: flex;
   flex-flow: column;
-  gap: 0.25rem;
-  gap: 1rem;
   gap: 0.5rem;
   height: fit-content;
   border-radius: 2rem;

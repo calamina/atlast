@@ -103,10 +103,12 @@ const countByCateg: ComputedRef<Record<string, number>> = computed(() => {
   justify-self: flex-end;
   align-items: flex-end;
   min-height: 90vh;
+  overflow-y: auto;
 }
 
 .filters {
   position: sticky;
+  position: fixed;
   top: var(--fixed);
   padding-left: 1rem;
   display: flex;
@@ -115,6 +117,8 @@ const countByCateg: ComputedRef<Record<string, number>> = computed(() => {
   gap: 0.5rem;
   height: fit-content;
   transition: opacity 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
+  max-height: 85vh;
+  overflow-y: scroll;
 }
 
 .user {

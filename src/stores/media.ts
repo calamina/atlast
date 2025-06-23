@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, type Ref } from 'vue'
+import { computed, ref, type ComputedRef, type Ref } from 'vue'
 import type { MediaModel } from '@/models/media.model'
 import type { FilterModel } from '@/models/filter.model'
 
@@ -8,13 +8,12 @@ import strings from '@/utils/strings'
 import { useNotificationStore } from '@/stores/notification'
 import { useLoadingStore } from '@/stores/loading'
 import { db } from './db'
-import { get } from '@vueuse/core'
 
 export const useMediaStore = defineStore('media', () => {
   const allMedia: Ref<Array<MediaModel>> = ref([])
   const filteredList: Ref<Array<MediaModel>> = ref([])
-  const count: Ref<number> = ref(0)
-  const filteredCount: Ref<number> = ref(0)
+  const count: ComputedRef<number> = computed(() => allMedia.value.length)
+  const filteredCount: ComputedRef<number> = computed(() => filteredList.value.length)
   const filters: Ref<FilterModel> = ref({ sort: 'createdAt', order: 'desc' })
   const mediaSearch: Ref<string> = ref('')
 
@@ -23,11 +22,14 @@ export const useMediaStore = defineStore('media', () => {
 
   async function getMedia(): Promise<MediaModel[]> {
     setLoading(true)
+    // if(filters.value.order === 'desc') {
+    //   query.reverse()
+    // }
     return await db.medias
+      // .orderBy(filters.value.sort)
       .toArray()
       .then((response) => {
         setLoading(false)
-        count.value = response.length
         allMedia.value = response
         applyMediaFilters(response)
         return response
@@ -35,6 +37,8 @@ export const useMediaStore = defineStore('media', () => {
       .catch((error) => {
         manageError(error, 'failed to get media', strings.SAD)
         setLoading(false)
+        allMedia.value = []
+        filteredList.value = []
         return []
       })
   }
@@ -114,7 +118,6 @@ export const useMediaStore = defineStore('media', () => {
       filtered = filtered.filter((m) => m.tags && m.tags.includes(filters.value.tag))
     }
 
-    filteredCount.value = filtered.length
     filteredList.value = filtered
     return filtered
   }

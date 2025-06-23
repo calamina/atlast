@@ -73,13 +73,13 @@ textarea {
 
 html {
   background-color: var(--background);
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  /* -ms-overflow-style: none;
+  scrollbar-width: none; */
 }
 
-html::-webkit-scrollbar {
+/* html::-webkit-scrollbar {
   display: none;
-}
+} */
 
 #app {
   width: 100%;
@@ -131,6 +131,10 @@ select {
   width: 100%;
   border: none;
   outline: none;
+}
+
+input[type="file"] {
+  display: none;
 }
 
 input[type="date"] {

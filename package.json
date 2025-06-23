@@ -19,6 +19,7 @@
     "@vueuse/rxjs": "^13.4.0",
     "axios": "^1.10.0",
     "dexie": "^4.0.11",
+    "dexie-export-import": "^4.1.4",
     "npm-check-updates": "^18.0.1",
     "pinia": "^3.0.1",
     "uuid": "^11.1.0",
@@ -26,8 +27,8 @@
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
-    "@tsconfig/node22": "^22.0.1",
     "@rushstack/eslint-patch": "^1.11.0",
+    "@tsconfig/node22": "^22.0.1",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^22.14.0",
     "@types/uuid": "^10.0.0",

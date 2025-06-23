@@ -9,7 +9,7 @@ const props = defineProps<{
 
 <template>
   <img class="image" v-if="props.src" :src="props.src" :class="{ imagesmall: small }" />
-  <div class="image empty" v-else :class="{ imagesmall: small }" >{{ strings.SAD }}</div>
+  <div class="image empty" v-else :class="{ imagesmall: small }">{{ strings.SAD }}</div>
 </template>
 
 <style scoped lang="scss">

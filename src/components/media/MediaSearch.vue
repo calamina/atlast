@@ -108,12 +108,12 @@ function upsertMedia(media: MediaModel, action: string) {
   gap: 0.5rem;
   // background-color: var(--background);
   overflow-y: auto;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  // -ms-overflow-style: none;
+  // scrollbar-width: none;
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  // &::-webkit-scrollbar {
+  //   display: none;
+  // }
 }
 
 .medias {
