@@ -13,6 +13,7 @@ const props = defineProps<{
 p {
   max-height: 30rem;
   padding-bottom: 0.5rem;
+  text-align: left;
 
   &.small {
     font-size: 0.9rem;

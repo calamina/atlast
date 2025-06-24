@@ -1,29 +1,26 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-// import { useUserStore } from '@/stores/user'
 
 import { useMediaStore } from '@/stores/media'
 import { useStateStore } from '@/stores/state'
 import { useTooltipStore } from '@/stores/tooltip'
 
-import UserMenu from './UserMenu.vue'
+import DatabaseMenu from './DatabaseMenu.vue'
 import MenuLink from './atomic/MenuLink.vue'
 import IconBook from './icons/IconBook.vue'
 import IconLayout from './icons/IconLayout.vue'
-// import IconUser from '@/components/icons/IconUser.vue'
 
 const { mediaSearch } = storeToRefs(useMediaStore())
 const { toggleActions } = useStateStore();
 const { setTooltip, resetTooltip } = useTooltipStore()
-// const { displayActions } = storeToRefs(useStateStore())
-// const { connectedUser } = storeToRefs(useUserStore())
+const { displayActions } = storeToRefs(useStateStore())
 </script>
 
 <template>
   <nav>
-    <!-- <nav v-if="connectedUser"> -->
     <div class="submenu">
       <div class="types" :class="{ mask: mediaSearch.length }">
+        <MenuLink :route="'home'" :icon="IconBook" :name="'library'" />
         <MenuLink :route="'media'" :icon="IconBook" :name="'library'" />
         <!-- <MenuLink :route="'user'" :icon="IconUser" :name="'users'" /> -->
         <!-- <MenuLink :route="'links'" :icon="IconLink" :name="'links'" /> -->
@@ -31,12 +28,12 @@ const { setTooltip, resetTooltip } = useTooltipStore()
     </div>
     <div class="sep" :class="{ mask: mediaSearch.length }">
       <button class="button-icon" @click="toggleActions" @mouseover="setTooltip('Show Options')"
-        @mouseleave="resetTooltip()">
+        @mouseleave="resetTooltip()" aria-label="Show Options" :aria-pressed="displayActions">
         <IconLayout />
       </button>
     </div>
     <div id="menu-search"></div>
-    <UserMenu :class="{ mask: mediaSearch.length }" />
+    <DatabaseMenu :class="{ mask: mediaSearch.length }" />
   </nav>
 </template>
 
@@ -54,7 +51,6 @@ nav {
   display: grid;
   grid-template-columns: subgrid;
   grid-column: span 5;
-  // grid-template-columns: 1fr 5.5rem 1fr 5.5rem 1fr;
   background-color: var(--background);
   border-bottom: 1px solid var(--border);
   transition: 0.3s;
@@ -98,8 +94,5 @@ nav {
 #menu-search {
   display: flex;
   min-width: 40vw;
-  // padding: 0 1rem;
 }
-
-@media (max-width: 1250px) {}
 </style>

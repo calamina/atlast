@@ -27,9 +27,7 @@ const categs = mediaCategs.map(categ => categ.name)
 
 const tags: ComputedRef<any> = computed(() => {
   const tags = new Set()
-  mediastore.filteredList.map((media) => {
-    media.tags?.forEach((tag: string) => tags.add(tag))
-  })
+  mediastore.filteredList.map((media) => media.tags?.forEach((tag: string) => tags.add(tag)))
   return tags
 })
 
@@ -45,9 +43,8 @@ function updateFilters(property: any, value: string | boolean | null) {
 const countByCateg: ComputedRef<Record<string, number>> = computed(() => {
   const counts: Record<string, number> = {}
   allMedia.value.forEach(media => {
-    if (media.categ) {
-      counts[media.categ] = (counts[media.categ] || 0) + 1
-    }
+    if (!media.categ) return
+    counts[media.categ] = (counts[media.categ] || 0) + 1
   })
   return counts
 })
@@ -61,7 +58,7 @@ const countByCateg: ComputedRef<Record<string, number>> = computed(() => {
       <FilterGroup :title="'favorites'">
         <div class="icon-group">
           <button class="icon-button button-like" :class="{ activeStatus: filters.like }"
-            @click="updateFilters('like', true)">
+            @click="updateFilters('like', true)" aria-label="Favorite filter">
             <IconLike v-if="!filters.like" class="icon" />
             <IconLikeFull v-else class="icon" />
           </button>
@@ -74,7 +71,8 @@ const countByCateg: ComputedRef<Record<string, number>> = computed(() => {
       <FilterGroup :title="'status'">
         <div class="icon-group">
           <button class="icon-button" v-for="status in mediaStatus"
-            :class="{ activeStatus: filters.status === status.name }" @click="updateFilters('status', status.name)">
+            :class="{ activeStatus: filters.status === status.name }" @click="updateFilters('status', status.name)"
+            :aria-label="status + 'filter'" :key="status.name">
             <component class="icon" :is="status!.component" :style="{ backgroundColor: status!.color }"
               @mouseover="setTooltip(status!.name)" @mouseleave="resetTooltip()" />
           </button>
@@ -107,6 +105,7 @@ const countByCateg: ComputedRef<Record<string, number>> = computed(() => {
 }
 
 .filters {
+  padding: 2px;
   position: sticky;
   position: fixed;
   top: var(--fixed);

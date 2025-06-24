@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, type Ref } from 'vue'
-import { useThrottleFn } from '@vueuse/core'
+import { onKeyStroke, templateRef, useThrottleFn } from '@vueuse/core'
 import { useMediaStore } from '@/stores/media'
 import { useWiki } from '@/stores/wiki'
 
@@ -23,48 +23,39 @@ import { useConfirmStore } from '@/stores/confirm'
 import { storeToRefs } from 'pinia'
 import { useStateStore } from '@/stores/state'
 import ItemExtract from '../atomic/ItemExtract.vue'
+import { useMediaUtils } from '@/utils/media-utils'
+import { MediaActions } from '@/utils/media-actions'
 
 const mediastore = useMediaStore()
 const wikiservice = useWiki()
 const { confirmOrCancel } = useConfirmStore()
 const { displaySmall, displayImages } = storeToRefs(useStateStore())
+const { mediaToMediaForm } = useMediaUtils()
 
 const props = defineProps<{
   media: MediaModel
-  action: string
+  action: MediaActions
 }>()
 const emits = defineEmits(['cancel', 'confirm'])
 
 const categories = mediaCategs.map(categ => categ.name)
 const media: Ref<MediaModel> = ref({})
+const form = templateRef<HTMLButtonElement | null>("form")
 
 onMounted(() => {
-  if (props.action === 'editMedia') {
-    media.value = {
-      id: props.media?.id,
-      title: props.media?.title,
-      url: props.media?.url,
-      description: props.media?.description,
-      tagstring: props.media?.tags?.join(' '),
-      categ: props.media?.categ,
-      action: props.media?.action,
-      score: props.media?.score,
-      like: props.media?.like,
-      extract: props.media?.extract,
-      image: props.media?.image,
-      key: props.media?.key
-    }
+  if (props.action === MediaActions.EDIT) {
+    media.value = mediaToMediaForm(props.media)
   } else
-    wikiservice.getWikiByLink(props.media.key!).then((data) => {
-      media.value = {
-        ...data,
-        tagstring: props.media.tags?.join(' '),
-        score: 0,
-        action: 'completed',
-        categ: 'movie',
-        key: props.media.key,
-      }
-    })
+    wikiservice.getWikiByLink(props.media.key!)
+      .then((data) => media.value = data ?? {})
+  form.value?.focus()
+})
+
+onKeyStroke(['Escape'], (e) => {
+  if (e.key === 'Escape') {
+    e.preventDefault()
+    emits('cancel')
+  }
 })
 
 const addMedia = useThrottleFn((media: MediaModel) => {
@@ -96,7 +87,7 @@ const deleteMedia = useThrottleFn((id: number) => {
 }, 500)
 </script>
 <template>
-  <div class="media" :class="{ mediaSmall: displaySmall }" v-if="media">
+  <button ref="form" class="media" :class="{ mediaSmall: displaySmall }" v-if="media">
     <ItemPicture :src="media.image ?? null" :small="displaySmall" v-if="displayImages" />
     <div class="media__content">
       <ItemTitle :title="media.title ?? null" :small="displaySmall" />
@@ -129,7 +120,7 @@ const deleteMedia = useThrottleFn((id: number) => {
         </div>
         <div class="media__footer">
           <input placeholder="tags (separate with space)" class="media__tags" type="text" v-model="media.tagstring" />
-          <div class="media__actions" v-if="props.action === 'createMedia'">
+          <div class="media__actions" v-if="props.action === MediaActions.CREATE">
             <button class="button-icon media__cancel" type="reset" @click="$emit('cancel', props.media)">
               <IconBack />
             </button>
@@ -137,7 +128,7 @@ const deleteMedia = useThrottleFn((id: number) => {
               <IconCheck />
             </button>
           </div>
-          <div class="media__actions" v-if="props.action === 'editMedia'">
+          <div class="media__actions" v-if="props.action === MediaActions.EDIT">
             <button class="button-icon media__cancel" type="reset" @click="$emit('cancel', props.media)">
               <IconBack />
             </button>
@@ -151,7 +142,7 @@ const deleteMedia = useThrottleFn((id: number) => {
         </div>
       </div>
     </div>
-  </div>
+  </button>
 </template>
 <style lang="scss" scoped>
 .media {
@@ -160,8 +151,13 @@ const deleteMedia = useThrottleFn((id: number) => {
   flex-flow: row;
   gap: 0.75rem;
   padding: 1rem;
-  background-color: var(--white);
   border-radius: 1.5rem;
+  background-color: var(--white);
+
+  &:focus {
+    // outline: none;
+    outline: 2px solid var(--background-darker);
+  }
 
   &.mediaSmall {
     padding: 0.5rem;
@@ -215,6 +211,7 @@ const deleteMedia = useThrottleFn((id: number) => {
     right: 0.5rem;
     top: 0.5rem;
     padding: 0.55rem;
+    border-radius: 100%;
   }
 
   &__footer {

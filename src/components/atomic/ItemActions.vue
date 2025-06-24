@@ -1,16 +1,12 @@
 <script setup lang="ts">
 import { useThrottleFn } from '@vueuse/core'
-import { storeToRefs } from 'pinia'
 
 import { useTooltipStore } from '@/stores/tooltip'
-import { useStateStore } from '@/stores/state'
 
 import IconEdit from '@/components/icons/IconEdit.vue'
-import IconPlus from '@/components/icons/IconPlus.vue'
 import IconLink from '@/components/icons/IconLink.vue'
 
 const { setTooltip, resetTooltip } = useTooltipStore()
-// const { displaySmall, displayImages } = storeToRefs(useStateStore())
 
 const emits = defineEmits(['enableEdit'])
 const props = defineProps<{
@@ -30,16 +26,13 @@ function openLink(url: string | undefined) {
 <template>
   <div class="actions">
     <button class="button-icon action" type="button" @click="openLink(props.url)"
-      @mouseover="setTooltip('Wikipedia link')" @mouseleave="resetTooltip()">
+      @mouseover="setTooltip('Wikipedia link')" @mouseleave="resetTooltip()" aria-label="Open link">
       <IconLink />
     </button>
     <button class="button-icon action" type="button" @click="toggleEdit" @mouseover="setTooltip('Edit')"
-      @mouseleave="resetTooltip()">
+      @mouseleave="resetTooltip()" aria-label="Edit media">
       <IconEdit />
     </button>
-    <!-- <button v-else class="button-icon action" type="button" @click="toggleEdit">
-        <IconPlus />
-      </button> -->
   </div>
 </template>
 

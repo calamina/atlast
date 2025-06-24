@@ -16,15 +16,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    :class="notification.type"
-    class="notification"
-    @click="notifications.removeNotification(notification)"
-  >
+  <button :class="notification.type" class="notification" @click="notifications.removeNotification(notification)">
     <p class="notification__message">
       {{ notification.message }}
     </p>
-  </div>
+  </button>
 </template>
 
 <style lang="scss" scoped>

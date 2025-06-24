@@ -8,7 +8,8 @@ const props = defineProps<{
 </script>
 
 <template>
-  <p class="description" :class="{ smallDescription: props.small }" v-if="props.description">{{ props.description ?? ('No description ' + strings.SAD) }}</p>
+  <p class="description" :class="{ smallDescription: props.small }" v-if="props.description">{{ props.description ??
+    ('No description ' + strings.SAD) }}</p>
 </template>
 
 <style scoped lang="scss">
@@ -16,6 +17,7 @@ const props = defineProps<{
   font-family: var(--font-italic);
   opacity: 0.7;
   max-height: 3rem;
+  text-align: left;
 
   &.smallDescription {
     font-size: 0.9rem;

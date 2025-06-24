@@ -26,7 +26,6 @@ const emits = defineEmits(['enableEdit'])
 const props = defineProps<{ media: MediaModel }>()
 
 const expanded: Ref<boolean | null> = ref(null)
-const displayActions: Ref<boolean | null> = ref(null)
 
 const toggleEdit = useThrottleFn(() => {
   resetTooltip()
@@ -35,8 +34,7 @@ const toggleEdit = useThrottleFn(() => {
 </script>
 
 <template>
-  <div class="media" :class="{ mediaSmall: displaySmall }" v-if="props.media.id" @click="expanded = !expanded"
-    @mouseenter="displayActions = true" @mouseleave="displayActions = false">
+  <button class="media" :class="{ mediaSmall: displaySmall }" v-if="props.media.id" @click="expanded = !expanded">
     <ItemPicture v-if="displayImages" :src="props.media.thumbnail ?? null" :small="displaySmall" />
     <div class="content">
       <ItemTitle :title="props.media.title ?? null" :like="props.media.like ?? null" :small="displaySmall" />
@@ -45,7 +43,6 @@ const toggleEdit = useThrottleFn(() => {
           :small="displaySmall" />
       </Transition>
       <TransitionGroup name="reveal">
-        <!-- <ItemDescription v-if="expanded && displaySmall" :description="props.media.description ?? null" :small="displaySmall" /> -->
         <TagGroup v-if="expanded && props.media.tags?.length" :max-height="true">
           <TagButton v-for="tag in props.media.tags" :key="tag" :name="tag" :selected="false" />
         </TagGroup>
@@ -58,8 +55,8 @@ const toggleEdit = useThrottleFn(() => {
         <ItemRating :score="props.media.score!" :small="displaySmall" />
       </div>
     </div>
-    <ItemActions v-if="displayActions" :url="media.url!" @enableEdit="toggleEdit()" />
-  </div>
+    <ItemActions class="actions" :url="media.url!" @enableEdit="toggleEdit()" />
+  </button>
 </template>
 
 <style lang="scss" scoped>
@@ -68,20 +65,37 @@ const toggleEdit = useThrottleFn(() => {
   transform-origin: left;
   position: relative;
   display: flex;
+  width: 100%;
+  justify-content: flex-start;
   flex-flow: row;
   gap: 0.75rem;
   padding: 1rem;
   border-radius: 1.5rem;
-  cursor: pointer;
+  outline: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  // cursor: pointer;
 
   &.mediaSmall {
     padding: 0.5rem;
     border-radius: 1rem;
   }
 
-  &:hover {
+  &:hover,
+  &:focus-within {
     background-color: var(--white);
+
+    .actions {
+      display: flex;
+    }
   }
+}
+
+.actions {
+  display: none;
 }
 
 .content {

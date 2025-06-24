@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
-import { onKeyStroke, useKeyModifier } from '@vueuse/core'
+import { onKeyStroke } from '@vueuse/core'
 import { watchDebounced } from '@vueuse/shared'
 
 import { useWiki } from '@/stores/wiki'
@@ -12,6 +12,8 @@ import MediaUpdateComponent from '@/components/media/MediaUpdateComponent.vue'
 import MediaComponent from './MediaComponent.vue'
 import MediaSimple from './MediaSimple.vue'
 import { storeToRefs } from 'pinia'
+import type { WikiGet } from '@/models/wiki-get'
+import { MediaActions } from '@/utils/media-actions'
 
 const emits = defineEmits(['exit'])
 
@@ -22,37 +24,30 @@ const { mediaSearch } = storeToRefs(mediastore)
 let wikiList: Ref<MediaModel[]> = ref([])
 let mediaList: Ref<MediaModel[]> = ref([])
 const activeMedia: Ref<MediaModel | null> = ref(null)
-const createOrUpdate: Ref<string> = ref('')
+const createOrUpdate: Ref<MediaActions> = ref(MediaActions.CREATE)
 
 watchDebounced(
-  mediaSearch,
-  () => {
-    activeMedia.value = null
-    mediaSearch.value ? getResults(mediaSearch.value) : ((wikiList.value = []), (mediaList.value = []))
+  mediaSearch, () => {
+    resetResults()
+    getResults(mediaSearch.value)
   },
   { debounce: 600, maxWait: 1200 }
 )
 
-async function getResults(value: string) {
+function resetResults() {
   mediaList.value = []
   wikiList.value = []
+  activeMedia.value = null
+}
 
-  const mediaTemp: MediaModel[] = []
+async function getResults(value: string) {
+  if (!value) return
 
-  mediastore.getMediaByTitle(value)
-    .then((data: MediaModel[]) => {
-      data?.forEach((element) => {
-        element.id = element.id
-        mediaTemp.push(element)
-      })
-    })
-    .then(() =>
-      getWikiByname(value).then((data: any) => {
-        const mediaListKeys = new Set(mediaList.value.map((el) => el.key))
-        wikiList.value = data.filter(({ key }: { key: string }) => !mediaListKeys.has(key))
-        mediaList.value = [...mediaTemp]
-      })
-    )
+  await getWikiByname(value).then((data: any) => {
+    mediastore.getMediaByTitle(value).forEach((element) => mediaList.value.push(element))
+    wikiList.value = data.filter((wiki: WikiGet) =>
+      !mediaList.value.map(media => media.key).includes(wiki.key))
+  })
 }
 
 onKeyStroke(['Escape'], (e) => {
@@ -62,7 +57,7 @@ onKeyStroke(['Escape'], (e) => {
   }
 })
 
-function upsertMedia(media: MediaModel, action: string) {
+function upsertMedia(media: MediaModel, action: MediaActions) {
   activeMedia.value = media
   createOrUpdate.value = action
 }
@@ -74,11 +69,11 @@ function upsertMedia(media: MediaModel, action: string) {
       <div class="results" v-if="!activeMedia">
         <div class="medias" v-if="mediaList.length">
           <MediaComponent v-for="media of mediaList" :media="media" :key="media.id"
-            @enableEdit="upsertMedia(media, 'editMedia')" />
+            @enableEdit="upsertMedia(media, MediaActions.EDIT)" />
         </div>
         <div class="medias" v-if="wikiList.length">
           <MediaSimple v-for="(media, index) of wikiList" :key="index" :media="media"
-            @click="upsertMedia(media, 'createMedia')" />
+            @click="upsertMedia(media, MediaActions.CREATE)" />
         </div>
       </div>
       <div class="results" v-else>
@@ -102,22 +97,13 @@ function upsertMedia(media: MediaModel, action: string) {
 .results {
   width: 100%;
   display: flex;
-  // flex-flow: column;
-  // align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  // background-color: var(--background);
+  padding-top: 0.25rem;
   overflow-y: auto;
-  // -ms-overflow-style: none;
-  // scrollbar-width: none;
-
-  // &::-webkit-scrollbar {
-  //   display: none;
-  // }
 }
 
 .medias {
-  // width: 45rem;
   width: max(40vw, 45rem);
   display: flex;
   flex-flow: column;

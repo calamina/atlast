@@ -8,6 +8,10 @@ import strings from '@/utils/strings'
 import { useNotificationStore } from '@/stores/notification'
 import { useLoadingStore } from '@/stores/loading'
 import { db } from './db'
+import { set, useThrottleFn } from '@vueuse/core'
+import { useConfirmStore } from './confirm'
+import { useFileUtils } from '@/utils/file-utils'
+import { useMediaUtils } from '@/utils/media-utils'
 
 export const useMediaStore = defineStore('media', () => {
   const allMedia: Ref<Array<MediaModel>> = ref([])
@@ -17,7 +21,10 @@ export const useMediaStore = defineStore('media', () => {
   const filters: Ref<FilterModel> = ref({ sort: 'createdAt', order: 'desc' })
   const mediaSearch: Ref<string> = ref('')
 
-  const notification = useNotificationStore()
+  const { setNewMediaProperties } = useMediaUtils()
+  const { downloadBlob, createBlob } = useFileUtils()
+  const { confirmOrCancel } = useConfirmStore()
+  const { addErrorNotification, addNotification } = useNotificationStore()
   const { setLoading } = useLoadingStore()
 
   async function getMedia(): Promise<MediaModel[]> {
@@ -43,31 +50,25 @@ export const useMediaStore = defineStore('media', () => {
       })
   }
 
-  async function getMediaByTitle(title: string): Promise<MediaModel[]> {
-    setLoading(true)
-    return await db.medias
+  function getMediaByTitle(title: string): MediaModel[] {
+    return allMedia.value
       .filter((media) => {
         if (media.title === undefined) return false
         return media.title.toLowerCase().includes(title.toLowerCase())
       })
-      .toArray()
-      .then((response: any) => {
-        setLoading(false)
-        return response
-      })
-      .catch((error) => manageError(error, 'failed to get media', strings.SAD))
   }
 
   async function addMedia(media: any): Promise<void> {
-    const existingMedia = await db.medias.where({ title: media.title }).first()
-    if (existingMedia) {
-      notification.addNotification('Media with this title already exists', strings.SAD)
-      return
-    }
+    const existingMedia = await db.medias
+      .where({ title: media.title })
+      .first()
+      .then((response) => {
+        if (response) return setNewMediaProperties(response)
+      })
 
-    if (media.action === 'planning') media.score = 0
-    media.tags = media.tagstring ? media.tagstring.split(' ') : null
-    media.createdAt = new Date()
+    if (existingMedia) {
+      return addNotification('Media with this title already exists', strings.SAD)
+    }
 
     await db.medias.add(media)
       .then(() => updateMedia('media added', strings.HAPPY))
@@ -123,14 +124,54 @@ export const useMediaStore = defineStore('media', () => {
   }
 
   function manageError(error: any, message: string, kao: string): void {
-    notification.addNotification(message, kao)
-    notification.addErrorNotification(error)
+    addNotification(message, kao)
+    addErrorNotification(error)
   }
 
   function updateMedia(message: string, kao: string): void {
-    notification.addNotification(message, kao)
+    addNotification(message, kao)
     getMedia()
   }
+
+  async function exportMediaDB(): Promise<void> {
+    const options = { prettyJson: true }
+    return await db.export(options)
+      .then((blob) => {
+        addNotification('Database exported successfully', strings.HAPPY);
+        downloadBlob(blob, 'mediaDB.json')
+      })
+      .catch(() => addErrorNotification('Failed to export database.' + strings.SAD))
+    // .finally(() => openUserMenu())
+  }
+
+  async function importMediaDB(file: File): Promise<void> {
+    if (!db.isOpen()) {
+      db.open()
+    }
+
+    const blob = createBlob(file, 'application/json')
+    return await db.import(blob)
+      .then(() => {
+        getMedia()
+        addNotification('Database imported successfully', strings.HAPPY)
+      })
+      .catch(() => addErrorNotification('Failed to import database.' + strings.SAD))
+  }
+
+  const deleteMediaDB = useThrottleFn(() => {
+    return confirmOrCancel('Are you sure you want to delete the database? This action cannot be undone.')
+      .then((confirm: boolean) => {
+        if (confirm) {
+          db.delete()
+            .then(() => {
+              addNotification('Database deleted successfully', strings.HAPPY)
+              allMedia.value = []
+              filteredList.value = []
+            })
+            .catch(() => addErrorNotification('Failed to delete database' + strings.SAD))
+        }
+      })
+  }, 500)
 
   return {
     count,
@@ -146,5 +187,8 @@ export const useMediaStore = defineStore('media', () => {
     editMedia,
     deleteMedia,
     mediaSearch,
+    importMediaDB,
+    exportMediaDB,
+    deleteMediaDB
   }
 })

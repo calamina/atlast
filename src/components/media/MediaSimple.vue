@@ -11,14 +11,13 @@ const { displaySmall, displayImages } = storeToRefs(useStateStore())
 </script>
 
 <template>
-  <div class="media">
+  <button class="media">
     <ItemPicture v-if="displayImages" :src="props.media.thumbnail?.url ?? null" :small="true" />
     <div class="media__content">
       <ItemTitle :title="props.media.title ?? null" :small="displaySmall" />
-      <!-- :url="`http://en.wikipedia.com/wiki/${props.media.key}` ?? null" -->
       <ItemDescription :description="props.media.description ?? null" />
     </div>
-  </div>
+  </button>
 </template>
 
 <style lang="scss" scoped>
@@ -30,11 +29,14 @@ const { displaySmall, displayImages } = storeToRefs(useStateStore())
   cursor: pointer;
   gap: 0.5rem;
   border-radius: 1rem;
-  // background-color: var(--white);
 
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: var(--white);
-    // background-color: var(--background);
+  }
+
+  &:focus {
+    outline: none;
   }
 
   &__content {

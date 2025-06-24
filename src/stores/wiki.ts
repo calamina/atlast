@@ -1,48 +1,30 @@
-import http from '@/utils/http-common'
+import type { MediaModel } from '@/models/media.model'
 import type { WikiGet } from '@/models/wiki-get'
 import { useNotificationStore } from '@/stores/notification'
+import { useMediaUtils } from '@/utils/media-utils'
 import strings from '@/utils/strings'
+import axios from 'axios'
 
 const notification = useNotificationStore()
+const { wikiToMedia } = useMediaUtils()
 
-const config = {
-  headers: {
-    'Api-User-Agent': 'Atlast : gbelliere@gmail.com'
-  }
-}
-
-async function getWikiByLink(link: string): Promise<any> {
+async function getWikiByLink(link: string): Promise<MediaModel | void> {
   const title = 'https://en.wikipedia.org/api/rest_v1/page/summary/' + link
-  return http
-    // .get<any>(title)
+  return axios
     .get<WikiGet>(title)
-    .then((response) => {
-      const object = {
-        id: response.data.id,
-        title: response.data.title,
-        url: response.data.content_urls?.desktop?.page,
-        description: response.data.description,
-        extract: response.data.extract,
-        image: response.data.originalimage?.source,
-        thumbnail: response.data.thumbnail?.source,
-        // key: response.data.key,
-      }
-      return object
-    })
+    .then((response) => wikiToMedia(response.data))
     .catch((error) => {
-      notification.addNotification('can\'t get wikis', strings.SAD)
+      notification.addNotification('Can\'t get wikis', strings.SAD)
       notification.addErrorNotification(error)
     })
 }
 
 async function getWikiByname(name: string): Promise<any> {
-  return http
-    .get<any>(`https://en.wikipedia.org/w/rest.php/v1/search/title?q=${name}&limit=30`, config)
-    .then((response) => {
-      return response.data.pages
-    })
+  return axios
+    .get<any>(`https://en.wikipedia.org/w/rest.php/v1/search/title?q=${name}&limit=30`)
+    .then((response) => response.data.pages)
     .catch((error) => {
-      notification.addNotification('can\'t get wikis', strings.SAD)
+      notification.addNotification('Can\'t get wikis', strings.SAD)
       notification.addErrorNotification(error)
     })
 }

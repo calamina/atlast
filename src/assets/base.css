@@ -98,10 +98,18 @@ button {
   /* outline: none; */
   background-color: transparent;
   cursor: pointer;
+
+  &:focus {
+    outline: 2px solid var(--text);
+  }
 }
 
-/* button:focus, a:focus {
+label:focus {
   outline: 2px solid var(--text);
+}
+
+/* input[type="text"]:focus {
+  outline: 2px solid var(--background-darker);
 } */
 
 .button-icon {

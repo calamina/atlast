@@ -12,7 +12,7 @@ export const useConfirmStore = defineStore('confirm', () => {
     if (!isCanceled) {
       dialogMessage.value = null
       return true
-      }
+    }
     dialogMessage.value = null
     return false
   }
