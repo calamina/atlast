@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useStateStore } from '@/stores/state';
 
-
 const { displaySmall } = useStateStore()
 const { extract } = defineProps<{
   extract: string | null | undefined

@@ -7,8 +7,10 @@ import { useMediaStore } from '@/stores/media'
 import MediaFilters from '@/components/media/MediaFilters.vue'
 import MediaSearchBar from '@/components/media/MediaSearchBar.vue'
 import MediaSearch from '@/components/media/MediaSearch.vue'
-import mediaCategs from '@/utils/media-categs'
-import mediaStatus from '@/utils/media-status'
+import { mediaCategs } from '@/data/media-categs'
+import { mediaStatus } from '@/data/media-status'
+import type { StatusNameModel } from '@/models/status.model'
+import type { CategNameModel } from '@/models/categ.model'
 
 const { mediaSearch, allMedia } = storeToRefs(useMediaStore())
 const { getMedia } = useMediaStore()
@@ -19,7 +21,7 @@ onMounted(() => getMedia().then(() => {
 }))
 
 interface dataModel {
-  name: string
+  name: StatusNameModel | CategNameModel
   component: Component
   total: number
 }
@@ -69,7 +71,7 @@ const initCategs = () => {
 
       <div class="KEK">
         <div class="chart-wrapper">
-          <div v-for="status of statusData" :key="status.name" class="chart">
+          <div v-for="status of statusData" :key="status.name ?? ''" class="chart">
             <div class="chart-bar-wrapper">
               <div class="chart-bar"
                 :style="{ backgroundColor: mediaStatus.find((m) => m.name === status.name)?.color, height: getSize(status.total, statusMax) }">
@@ -87,7 +89,7 @@ const initCategs = () => {
 
       <div class="KEK">
         <div class="chart-wrapper">
-          <div v-for="status of statusData" :key="status.name" class="chart">
+          <div v-for="status of statusData" :key="status.name ?? ''" class="chart">
             <div class="chart-bar-wrapper">
               <div class="chart-bar-background"></div>
               <div class="chart-bar"
@@ -104,7 +106,7 @@ const initCategs = () => {
 
       <div class="KEK">
         <div class="chart-wrapper">
-          <div v-for="categ of categData" :key="categ.name" class="chart">
+          <div v-for="categ of categData" :key="categ.name ?? ''" class="chart">
             <div class="chart-bar-wrapper">
               <span>{{ categ.total }}</span>
               <div class="chart-bar"

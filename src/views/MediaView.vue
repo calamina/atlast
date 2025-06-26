@@ -13,7 +13,7 @@ import MediaSearchBar from '@/components/media/MediaSearchBar.vue'
 import MediaSearch from '@/components/media/MediaSearch.vue'
 import ActionBar from '@/components/ActionBar.vue'
 import strings from '@/utils/strings'
-import { MediaActions } from '@/utils/media-actions'
+import { MediaActions } from '@/data/media-actions'
 import { useTooltipStore } from '@/stores/tooltip'
 
 const { filteredList, count, mediaSearch, filters } = storeToRefs(useMediaStore())

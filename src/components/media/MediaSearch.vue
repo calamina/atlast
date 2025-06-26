@@ -12,8 +12,8 @@ import MediaUpdateComponent from '@/components/media/MediaUpdateComponent.vue'
 import MediaComponent from './MediaComponent.vue'
 import MediaSimple from './MediaSimple.vue'
 import { storeToRefs } from 'pinia'
-import type { WikiGet } from '@/models/wiki-get'
-import { MediaActions } from '@/utils/media-actions'
+import type { WikiGetModel } from '@/models/wiki-get.model'
+import { MediaActions } from '@/data/media-actions'
 
 const emits = defineEmits(['exit'])
 
@@ -45,7 +45,7 @@ async function getResults(value: string): Promise<void> {
 
   await getWikiByname(value).then((data: any) => {
     getMediaByTitle(value).forEach((element) => mediaList.value.push(element))
-    wikiList.value = data.filter((wiki: WikiGet) =>
+    wikiList.value = data.filter((wiki: WikiGetModel) =>
       !mediaList.value.map(media => media.key).includes(wiki.key))
   })
 }

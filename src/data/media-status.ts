@@ -5,7 +5,7 @@ import IconDropped from '@/components/icons/IconDropped.vue'
 import IconPlanning from '@/components/icons/IconPlanning.vue'
 import type { StatusModel } from '@/models/status.model'
 
-export default [
+export const mediaStatus: StatusModel[] = [
   {
     color: '#a4dc6377',
     name: 'completed',
@@ -31,4 +31,4 @@ export default [
     name: 'paused',
     component: IconPaused
   }
-] as StatusModel[]
+]

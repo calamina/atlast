@@ -6,6 +6,7 @@ import { useStateStore } from '@/stores/state';
 import IconDetail from './icons/IconDetail.vue';
 import IconImage from './icons/IconImage.vue';
 import IconFilters from './icons/IconFilters.vue';
+import OptionButton from './atomic/OptionButton.vue';
 
 const { toggleSize, toggleSidebar, toggleImages } = useStateStore()
 const { displayOptions } = storeToRefs(useStateStore())
@@ -14,18 +15,15 @@ const { displayOptions } = storeToRefs(useStateStore())
 <template>
   <div class="optionBar">
     <div class="options" v-if="displayOptions">
-      <div class="options-display">
-        <!-- TODO : button icon component -->
-        <button class="button-icon" @click="toggleSize()" v-tooltip="'Toggle size'" aria-label="Toggle size">
-          <IconDetail />
-        </button>
-        <button class="button-icon" @click="toggleImages()" v-tooltip="'Toggle images'" aria-label="Toggle Images">
-          <IconImage />
-        </button>
-        <button class="button-icon" @click="toggleSidebar()" v-tooltip="'Show sidebar'" aria-label="Toggle sidebar">
-          <IconFilters />
-        </button>
-      </div>
+      <OptionButton @click="toggleSize()" :info="'Toggle size'">
+        <IconDetail />
+      </OptionButton>
+      <OptionButton @click="toggleImages()" :info="'Toggle images'">
+        <IconImage />
+      </OptionButton>
+      <OptionButton @click="toggleSidebar()" :info="'Toggle sidebar'">
+        <IconFilters />
+      </OptionButton>
     </div>
   </div>
 </template>
@@ -47,19 +45,7 @@ const { displayOptions } = storeToRefs(useStateStore())
   gap: 0.5rem;
   height: fit-content;
   border-radius: 2rem;
-}
-
-.options-display {
   background-color: var(--background-darker);
   border-radius: 2rem;
-
-  button {
-    border-radius: 100%;
-  }
-
-  &.smallRadius {
-    border-bottom-left-radius: 0.5rem;
-    border-bottom-right-radius: 0.5rem;
-  }
 }
 </style>

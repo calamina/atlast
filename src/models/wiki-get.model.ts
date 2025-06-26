@@ -1,4 +1,4 @@
-export interface WikiGet {
+export interface WikiGetModel {
   id?: string
   title: string
   wikibase_item?: string
@@ -22,7 +22,7 @@ export interface WikiGet {
   }
   originalimage?: {
     source: string
-  } 
+  }
   key?: string
   type?: string
 }

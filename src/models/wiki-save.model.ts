@@ -1,4 +1,4 @@
-export interface WikiSave {
+export interface WikiSaveModel {
   type: string
   category: string
   status: string

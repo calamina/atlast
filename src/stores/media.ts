@@ -1,8 +1,8 @@
+import "dexie-export-import";
 import { defineStore } from 'pinia'
 import { computed, ref, type ComputedRef, type Ref } from 'vue'
 import type { MediaModel } from '@/models/media.model'
 import type { FilterModel } from '@/models/filter.model'
-
 import strings from '@/utils/strings'
 
 import { useNotificationStore } from '@/stores/notification'
@@ -87,6 +87,9 @@ export const useMediaStore = defineStore('media', () => {
 
     return await db.medias.update(media.id, { ...media })
       .then(() => updateMedia('media edited', strings.HAPPY))
+      // .catch('DataCloneError', e => {
+      //   console.error("DataClone error: " + e.message);
+      // })
       .catch((error) => manageError(error, 'failed to edit media', strings.SAD))
   }
 

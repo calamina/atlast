@@ -4,7 +4,7 @@ import { onKeyStroke, templateRef, useThrottleFn } from '@vueuse/core'
 import { useMediaStore } from '@/stores/media'
 import { useWiki } from '@/stores/wiki'
 
-import status from '@/utils/media-status'
+import { mediaStatus } from '@/data/media-status'
 
 import type { MediaModel } from '@/models/media.model'
 
@@ -18,13 +18,13 @@ import IconCheck from '@/components/icons/IconCheck.vue'
 import IconRating from '../icons/IconRating.vue'
 import IconDelete from '@/components/icons/IconDelete.vue'
 import IconLikeFull from '@/components/icons/IconLikeFull.vue'
-import mediaCategs from '@/utils/media-categs'
+import { mediaCategs } from '@/data/media-categs'
 import { useConfirmStore } from '@/stores/confirm'
 import { storeToRefs } from 'pinia'
 import { useStateStore } from '@/stores/state'
 import ItemExtract from '../atomic/ItemExtract.vue'
 import { useMediaUtils } from '@/utils/media-utils'
-import { MediaActions } from '@/utils/media-actions'
+import { MediaActions } from '@/data/media-actions'
 
 const mediastore = useMediaStore()
 const wikiservice = useWiki()
@@ -99,15 +99,15 @@ const deleteMedia = useThrottleFn((id: number) => {
       </button>
       <div class="media__form">
         <div class="choices">
-          <button v-for="s in status" type="button" class="rating" :key="s.name" @click="mediaTemp.status = s.name"
-            :style="{
+          <button v-for="s in mediaStatus" type="button" class="rating" :key="s.name ?? ''"
+            @click="mediaTemp.status = s.name" :style="{
               backgroundColor: mediaTemp.status === s.name ? s.color : 'var(--background)'
             }" :class="{ active: mediaTemp.status === s.name }">
             {{ s.name }}
           </button>
         </div>
         <div class="choices">
-          <button v-for="category in categories" type="button" class="rating" :key="category"
+          <button v-for="category in categories" type="button" class="rating" :key="category ?? ''"
             @click="mediaTemp.categ = category" :class="{ active: mediaTemp.categ === category }">
             {{ category }}
           </button>

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, useTemplateRef } from 'vue';
 import { onClickOutside } from '@vueuse/core'
-import "dexie-export-import";
 
 import { useMediaStore } from '@/stores/media';
 import { useFileUtils } from '@/utils/file-utils';
@@ -9,6 +8,7 @@ import IconUser from './icons/IconUser.vue';
 import IconDatabaseExport from './icons/IconDatabaseExport.vue';
 import IconDatabaseImport from './icons/IconDatabaseImport.vue';
 import IconDatabaseDelete from './icons/IconDatabaseDelete.vue';
+import OptionButton from './atomic/OptionButton.vue';
 
 const { importMediaDB, exportMediaDB, deleteMediaDB } = useMediaStore()
 const { checkJsonFile } = useFileUtils()
@@ -41,25 +41,22 @@ async function deleteDB(): Promise<void> {
 <template>
   <div class="user" ref="menu">
     <div class="menu-icon">
-      <button class="button-icon" type="button" @click="toggleUserMenu()" aria-label="User menu"
-        v-tooltip="'User menu'">
+      <OptionButton @click="toggleUserMenu()" :info="'User menu'" :background="'dark'">
         <IconUser />
-      </button>
+      </OptionButton>
     </div>
     <div class="submenu" v-if="isSubmenuVisible">
-      <button class="button-icon" type="button" @click="exportDB()" v-tooltip="'Export database'"
-        aria-label="Export database">
+      <OptionButton @click="exportDB()" :info="'Export database'">
         <IconDatabaseExport />
-      </button>
+      </OptionButton>
       <label for="file-upload" class="button-icon file-button" v-tooltip="'Import database'"
         aria-label="Import database" tabindex="0">
         <IconDatabaseImport />
       </label>
       <input type="file" ref="fileInput" id="file-upload" accept=".json" @change="importDB()" />
-      <button class="button-icon" type="button" @click="deleteDB()" v-tooltip="'Delete database'"
-        aria-label="Delete database">
+      <OptionButton @click="deleteDB()" :info="'Delete database'">
         <IconDatabaseDelete />
-      </button>
+      </OptionButton>
     </div>
   </div>
 </template>
@@ -74,11 +71,6 @@ async function deleteDB(): Promise<void> {
   padding: 0.5rem 0 0.5rem 1.25rem;
   grid-column: span 2;
   width: fit-content;
-
-  button {
-    background-color: var(--background-darker);
-    border-radius: 100%;
-  }
 }
 
 .submenu {
@@ -89,14 +81,10 @@ async function deleteDB(): Promise<void> {
   height: fit-content;
   border-radius: 2rem;
   background-color: var(--background-darker);
+}
 
-  button,
-  label {
-    border-radius: 100%;
-  }
-
-  label {
-    cursor: pointer;
-  }
+label {
+  border-radius: 100%;
+  cursor: pointer;
 }
 </style>

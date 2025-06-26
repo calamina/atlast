@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useDateFormat, useTimeAgo } from '@vueuse/core';
-import mediaStatus from '@/utils/media-status';
-import type { StatusModel } from '@/models/status.model';
+import { mediaStatus } from '@/data/media-status';
 import { useStateStore } from '@/stores/state';
+import type { StatusModel } from '@/models/status.model';
 
 const { displaySmall } = useStateStore()
 const { status, dates } = defineProps<{

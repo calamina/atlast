@@ -1,3 +1,6 @@
+import type { CategNameModel } from "./categ.model"
+import type { StatusNameModel } from "./status.model"
+
 export interface MediaModel {
   id?: number
   title?: string
@@ -5,8 +8,8 @@ export interface MediaModel {
   extract?: string
   user?: string
   tags?: string[] | null
-  categ?: string
-  status?: string
+  categ?: CategNameModel
+  status?: StatusNameModel
   score?: number
   thumbnail?: string | any
   image?: string

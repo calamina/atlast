@@ -75,8 +75,6 @@ const toggleEdit = useThrottleFn(() => {
     outline: none;
   }
 
-  // cursor: pointer;
-
   &.mediaSmall {
     padding: 0.5rem;
     border-radius: 1rem;

@@ -3,8 +3,9 @@ import IconMovie from '@/components/icons/IconMovie.vue'
 import IconSeries from '@/components/icons/IconSeries.vue'
 import IconComic from '@/components/icons/IconComic.vue'
 import IconGame from '@/components/icons/IconGame.vue'
+import type { CategModel } from '@/models/categ.model'
 
-export default [
+export const mediaCategs: CategModel[] = [
   {
     color: '#a4dc6366',
     name: 'movie',
@@ -30,4 +31,4 @@ export default [
     name: 'game',
     component: IconGame
   }
-]
+] 

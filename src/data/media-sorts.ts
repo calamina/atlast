@@ -1,4 +1,6 @@
-export default [
+import type { SortModel } from "@/models/sort.model";
+
+export const filterSorts: SortModel[] = [
   {
     name: 'date',
     title: 'date',

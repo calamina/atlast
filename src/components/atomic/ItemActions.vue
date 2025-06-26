@@ -5,6 +5,7 @@ import { useTooltipStore } from '@/stores/tooltip'
 
 import IconEdit from '@/components/icons/IconEdit.vue'
 import IconLink from '@/components/icons/IconLink.vue'
+import OptionButton from './OptionButton.vue'
 
 const { resetTooltip } = useTooltipStore()
 
@@ -20,20 +21,19 @@ const toggleEdit = useThrottleFn(() => {
   emits('enableEdit')
 }, 500)
 
-function openLink(url: string | undefined) {
+const openLink = (url: string | undefined) => {
   if (url) window.open(url, "_blank");
 }
 </script>
 
 <template>
   <div class="actions">
-    <button class="button-icon action" type="button" @click="openLink(url)" v-tooltip="'Wikipedia link'"
-      aria-label="Open link">
+    <OptionButton @click="openLink(url)" :info="'Wikipedia link'" :background="'clear'">
       <IconLink />
-    </button>
-    <button class="button-icon action" type="button" @click="toggleEdit" v-tooltip="'Edit'" aria-label="Edit media">
+    </OptionButton>
+    <OptionButton @click="toggleEdit()" :info="'Edit'" :background="'clear'">
       <IconEdit />
-    </button>
+    </OptionButton>
   </div>
 </template>
 
@@ -46,14 +46,6 @@ function openLink(url: string | undefined) {
   display: flex;
   padding: 0;
   gap: 0.25rem;
-  border-radius: 100%;
-}
-
-.action {
-  background-color: var(--background);
-  width: 2.5rem;
-  height: 2.5rem;
-  padding: 0.55rem;
   border-radius: 100%;
 }
 </style>

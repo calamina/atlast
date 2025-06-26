@@ -15,8 +15,8 @@ const { name, info, selected, sort } = defineProps<{
     <p class="filter__name">{{ name }}</p>
     <p class="filter__info">{{ info }}</p>
     <template v-if="selected && sort">
-      <IconSortAscending class="filter__icon" v-if="sort === 'ascending'" />
-      <IconSortDescending class="filter__icon" v-if="sort === 'descending'" />
+      <IconSortAscending class="filter__icon" v-if="sort === 'asc'" />
+      <IconSortDescending class="filter__icon" v-if="sort === 'desc'" />
     </template>
   </button>
 </template>
