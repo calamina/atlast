@@ -11,7 +11,7 @@ export const useMediaUtils = () => {
       image: wiki.originalimage?.source,
       thumbnail: wiki.thumbnail?.source,
       score: 0,
-      action: 'completed',
+      status: 'completed',
       categ: 'movie',
       key: wiki.titles.canonical,
     }
@@ -25,7 +25,7 @@ export const useMediaUtils = () => {
       description: media?.description,
       tagstring: media?.tags?.join(' '),
       categ: media?.categ,
-      action: media?.action,
+      status: media?.status,
       score: media?.score,
       like: media?.like,
       extract: media?.extract,
@@ -35,7 +35,7 @@ export const useMediaUtils = () => {
   }
 
   function setNewMediaProperties(media: MediaModel): MediaModel {
-    if (media.action === 'planning') media.score = 0
+    if (media.status === 'planning') media.score = 0
     media.tags = media.tagstring ? media.tagstring.split(' ') : null
     media.createdAt = new Date()
     return media

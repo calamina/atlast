@@ -10,7 +10,7 @@ const { src, small } = defineProps<{
 </script>
 
 <template>
-  <img class="image" v-if="src" :src="src" :class="{ imagesmall: displaySmall || small }" />
+  <img class="image" v-if="src" :src="src" :class="{ imagesmall: displaySmall || small }" alt="Wikipedia entry image" />
   <div class="image empty" v-else :class="{ imagesmall: displaySmall || small }">{{ strings.SAD }}</div>
 </template>
 

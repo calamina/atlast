@@ -10,39 +10,33 @@ Personnal Knowledge Database made with Vue3, wikipedia API, and IndexedDB (brows
 ![atlast preview](atlast-search.png?raw=true "Atlast preview")
 
 
+# DOING
+add graphs and stats !!! with links ? 
+  - graph showing categories > click on category to get to page with filters ?
+
 # TODO
 REFACTOR HUGE COMPONENTS
-REFACTOR BIG FUNCS
 RESPONSIVE !
 FIX SORTING
+DARK THEME
+
 focus capture in search + menus ?
-
-Add transitions on tooltips + menus
-add graphs and stats !!! with links ? 
-  - graph showing categories > click on category to get to page with filters :)
-
+Add transitions on menus
+add transition on tooltip (messed up for now / blinking effect :')
 - [ ] expand categories to other things (links ? / uncategorized / Nature / ...)
-
-- [ ] component to enable/disable stuff ? size by size comparison
-
+- [ ] component to enable/disable stuff
 - [ ] clean filter (css + html)
 - [ ] filter categs -> icons ???
-<!-- - [ ] check search > type seems to reset results ??? -->
-<!-- - [ ] media + update check if store is better than input for size -->
 - [ ] fix color names
 
 # search
 - [ ] either close or rerender on delete/add/edit !
+<!-- is clossing RN ? -->
 # atomic
 - [ ] menu buttons (icon / text / texticon) maybe ...
 # css
 - [ ] clean & refactor css
 - [ ] bem everywhere
 - [ ] responsive
-# models
-- [ ] change actions name to status
-# Accessibility
-- [ ] aria and focus and img alt and link hover
 # Performance
-- [ ] check how to cache data (done already with store ?)
 - [ ] check how to lazy load images

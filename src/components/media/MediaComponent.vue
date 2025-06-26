@@ -48,7 +48,7 @@ const toggleEdit = useThrottleFn(() => {
         <ItemExtract v-if="expanded" :extract="media.extract!" />
       </TransitionGroup>
       <div class="footer" :class="{ smallFooter: displaySmall }">
-        <ItemStatus :status="media.action!" :dates="{ created: media.createdAt, updated: media.updatedAt }" />
+        <ItemStatus :status="media.status!" :dates="{ created: media.createdAt, updated: media.updatedAt }" />
         <ItemCateg :categ="media.categ" />
         <ItemRating :score="media.score!" />
       </div>

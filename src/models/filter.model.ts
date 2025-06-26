@@ -3,6 +3,6 @@ export interface FilterModel {
   sort: string
   order: string
   categ?: string | null
-  action?: string | null
+  status?: string | null
   like?: boolean | null
 }

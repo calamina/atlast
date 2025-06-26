@@ -6,7 +6,7 @@ export interface MediaModel {
   user?: string
   tags?: string[] | null
   categ?: string
-  action?: string
+  status?: string
   score?: number
   thumbnail?: string | any
   image?: string

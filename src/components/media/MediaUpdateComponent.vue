@@ -4,7 +4,7 @@ import { onKeyStroke, templateRef, useThrottleFn } from '@vueuse/core'
 import { useMediaStore } from '@/stores/media'
 import { useWiki } from '@/stores/wiki'
 
-import actions from '@/utils/media-status'
+import status from '@/utils/media-status'
 
 import type { MediaModel } from '@/models/media.model'
 
@@ -59,7 +59,7 @@ onKeyStroke(['Escape'], (e) => {
 })
 
 const addMedia = useThrottleFn((media: MediaModel) => {
-  if (media.action === 'planning') media.score = 0
+  if (media.status === 'planning') media.score = 0
   media.tags = media.tagstring ? media.tagstring.split(' ') : null
   mediastore
     .addMedia(media)
@@ -68,7 +68,7 @@ const addMedia = useThrottleFn((media: MediaModel) => {
 
 const editMedia = useThrottleFn((media?: MediaModel) => {
   if (!media) return
-  if (media.action === 'planning') media.score = 0
+  if (media.status === 'planning') media.score = 0
   media.tags = media.tagstring ? media.tagstring.split(' ') : null
   mediastore
     .editMedia(media)
@@ -99,11 +99,11 @@ const deleteMedia = useThrottleFn((id: number) => {
       </button>
       <div class="media__form">
         <div class="choices">
-          <button v-for="action in actions" type="button" class="rating" :key="action.name"
-            @click="mediaTemp.action = action.name" :style="{
-              backgroundColor: mediaTemp.action === action.name ? action.color : 'var(--background)'
-            }" :class="{ active: mediaTemp.action === action.name }">
-            {{ action.name }}
+          <button v-for="s in status" type="button" class="rating" :key="s.name" @click="mediaTemp.status = s.name"
+            :style="{
+              backgroundColor: mediaTemp.status === s.name ? s.color : 'var(--background)'
+            }" :class="{ active: mediaTemp.status === s.name }">
+            {{ s.name }}
           </button>
         </div>
         <div class="choices">
@@ -112,7 +112,7 @@ const deleteMedia = useThrottleFn((id: number) => {
             {{ category }}
           </button>
         </div>
-        <div class="choices" v-if="mediaTemp.action !== 'planning'">
+        <div class="choices" v-if="mediaTemp.status !== 'planning'">
           <button v-for="index in 10" type="button" class="rating-icon" :key="index" @click="mediaTemp.score = index"
             :class="{ iconActive: mediaTemp.score! >= index }">
             <IconRating />

@@ -4,9 +4,13 @@ import type { Directive } from "vue"
 export const tooltip: Directive = {
   mounted(el: HTMLElement, binding: any) {
     const { setTooltip, resetTooltip } = useTooltipStore()
-    el.addEventListener("mouseover",
+
+    el.addEventListener(
+      "mouseover",
       () => setTooltip(binding.value))
-    el.addEventListener("mouseout",
+
+    el.addEventListener(
+      "mouseout",
       () => resetTooltip())
   },
 }

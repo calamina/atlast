@@ -6,7 +6,7 @@ import type { FilterModel } from '@/models/filter.model'
 import strings from '@/utils/strings'
 
 import { useNotificationStore } from '@/stores/notification'
-import { useLoadingStore } from '@/stores/loading'
+// import { useLoadingStore } from '@/stores/loading'
 import { db } from './db'
 import { useThrottleFn } from '@vueuse/core'
 import { useConfirmStore } from './confirm'
@@ -25,7 +25,7 @@ export const useMediaStore = defineStore('media', () => {
   const { downloadBlob, createBlob } = useFileUtils()
   const { confirmOrCancel } = useConfirmStore()
   const { addErrorNotification, addNotification } = useNotificationStore()
-  const { setLoading } = useLoadingStore()
+  // const { setLoading } = useLoadingStore()
 
   // async function checkMediaChanges(): Promise<boolean> {
   //   if (!db.isOpen()) return false
@@ -82,7 +82,7 @@ export const useMediaStore = defineStore('media', () => {
   }
 
   async function editMedia(media: MediaModel): Promise<void> {
-    if (media.action === 'planning') media.score = 0
+    if (media.status === 'planning') media.score = 0
     media.tags = media.tagstring ? media.tagstring.split(' ') : null
     media.updatedAt = new Date()
 
@@ -113,7 +113,7 @@ export const useMediaStore = defineStore('media', () => {
   function applyMediaFilters(media: MediaModel[]): MediaModel[] {
     let filtered = media
     if (filters.value.status) {
-      filtered = filtered.filter((m) => m.action === filters.value.status)
+      filtered = filtered.filter((m) => m.status === filters.value.status)
     }
     if (filters.value.categ) {
       filtered = filtered.filter((m) => m.categ === filters.value.categ)
@@ -147,7 +147,6 @@ export const useMediaStore = defineStore('media', () => {
         downloadBlob(blob, 'mediaDB.json')
       })
       .catch(() => addErrorNotification('Failed to export database.' + strings.SAD))
-    // .finally(() => openUserMenu())
   }
 
   async function importMediaDB(file: File): Promise<void> {
