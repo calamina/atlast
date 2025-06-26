@@ -114,29 +114,26 @@ const deleteMedia = useThrottleFn((id: number) => {
         </div>
         <div class="choices" v-if="mediaTemp.status !== 'planning'">
           <button v-for="index in 10" type="button" class="rating-icon" :key="index" @click="mediaTemp.score = index"
-            :class="{ iconActive: mediaTemp.score! >= index }">
+            :class="{ iconActive: mediaTemp.score! >= index }" v-tooltip="index + ' / 10'"
+            :aria-label="index + ' / 10'">
             <IconRating />
           </button>
         </div>
         <div class="media__footer">
           <input placeholder="tags (separate with space)" class="media__tags" type="text"
             v-model="mediaTemp.tagstring" />
-          <div class="media__actions" v-if="action === MediaActions.CREATE">
-            <button class="button-icon media__cancel" type="reset" @click="$emit('cancel', media)">
+          <div class="media__actions">
+            <button class="button-icon media__cancel" type="reset" @click="$emit('cancel', media)" v-tooltip="'Cancel'"
+              aria-label="Cancel">
               <IconBack />
             </button>
-            <button class="button-icon media__submit" type="submit" @click="addMedia(mediaTemp)">
-              <IconCheck />
-            </button>
-          </div>
-          <div class="media__actions" v-if="action === MediaActions.EDIT">
-            <button class="button-icon media__cancel" type="reset" @click="$emit('cancel', media)">
-              <IconBack />
-            </button>
-            <button class="button-icon media__cancel" type="button" @click="deleteMedia(media.id!)">
+            <button v-if="action === MediaActions.EDIT" class="button-icon media__cancel" type="button"
+              @click="deleteMedia(media.id!)" v-tooltip="'Delete'" aria-label="Delete">
               <IconDelete />
             </button>
-            <button class="button-icon media__submit" type="button" @click="editMedia(mediaTemp)">
+            <button class="button-icon media__submit" type="submit"
+              @click="action === MediaActions.CREATE ? addMedia(mediaTemp) : editMedia(mediaTemp)" v-tooltip="'Confirm'"
+              aria-label="Confirm">
               <IconCheck />
             </button>
           </div>

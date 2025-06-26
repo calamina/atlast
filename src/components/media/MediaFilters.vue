@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { type Ref, ref, type ComputedRef, computed } from 'vue'
-import type { FilterModel } from '@/models/filter.model'
+import { type ComputedRef, computed } from 'vue'
 import { useMediaStore } from '@/stores/media'
 import { storeToRefs } from 'pinia'
 import { useStateStore } from '@/stores/state'
@@ -15,17 +14,15 @@ import IconLike from '../icons/IconLike.vue'
 import IconLikeFull from '../icons/IconLikeFull.vue'
 
 const emits = defineEmits(['refreshList'])
-const mediastore = useMediaStore()
-const { allMedia } = storeToRefs(useMediaStore())
+const { updateMediaFilters, resetFilters } = useMediaStore()
+const { allMedia, filteredList, count, filteredCount, filters } = storeToRefs(useMediaStore())
 const { displaySidebar } = storeToRefs(useStateStore())
-
-const filters: Ref<FilterModel> = ref({ sort: 'createdAt', order: 'asc' })
 
 const categs = mediaCategs.map(categ => categ.name)
 
 const tags: ComputedRef<any> = computed(() => {
   const tags = new Set()
-  mediastore.filteredList.map((media) => media.tags?.forEach((tag: string) => tags.add(tag)))
+  filteredList.value.map((media) => media.tags?.forEach((tag: string) => tags.add(tag)))
   return tags
 })
 
@@ -35,9 +32,10 @@ function updateFilters(property: any, value: string | boolean | null) {
   } else {
     filters.value[property] = filters.value[property] === value ? null : value
   }
-  mediastore.updateFilters(filters.value)
+  updateMediaFilters(filters.value)
 }
 
+// TODO : move to utils
 const countByCateg: ComputedRef<Record<string, number>> = computed(() => {
   const counts: Record<string, number> = {}
   allMedia.value.forEach(media => {
@@ -51,8 +49,7 @@ const countByCateg: ComputedRef<Record<string, number>> = computed(() => {
 <template>
   <div class="filter-wrapper">
     <div class="filters" v-if="displaySidebar">
-      <FilterButton :selected="mediastore.filteredCount === mediastore.count" :name="'All'" :info="mediastore.count"
-        @click="mediastore.resetFilters()" />
+      <FilterButton :selected="filteredCount === count" :name="'All'" :info="count" @click="resetFilters()" />
       <FilterGroup :title="'favorites'">
         <div class="icon-group">
           <button class="icon-button button-like" :class="{ activeStatus: filters.like }"

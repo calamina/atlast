@@ -14,10 +14,12 @@ import MediaSearch from '@/components/media/MediaSearch.vue'
 import ActionBar from '@/components/ActionBar.vue'
 import strings from '@/utils/strings'
 import { MediaActions } from '@/utils/media-actions'
+import { useTooltipStore } from '@/stores/tooltip'
 
-const { filteredList, count, mediaSearch } = storeToRefs(useMediaStore())
+const { filteredList, count, mediaSearch, filters } = storeToRefs(useMediaStore())
 const { getMedia } = useMediaStore()
 const { loading } = storeToRefs(useLoadingStore())
+const { resetTooltip } = useTooltipStore()
 
 const show: Ref<number | null> = ref(null)
 
@@ -34,6 +36,7 @@ watch(filteredList, () => show.value = null)
 
 function editMedia(index: number) {
   show.value = show.value === index ? null : index
+  resetTooltip()
 }
 </script>
 

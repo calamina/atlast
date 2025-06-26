@@ -1,6 +1,6 @@
 export default [
   {
-    name: 'createdAt',
+    name: 'date',
     title: 'date',
   },
   {
@@ -11,4 +11,4 @@ export default [
     name: 'score',
     title: 'rating',
   }
-]
+]  

@@ -26,6 +26,7 @@
   --white: #fff;
   --background: #efefef;
   --background-transparent: #efefefdd;
+  --background-transparent-plus: #efefef99;
   --background-darker: #ddd;
   --active: #ddd;
   --border: #ddd;
@@ -100,12 +101,14 @@ button {
   cursor: pointer;
 
   &:focus {
-    outline: 2px solid var(--text);
+    outline: 2px solid var(--background-darker);
+    /* outline: 2px solid var(--text); */
   }
 }
 
 label:focus {
-  outline: 2px solid var(--text);
+  outline: 2px solid var(--background-darker);
+  /* outline: 2px solid var(--text); */
 }
 
 /* input[type="text"]:focus {
@@ -156,6 +159,7 @@ input[type="date"] {
   }
 
   #app {
-    grid-template-columns: 0 5.5rem 1fr 5.5rem 1fr;
+    grid-template-columns: 0 5.5rem 1fr 5.5rem 0;
+    /* grid-template-columns: 0 3rem 1fr 3rem 0; */
   }
 }

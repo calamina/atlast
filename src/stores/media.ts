@@ -18,10 +18,10 @@ export const useMediaStore = defineStore('media', () => {
   const filteredList: Ref<Array<MediaModel>> = ref([])
   const count: ComputedRef<number> = computed(() => allMedia.value.length)
   const filteredCount: ComputedRef<number> = computed(() => filteredList.value.length)
-  const filters: Ref<FilterModel> = ref({ sort: 'createdAt', order: 'desc' })
+  const filters: Ref<FilterModel> = ref({ sort: 'date', order: 'desc' })
   const mediaSearch: Ref<string> = ref('')
 
-  const { setNewMediaProperties } = useMediaUtils()
+  const { setNewMediaProperties, sortMedia } = useMediaUtils()
   const { downloadBlob, createBlob } = useFileUtils()
   const { confirmOrCancel } = useConfirmStore()
   const { addErrorNotification, addNotification } = useNotificationStore()
@@ -65,18 +65,17 @@ export const useMediaStore = defineStore('media', () => {
   }
 
   async function addMedia(media: any): Promise<void> {
-    const existingMedia = await db.medias
-      .where({ title: media.title })
-      .first()
-      .then((response) => {
-        if (response) return setNewMediaProperties(response)
-      })
+    // const existingMedia = await db.medias
+    //   .where({ title: media.title })
+    //   .first()
+    //   .then((response) => {
+    //     if (response) return setNewMediaProperties(response)
+    //   })
 
-    if (existingMedia) {
-      return addNotification('Media with this title already exists', strings.SAD)
-    }
-
-    return await db.medias.add(media)
+    // if (existingMedia) {
+    //   return addNotification('Media with this title already exists', strings.SAD)
+    // }
+    return await db.medias.add(setNewMediaProperties(media))
       .then(() => updateMedia('media added', strings.HAPPY))
       .catch((error) => manageError(error, 'failed to add media', strings.SAD))
   }
@@ -97,7 +96,7 @@ export const useMediaStore = defineStore('media', () => {
       .catch((error) => manageError(error, "failed to delete media", strings.SAD))
   }
 
-  async function updateFilters(newFilters: FilterModel): Promise<any> {
+  async function updateMediaFilters(newFilters: FilterModel): Promise<any> {
     filters.value = newFilters
     getMedia()
   }
@@ -125,7 +124,7 @@ export const useMediaStore = defineStore('media', () => {
       filtered = filtered.filter((m) => m.tags && m.tags.includes(filters.value.tag))
     }
 
-    filteredList.value = filtered
+    filteredList.value = sortMedia(filtered, filters.value)
     return filtered
   }
 
@@ -186,7 +185,7 @@ export const useMediaStore = defineStore('media', () => {
     getMedia,
     getMediaByTitle,
     filters,
-    updateFilters,
+    updateMediaFilters,
     resetFilters,
     addMedia,
     editMedia,
