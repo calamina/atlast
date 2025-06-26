@@ -6,9 +6,11 @@ import { useTooltipStore } from '@/stores/tooltip'
 import IconEdit from '@/components/icons/IconEdit.vue'
 import IconLink from '@/components/icons/IconLink.vue'
 
-const { setTooltip, resetTooltip } = useTooltipStore()
+const { resetTooltip } = useTooltipStore()
 
-const emits = defineEmits(['enableEdit'])
+const emits = defineEmits([
+  'enableEdit'
+])
 const props = defineProps<{
   url: string
 }>()
@@ -25,12 +27,11 @@ function openLink(url: string | undefined) {
 
 <template>
   <div class="actions">
-    <button class="button-icon action" type="button" @click="openLink(props.url)"
-      @mouseover="setTooltip('Wikipedia link')" @mouseleave="resetTooltip()" aria-label="Open link">
+    <button class="button-icon action" type="button" @click="openLink(props.url)" v-tooltip="'Wikipedia link'"
+      aria-label="Open link">
       <IconLink />
     </button>
-    <button class="button-icon action" type="button" @click="toggleEdit" @mouseover="setTooltip('Edit')"
-      @mouseleave="resetTooltip()" aria-label="Edit media">
+    <button class="button-icon action" type="button" @click="toggleEdit" v-tooltip="'Edit'" aria-label="Edit media">
       <IconEdit />
     </button>
   </div>

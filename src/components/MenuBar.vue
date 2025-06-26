@@ -3,7 +3,6 @@ import { storeToRefs } from 'pinia'
 
 import { useMediaStore } from '@/stores/media'
 import { useStateStore } from '@/stores/state'
-import { useTooltipStore } from '@/stores/tooltip'
 
 import DatabaseMenu from './DatabaseMenu.vue'
 import MenuLink from './atomic/MenuLink.vue'
@@ -12,7 +11,6 @@ import IconLayout from './icons/IconLayout.vue'
 
 const { mediaSearch } = storeToRefs(useMediaStore())
 const { toggleActions } = useStateStore();
-const { setTooltip, resetTooltip } = useTooltipStore()
 const { displayActions } = storeToRefs(useStateStore())
 </script>
 
@@ -27,8 +25,8 @@ const { displayActions } = storeToRefs(useStateStore())
       </div>
     </div>
     <div class="sep" :class="{ mask: mediaSearch.length }">
-      <button class="button-icon" @click="toggleActions" @mouseover="setTooltip('Show Options')"
-        @mouseleave="resetTooltip()" aria-label="Show Options" :aria-pressed="displayActions">
+      <button class="button-icon" @click="toggleActions" v-tooltip="'Show Options'" aria-label="Show Options"
+        :aria-pressed="displayActions">
         <IconLayout />
       </button>
     </div>

@@ -3,7 +3,6 @@ import { ref, useTemplateRef } from 'vue';
 import { onClickOutside } from '@vueuse/core'
 import "dexie-export-import";
 
-import { useTooltipStore } from '@/stores/tooltip';
 import { useMediaStore } from '@/stores/media';
 import { useFileUtils } from '@/utils/file-utils';
 import IconUser from './icons/IconUser.vue';
@@ -12,7 +11,6 @@ import IconDatabaseImport from './icons/IconDatabaseImport.vue';
 import IconDatabaseDelete from './icons/IconDatabaseDelete.vue';
 
 const { importMediaDB, exportMediaDB, deleteMediaDB } = useMediaStore()
-const { setTooltip, resetTooltip } = useTooltipStore()
 const { checkJsonFile } = useFileUtils()
 
 const menu = ref(null)
@@ -25,18 +23,18 @@ function toggleUserMenu() {
   isSubmenuVisible.value = !isSubmenuVisible.value
 }
 
-async function exportDB() {
+async function exportDB(): Promise<void> {
   await exportMediaDB().finally(() => toggleUserMenu())
 }
 
-async function importDB() {
+async function importDB(): Promise<void> {
   const file = fileInput.value?.files?.[0];
-  checkJsonFile(file).then((resolvedFile) =>
-    importMediaDB(resolvedFile).finally(() => toggleUserMenu())
-  )
+  await checkJsonFile(file)
+    .then((resolvedFile) => importMediaDB(resolvedFile))
+    .then(() => toggleUserMenu())
 }
 
-async function deleteDB() {
+async function deleteDB(): Promise<void> {
   await deleteMediaDB().finally(() => toggleUserMenu())
 }
 </script>
@@ -44,22 +42,22 @@ async function deleteDB() {
   <div class="user" ref="menu">
     <div class="menu-icon">
       <button class="button-icon" type="button" @click="toggleUserMenu()" aria-label="User menu"
-        @mouseover="setTooltip('User menu')" @mouseleave="resetTooltip()">
+        v-tooltip="'User menu'">
         <IconUser />
       </button>
     </div>
     <div class="submenu" v-if="isSubmenuVisible">
-      <button class="button-icon" type="button" @click="exportDB()" @mouseover="setTooltip('Export database')"
-        @mouseleave="resetTooltip()" aria-label="Export database">
+      <button class="button-icon" type="button" @click="exportDB()" v-tooltip="'Export database'"
+        aria-label="Export database">
         <IconDatabaseExport />
       </button>
-      <label for="file-upload" class="button-icon file-button" @mouseover="setTooltip('Import database')"
-        @mouseleave="resetTooltip()" aria-label="Import database" tabindex="0">
+      <label for="file-upload" class="button-icon file-button" v-tooltip="'Import database'"
+        aria-label="Import database" tabindex="0">
         <IconDatabaseImport />
       </label>
       <input type="file" ref="fileInput" id="file-upload" accept=".json" @change="importDB()" />
-      <button class="button-icon" type="button" @click="deleteDB()" @mouseover="setTooltip('Delete database')"
-        @mouseleave="resetTooltip()" aria-label="Delete database">
+      <button class="button-icon" type="button" @click="deleteDB()" v-tooltip="'Delete database'"
+        aria-label="Delete database">
         <IconDatabaseDelete />
       </button>
     </div>

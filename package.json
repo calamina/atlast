@@ -18,7 +18,6 @@
     "@vueuse/integrations": "^13.4.0",
     "@vueuse/rxjs": "^13.4.0",
     "axios": "^1.10.0",
-    "chart.js": "^4.5.0",
     "dexie": "^4.0.11",
     "dexie-export-import": "^4.1.4",
     "npm-check-updates": "^18.0.1",

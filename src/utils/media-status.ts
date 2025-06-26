@@ -22,7 +22,6 @@ export default [
     component: IconOngoing
   },
   {
-    // color: '#88888877 ',
     color: '#dc848477',
     name: 'dropped',
     component: IconDropped

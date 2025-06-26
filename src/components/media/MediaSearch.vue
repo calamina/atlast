@@ -40,7 +40,7 @@ function resetResults() {
   activeMedia.value = null
 }
 
-async function getResults(value: string) {
+async function getResults(value: string): Promise<void> {
   if (!value) return
 
   await getWikiByname(value).then((data: any) => {

@@ -8,7 +8,7 @@ import strings from '@/utils/strings'
 import { useNotificationStore } from '@/stores/notification'
 import { useLoadingStore } from '@/stores/loading'
 import { db } from './db'
-import { set, useThrottleFn } from '@vueuse/core'
+import { useThrottleFn } from '@vueuse/core'
 import { useConfirmStore } from './confirm'
 import { useFileUtils } from '@/utils/file-utils'
 import { useMediaUtils } from '@/utils/media-utils'
@@ -27,8 +27,14 @@ export const useMediaStore = defineStore('media', () => {
   const { addErrorNotification, addNotification } = useNotificationStore()
   const { setLoading } = useLoadingStore()
 
+  // async function checkMediaChanges(): Promise<boolean> {
+  //   if (!db.isOpen()) return false
+  //   return await db.medias.toArray()
+  //     .then((response) => allMedia.value.map(m => m.id) === response.map(m => m.id))
+  // }
+
   async function getMedia(): Promise<MediaModel[]> {
-    setLoading(true)
+    // setLoading(true)
     // if(filters.value.order === 'desc') {
     //   query.reverse()
     // }
@@ -36,14 +42,14 @@ export const useMediaStore = defineStore('media', () => {
       // .orderBy(filters.value.sort)
       .toArray()
       .then((response) => {
-        setLoading(false)
         allMedia.value = response
         applyMediaFilters(response)
+        // setLoading(false)
         return response
       })
       .catch((error) => {
         manageError(error, 'failed to get media', strings.SAD)
-        setLoading(false)
+        // setLoading(false)
         allMedia.value = []
         filteredList.value = []
         return []
@@ -70,7 +76,7 @@ export const useMediaStore = defineStore('media', () => {
       return addNotification('Media with this title already exists', strings.SAD)
     }
 
-    await db.medias.add(media)
+    return await db.medias.add(media)
       .then(() => updateMedia('media added', strings.HAPPY))
       .catch((error) => manageError(error, 'failed to add media', strings.SAD))
   }
@@ -80,13 +86,13 @@ export const useMediaStore = defineStore('media', () => {
     media.tags = media.tagstring ? media.tagstring.split(' ') : null
     media.updatedAt = new Date()
 
-    await db.medias.update(media.id, { ...media })
+    return await db.medias.update(media.id, { ...media })
       .then(() => updateMedia('media edited', strings.HAPPY))
       .catch((error) => manageError(error, 'failed to edit media', strings.SAD))
   }
 
   async function deleteMedia(id: number): Promise<any> {
-    await db.medias.delete(id)
+    return db.medias.delete(id)
       .then(() => updateMedia('media deleted', strings.HAPPY))
       .catch((error) => manageError(error, "failed to delete media", strings.SAD))
   }
@@ -158,8 +164,8 @@ export const useMediaStore = defineStore('media', () => {
       .catch(() => addErrorNotification('Failed to import database.' + strings.SAD))
   }
 
-  const deleteMediaDB = useThrottleFn(() => {
-    return confirmOrCancel('Are you sure you want to delete the database? This action cannot be undone.')
+  const deleteMediaDB = useThrottleFn(async () => {
+    return await confirmOrCancel('Are you sure you want to delete the database? This action cannot be undone.')
       .then((confirm: boolean) => {
         if (confirm) {
           db.delete()

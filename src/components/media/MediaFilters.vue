@@ -3,15 +3,14 @@ import { type Ref, ref, type ComputedRef, computed } from 'vue'
 import type { FilterModel } from '@/models/filter.model'
 import { useMediaStore } from '@/stores/media'
 import { storeToRefs } from 'pinia'
+import { useStateStore } from '@/stores/state'
+import sorts from '@/utils/media-sorts'
+import mediaStatus from '@/utils/media-status'
+import mediaCategs from '@/utils/media-categs'
 import FilterButton from '@/components/atomic/FilterButton.vue'
 import FilterGroup from '@/components/atomic/FilterGroup.vue'
 import TagButton from '@/components/atomic/TagButton.vue'
 import TagGroup from '@/components/atomic/TagGroup.vue'
-import sorts from '@/utils/media-sorts'
-import mediaCategs from '@/utils/media-categs'
-import mediaStatus from '@/utils/media-status'
-import { useStateStore } from '@/stores/state'
-import { useTooltipStore } from '@/stores/tooltip'
 import IconLike from '../icons/IconLike.vue'
 import IconLikeFull from '../icons/IconLikeFull.vue'
 
@@ -19,7 +18,6 @@ const emits = defineEmits(['refreshList'])
 const mediastore = useMediaStore()
 const { allMedia } = storeToRefs(useMediaStore())
 const { displaySidebar } = storeToRefs(useStateStore())
-const { setTooltip, resetTooltip } = useTooltipStore()
 
 const filters: Ref<FilterModel> = ref({ sort: 'createdAt', order: 'asc' })
 
@@ -58,7 +56,7 @@ const countByCateg: ComputedRef<Record<string, number>> = computed(() => {
       <FilterGroup :title="'favorites'">
         <div class="icon-group">
           <button class="icon-button button-like" :class="{ activeStatus: filters.like }"
-            @click="updateFilters('like', true)" aria-label="Favorite filter">
+            @click="updateFilters('like', true)" aria-label="Favorite filter" v-tooltip="'Favorite filter'">
             <IconLike v-if="!filters.like" class="icon" />
             <IconLikeFull v-else class="icon" />
           </button>
@@ -74,7 +72,7 @@ const countByCateg: ComputedRef<Record<string, number>> = computed(() => {
             :class="{ activeStatus: filters.status === status.name }" @click="updateFilters('status', status.name)"
             :aria-label="status + 'filter'" :key="status.name">
             <component class="icon" :is="status!.component" :style="{ backgroundColor: status!.color }"
-              @mouseover="setTooltip(status!.name)" @mouseleave="resetTooltip()" />
+              v-tooltip="status!.name" />
           </button>
         </div>
       </FilterGroup>

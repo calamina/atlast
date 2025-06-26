@@ -2,7 +2,6 @@
 import { storeToRefs } from 'pinia';
 
 import { useStateStore } from '@/stores/state';
-import { useTooltipStore } from '@/stores/tooltip';
 
 import IconDetail from './icons/IconDetail.vue';
 import IconImage from './icons/IconImage.vue';
@@ -10,7 +9,6 @@ import IconFilters from './icons/IconFilters.vue';
 
 const { toggleSize, toggleSidebar, toggleImages } = useStateStore()
 const { displayActions } = storeToRefs(useStateStore())
-const { setTooltip, resetTooltip } = useTooltipStore()
 </script>
 
 <template>
@@ -18,16 +16,13 @@ const { setTooltip, resetTooltip } = useTooltipStore()
     <div class="actions" v-if="displayActions">
       <div class="actions-display">
         <!-- TODO : button icon component -->
-        <button class="button-icon" @click="toggleSize()" @mouseover="setTooltip('Toggle size')"
-          @mouseleave="resetTooltip()">
+        <button class="button-icon" @click="toggleSize()" v-tooltip="'Toggle size'" aria-label="Toggle size">
           <IconDetail />
         </button>
-        <button class="button-icon" @click="toggleImages()" @mouseover="setTooltip('Toggle images')"
-          @mouseleave="resetTooltip()">
+        <button class="button-icon" @click="toggleImages()" v-tooltip="'Toggle images'" aria-label="Toggle Images">
           <IconImage />
         </button>
-        <button class="button-icon" @click="toggleSidebar()" @mouseover="setTooltip('Toggle sidebar')"
-          @mouseleave="resetTooltip()">
+        <button class="button-icon" @click="toggleSidebar()" v-tooltip="'Show sidebar'" aria-label="Toggle sidebar">
           <IconFilters />
         </button>
       </div>
