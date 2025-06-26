@@ -4,14 +4,14 @@ import { useNotificationStore } from '@/stores/notification'
 import { onMounted } from 'vue'
 
 const notifications = useNotificationStore()
-const props = defineProps<{
+const { notification } = defineProps<{
   notification: Notification
 }>()
 
 onMounted(() => {
   setTimeout(() => {
-    notifications.removeNotification(props.notification)
-  }, props.notification.long ? 5000 : 2500)
+    notifications.removeNotification(notification)
+  }, notification.long ? 5000 : 2500)
 })
 </script>
 

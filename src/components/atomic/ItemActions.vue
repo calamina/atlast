@@ -11,7 +11,7 @@ const { resetTooltip } = useTooltipStore()
 const emits = defineEmits([
   'enableEdit'
 ])
-const props = defineProps<{
+const { url } = defineProps<{
   url: string
 }>()
 
@@ -27,7 +27,7 @@ function openLink(url: string | undefined) {
 
 <template>
   <div class="actions">
-    <button class="button-icon action" type="button" @click="openLink(props.url)" v-tooltip="'Wikipedia link'"
+    <button class="button-icon action" type="button" @click="openLink(url)" v-tooltip="'Wikipedia link'"
       aria-label="Open link">
       <IconLink />
     </button>

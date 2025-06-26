@@ -1,17 +1,18 @@
 <script setup lang="ts">
+import { useStateStore } from '@/stores/state';
 import IconLikeFull from '../icons/IconLikeFull.vue';
 
-const props = defineProps<{
+const { displaySmall } = useStateStore()
+const { title, like } = defineProps<{
   title: string | null
   like?: boolean | null
-  small?: boolean
 }>()
 </script>
 
 <template>
-  <div v-if="props.title" class="title" :class="{ smallTitle: props.small }">
-    <h2>{{ props.title }}</h2>
-    <IconLikeFull class="like" v-if="props.like" />
+  <div v-if="title" class="title" :class="{ smallTitle: displaySmall }">
+    <h2>{{ title }}</h2>
+    <IconLikeFull class="like" v-if="like" />
   </div>
 </template>
 

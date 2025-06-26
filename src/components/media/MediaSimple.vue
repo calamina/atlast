@@ -6,16 +6,16 @@ import ItemPicture from '@/components/atomic/ItemPicture.vue'
 import { storeToRefs } from 'pinia';
 import { useStateStore } from '@/stores/state';
 
-const props = defineProps<{ media: MediaModel }>()
-const { displaySmall, displayImages } = storeToRefs(useStateStore())
+const { media } = defineProps<{ media: MediaModel }>()
+const { displayImages } = storeToRefs(useStateStore())
 </script>
 
 <template>
   <button class="media">
-    <ItemPicture v-if="displayImages" :src="props.media.thumbnail?.url ?? null" :small="true" />
+    <ItemPicture v-if="displayImages" :src="media.thumbnail?.url ?? null" :small="true" />
     <div class="media__content">
-      <ItemTitle :title="props.media.title ?? null" :small="displaySmall" />
-      <ItemDescription :description="props.media.description ?? null" />
+      <ItemTitle :title="media.title ?? null" />
+      <ItemDescription :description="media.description ?? null" />
     </div>
   </button>
 </template>

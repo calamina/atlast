@@ -1,14 +1,15 @@
 <script setup lang="ts">
+import { useStateStore } from '@/stores/state';
 import strings from '@/utils/strings';
 
-const props = defineProps<{
+const { displaySmall } = useStateStore()
+const { description } = defineProps<{
   description: string | null
-  small?: boolean
 }>()
 </script>
 
 <template>
-  <p class="description" :class="{ smallDescription: props.small }" v-if="props.description">{{ props.description ??
+  <p class="description" :class="{ smallDescription: displaySmall }" v-if="description">{{ description ??
     ('No description ' + strings.SAD) }}</p>
 </template>
 

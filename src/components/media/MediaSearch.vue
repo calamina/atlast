@@ -18,8 +18,8 @@ import { MediaActions } from '@/utils/media-actions'
 const emits = defineEmits(['exit'])
 
 const { getWikiByname } = useWiki()
-const mediastore = useMediaStore()
-const { mediaSearch } = storeToRefs(mediastore)
+const { getMediaByTitle } = useMediaStore()
+const { mediaSearch } = storeToRefs(useMediaStore())
 
 let wikiList: Ref<MediaModel[]> = ref([])
 let mediaList: Ref<MediaModel[]> = ref([])
@@ -44,7 +44,7 @@ async function getResults(value: string): Promise<void> {
   if (!value) return
 
   await getWikiByname(value).then((data: any) => {
-    mediastore.getMediaByTitle(value).forEach((element) => mediaList.value.push(element))
+    getMediaByTitle(value).forEach((element) => mediaList.value.push(element))
     wikiList.value = data.filter((wiki: WikiGet) =>
       !mediaList.value.map(media => media.key).includes(wiki.key))
   })

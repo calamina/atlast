@@ -1,12 +1,15 @@
 <script setup lang="ts">
-const props = defineProps<{
+import { useStateStore } from '@/stores/state';
+
+
+const { displaySmall } = useStateStore()
+const { extract } = defineProps<{
   extract: string | null | undefined
-  small?: boolean
 }>()
 </script>
 
 <template>
-  <p :class="{ small: props.small }">{{ props.extract }}</p>
+  <p :class="{ small: displaySmall }">{{ extract }}</p>
 </template>
 
 <style scoped lang="scss">

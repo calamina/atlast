@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ButtonHTMLAttributes } from 'vue'
 
-const props = defineProps<{
+const { name, type } = defineProps<{
   name: string
   type: ButtonHTMLAttributes['type']
 }>()
@@ -9,7 +9,7 @@ const props = defineProps<{
 
 <template>
   <button class="primary" :type="type">
-    {{ props.name }}
+    {{ name }}
   </button>
 </template>
 

@@ -2,7 +2,7 @@
 import IconSortAscending from '../icons/IconSortAscending.vue';
 import IconSortDescending from '../icons/IconSortDescending.vue';
 
-const props = defineProps<{
+const { name, info, selected, sort } = defineProps<{
   name: string
   info?: string | number
   selected?: boolean
@@ -11,9 +11,9 @@ const props = defineProps<{
 </script>
 
 <template>
-  <button class="filter" :class="{ selected: props.selected }">
-    <p class="filter__name">{{ props.name }}</p>
-    <p class="filter__info">{{ props.info }}</p>
+  <button class="filter" :class="{ selected: selected }">
+    <p class="filter__name">{{ name }}</p>
+    <p class="filter__info">{{ info }}</p>
     <template v-if="selected && sort">
       <IconSortAscending class="filter__icon" v-if="sort === 'ascending'" />
       <IconSortDescending class="filter__icon" v-if="sort === 'descending'" />

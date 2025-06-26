@@ -6,14 +6,13 @@ import IconCancel from '@/components/icons/IconCancel.vue'
 import IconSearch from '@/components/icons/IconSearch.vue'
 
 const search = defineModel<string>({ required: true })
-const props = defineProps<{
+const { component, placeholder } = defineProps<{
   component: Component
   placeholder: string
 }>()
 
-
-// const keys = useMagicKeys()
 const input: Ref<HTMLInputElement | null> = ref(null);
+// const keys = useMagicKeys()
 
 // whenever(keys.shift_s, () => {
 //   if (document.activeElement === input.value) {
@@ -32,7 +31,7 @@ const input: Ref<HTMLInputElement | null> = ref(null);
   <teleport to="#menu-search">
     <div class="media__search">
       <!-- TODO : put icon in label inside input !!! -->
-      <input ref="input" type="text" name="search" v-model="search" id="search" :placeholder="props.placeholder"
+      <input ref="input" type="text" name="search" v-model="search" id="search" :placeholder="placeholder"
         autocomplete="off" />
       <!-- <span>[shift + s]</span> -->
       <IconSearch v-if="!search.length" class="button-icon" />
@@ -40,7 +39,7 @@ const input: Ref<HTMLInputElement | null> = ref(null);
     </div>
   </teleport>
   <transition name="search" mode="out-in">
-    <ActionOverlay v-if="!!search.length" class="overlay" :component="props.component" @exit="search = ''" />
+    <ActionOverlay v-if="!!search.length" class="overlay" :component="component" @exit="search = ''" />
   </transition>
 </template>
 

@@ -23,7 +23,7 @@ const { resetTooltip } = useTooltipStore()
 const { displaySmall, displayImages } = storeToRefs(useStateStore())
 
 const emits = defineEmits(['enableEdit'])
-const props = defineProps<{ media: MediaModel }>()
+const { media } = defineProps<{ media: MediaModel }>()
 
 const expanded: Ref<boolean | null> = ref(null)
 
@@ -34,25 +34,23 @@ const toggleEdit = useThrottleFn(() => {
 </script>
 
 <template>
-  <button class="media" :class="{ mediaSmall: displaySmall }" v-if="props.media.id" @click="expanded = !expanded">
-    <ItemPicture v-if="displayImages" :src="props.media.thumbnail ?? null" :small="displaySmall" />
+  <button class="media" :class="{ mediaSmall: displaySmall }" v-if="media.id" @click="expanded = !expanded">
+    <ItemPicture v-if="displayImages" :src="media.thumbnail ?? null" />
     <div class="content">
-      <ItemTitle :title="props.media.title ?? null" :like="props.media.like ?? null" :small="displaySmall" />
+      <ItemTitle :title="media.title ?? null" :like="media.like ?? null" />
       <Transition name="reveal">
-        <ItemDescription v-if="!displaySmall || expanded && displaySmall" :description="props.media.description ?? null"
-          :small="displaySmall" />
+        <ItemDescription v-if="!displaySmall || expanded && displaySmall" :description="media.description ?? null" />
       </Transition>
       <TransitionGroup name="reveal">
-        <TagGroup v-if="expanded && props.media.tags?.length" :max-height="true">
-          <TagButton v-for="tag in props.media.tags" :key="tag" :name="tag" :selected="false" />
+        <TagGroup v-if="expanded && media.tags?.length" :max-height="true">
+          <TagButton v-for="tag in media.tags" :key="tag" :name="tag" :selected="false" />
         </TagGroup>
-        <ItemExtract v-if="expanded" :extract="props.media.extract!" :small="displaySmall" />
+        <ItemExtract v-if="expanded" :extract="media.extract!" />
       </TransitionGroup>
       <div class="footer" :class="{ smallFooter: displaySmall }">
-        <ItemStatus :status="props.media.action!"
-          :dates="{ created: props.media.createdAt, updated: props.media.updatedAt }" :small="displaySmall" />
-        <ItemCateg :categ="props.media.categ" :small="displaySmall" />
-        <ItemRating :score="props.media.score!" :small="displaySmall" />
+        <ItemStatus :status="media.action!" :dates="{ created: media.createdAt, updated: media.updatedAt }" />
+        <ItemCateg :categ="media.categ" />
+        <ItemRating :score="media.score!" />
       </div>
     </div>
     <ItemActions class="actions" :url="media.url!" @enableEdit="toggleEdit()" />

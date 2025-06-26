@@ -4,7 +4,7 @@ import type { Component } from 'vue'
 
 const emits = defineEmits(['exit'])
 
-const props = defineProps<{
+const { component } = defineProps<{
   component: Component
 }>()
 
@@ -18,7 +18,7 @@ onKeyStroke(['Escape'], (e) => {
 
 <template>
   <div class="overlay-background">
-    <component :is="props.component" @exit="$emit('exit')"></component>
+    <component :is="component" @exit="$emit('exit')"></component>
   </div>
 </template>
 

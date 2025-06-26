@@ -1,12 +1,12 @@
 <script setup lang="ts">
-const props = defineProps<{
+const { title } = defineProps<{
   title: string
 }>()
 </script>
 
 <template>
   <div class="filter-categ">
-    <h3 v-if="props.title.length">{{ props.title }}</h3>
+    <h3 v-if="title.length">{{ title }}</h3>
     <slot />
   </div>
 </template>

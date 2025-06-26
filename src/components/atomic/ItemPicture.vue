@@ -1,15 +1,17 @@
 <script setup lang="ts">
+import { useStateStore } from '@/stores/state';
 import strings from '@/utils/strings';
 
-const props = defineProps<{
+const { displaySmall } = useStateStore()
+const { src, small } = defineProps<{
   src: string | null
-  small: boolean | null
+  small?: boolean
 }>()
 </script>
 
 <template>
-  <img class="image" v-if="props.src" :src="props.src" :class="{ imagesmall: small }" />
-  <div class="image empty" v-else :class="{ imagesmall: small }">{{ strings.SAD }}</div>
+  <img class="image" v-if="src" :src="src" :class="{ imagesmall: displaySmall || small }" />
+  <div class="image empty" v-else :class="{ imagesmall: displaySmall || small }">{{ strings.SAD }}</div>
 </template>
 
 <style scoped lang="scss">

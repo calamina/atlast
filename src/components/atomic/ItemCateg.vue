@@ -1,13 +1,15 @@
 <script setup lang="ts">
-const props = defineProps<{
+import { useStateStore } from '@/stores/state';
+
+const { displaySmall } = useStateStore()
+const { categ } = defineProps<{
   categ: string | undefined
-  small?: boolean
 }>()
 </script>
 
 <template>
-  <p :class="{ smallCateg: props.small }">
-    {{ props.categ }}
+  <p :class="{ smallCateg: displaySmall }">
+    {{ categ }}
   </p>
 </template>
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{
+const { type, name, required } = defineProps<{
   type: string
   name: string
   required?: boolean
@@ -12,9 +12,9 @@ const value = defineModel<string | undefined>({
 
 <template>
   <div>
-    <input class="input" :value="value" :type="props.type" :name="props.name" :id="props.name" :placeholder="props.name"
+    <input class="input" :value="value" :type="type" :name="name" :id="name" :placeholder="name"
       @input="$emit('update:modelValue', ($event.target as HTMLInputElement)!.value)" :required="required" />
-    <label class="label" :for="props.name">
+    <label class="label" :for="name">
       <p class="label__name">{{ name }}
         <!-- <span class="label__required" v-if="required">{{ '*' }}</span> -->
       </p>

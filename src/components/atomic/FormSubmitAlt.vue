@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import type { ButtonHTMLAttributes } from 'vue'
 
-const props = defineProps<{
+const { name, type } = defineProps<{
   name: string
   type: ButtonHTMLAttributes['type']
 }>()
 </script>
 
 <template>
-  <button class="secondary" :type="props.type">
+  <button class="secondary" :type="type">
     or <span>{{ name }}</span>
   </button>
 </template>

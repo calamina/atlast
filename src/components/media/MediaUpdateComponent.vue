@@ -32,22 +32,22 @@ const { confirmOrCancel } = useConfirmStore()
 const { displaySmall, displayImages } = storeToRefs(useStateStore())
 const { mediaToMediaForm } = useMediaUtils()
 
-const props = defineProps<{
+const { media, action } = defineProps<{
   media: MediaModel
   action: MediaActions
 }>()
 const emits = defineEmits(['cancel', 'confirm'])
 
 const categories = mediaCategs.map(categ => categ.name)
-const media: Ref<MediaModel> = ref({})
+const mediaTemp: Ref<MediaModel> = ref({})
 const form = templateRef<HTMLButtonElement | null>("form")
 
 onMounted(() => {
-  if (props.action === MediaActions.EDIT) {
-    media.value = mediaToMediaForm(props.media)
+  if (action === MediaActions.EDIT) {
+    mediaTemp.value = mediaToMediaForm(media)
   } else
-    wikiservice.getWikiByLink(props.media.key!)
-      .then((data) => media.value = data ?? {})
+    wikiservice.getWikiByLink(media.key!)
+      .then((data) => mediaTemp.value = data ?? {})
   form.value?.focus()
 })
 
@@ -87,55 +87,56 @@ const deleteMedia = useThrottleFn((id: number) => {
 }, 500)
 </script>
 <template>
-  <button ref="form" class="media" :class="{ mediaSmall: displaySmall }" v-if="media">
-    <ItemPicture :src="media.image ?? null" :small="displaySmall" v-if="displayImages" />
+  <button ref="form" class="media" :class="{ mediaSmall: displaySmall }" v-if="mediaTemp">
+    <ItemPicture :src="mediaTemp.image ?? null" v-if="displayImages" />
     <div class="media__content">
-      <ItemTitle :title="media.title ?? null" :small="displaySmall" />
-      <ItemDescription :description="media.description ?? null" :small="displaySmall" />
-      <ItemExtract :extract="media.extract!" :small="displaySmall" />
-      <button class="media__favorite button-icon" type="button" @click="media.like = !media.like">
-        <IconLikeFull class="love" v-if="media.like === true" />
+      <ItemTitle :title="mediaTemp.title ?? null" />
+      <ItemDescription :description="mediaTemp.description ?? null" />
+      <ItemExtract :extract="mediaTemp.extract!" />
+      <button class="media__favorite button-icon" type="button" @click="mediaTemp.like = !mediaTemp.like">
+        <IconLikeFull class="love" v-if="mediaTemp.like === true" />
         <IconLike v-else />
       </button>
       <div class="media__form">
         <div class="choices">
           <button v-for="action in actions" type="button" class="rating" :key="action.name"
-            @click="media.action = action.name" :style="{
-              backgroundColor: media.action === action.name ? action.color : 'var(--background)'
-            }" :class="{ active: media.action === action.name }">
+            @click="mediaTemp.action = action.name" :style="{
+              backgroundColor: mediaTemp.action === action.name ? action.color : 'var(--background)'
+            }" :class="{ active: mediaTemp.action === action.name }">
             {{ action.name }}
           </button>
         </div>
         <div class="choices">
           <button v-for="category in categories" type="button" class="rating" :key="category"
-            @click="media.categ = category" :class="{ active: media.categ === category }">
+            @click="mediaTemp.categ = category" :class="{ active: mediaTemp.categ === category }">
             {{ category }}
           </button>
         </div>
-        <div class="choices" v-if="media.action !== 'planning'">
-          <button v-for="index in 10" type="button" class="rating-icon" :key="index" @click="media.score = index"
-            :class="{ iconActive: media.score! >= index }">
+        <div class="choices" v-if="mediaTemp.action !== 'planning'">
+          <button v-for="index in 10" type="button" class="rating-icon" :key="index" @click="mediaTemp.score = index"
+            :class="{ iconActive: mediaTemp.score! >= index }">
             <IconRating />
           </button>
         </div>
         <div class="media__footer">
-          <input placeholder="tags (separate with space)" class="media__tags" type="text" v-model="media.tagstring" />
-          <div class="media__actions" v-if="props.action === MediaActions.CREATE">
-            <button class="button-icon media__cancel" type="reset" @click="$emit('cancel', props.media)">
+          <input placeholder="tags (separate with space)" class="media__tags" type="text"
+            v-model="mediaTemp.tagstring" />
+          <div class="media__actions" v-if="action === MediaActions.CREATE">
+            <button class="button-icon media__cancel" type="reset" @click="$emit('cancel', media)">
               <IconBack />
             </button>
-            <button class="button-icon media__submit" type="submit" @click="addMedia(media)">
+            <button class="button-icon media__submit" type="submit" @click="addMedia(mediaTemp)">
               <IconCheck />
             </button>
           </div>
-          <div class="media__actions" v-if="props.action === MediaActions.EDIT">
-            <button class="button-icon media__cancel" type="reset" @click="$emit('cancel', props.media)">
+          <div class="media__actions" v-if="action === MediaActions.EDIT">
+            <button class="button-icon media__cancel" type="reset" @click="$emit('cancel', media)">
               <IconBack />
             </button>
-            <button class="button-icon media__cancel" type="button" @click="deleteMedia(props.media.id!)">
+            <button class="button-icon media__cancel" type="button" @click="deleteMedia(media.id!)">
               <IconDelete />
             </button>
-            <button class="button-icon media__submit" type="button" @click="editMedia(media)">
+            <button class="button-icon media__submit" type="button" @click="editMedia(mediaTemp)">
               <IconCheck />
             </button>
           </div>

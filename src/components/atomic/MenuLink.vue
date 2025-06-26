@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Component } from 'vue';
 
-const props = defineProps<{
+const { route, name, icon } = defineProps<{
   route: string
   name: string
   icon: Component
@@ -9,11 +9,11 @@ const props = defineProps<{
 </script>
 
 <template>
-  <router-link class="type" :to="{ name: props.route }">
+  <router-link class="type" :to="{ name: route }">
     <div class="button-icon">
-      <component :is="props.icon" />
+      <component :is="icon" />
     </div>
-    <span>{{ props.name }}</span>
+    <span>{{ name }}</span>
   </router-link>
 </template>
 

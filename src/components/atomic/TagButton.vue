@@ -1,12 +1,12 @@
 <script setup lang="ts">
-const props = defineProps<{
+const { name, selected } = defineProps<{
   name: string
   selected?: boolean
 }>()
 </script>
 <template>
   <button class="media__tag" :class="{ tagSelected: selected }">
-    {{ props.name }}
+    {{ name }}
   </button>
 </template>
 <style scope lang="scss">
@@ -22,6 +22,7 @@ const props = defineProps<{
   color: var(--text-light);
   border-radius: 1rem;
   font-size: 0.85rem;
+
   &::before {
     content: '#';
   }
