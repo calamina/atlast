@@ -8,13 +8,13 @@ import IconImage from './icons/IconImage.vue';
 import IconFilters from './icons/IconFilters.vue';
 
 const { toggleSize, toggleSidebar, toggleImages } = useStateStore()
-const { displayActions } = storeToRefs(useStateStore())
+const { displayOptions } = storeToRefs(useStateStore())
 </script>
 
 <template>
-  <div class="actionBar">
-    <div class="actions" v-if="displayActions">
-      <div class="actions-display">
+  <div class="optionBar">
+    <div class="options" v-if="displayOptions">
+      <div class="options-display">
         <!-- TODO : button icon component -->
         <button class="button-icon" @click="toggleSize()" v-tooltip="'Toggle size'" aria-label="Toggle size">
           <IconDetail />
@@ -31,7 +31,7 @@ const { displayActions } = storeToRefs(useStateStore())
 </template>
 
 <style lang="scss" scoped>
-.actionBar {
+.optionBar {
   position: relative;
   display: flex;
   flex-flow: column;
@@ -39,7 +39,7 @@ const { displayActions } = storeToRefs(useStateStore())
   align-items: center;
 }
 
-.actions {
+.options {
   position: fixed;
   top: var(--fixed);
   display: flex;
@@ -49,7 +49,7 @@ const { displayActions } = storeToRefs(useStateStore())
   border-radius: 2rem;
 }
 
-.actions-display {
+.options-display {
   background-color: var(--background-darker);
   border-radius: 2rem;
 
