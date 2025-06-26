@@ -130,6 +130,7 @@ function upsertMedia(media: MediaModel, action: MediaActions) {
 
   .medias {
     width: 100%;
+    min-width: 0;
   }
 
   .results {

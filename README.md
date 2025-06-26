@@ -15,10 +15,17 @@ add graphs and stats !!! with links ?
   - graph showing categories > click on category to get to page with filters ?
 
 # TODO
-REFACTOR HUGE COMPONENTS
-RESPONSIVE !
 FIX SORTING
 DARK THEME
+
+# css
+- [ ] clean & refactor css
+- [ ] bem everywhere
+- [ ] responsive : kinda ok / next : add filters on small screens
+
+# atomic
+- [ ] REFACTOR HUGE COMPONENTS
+- [ ] menu buttons (icon / text / texticon) maybe ...
 
 focus capture in search + menus ?
 Add transitions on menus
@@ -29,14 +36,5 @@ add transition on tooltip (messed up for now / blinking effect :')
 - [ ] filter categs -> icons ???
 - [ ] fix color names
 
-# search
-- [ ] either close or rerender on delete/add/edit !
-<!-- is clossing RN ? -->
-# atomic
-- [ ] menu buttons (icon / text / texticon) maybe ...
-# css
-- [ ] clean & refactor css
-- [ ] bem everywhere
-- [ ] responsive
 # Performance
 - [ ] check how to lazy load images

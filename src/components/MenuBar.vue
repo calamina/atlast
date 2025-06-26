@@ -10,8 +10,8 @@ import IconBook from './icons/IconBook.vue'
 import IconLayout from './icons/IconLayout.vue'
 
 const { mediaSearch } = storeToRefs(useMediaStore())
-const { toggleActions } = useStateStore();
-const { displayActions } = storeToRefs(useStateStore())
+const { toggleOptions } = useStateStore();
+const { displayOptions } = storeToRefs(useStateStore())
 </script>
 
 <template>
@@ -25,8 +25,8 @@ const { displayActions } = storeToRefs(useStateStore())
       </div>
     </div>
     <div class="sep" :class="{ mask: mediaSearch.length }">
-      <button class="button-icon" @click="toggleActions" v-tooltip="'Show Options'" aria-label="Show Options"
-        :aria-pressed="displayActions">
+      <button class="button-icon" @click="toggleOptions" v-tooltip="'Show Options'" aria-label="Show Options"
+        :aria-pressed="displayOptions">
         <IconLayout />
       </button>
     </div>
@@ -92,5 +92,11 @@ nav {
 #menu-search {
   display: flex;
   min-width: 40vw;
+}
+
+@media (max-width: 1250px) {
+  #menu-search {
+    min-width: 0;
+  }
 }
 </style>
