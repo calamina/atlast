@@ -1,19 +1,19 @@
 import IconBook from '@/components/icons/IconBook.vue'
-import IconPaused from '@/components/icons/IconPaused.vue'
-import IconCompleted from '@/components/icons/IconCompleted.vue'
-import IconDropped from '@/components/icons/IconDropped.vue'
-import IconPlanning from '@/components/icons/IconPlanning.vue'
+import IconMovie from '@/components/icons/IconMovie.vue'
+import IconSeries from '@/components/icons/IconSeries.vue'
+import IconComic from '@/components/icons/IconComic.vue'
+import IconGame from '@/components/icons/IconGame.vue'
 
 export default [
   {
     color: '#a4dc6366',
     name: 'movie',
-    component: IconCompleted
+    component: IconMovie
   },
   {
     color: '#dca86366',
     name: 'series',
-    component: IconPlanning
+    component: IconSeries
   },
   {
     color: '#63cedc66',
@@ -23,11 +23,11 @@ export default [
   {
     color: '#88888866',
     name: 'comic',
-    component: IconDropped
+    component: IconComic
   },
   {
     color: '#b6cccf66',
     name: 'game',
-    component: IconPaused
+    component: IconGame
   }
 ]

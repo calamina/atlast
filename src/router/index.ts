@@ -14,6 +14,11 @@ const router = createRouter({
       component: () => import('../views/MediaView.vue')
     },
     {
+      path: '/data',
+      name: 'data',
+      component: () => import('../views/DataView.vue')
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'Backrooms',
       component: () => import('../views/BackroomsView.vue')

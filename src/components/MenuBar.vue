@@ -8,6 +8,7 @@ import DatabaseMenu from './DatabaseMenu.vue'
 import MenuLink from './atomic/MenuLink.vue'
 import IconBook from './icons/IconBook.vue'
 import IconLayout from './icons/IconLayout.vue'
+import IconCharts from './icons/IconCharts.vue'
 
 const { mediaSearch } = storeToRefs(useMediaStore())
 const { toggleOptions } = useStateStore();
@@ -19,7 +20,7 @@ const { displayOptions } = storeToRefs(useStateStore())
     <div class="submenu">
       <div class="types" :class="{ mask: mediaSearch.length }">
         <MenuLink :route="'home'" :icon="IconBook" :name="'library'" />
-        <MenuLink :route="'media'" :icon="IconBook" :name="'library'" />
+        <MenuLink :route="'data'" :icon="IconCharts" :name="'data'" />
         <!-- <MenuLink :route="'user'" :icon="IconUser" :name="'users'" /> -->
         <!-- <MenuLink :route="'links'" :icon="IconLink" :name="'links'" /> -->
       </div>
