@@ -108,6 +108,7 @@ main {
     width: 100%;
     padding: 0.25rem;
     min-width: 0;
+    grid-column: span 5;
   }
 
   .media__search {

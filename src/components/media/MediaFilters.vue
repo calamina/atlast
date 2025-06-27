@@ -54,4 +54,10 @@ const { displaySidebar } = storeToRefs(useStateStore())
   max-height: 85vh;
   overflow-y: scroll;
 }
+
+@media (max-width: 1250px) {
+  .filter-wrapper {
+    display: none;
+  }
+}
 </style>

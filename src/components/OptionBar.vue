@@ -48,4 +48,10 @@ const { displayOptions } = storeToRefs(useStateStore())
   background-color: var(--background-darker);
   border-radius: 2rem;
 }
+
+@media (max-width: 1250px) {
+  .optionBar {
+    display: none;
+  }
+}
 </style>
