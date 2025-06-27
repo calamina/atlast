@@ -8,7 +8,6 @@ import IconLikeFull from '../icons/IconLikeFull.vue'
 const { updateMediaFilters } = useMediaStore()
 const { filters } = storeToRefs(useMediaStore())
 
-
 function updateFilters() {
   filters.value.like = !filters.value.like
   updateMediaFilters(filters.value)
@@ -16,12 +15,12 @@ function updateFilters() {
 </script>
 
 <template>
-  <FilterGroup :title="'favorites'">
+  <FilterGroup title="favorites">
     <div class="icon-group">
-      <button class="icon-button button-like" :class="{ activeStatus: filters.like }" @click="updateFilters()"
+      <button class="icon-button button-like" :class="{ active: filters.like }" @click="updateFilters()"
         aria-label="Favorite filter" v-tooltip="'Favorite filter'">
         <IconLike v-if="!filters.like" class="icon" />
-        <IconLikeFull v-else class="icon" />
+        <IconLikeFull v-else class="icon like" />
       </button>
     </div>
   </FilterGroup>
@@ -43,11 +42,14 @@ function updateFilters() {
   cursor: pointer;
   border-radius: 2.5rem;
   padding: 0.5rem;
+}
 
-  &.activeStatus {
-    background-color: var(--white);
-    color: var(--favorite);
-  }
+.active {
+  background-color: var(--white);
+}
+
+.like {
+  color: var(--favorite);
 }
 
 .icon {

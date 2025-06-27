@@ -38,7 +38,6 @@ const categMax: ComputedRef<number> = computed(() =>
 
 const getSize = (total: number, max: number) => {
   return total / max * 100 + "%"
-  // return "calc(" + total / max * 100 + "% - 1.5rem)"
 }
 
 const initStatus = () => {
@@ -64,7 +63,7 @@ const initCategs = () => {
 
 <template>
   <main>
-    <MediaSearchBar v-model="mediaSearch" :placeholder="'Search medias'" :component="MediaSearch" />
+    <MediaSearchBar v-model="mediaSearch" placeholder="Search medias" :component="MediaSearch" />
     <MediaFilters />
     <p></p>
     <div class="charts">

@@ -9,7 +9,7 @@ const db = new Dexie('mediasDatabase') as Dexie & {
 };
 
 db.version(1).stores({
-  medias: '++id,title,url,extract,user,tags,categ,score,thumbnail,image,description,tagstring,like,attributes,key,createdAt,updatedAt, status'
+  medias: '++id,title,url,extract,user,tags,categ,score,thumbnail,image,description,tagstring,like,key,createdAt,updatedAt, status'
 });
 
 export { db };

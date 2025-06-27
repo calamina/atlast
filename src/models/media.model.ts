@@ -2,7 +2,7 @@ import type { CategNameModel } from "./categ.model"
 import type { StatusNameModel } from "./status.model"
 
 export interface MediaModel {
-  id?: number
+  id: number
   title?: string
   url?: string
   extract?: string
@@ -16,7 +16,6 @@ export interface MediaModel {
   description?: string
   tagstring?: string
   like?: boolean
-  attributes?: any
   key?: string
   createdAt?: Date
   updatedAt?: Date

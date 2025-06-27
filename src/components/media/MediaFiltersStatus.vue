@@ -15,7 +15,7 @@ function updateFilters(value: StatusNameModel) {
 </script>
 
 <template>
-  <FilterGroup :title="'status'">
+  <FilterGroup title="status">
     <div class="icon-group">
       <button class="icon-button" v-for="status in mediaStatus"
         :class="{ activeStatus: filters.status === status.name }" @click="updateFilters(status.name)"

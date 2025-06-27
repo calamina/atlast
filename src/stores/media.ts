@@ -6,7 +6,6 @@ import type { FilterModel } from '@/models/filter.model'
 import strings from '@/utils/strings'
 
 import { useNotificationStore } from '@/stores/notification'
-// import { useLoadingStore } from '@/stores/loading'
 import { db } from './db'
 import { useThrottleFn } from '@vueuse/core'
 import { useConfirmStore } from './confirm'
@@ -25,33 +24,17 @@ export const useMediaStore = defineStore('media', () => {
   const { downloadBlob, createBlob } = useFileUtils()
   const { confirmOrCancel } = useConfirmStore()
   const { addErrorNotification, addNotification } = useNotificationStore()
-  // const { setLoading } = useLoadingStore()
-
-  // async function checkMediaChanges(): Promise<boolean> {
-  //   if (!db.isOpen()) return false
-  //   return await db.medias.toArray()
-  //     .then((response) => allMedia.value.map(m => m.id) === response.map(m => m.id))
-  // }
 
   async function getMedia(): Promise<MediaModel[]> {
-    // setLoading(true)
-    // if(filters.value.order === 'desc') {
-    //   query.reverse()
-    // }
     return await db.medias
-      // .orderBy(filters.value.sort)
       .toArray()
       .then((response) => {
         allMedia.value = response
-        applyMediaFilters(response)
-        // setLoading(false)
-        return response
+        return applyMediaFilters(response)
       })
       .catch((error) => {
         manageError(error, 'failed to get media', strings.SAD)
-        // setLoading(false)
-        allMedia.value = []
-        filteredList.value = []
+        emptyLists()
         return []
       })
   }
@@ -64,47 +47,46 @@ export const useMediaStore = defineStore('media', () => {
       })
   }
 
-  async function addMedia(media: any): Promise<void> {
-    // const existingMedia = await db.medias
-    //   .where({ title: media.title })
-    //   .first()
-    //   .then((response) => {
-    //     if (response) return setNewMediaProperties(response)
-    //   })
-
-    // if (existingMedia) {
-    //   return addNotification('Media with this title already exists', strings.SAD)
-    // }
+  async function addMedia(media: MediaModel): Promise<number | null> {
     return await db.medias.add(setNewMediaProperties(media))
-      .then(() => updateMedia('media added', strings.HAPPY))
-      .catch((error) => manageError(error, 'failed to add media', strings.SAD))
+      .then(data => {
+        updateMedia('media added', strings.HAPPY)
+        return data
+      })
+      .catch((error) => {
+        manageError(error, 'failed to add media', strings.SAD)
+        return null
+      })
   }
 
-  async function editMedia(media: MediaModel): Promise<void> {
+  async function editMedia(media: MediaModel): Promise<number | null> {
     if (media.status === 'planning') media.score = 0
     media.tags = media.tagstring ? media.tagstring.split(' ') : null
     media.updatedAt = new Date()
 
     return await db.medias.update(media.id, { ...media })
-      .then(() => updateMedia('media edited', strings.HAPPY))
-      // .catch('DataCloneError', e => {
-      //   console.error("DataClone error: " + e.message);
-      // })
-      .catch((error) => manageError(error, 'failed to edit media', strings.SAD))
+      .then(data => {
+        updateMedia('media edited', strings.HAPPY)
+        return data ?? null
+      })
+      .catch((error) => {
+        manageError(error, 'failed to edit media', strings.SAD)
+        return null
+      })
   }
 
-  async function deleteMedia(id: number): Promise<any> {
+  async function deleteMedia(id: number): Promise<void> {
     return db.medias.delete(id)
       .then(() => updateMedia('media deleted', strings.HAPPY))
       .catch((error) => manageError(error, "failed to delete media", strings.SAD))
   }
 
-  async function updateMediaFilters(newFilters: FilterModel): Promise<any> {
+  async function updateMediaFilters(newFilters: FilterModel): Promise<void> {
     filters.value = newFilters
     getMedia()
   }
 
-  async function resetFilters(): Promise<any> {
+  async function resetFilters(): Promise<void> {
     filters.value.status = null
     filters.value.categ = null
     filters.value.like = null
@@ -124,14 +106,14 @@ export const useMediaStore = defineStore('media', () => {
       filtered = filtered.filter((m) => m.like === filters.value.like)
     }
     if (filters.value.tag) {
-      filtered = filtered.filter((m) => m.tags && m.tags.includes(filters.value.tag))
+      filtered = filtered.filter((m) => m.tags && filters.value.tag && m.tags.includes(filters.value.tag))
     }
 
     filteredList.value = sortMedia(filtered, filters.value)
     return filtered
   }
 
-  function manageError(error: any, message: string, kao: string): void {
+  function manageError(error: string, message: string, kao: string): void {
     addNotification(message, kao)
     addErrorNotification(error)
   }
@@ -141,43 +123,36 @@ export const useMediaStore = defineStore('media', () => {
     getMedia()
   }
 
+  async function emptyLists(): Promise<void> {
+    allMedia.value = filteredList.value = []
+  }
+
   async function exportMediaDB(): Promise<void> {
     const options = { prettyJson: true }
     return await db.export(options)
-      .then((blob) => {
-        addNotification('Database exported successfully', strings.HAPPY);
-        downloadBlob(blob, 'mediaDB.json')
-      })
+      .then((blob) => downloadBlob(blob, 'mediaDB.json'))
+      .then(() => addNotification('Database exported successfully', strings.HAPPY))
       .catch(() => addErrorNotification('Failed to export database.' + strings.SAD))
   }
 
   async function importMediaDB(file: File): Promise<void> {
-    if (!db.isOpen()) {
-      db.open()
-    }
+    if (!db.isOpen()) db.open()
 
     const blob = createBlob(file, 'application/json')
     return await db.import(blob)
-      .then(() => {
-        getMedia()
-        addNotification('Database imported successfully', strings.HAPPY)
-      })
+      .then(() => getMedia())
+      .then(() => addNotification('Database imported successfully', strings.HAPPY))
       .catch(() => addErrorNotification('Failed to import database.' + strings.SAD))
   }
 
   const deleteMediaDB = useThrottleFn(async () => {
     return await confirmOrCancel('Are you sure you want to delete the database? This action cannot be undone.')
-      .then((confirm: boolean) => {
-        if (confirm) {
-          db.delete()
-            .then(() => {
-              addNotification('Database deleted successfully', strings.HAPPY)
-              allMedia.value = []
-              filteredList.value = []
-            })
-            .catch(() => addErrorNotification('Failed to delete database' + strings.SAD))
-        }
+      .then((confirm: boolean) => confirm ? db.delete() : Promise.reject())
+      .then(() => {
+        addNotification('Database deleted successfully', strings.HAPPY)
+        emptyLists()
       })
+      .catch((err) => err ? addErrorNotification('Failed to delete database' + strings.SAD) : null)
   }, 500)
 
   return {

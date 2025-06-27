@@ -1,19 +1,9 @@
 <script setup lang="ts">
-import { onKeyStroke } from '@vueuse/core'
 import type { Component } from 'vue'
-
-const emits = defineEmits(['exit'])
 
 const { component } = defineProps<{
   component: Component
 }>()
-
-onKeyStroke(['Escape'], (e) => {
-  if (e.key === 'Escape') {
-    e.preventDefault()
-    emits('exit')
-  }
-})
 </script>
 
 <template>

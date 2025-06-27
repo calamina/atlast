@@ -2,12 +2,13 @@
 import { useDateFormat, useTimeAgo } from '@vueuse/core';
 import { mediaStatus } from '@/data/media-status';
 import { useStateStore } from '@/stores/state';
-import type { StatusModel } from '@/models/status.model';
+import type { StatusModel, StatusNameModel } from '@/models/status.model';
 
 const { displaySmall } = useStateStore()
-const { status, dates } = defineProps<{
-  status: string
-  dates: { created: Date | undefined, updated: Date | undefined }
+const { status, created, updated } = defineProps<{
+  status: StatusNameModel | undefined
+  created: Date | undefined
+  updated: Date | undefined
 }>()
 
 const selectedStatus: StatusModel | undefined = mediaStatus.find(s => s.name === status)
@@ -21,7 +22,7 @@ function formatDate(created?: Date | undefined, updated?: Date | undefined): str
 
 <template>
   <component v-if="selectedStatus" class="status" :class="{ smallStatus: displaySmall }" :is="selectedStatus?.component"
-    v-tooltip="selectedStatus?.name + ' — ' + formatDate(dates.created ?? undefined, dates.updated ?? undefined)" />
+    v-tooltip="selectedStatus?.name + ' — ' + formatDate(created ?? undefined, updated ?? undefined)" />
 </template>
 
 <style scoped lang="scss">

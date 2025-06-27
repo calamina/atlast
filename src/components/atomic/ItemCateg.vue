@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import type { CategNameModel } from '@/models/categ.model';
 import { useStateStore } from '@/stores/state';
 
 const { displaySmall } = useStateStore()
 const { categ } = defineProps<{
-  categ: string | undefined
+  categ: CategNameModel | undefined
 }>()
 </script>
 

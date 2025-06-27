@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import type { CategNameModel } from '@/models/categ.model';
 import IconSortAscending from '../icons/IconSortAscending.vue';
 import IconSortDescending from '../icons/IconSortDescending.vue';
+import type { StatusNameModel } from '@/models/status.model';
 
 const { name, info, selected, sort } = defineProps<{
-  name: string
+  name: string | CategNameModel | StatusNameModel
   info?: string | number
   selected?: boolean
   sort?: string

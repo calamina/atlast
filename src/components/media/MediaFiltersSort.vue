@@ -20,7 +20,7 @@ function updateFilters(value: SortNameModel) {
 </script>
 
 <template>
-  <FilterGroup :title="'sort'">
+  <FilterGroup title="sort">
     <FilterButton v-for="sort in filterSorts" :key="sort.name ?? 1" :selected="filters.sort === sort.name"
       :name="sort.title" :sort="filters.order" @click="updateFilters(sort.name)" />
   </FilterGroup>

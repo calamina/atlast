@@ -41,12 +41,12 @@ async function deleteDB(): Promise<void> {
 <template>
   <div class="user" ref="menu">
     <div class="menu-icon">
-      <OptionButton @click="toggleUserMenu()" :info="'User menu'" :background="'dark'">
+      <OptionButton @click="toggleUserMenu()" info="User menu" background="dark">
         <IconUser />
       </OptionButton>
     </div>
     <div class="submenu" v-if="isSubmenuVisible">
-      <OptionButton @click="exportDB()" :info="'Export database'">
+      <OptionButton @click="exportDB()" info="Export database">
         <IconDatabaseExport />
       </OptionButton>
       <label for="file-upload" class="button-icon file-button" v-tooltip="'Import database'"
@@ -54,7 +54,7 @@ async function deleteDB(): Promise<void> {
         <IconDatabaseImport />
       </label>
       <input type="file" ref="fileInput" id="file-upload" accept=".json" @change="importDB()" />
-      <OptionButton @click="deleteDB()" :info="'Delete database'">
+      <OptionButton @click="deleteDB()" info="Delete database">
         <IconDatabaseDelete />
       </OptionButton>
     </div>

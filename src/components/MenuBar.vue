@@ -19,10 +19,8 @@ const { displayOptions } = storeToRefs(useStateStore())
   <nav>
     <div class="submenu">
       <div class="types" :class="{ mask: mediaSearch.length }">
-        <MenuLink :route="'home'" :icon="IconBook" :name="'library'" />
-        <MenuLink :route="'data'" :icon="IconCharts" :name="'data'" />
-        <!-- <MenuLink :route="'user'" :icon="IconUser" :name="'users'" /> -->
-        <!-- <MenuLink :route="'links'" :icon="IconLink" :name="'links'" /> -->
+        <MenuLink route="home" :icon="IconBook" name="library" />
+        <MenuLink route="data" :icon="IconCharts" name="data" />
       </div>
     </div>
     <div class="sep" :class="{ mask: mediaSearch.length }">

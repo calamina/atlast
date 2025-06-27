@@ -15,13 +15,13 @@ const { displayOptions } = storeToRefs(useStateStore())
 <template>
   <div class="optionBar">
     <div class="options" v-if="displayOptions">
-      <OptionButton @click="toggleSize()" :info="'Toggle size'">
+      <OptionButton @click="toggleSize()" info="Toggle size">
         <IconDetail />
       </OptionButton>
-      <OptionButton @click="toggleImages()" :info="'Toggle images'">
+      <OptionButton @click="toggleImages()" info="Toggle images">
         <IconImage />
       </OptionButton>
-      <OptionButton @click="toggleSidebar()" :info="'Toggle sidebar'">
+      <OptionButton @click="toggleSidebar()" info="Toggle sidebar">
         <IconFilters />
       </OptionButton>
     </div>

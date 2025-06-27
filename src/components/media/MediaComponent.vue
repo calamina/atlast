@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
-import { useThrottleFn } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 
-import { useTooltipStore } from '@/stores/tooltip'
 import { useStateStore } from '@/stores/state'
 
 import type { MediaModel } from '@/models/media.model'
@@ -19,18 +17,9 @@ import ItemStatus from '@/components/atomic/ItemStatus.vue'
 import ItemActions from '../atomic/ItemActions.vue'
 import ItemExtract from '../atomic/ItemExtract.vue'
 
-const { resetTooltip } = useTooltipStore()
 const { displaySmall, displayImages } = storeToRefs(useStateStore())
-
-const emits = defineEmits(['enableEdit'])
 const { media } = defineProps<{ media: MediaModel }>()
-
 const expanded: Ref<boolean | null> = ref(null)
-
-const toggleEdit = useThrottleFn(() => {
-  resetTooltip()
-  emits('enableEdit')
-}, 500)
 </script>
 
 <template>
@@ -48,12 +37,13 @@ const toggleEdit = useThrottleFn(() => {
         <ItemExtract v-if="expanded" :extract="media.extract!" />
       </TransitionGroup>
       <div class="footer" :class="{ smallFooter: displaySmall }">
-        <ItemStatus :status="media.status!" :dates="{ created: media.createdAt, updated: media.updatedAt }" />
+        <ItemStatus :key="media.status ?? 1" :status="media.status" :updated="media.updatedAt"
+          :created="media.createdAt" />
         <ItemCateg :categ="media.categ" />
         <ItemRating :score="media.score!" />
       </div>
     </div>
-    <ItemActions class="actions" :url="media.url!" @enableEdit="toggleEdit()" />
+    <ItemActions class="actions" :url="media.url" :id="media.id" />
   </button>
 </template>
 

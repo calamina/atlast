@@ -1,37 +1,34 @@
 <script setup lang="ts">
 import { useThrottleFn } from '@vueuse/core'
-
 import { useTooltipStore } from '@/stores/tooltip'
+import { useMediaFormStore } from '@/stores/media.form'
 
 import IconEdit from '@/components/icons/IconEdit.vue'
 import IconLink from '@/components/icons/IconLink.vue'
 import OptionButton from './OptionButton.vue'
 
 const { resetTooltip } = useTooltipStore()
+const { toggleActive } = useMediaFormStore()
 
-const emits = defineEmits([
-  'enableEdit'
-])
-const { url } = defineProps<{
-  url: string
+const { id, url } = defineProps<{
+  id: number
+  url: string | undefined
 }>()
 
 const toggleEdit = useThrottleFn(() => {
+  toggleActive(id)
   resetTooltip()
-  emits('enableEdit')
 }, 500)
 
-const openLink = (url: string | undefined) => {
-  if (url) window.open(url, "_blank");
-}
+const openLink = (url: string | undefined) => window.open(url ?? '', "_blank")
 </script>
 
 <template>
   <div class="actions">
-    <OptionButton @click="openLink(url)" :info="'Wikipedia link'" :background="'clear'">
+    <OptionButton @click="openLink(url)" info="Wikipedia link" background="clear">
       <IconLink />
     </OptionButton>
-    <OptionButton @click="toggleEdit()" :info="'Edit'" :background="'clear'">
+    <OptionButton @click="toggleEdit()" info="Edit" background="clear">
       <IconEdit />
     </OptionButton>
   </div>

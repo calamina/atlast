@@ -18,7 +18,7 @@ export const useMediaUtils = () => {
     }
   }
 
-  function mediaToMediaForm(media: MediaModel) {
+  async function mediaToMediaForm(media: MediaModel): Promise<MediaModel> {
     return {
       id: media?.id,
       title: media?.title,
@@ -33,6 +33,12 @@ export const useMediaUtils = () => {
       image: media?.image,
       key: media?.key
     }
+  }
+
+  async function mediaFormToMedia(mediaForm: MediaModel): Promise<MediaModel> {
+    if (mediaForm.status === 'planning') mediaForm.score = 0
+    mediaForm.tags = mediaForm.tagstring ? mediaForm.tagstring.split(' ') : null
+    return mediaForm
   }
 
   function setNewMediaProperties(media: MediaModel): MediaModel {
@@ -73,10 +79,10 @@ export const useMediaUtils = () => {
     return filters.order === 'desc' ? media.reverse() : media;
   }
 
-
   return {
     wikiToMedia,
     mediaToMediaForm,
+    mediaFormToMedia,
     setNewMediaProperties,
     sortMedia
   }

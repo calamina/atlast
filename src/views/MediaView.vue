@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, type Ref, watch } from 'vue'
+import { onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import { useMediaStore } from '@/stores/media'
@@ -7,56 +7,50 @@ import { useLoadingStore } from '@/stores/loading'
 
 import MediaComponent from '@/components/media/MediaComponent.vue'
 import MediaMock from '@/components/media/MediaMock.vue'
-import MediaUpdateComponent from '@/components/media/MediaUpdateComponent.vue'
+import MediaUpdate from '@/components/media/MediaUpdate.vue'
 import MediaFilters from '@/components/media/MediaFilters.vue'
 import MediaSearchBar from '@/components/media/MediaSearchBar.vue'
 import MediaSearch from '@/components/media/MediaSearch.vue'
-import ActionBar from '@/components/ActionBar.vue'
+import OptionBar from '@/components/OptionBar.vue'
 import strings from '@/utils/strings'
 import { MediaActions } from '@/data/media-actions'
-import { useTooltipStore } from '@/stores/tooltip'
+import { useMediaFormStore } from '@/stores/media.form'
 
-const { filteredList, count, mediaSearch, filters } = storeToRefs(useMediaStore())
+const { filteredList, count, mediaSearch } = storeToRefs(useMediaStore())
 const { getMedia } = useMediaStore()
 const { loading } = storeToRefs(useLoadingStore())
-const { resetTooltip } = useTooltipStore()
-
-const show: Ref<number | null> = ref(null)
+const { resetActive } = useMediaFormStore()
+const { mediaFormActive } = storeToRefs(useMediaFormStore())
 
 onMounted(() => getMedia())
 
 watch(mediaSearch, () => {
-  show.value = null
+  resetActive()
   mediaSearch.value.length > 0
     ? (document.documentElement.style.overflow = 'hidden')
     : (document.documentElement.style.overflow = 'auto')
 })
 
-watch(filteredList, () => show.value = null)
-
-function editMedia(index: number) {
-  show.value = show.value === index ? null : index
-  resetTooltip()
-}
+watch(filteredList, () => resetActive())
 </script>
 
 <template>
   <main>
-    <MediaSearchBar v-model="mediaSearch" :placeholder="'Search medias'" :component="MediaSearch" />
+    <MediaSearchBar v-model="mediaSearch" placeholder="Search medias" :component="MediaSearch" />
     <MediaFilters />
-    <ActionBar />
+    <OptionBar />
     <transition name="fade" mode="out-in">
       <div class="medias" v-if="loading">
         <MediaMock v-for="i of 5" :key="i" />
       </div>
       <div class="medias" v-else-if="filteredList?.length !== 0">
-        <div class="media__switch" v-for="(media, index) of filteredList" :key="media.id">
-          <MediaComponent v-if="show !== index" :media="media" :key="media.id" @enableEdit="editMedia(index)" />
-          <MediaUpdateComponent v-else :media="media" :action="MediaActions.EDIT" :key="media.key"
-            @confirm="editMedia(index)" @cancel="editMedia(index)" />
+        <div class="media__switch" v-for="media of filteredList" :key="media.id">
+          <MediaComponent v-if="mediaFormActive !== media.id" :media="media" :key="media.id" />
+          <MediaUpdate v-else :media="media" :action="MediaActions.EDIT" :key="media.key" />
         </div>
       </div>
       <div class="medias" v-else>
+        <!-- TODO: Add component :) -->
         <template v-if="count">
           <p v-if="count">{{ "Empty for now" + strings.SAD }}</p>
         </template>
@@ -64,6 +58,7 @@ function editMedia(index: number) {
           <MediaMock v-for="i of 2" :key="i" />
           <p>{{ "Add some media by searching" + strings.HAPPY }}</p>
         </template>
+        <!-- compoenent ned -->
       </div>
     </transition>
   </main>

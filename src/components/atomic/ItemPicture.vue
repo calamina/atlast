@@ -3,7 +3,7 @@ import { useStateStore } from '@/stores/state';
 import strings from '@/utils/strings';
 
 const { displaySmall } = useStateStore()
-const { src, small } = defineProps<{
+const { src, small = false } = defineProps<{
   src: string | null
   small?: boolean
 }>()

@@ -4,7 +4,7 @@ import strings from "./strings";
 export const useFileUtils = () => {
   const { addErrorNotification } = useNotificationStore();
 
-  const downloadBlob = (blob: Blob, filename: string): void => {
+  const downloadBlob = async (blob: Blob, filename: string): Promise<void> => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -13,9 +13,10 @@ export const useFileUtils = () => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    return Promise.resolve()
   };
 
-  const createBlob = (file: any, type = 'application/json'): Blob => {
+  const createBlob = (file: File, type = 'application/json'): Blob => {
     return new Blob([file], { type })
   }
 

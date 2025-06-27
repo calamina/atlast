@@ -28,7 +28,7 @@ const countByCateg: ComputedRef<Record<string, number>> = computed(() => {
 </script>
 
 <template>
-  <FilterGroup :title="'category'">
+  <FilterGroup title="category">
     <FilterButton v-for="categ in categs" :key="categ ?? 1" :selected="filters.categ === categ" :name="categ"
       :info="countByCateg[categ ?? 1]" @click="updateFilters(categ)" />
   </FilterGroup>

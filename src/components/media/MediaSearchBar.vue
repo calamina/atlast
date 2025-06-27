@@ -39,7 +39,7 @@ const input: Ref<HTMLInputElement | null> = ref(null);
     </div>
   </teleport>
   <transition name="search" mode="out-in">
-    <ActionOverlay v-if="!!search.length" class="overlay" :component="component" @exit="search = ''" />
+    <ActionOverlay v-if="!!search.length" class="overlay" :component="component" />
   </transition>
 </template>
 

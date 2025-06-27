@@ -17,7 +17,7 @@ const { displaySidebar } = storeToRefs(useStateStore())
 <template>
   <div class="filter-wrapper">
     <div class="filters" v-if="displaySidebar">
-      <FilterButton :selected="filteredCount === count" :name="'All'" :info="count" @click="resetFilters()" />
+      <FilterButton :selected="filteredCount === count" name="All" :info="count" @click="resetFilters()" />
       <MediaFiltersFavorite />
       <MediaFiltersCateg />
       <MediaFiltersStatus />
