@@ -1,6 +1,6 @@
 import "dexie-export-import";
 import { defineStore } from 'pinia'
-import { computed, ref, type ComputedRef, type Ref } from 'vue'
+import { computed, ref, toRaw, type ComputedRef, type Ref } from 'vue'
 import type { MediaModel } from '@/models/media.model'
 import type { FilterModel } from '@/models/filter.model'
 import strings from '@/utils/strings'
@@ -61,10 +61,9 @@ export const useMediaStore = defineStore('media', () => {
 
   async function editMedia(media: MediaModel): Promise<number | null> {
     if (media.status === 'planning') media.score = 0
-    media.tags = media.tagstring ? media.tagstring.split(' ') : null
     media.updatedAt = new Date()
-
-    return await db.medias.update(media.id, { ...media })
+    // toRaw is used because Dexie doesn't like the proxy returned by vue :'(
+    return await db.medias.update(media.id, { ...toRaw(media) })
       .then(data => {
         updateMedia('media edited', strings.HAPPY)
         return data ?? null

@@ -45,11 +45,11 @@ onKeyStroke(['Escape'], (e) => {
 
 <template>
   <button ref="form" class="media" :class="{ mediaSmall: displaySmall }" v-if="mediaForm">
-    <ItemPicture :src="mediaForm.image ?? null" v-if="displayImages" />
+    <ItemPicture :src="mediaForm.image" v-if="displayImages" />
     <form class="content" @submit.prevent>
-      <ItemTitle :title="mediaForm.title ?? null" />
-      <ItemDescription :description="mediaForm.description ?? null" />
-      <ItemExtract :extract="mediaForm.extract ?? null" />
+      <ItemTitle v-if="mediaForm.title" :title="mediaForm.title" />
+      <ItemDescription v-if="mediaForm.description" :description="mediaForm.description" />
+      <ItemExtract v-if="mediaForm.extract" :extract="mediaForm.extract" />
       <MediaUpdateFavorite />
       <div class="form">
         <MediaUpdateStatus />

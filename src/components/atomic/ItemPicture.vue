@@ -4,7 +4,7 @@ import strings from '@/utils/strings';
 
 const { displaySmall } = useStateStore()
 const { src, small = false } = defineProps<{
-  src: string | null
+  src: string | null | undefined
   small?: boolean
 }>()
 </script>

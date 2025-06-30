@@ -37,13 +37,14 @@ export const useMediaUtils = () => {
 
   async function mediaFormToMedia(mediaForm: MediaModel): Promise<MediaModel> {
     if (mediaForm.status === 'planning') mediaForm.score = 0
-    mediaForm.tags = mediaForm.tagstring ? mediaForm.tagstring.split(' ') : null
+    mediaForm.tags = mediaForm.tagstring ? mediaForm.tagstring.split(' ') : []
+    console.debug(mediaForm)
     return mediaForm
   }
 
   function setNewMediaProperties(media: MediaModel): MediaModel {
     if (media.status === 'planning') media.score = 0
-    media.tags = media.tagstring ? media.tagstring.split(' ') : null
+    media.tags = media.tagstring ? media.tagstring.split(' ') : []
     media.createdAt = new Date()
     return media
   }

@@ -7,12 +7,12 @@ export interface MediaModel {
   url?: string
   extract?: string
   user?: string
-  tags?: string[] | null
+  tags?: string[]
   categ?: CategNameModel
   status?: StatusNameModel
   score?: number
   thumbnail?: string | any
-  image?: string
+  image: string
   description?: string
   tagstring?: string
   like?: boolean
