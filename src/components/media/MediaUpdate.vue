@@ -18,6 +18,7 @@ import MediaUpdateCateg from './MediaUpdateCateg.vue'
 import MediaUpdateFavorite from './MediaUpdateFavorite.vue'
 import MediaUpdateScore from './MediaUpdateScore.vue'
 import MediaUpdateActions from './MediaUpdateActions.vue'
+import MediaUpdateTags from './MediaUpdateTags.vue'
 
 const { displaySmall, displayImages } = storeToRefs(useStateStore())
 const { setupMediaForm, resetActive } = useMediaFormStore()
@@ -56,7 +57,7 @@ onKeyStroke(['Escape'], (e) => {
         <MediaUpdateCateg />
         <MediaUpdateScore />
         <div class="footer">
-          <input placeholder="tags (separate with space)" class="tags" type="text" v-model="mediaForm.tagstring" />
+          <MediaUpdateTags />
           <MediaUpdateActions :action />
         </div>
       </div>
@@ -87,7 +88,6 @@ onKeyStroke(['Escape'], (e) => {
       gap: 0.25rem;
     }
 
-    .tags,
     .footer {
       height: 2rem;
     }
@@ -113,18 +113,6 @@ onKeyStroke(['Escape'], (e) => {
   justify-content: space-between;
   align-items: start;
   gap: 5rem;
-}
-
-.tags {
-  padding: 0.5rem 1rem;
-  background-color: var(--background);
-  color: var(--text);
-  border-radius: 1rem;
-  width: 100%;
-  font-size: 0.85rem;
-  font-size: 1rem;
-  height: 2.5rem;
-  font-family: var(--font-bold);
 }
 
 @media (max-width: 1250px) {

@@ -4,7 +4,6 @@ import { useMediaFormStore } from '@/stores/media.form'
 const { mediaForm } = storeToRefs(useMediaFormStore())
 </script>
 
-<!-- TODO -->
 <template>
   <input placeholder="tags (separate with space)" class="tags" type="text" v-model="mediaForm.tagstring" />
 </template>

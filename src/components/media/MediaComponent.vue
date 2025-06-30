@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
+import { computed, ref, type ComputedRef, type Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import { useStateStore } from '@/stores/state'
@@ -20,15 +20,16 @@ import ItemExtract from '../atomic/ItemExtract.vue'
 const { displaySmall, displayImages } = storeToRefs(useStateStore())
 const { media } = defineProps<{ media: MediaModel }>()
 const expanded: Ref<boolean | null> = ref(null)
+const showDescription: ComputedRef<boolean> = computed(() => !displaySmall || expanded && displaySmall.value)
 </script>
 
 <template>
   <button class="media" :class="{ mediaSmall: displaySmall }" v-if="media.id" @click="expanded = !expanded">
-    <ItemPicture v-if="displayImages" :src="media.thumbnail ?? null" />
+    <ItemPicture v-if="displayImages" :src="media.thumbnail" />
     <div class="content">
-      <ItemTitle :title="media.title ?? null" :like="media.like ?? null" />
+      <ItemTitle v-if="media.title" :title="media.title" :like="media.like ?? false" />
       <Transition name="reveal">
-        <ItemDescription v-if="!displaySmall || expanded && displaySmall" :description="media.description ?? null" />
+        <ItemDescription v-if="media.description && showDescription" :description="media.description" />
       </Transition>
       <TransitionGroup name="reveal">
         <TagGroup v-if="expanded && media.tags?.length" :max-height="true">

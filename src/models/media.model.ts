@@ -12,7 +12,7 @@ export interface MediaModel {
   status?: StatusNameModel
   score?: number
   thumbnail?: string | any
-  image: string
+  image?: string
   description?: string
   tagstring?: string
   like?: boolean

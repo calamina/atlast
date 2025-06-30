@@ -11,8 +11,6 @@ Personnal Knowledge Database made with Vue3, wikipedia API, and IndexedDB (brows
 
 
 # DOING
-CLEANING MEDIAUPDATE :)
-
 FILTERS : add common classes/components for groups and icons
 check if prop is better than service for filters ref
 
@@ -20,7 +18,6 @@ add graphs and stats !!! with links ?
   - graph showing categories > click on category to get to page with filters ?
 
 # TODO
-Fix media page load (maybe removed somtheing I should'nt have ...)
 REFACTO MEDIA SEARCH : export functions to composable with searchbar ?
 TELEPORT MEDIA OPTIONS TO MENU (accessibility + iso)
 DARK THEME
