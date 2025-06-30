@@ -40,6 +40,7 @@ nav {
   top: 0;
   z-index: 500;
   width: 100vw;
+  height: fit-content;
   margin: 0 auto;
   padding: 0;
   padding-top: 1rem;

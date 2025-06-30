@@ -21,6 +21,14 @@ const { isRevealed } = storeToRefs(useConfirmStore())
   <router-view v-slot="{ Component }">
     <component :is="Component" />
   </router-view>
-  <ElementTooltip v-if="tooltip" />
+  <ElementTooltip class="tooltip" v-if="tooltip" />
   <ConfirmationComponent v-if="isRevealed" />
 </template>
+
+<style lang="scss" scoped>
+@media (max-width: 1250px) {
+  .tooltip {
+    display: none;
+  }
+}
+</style>
