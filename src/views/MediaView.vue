@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, watch } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import { useMediaStore } from '@/stores/media'
@@ -15,8 +15,9 @@ import OptionBar from '@/components/OptionBar.vue'
 import strings from '@/utils/strings'
 import { MediaActions } from '@/data/media-actions'
 import { useMediaFormStore } from '@/stores/media.form'
+import { useOffsetPagination } from '@vueuse/core'
 
-const { filteredList, count, mediaSearch } = storeToRefs(useMediaStore())
+const { filteredList, count, filteredCount, mediaSearch } = storeToRefs(useMediaStore())
 const { getMedia } = useMediaStore()
 const { loading } = storeToRefs(useLoadingStore())
 const { resetActive } = useMediaFormStore()
@@ -32,11 +33,31 @@ watch(mediaSearch, () => {
 })
 
 watch(filteredList, () => resetActive())
+
+const pageSize = 20
+const start = computed(() => currentPage.value === 1 ? 0 : (currentPage.value - 1) * pageSize)
+const end = computed(() => start.value + pageSize)
+const paginatedList = computed(() => filteredList.value.slice(start.value, end.value))
+
+const {
+  currentPage,
+  isFirstPage,
+  isLastPage,
+  prev,
+  next,
+  pageCount,
+  // currentPageSize,
+} = useOffsetPagination({
+  total: filteredCount,
+  page: 1,
+  pageSize,
+  onPageChange: (): void => window.scrollTo(0, 0),
+})
 </script>
 
 <template>
   <main>
-    <MediaSearchBar v-model="mediaSearch" placeholder="Search medias" :component="MediaSearch" />
+    <MediaSearchBar v-model="mediaSearch" placeholder="Search medias (ctrl + s)" :component="MediaSearch" />
     <MediaFilters />
     <OptionBar />
     <transition name="fade" mode="out-in">
@@ -44,10 +65,20 @@ watch(filteredList, () => resetActive())
         <MediaMock v-for="i of 5" :key="i" />
       </div>
       <div class="medias" v-else-if="filteredList?.length !== 0">
-        <div class="media__switch" v-for="media of filteredList" :key="media.id">
+        <div class="media__switch" v-for="media of paginatedList" :key="media.id">
           <MediaComponent v-if="mediaFormActive !== media.id" :media="media" :key="media.id" />
           <MediaUpdate v-else :media="media" :action="MediaActions.EDIT" :key="media.key" />
         </div>
+        <!-- pagination component -->
+        <div class="pagination" v-if="pageCount > 1">
+          <button class="pagination-button" type="button" :disabled="isFirstPage" @click="prev">Previous</button>
+          <button class="pagination-button" :class="{ activepage: currentPage === item }" v-for="item in pageCount"
+            :key="item" :disabled="currentPage === item" @click="currentPage = item">
+            {{ item }}
+          </button>
+          <button class="pagination-button" type="button" :disabled="isLastPage" @click="next">Next</button>
+        </div>
+        <!-- pagination component end -->
       </div>
       <div class="medias" v-else>
         <!-- TODO: Add component :) -->
@@ -72,6 +103,38 @@ main {
   grid-template-columns: subgrid;
   grid-column: span 5;
   transition: 0.3s;
+}
+
+.pagination {
+  padding: 1rem 0 2rem;
+  display: flex;
+  gap: 0.25rem;
+}
+
+.pagination-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--background-darker);
+  height: 2.5rem;
+  padding: 0 1rem;
+  border-radius: 2rem;
+
+  &:not(.activepage):disabled {
+    opacity: 0.5;
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+
+  &:focus {
+    outline-color: var(--text);
+  }
+}
+
+.activepage {
+  background-color: var(--highlight);
 }
 
 .medias {

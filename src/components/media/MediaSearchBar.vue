@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, type Component, type Ref } from 'vue';
-// import { useMagicKeys, whenever } from '@vueuse/core'
+import { useMagicKeys, whenever } from '@vueuse/core'
 import ActionOverlay from '@/components/ActionOverlay.vue'
 import IconCancel from '@/components/icons/IconCancel.vue'
 import IconSearch from '@/components/icons/IconSearch.vue'
@@ -12,28 +12,33 @@ const { component, placeholder } = defineProps<{
 }>()
 
 const input: Ref<HTMLInputElement | null> = ref(null);
-// const keys = useMagicKeys()
 
-// whenever(keys.shift_s, () => {
-//   if (document.activeElement === input.value) {
-//     search.value = ''
-//     input.value?.blur();
-//   }
-//   else {
-//     setTimeout(function () {
-//       input.value?.focus();
-//     }, 20);
-//   }
-// })
+const { ctrl_s } = useMagicKeys({
+  passive: false,
+  onEventFired(e) {
+    if (e.ctrlKey && e.key === 's' && e.type === 'keydown')
+      e.preventDefault()
+  },
+})
+
+whenever(ctrl_s, () => {
+  if (document.activeElement === input.value) {
+    search.value = ''
+    input.value?.blur();
+  }
+  else {
+    input.value?.focus();
+  }
+})
 </script>
 
 <template>
   <teleport to="#menu-search">
     <div class="media__search">
       <!-- TODO : put icon in label inside input !!! -->
+      <!-- add shortcut keys -->
       <input ref="input" type="text" name="search" v-model="search" id="search" :placeholder="placeholder"
         autocomplete="off" />
-      <!-- <span>[shift + s]</span> -->
       <IconSearch v-if="!search.length" class="button-icon" />
       <IconCancel v-if="!!search.length" class="button-icon" @click="search = ''" />
     </div>
@@ -57,9 +62,8 @@ const input: Ref<HTMLInputElement | null> = ref(null);
 
   input[type='text'] {
     padding: 0 1rem;
-    // padding: 0;
     text-align: center;
-    font-size: 1.1rem;
+    font-size: 1rem;
     border-radius: 3rem;
     height: 2.5rem;
     font-family: var(--font-bold);

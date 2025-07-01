@@ -15,6 +15,7 @@ Personnal Knowledge Database made with Vue3, wikipedia API, and IndexedDB (brows
 - graph showing categories > click on category to get to page with filters ?
 
 # TODO
+- pagination : export to component || clean :)
 - FILTERS : add common classes/components for groups and icons
 - check if prop is better than service for filters ref
 - highlight active options
