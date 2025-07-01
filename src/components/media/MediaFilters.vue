@@ -52,7 +52,7 @@ const { displaySidebar } = storeToRefs(useStateStore())
   height: fit-content;
   transition: opacity 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
   max-height: 85vh;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 @media (max-width: 1250px) {
