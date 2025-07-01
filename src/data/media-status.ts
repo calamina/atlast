@@ -7,14 +7,14 @@ import type { StatusModel } from '@/models/status.model'
 
 export const mediaStatus: StatusModel[] = [
   {
-    color: '#a4dc6377',
-    name: 'completed',
-    component: IconCompleted
-  },
-  {
     color: '#dcbc6377',
     name: 'planning',
     component: IconPlanning
+  },
+  {
+    color: '#a4dc6377',
+    name: 'completed',
+    component: IconCompleted
   },
   {
     color: '#63cedc77',
@@ -22,13 +22,13 @@ export const mediaStatus: StatusModel[] = [
     component: IconOngoing
   },
   {
+    color: '#b6cccf77',
+    name: 'paused',
+    component: IconPaused
+  },
+  {
     color: '#dc848477',
     name: 'dropped',
     component: IconDropped
   },
-  {
-    color: '#b6cccf77',
-    name: 'paused',
-    component: IconPaused
-  }
 ]

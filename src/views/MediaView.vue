@@ -67,7 +67,6 @@ watch(filteredList, () => resetActive())
 <style lang="scss" scoped>
 main {
   width: 100vw;
-  scrollbar-width: none;
   justify-content: center;
   display: grid;
   grid-template-columns: subgrid;
@@ -82,7 +81,8 @@ main {
   gap: 0.25rem;
   flex: 1;
   min-width: max(40vw, 45rem);
-  padding: 1rem;
+  padding-top: 1rem;
+  grid-column: 3 / 4;
 
   p {
     padding-top: 2rem;

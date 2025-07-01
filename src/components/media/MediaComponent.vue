@@ -20,7 +20,7 @@ import ItemExtract from '../atomic/ItemExtract.vue'
 const { displaySmall, displayImages } = storeToRefs(useStateStore())
 const { media } = defineProps<{ media: MediaModel }>()
 const expanded: Ref<boolean | null> = ref(null)
-const showDescription: ComputedRef<boolean> = computed(() => !displaySmall || expanded && displaySmall.value)
+const showDescription: ComputedRef<boolean> = computed(() => !displaySmall || expanded && !displaySmall.value)
 </script>
 
 <template>
@@ -107,9 +107,9 @@ const showDescription: ComputedRef<boolean> = computed(() => !displaySmall || ex
 /* TRANSITIONS */
 .reveal-enter-active,
 .reveal-leave-active {
-  transition: max-height 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53),
-    opacity 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53),
-    padding 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
+  transition: max-height 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53),
+    opacity 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53),
+    padding 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53);
 }
 
 .reveal-enter-from,

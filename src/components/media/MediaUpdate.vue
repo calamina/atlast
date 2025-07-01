@@ -46,7 +46,7 @@ onKeyStroke(['Escape'], (e) => {
 
 <template>
   <button ref="form" class="media" :class="{ mediaSmall: displaySmall }" v-if="mediaForm">
-    <ItemPicture :src="mediaForm.image" v-if="displayImages" />
+    <ItemPicture v-if="displayImages" :src="mediaForm.image" :small="displaySmall" />
     <form class="content" @submit.prevent>
       <ItemTitle v-if="mediaForm.title" :title="mediaForm.title" />
       <ItemDescription v-if="mediaForm.description" :description="mediaForm.description" />
@@ -75,22 +75,10 @@ onKeyStroke(['Escape'], (e) => {
   border-radius: 1.5rem;
   background-color: var(--white);
   width: 100%;
+  transition: padding 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53), gap 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53), border-radius 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53);
 
   &:focus {
     outline: 2px solid var(--background-darker);
-  }
-
-  &.mediaSmall {
-    padding: 0.5rem;
-    border-radius: 1rem;
-
-    .form {
-      gap: 0.25rem;
-    }
-
-    .footer {
-      height: 2rem;
-    }
   }
 }
 
@@ -105,6 +93,7 @@ onKeyStroke(['Escape'], (e) => {
   display: flex;
   flex-flow: column;
   gap: 1rem;
+  transition: gap 0.2s;
 }
 
 .footer {
@@ -113,6 +102,16 @@ onKeyStroke(['Escape'], (e) => {
   justify-content: space-between;
   align-items: start;
   gap: 5rem;
+}
+
+.mediaSmall {
+  padding: 0.5rem;
+  // gap: 0.5rem;
+  border-radius: 1rem;
+
+  .form {
+    gap: 0.25rem;
+  }
 }
 
 @media (max-width: 1250px) {

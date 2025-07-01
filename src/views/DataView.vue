@@ -4,7 +4,6 @@ import { storeToRefs } from 'pinia'
 
 import { useMediaStore } from '@/stores/media'
 
-import MediaFilters from '@/components/media/MediaFilters.vue'
 import MediaSearchBar from '@/components/media/MediaSearchBar.vue'
 import MediaSearch from '@/components/media/MediaSearch.vue'
 import { mediaCategs } from '@/data/media-categs'
@@ -64,8 +63,6 @@ const initCategs = () => {
 <template>
   <main>
     <MediaSearchBar v-model="mediaSearch" placeholder="Search medias" :component="MediaSearch" />
-    <MediaFilters />
-    <p></p>
     <div class="charts">
 
       <div class="KEK">
@@ -86,7 +83,7 @@ const initCategs = () => {
         <h3>Status</h3>
       </div>
 
-      <div class="KEK">
+      <!-- <div class="KEK">
         <div class="chart-wrapper">
           <div v-for="status of statusData" :key="status.name ?? ''" class="chart">
             <div class="chart-bar-wrapper">
@@ -101,7 +98,7 @@ const initCategs = () => {
           </div>
         </div>
         <h3>Status</h3>
-      </div>
+      </div> -->
 
       <div class="KEK">
         <div class="chart-wrapper">
@@ -142,9 +139,10 @@ main {
   align-items: center;
   width: 100%;
   padding-top: 1rem;
-  min-width: 100%;
   gap: 1rem;
   min-width: max(40vw, 45rem);
+  grid-column: 3 / 4;
+  padding: 1rem;
 }
 
 .KEK {
@@ -250,6 +248,8 @@ h3 {
 
 @media (max-width: 1250px) {
   .charts {
+    align-self: flex-start;
+    grid-column: span 5;
     min-width: 0;
   }
 }

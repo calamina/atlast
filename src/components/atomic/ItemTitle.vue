@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useStateStore } from '@/stores/state';
 import IconLikeFull from '../icons/IconLikeFull.vue';
+import { storeToRefs } from 'pinia';
 
-const { displaySmall } = useStateStore()
+const { displaySmall } = storeToRefs(useStateStore())
 const { title, like } = defineProps<{
   title: string | null
   like?: boolean | null
@@ -27,13 +28,14 @@ const { title, like } = defineProps<{
   margin-bottom: -0.25rem;
   white-space: nowrap;
   text-overflow: ellipsis;
+  transition: margin-top 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53);
+}
 
-  &.smallTitle {
-    margin-top: -0.2rem;
+.smallTitle {
+  margin-top: -0.2rem;
 
-    h2 {
-      font-size: 1.2rem;
-    }
+  h2 {
+    font-size: 1.2rem;
   }
 }
 
@@ -44,6 +46,7 @@ h2 {
   text-transform: capitalize;
   text-decoration: none;
   color: var(--text);
+  transition: font-size 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53);
 }
 
 .like {

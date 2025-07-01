@@ -107,6 +107,7 @@ function upsertMedia(media: MediaModel, action: MediaActions) {
   gap: 0.5rem;
   padding-top: 0.25rem;
   overflow-y: auto;
+  padding: 0.25rem 1rem 1rem;
 }
 
 .medias {

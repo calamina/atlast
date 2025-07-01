@@ -31,6 +31,7 @@ const { route, name, icon } = defineProps<{
   text-decoration: none;
   width: 100%;
 
+
   span {
     padding-right: 1rem;
     padding-bottom: 0.15rem;
@@ -43,6 +44,12 @@ const { route, name, icon } = defineProps<{
 .router-link-active,
 .type:hover {
   background-color: var(--highlight);
+}
+
+.type:focus-visible {
+  outline: 2px solid var(--text);
+  // outline-color: red;
+  border: none;
 }
 
 .button-icon {

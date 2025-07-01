@@ -23,6 +23,10 @@ const { name, selected } = defineProps<{
   border-radius: 1rem;
   font-size: 0.85rem;
 
+  &:focus {
+    outline-color: var(--text);
+  }
+
   &::before {
     content: '#';
   }
