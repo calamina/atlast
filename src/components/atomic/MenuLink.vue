@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import type { Component } from 'vue';
-import { storeToRefs } from 'pinia';
-import { useUserStore } from '@/stores/user';
 
-const { connectedUser } = storeToRefs(useUserStore())
-
-const props = defineProps<{
+const { route, name, icon } = defineProps<{
   route: string
   name: string
   icon: Component
@@ -13,11 +9,11 @@ const props = defineProps<{
 </script>
 
 <template>
-  <router-link class="type" :to="{ name: props.route, params: { username: connectedUser?.username } }">
+  <router-link class="type" :to="{ name: route }">
     <div class="button-icon">
-      <component :is="props.icon" />
+      <component :is="icon" />
     </div>
-    <span>{{ props.name }}</span>
+    <span>{{ name }}</span>
   </router-link>
 </template>
 
@@ -35,6 +31,7 @@ const props = defineProps<{
   text-decoration: none;
   width: 100%;
 
+
   span {
     padding-right: 1rem;
     padding-bottom: 0.15rem;
@@ -49,6 +46,11 @@ const props = defineProps<{
   background-color: var(--highlight);
 }
 
+.type:focus-visible {
+  outline: 2px solid var(--text);
+  // outline-color: red;
+  border: none;
+}
 
 .button-icon {
   background-color: transparent;

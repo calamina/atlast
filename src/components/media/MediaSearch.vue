@@ -1,93 +1,91 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
-import { onKeyStroke, useKeyModifier } from '@vueuse/core'
+import { computed, ref, type ComputedRef, type Ref } from 'vue'
+import { onKeyStroke } from '@vueuse/core'
 import { watchDebounced } from '@vueuse/shared'
 
 import { useWiki } from '@/stores/wiki'
 import { useMediaStore } from '@/stores/media'
-import { useUserStore } from '@/stores/user'
 
 import type { MediaModel } from '@/models/media.model'
 
-import MediaUpdateComponent from '@/components/media/MediaUpdateComponent.vue'
+import MediaUpdate from '@/components/media/MediaUpdate.vue'
 import MediaComponent from './MediaComponent.vue'
 import MediaSimple from './MediaSimple.vue'
 import { storeToRefs } from 'pinia'
-
-const emits = defineEmits(['exit'])
+import { MediaActions } from '@/data/media-actions'
+import { useMediaFormStore } from '@/stores/media.form'
+import type { WikiSearchModel } from '@/models/wiki-search.model'
 
 const { getWikiByname } = useWiki()
-const { connectedUser } = useUserStore()
-const mediastore = useMediaStore()
-const { mediaSearch } = storeToRefs(mediastore)
+const { getMediaByTitle } = useMediaStore()
+const { mediaSearch } = storeToRefs(useMediaStore())
+const { mediaFormActive } = storeToRefs(useMediaFormStore())
+const { resetActive, toggleActive } = useMediaFormStore()
 
 let wikiList: Ref<MediaModel[]> = ref([])
 let mediaList: Ref<MediaModel[]> = ref([])
-const activeMedia: Ref<MediaModel | null> = ref(null)
-const createOrUpdate: Ref<string> = ref('')
+const createOrUpdate: Ref<MediaActions> = ref(MediaActions.EDIT)
+const selectedLibraryMedia: ComputedRef<MediaModel | null> = computed(() => mediaList.value.find(media => media.id === mediaFormActive.value) ?? null)
+const selectedWikiMedia: Ref<MediaModel | null> = ref(null)
+const selectedMedia: Ref<MediaModel | null> = computed(() => createOrUpdate.value === MediaActions.CREATE ? selectedWikiMedia.value : selectedLibraryMedia.value)
 
 watchDebounced(
-  mediaSearch,
-  () => {
-    activeMedia.value = null
-    mediaSearch.value ? getResults(mediaSearch.value) : ((wikiList.value = []), (mediaList.value = []))
+  mediaSearch, () => {
+    resetResults()
+    getResults(mediaSearch.value)
   },
   { debounce: 600, maxWait: 1200 }
 )
 
-async function getResults(value: string) {
+function resetResults() {
   mediaList.value = []
   wikiList.value = []
+  resetActive()
+}
 
-  const mediaTemp: MediaModel[] = []
+async function getResults(value: string): Promise<MediaModel[][] | null> {
+  if (!value) return null
 
-  mediastore.getMediaByUserAndName(connectedUser!.username, value)
-  .then((data: MediaModel[]) => {
-    data?.forEach((element) => {
-      element.attributes.id = element.id
-      mediaTemp.push(element.attributes)
-      // mediaList.value.push(element.attributes)
-    })
+  return await getWikiByname(value).then((data: WikiSearchModel[] | null) => {
+    getMediaByTitle(value).forEach((element) => mediaList.value.push(element))
+    wikiList.value = data?.filter((wiki: WikiSearchModel) =>
+      !mediaList.value.map(media => media.key).includes(wiki.key)) ?? []
+    return [wikiList.value, mediaList.value]
   })
-  .then(() =>
-    getWikiByname(value).then((data: any) => {
-      const mediaListKeys = new Set(mediaList.value.map((el) => el.key))
-      wikiList.value = data.filter(({ key }: { key: string }) => !mediaListKeys.has(key))
-      mediaList.value = [...mediaTemp]
-    })
-  )
 }
 
 onKeyStroke(['Escape'], (e) => {
   if (e.key === 'Escape') {
     e.preventDefault()
-    emits('exit')
+    mediaSearch.value = ''
   }
 })
 
-function upsertMedia(media: MediaModel, action: string) {
-  activeMedia.value = media
+function upsertMedia(media: MediaModel, action: MediaActions) {
   createOrUpdate.value = action
+  if (action === MediaActions.CREATE) {
+    toggleActive(media.id)
+    selectedWikiMedia.value = media
+  }
 }
 </script>
 
 <template>
   <transition name="fade">
     <div class="wrapper-search">
-      <div class="results" v-if="!activeMedia">
+      <div class="results" v-if="!mediaFormActive">
         <div class="medias" v-if="mediaList.length">
           <MediaComponent v-for="media of mediaList" :media="media" :key="media.id"
-          @enableEdit="upsertMedia(media, 'editMedia')" />
+            @click="upsertMedia(media, MediaActions.EDIT)" />
         </div>
         <div class="medias" v-if="wikiList.length">
           <MediaSimple v-for="(media, index) of wikiList" :key="index" :media="media"
-            @click="upsertMedia(media, 'createMedia')" />
+            @click="upsertMedia(media, MediaActions.CREATE)" />
         </div>
       </div>
       <div class="results" v-else>
         <div class="medias">
-          <MediaUpdateComponent :media="activeMedia" :action="createOrUpdate" :key="activeMedia.key"
-            @confirm="$emit('exit')" @cancel="activeMedia = null" />
+          <MediaUpdate v-if="selectedMedia" :media="selectedMedia" :action="createOrUpdate" :key="mediaFormActive" />
         </div>
       </div>
     </div>
@@ -105,22 +103,14 @@ function upsertMedia(media: MediaModel, action: string) {
 .results {
   width: 100%;
   display: flex;
-  // flex-flow: column;
-  // align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  // background-color: var(--background);
+  padding-top: 0.25rem;
   overflow-y: auto;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  padding: 0.25rem 1rem 1rem;
 }
 
 .medias {
-  // width: 45rem;
   width: max(40vw, 45rem);
   display: flex;
   flex-flow: column;
@@ -147,6 +137,7 @@ function upsertMedia(media: MediaModel, action: string) {
 
   .medias {
     width: 100%;
+    min-width: 0;
   }
 
   .results {

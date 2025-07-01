@@ -6,19 +6,18 @@ import ItemPicture from '@/components/atomic/ItemPicture.vue'
 import { storeToRefs } from 'pinia';
 import { useStateStore } from '@/stores/state';
 
-const props = defineProps<{ media: MediaModel }>()
-const { displaySmall, displayImages } = storeToRefs(useStateStore())
+const { media } = defineProps<{ media: MediaModel }>()
+const { displayImages } = storeToRefs(useStateStore())
 </script>
 
 <template>
-  <div class="media">
-    <ItemPicture v-if="displayImages" :src="props.media.thumbnail?.url ?? null" :small="true" />
+  <button class="media">
+    <ItemPicture v-if="displayImages" :src="media.thumbnail?.url ?? null" :small="true" />
     <div class="media__content">
-      <ItemTitle :title="props.media.title ?? null" :small="displaySmall" />
-      <!-- :url="`http://en.wikipedia.com/wiki/${props.media.key}` ?? null" -->
-      <ItemDescription :description="props.media.description ?? null" />
+      <ItemTitle :title="media.title ?? null" />
+      <ItemDescription :description="media.description ?? null" />
     </div>
-  </div>
+  </button>
 </template>
 
 <style lang="scss" scoped>
@@ -30,11 +29,14 @@ const { displaySmall, displayImages } = storeToRefs(useStateStore())
   cursor: pointer;
   gap: 0.5rem;
   border-radius: 1rem;
-  // background-color: var(--white);
 
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: var(--white);
-    // background-color: var(--background);
+  }
+
+  &:focus {
+    outline: none;
   }
 
   &__content {

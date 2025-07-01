@@ -1,19 +1,17 @@
 <script setup lang="ts">
-import { useTooltipStore } from '@/stores/tooltip';
+import { useStateStore } from '@/stores/state';
 import IconRating from '../icons/IconRating.vue';
 
-const { setTooltip, resetTooltip } = useTooltipStore()
-
-const props = defineProps<{
+const { displaySmall } = useStateStore()
+const { score } = defineProps<{
   score: number
-  small?: boolean
 }>()
 </script>
 
 <template>
-  <div v-if="props.score" :class="{ smallRating: props.small }" @mouseover="setTooltip(props.score + ' / 10')"
-    @mouseleave="resetTooltip()">
-    <IconRating v-for="score in props.score" :key="score" class="icon" />
+  <div v-if="score" :class="{ smallRating: displaySmall }" v-tooltip="score + ' / 10'"
+    :aria-label="'Media rating:' + score + ' / 10'">
+    <IconRating v-for="point in score" :key="point" class="icon" />
   </div>
 </template>
 
@@ -47,5 +45,4 @@ div {
     }
   }
 }
-
 </style>

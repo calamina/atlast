@@ -1,11 +1,10 @@
 <script setup lang="ts">
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const props = defineProps<{
+const { maxHeight } = defineProps<{
   maxHeight: boolean
 }>()
 </script>
 <template>
-  <div class="tags" :class="{ tagsHeight: props.maxHeight }">
+  <div class="tags" :class="{ tagsHeight: maxHeight }">
     <slot />
   </div>
 </template>

@@ -1,15 +1,21 @@
 <script setup lang="ts">
+import { useStateStore } from '@/stores/state';
 import strings from '@/utils/strings';
+import { storeToRefs } from 'pinia';
+import { computed, type ComputedRef } from 'vue';
 
-const props = defineProps<{
-  src: string | null
-  small: boolean | null
+const { displaySmall } = storeToRefs(useStateStore())
+const { src, small } = defineProps<{
+  src: string | null | undefined
+  small?: boolean
 }>()
+
+const isSmall: ComputedRef<boolean> = computed(() => small === undefined ? displaySmall.value : small || displaySmall.value)
 </script>
 
 <template>
-  <img class="image" v-if="props.src" :src="props.src" :class="{ imagesmall: small }" />
-  <div class="image empty" v-else :class="{ imagesmall: small }" >{{ strings.SAD }}</div>
+  <img class="image" v-if="src" :src="src" :class="{ imagesmall: isSmall }" alt="Wikipedia entry image" />
+  <div class="image empty" v-else :class="{ imagesmall: displaySmall || small }">{{ strings.SAD }}</div>
 </template>
 
 <style scoped lang="scss">
@@ -21,6 +27,7 @@ const props = defineProps<{
   border-radius: 1rem;
   background-color: var(--active);
   flex-shrink: 0;
+  transition: width 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53), height 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53), border-radius 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53);
 }
 
 .empty {

@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import type { CategNameModel } from '@/models/categ.model';
 import IconSortAscending from '../icons/IconSortAscending.vue';
 import IconSortDescending from '../icons/IconSortDescending.vue';
+import type { StatusNameModel } from '@/models/status.model';
 
-const props = defineProps<{
-  name: string
+const { name, info, selected, sort } = defineProps<{
+  name: string | CategNameModel | StatusNameModel
   info?: string | number
   selected?: boolean
   sort?: string
@@ -11,12 +13,12 @@ const props = defineProps<{
 </script>
 
 <template>
-  <button class="filter" :class="{ selected: props.selected }">
-    <p class="filter__name">{{ props.name }}</p>
-    <p class="filter__info">{{ props.info }}</p>
+  <button class="filter" :class="{ selected: selected }">
+    <p class="filter__name">{{ name }}</p>
+    <p class="filter__info">{{ info }}</p>
     <template v-if="selected && sort">
-      <IconSortAscending class="filter__icon" v-if="sort === 'ascending'" />
-      <IconSortDescending class="filter__icon" v-if="sort === 'descending'" />
+      <IconSortAscending class="filter__icon" v-if="sort === 'asc'" />
+      <IconSortDescending class="filter__icon" v-if="sort === 'desc'" />
     </template>
   </button>
 </template>

@@ -1,30 +1,28 @@
 <script setup lang="ts">
-import { useTooltipStore } from '@/stores/tooltip';
 import { useDateFormat, useTimeAgo } from '@vueuse/core';
-import mediaStatus from '@/utils/media-status';
-import type { StatusModel } from '@/models/status.model';
+import { mediaStatus } from '@/data/media-status';
+import { useStateStore } from '@/stores/state';
+import type { StatusModel, StatusNameModel } from '@/models/status.model';
 
-const { setTooltip, resetTooltip } = useTooltipStore()
-
-const props = defineProps<{
-  status: string
-  dates: { created: Date, updated: Date }
-  small?: boolean
+const { displaySmall } = useStateStore()
+const { status, created, updated } = defineProps<{
+  status: StatusNameModel | undefined
+  created: Date | undefined
+  updated: Date | undefined
 }>()
 
-const selectedStatus: StatusModel | undefined = mediaStatus.find(status => status.name === props.status)
+const selectedStatus: StatusModel | undefined = mediaStatus.find(s => s.name === status)
 
-function formatDate(created?: Date, updated?: Date): string {
-  if (!created) return ''
+function formatDate(created?: Date | undefined, updated?: Date | undefined): string {
   const date = updated ?? created
+  if (!date) return ''
   return useDateFormat(date, 'DD/MM/YY').value + ' — ' + useTimeAgo(date).value
 }
 </script>
 
 <template>
-  <component v-if="selectedStatus" class="status" :class="{ smallStatus: props.small }" :is="selectedStatus?.component"
-    @mouseover="setTooltip(selectedStatus?.name + ' — ' + formatDate(props.dates.created, props.dates.updated))"
-    @mouseleave="resetTooltip()" />
+  <component v-if="selectedStatus" class="status" :class="{ smallStatus: displaySmall }" :is="selectedStatus?.component"
+    v-tooltip="selectedStatus?.name + ' — ' + formatDate(created ?? undefined, updated ?? undefined)" />
 </template>
 
 <style scoped lang="scss">

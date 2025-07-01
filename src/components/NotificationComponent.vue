@@ -4,27 +4,23 @@ import { useNotificationStore } from '@/stores/notification'
 import { onMounted } from 'vue'
 
 const notifications = useNotificationStore()
-const props = defineProps<{
+const { notification } = defineProps<{
   notification: Notification
 }>()
 
 onMounted(() => {
   setTimeout(() => {
-    notifications.removeNotification(props.notification)
-  }, props.notification.long ? 5000 : 2500)
+    notifications.removeNotification(notification)
+  }, notification.long ? 5000 : 2500)
 })
 </script>
 
 <template>
-  <div
-    :class="notification.type"
-    class="notification"
-    @click="notifications.removeNotification(notification)"
-  >
+  <button :class="notification.type" class="notification" @click="notifications.removeNotification(notification)">
     <p class="notification__message">
       {{ notification.message }}
     </p>
-  </div>
+  </button>
 </template>
 
 <style lang="scss" scoped>

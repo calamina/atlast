@@ -1,37 +1,37 @@
 <script setup lang="ts">
 import { ref, type Component, type Ref } from 'vue';
-import { useMagicKeys, whenever } from '@vueuse/core'
+// import { useMagicKeys, whenever } from '@vueuse/core'
 import ActionOverlay from '@/components/ActionOverlay.vue'
 import IconCancel from '@/components/icons/IconCancel.vue'
 import IconSearch from '@/components/icons/IconSearch.vue'
 
 const search = defineModel<string>({ required: true })
-const props = defineProps<{
+const { component, placeholder } = defineProps<{
   component: Component
   placeholder: string
 }>()
 
-
-const keys = useMagicKeys()
 const input: Ref<HTMLInputElement | null> = ref(null);
+// const keys = useMagicKeys()
 
-whenever(keys.shift_s, () => {
-  if (document.activeElement === input.value) {
-    search.value = ''
-    input.value?.blur();
-  }
-  else {
-    setTimeout(function () {
-      input.value?.focus();
-    }, 20);
-  }
-})
+// whenever(keys.shift_s, () => {
+//   if (document.activeElement === input.value) {
+//     search.value = ''
+//     input.value?.blur();
+//   }
+//   else {
+//     setTimeout(function () {
+//       input.value?.focus();
+//     }, 20);
+//   }
+// })
 </script>
 
 <template>
   <teleport to="#menu-search">
     <div class="media__search">
-      <input ref="input" type="text" name="search" v-model="search" id="search" :placeholder="props.placeholder"
+      <!-- TODO : put icon in label inside input !!! -->
+      <input ref="input" type="text" name="search" v-model="search" id="search" :placeholder="placeholder"
         autocomplete="off" />
       <!-- <span>[shift + s]</span> -->
       <IconSearch v-if="!search.length" class="button-icon" />
@@ -39,7 +39,7 @@ whenever(keys.shift_s, () => {
     </div>
   </teleport>
   <transition name="search" mode="out-in">
-    <ActionOverlay v-if="!!search.length" class="overlay" :component="props.component" @exit="search = ''" />
+    <ActionOverlay v-if="!!search.length" class="overlay" :component="component" />
   </transition>
 </template>
 
@@ -57,6 +57,7 @@ whenever(keys.shift_s, () => {
 
   input[type='text'] {
     padding: 0 1rem;
+    // padding: 0;
     text-align: center;
     font-size: 1.1rem;
     border-radius: 3rem;

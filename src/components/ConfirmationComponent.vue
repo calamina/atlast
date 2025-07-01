@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onKeyStroke, useConfirmDialog } from '@vueuse/core'
+import { onKeyStroke } from '@vueuse/core'
 import { useConfirmStore } from '@/stores/confirm';
 
 const { confirm, cancel, dialogMessage } = useConfirmStore()
@@ -64,7 +64,7 @@ button {
     background-color: var(--background);
 
     &.button-confirm {
-    background-color: var(--highlight);
+        background-color: var(--highlight);
     }
 }
 </style>

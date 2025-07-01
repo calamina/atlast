@@ -1,162 +1,175 @@
+import "dexie-export-import";
 import { defineStore } from 'pinia'
-import { ref, type Ref } from 'vue'
+import { computed, ref, toRaw, type ComputedRef, type Ref } from 'vue'
 import type { MediaModel } from '@/models/media.model'
 import type { FilterModel } from '@/models/filter.model'
-
-import http from '@/utils/http-common'
-import { errorMessage, errorsMessages } from '@/utils/error-manager'
 import strings from '@/utils/strings'
 
 import { useNotificationStore } from '@/stores/notification'
-import { useUserStore } from '@/stores/user'
-import { useLoadingStore } from '@/stores/loading'
+import { db } from './db'
+import { useThrottleFn } from '@vueuse/core'
+import { useConfirmStore } from './confirm'
+import { useFileUtils } from '@/utils/file-utils'
+import { useMediaUtils } from '@/utils/media-utils'
 
 export const useMediaStore = defineStore('media', () => {
+  const allMedia: Ref<Array<MediaModel>> = ref([])
   const filteredList: Ref<Array<MediaModel>> = ref([])
-  const count: Ref<number> = ref(0)
-  const filteredCount: Ref<number> = ref(0)
-  const filters: Ref<FilterModel> = ref({ sort: 'createdAt', order: 'desc' })
+  const count: ComputedRef<number> = computed(() => allMedia.value.length)
+  const filteredCount: ComputedRef<number> = computed(() => filteredList.value.length)
+  const filters: Ref<FilterModel> = ref({ sort: 'date', order: 'desc' })
   const mediaSearch: Ref<string> = ref('')
-  const pagination: Ref<{ page: number, pageCount: number }> = ref({ page: 1, pageCount: 1 });
 
-  const notification = useNotificationStore()
-  const user = useUserStore()
-  const { setLoading } = useLoadingStore()
+  const { setNewMediaProperties, sortMedia } = useMediaUtils()
+  const { downloadBlob, createBlob } = useFileUtils()
+  const { confirmOrCancel } = useConfirmStore()
+  const { addErrorNotification, addNotification } = useNotificationStore()
 
-  const headers = {
-    headers: {
-      Authorization: 'Bearer ' + user.connectedUserToken
-    }
-  }
-
-  async function getMediaByUserAndName(user: string, name: string): Promise<any> {
-    setLoading(true)
-    return http
-      .get<Array<any>>(
-        `medias?filters[title][$containsi]=${name}&filters[user][$eq]=${user}`,
-        headers)
-      .then((response: any) => {
-        setLoading(false)
-        return response.data.data
+  async function getMedia(): Promise<MediaModel[]> {
+    return await db.medias
+      .toArray()
+      .then((response) => {
+        allMedia.value = response
+        return applyMediaFilters(response)
       })
-      .catch((error) => manageError(error, 'failed to get media', strings.SAD))
-  }
-
-  async function getMediaByUser(user: string, page?: number): Promise<MediaModel[]> {
-    const query = page ?
-      'medias?sort=createdAt:desc&filters[user][$eq]=' + user + '&pagination[page]=' + page :
-      'medias?sort=createdAt:desc&filters[user][$eq]=' + user
-
-    setLoading(true)
-    return http
-      .get<Array<any>>(query, headers)
-      .then((response: any) => {
-        count.value = response.data?.meta?.pagination?.total
-        pagination.value.pageCount = response.data?.meta?.pagination?.pageCount
-        setLoading(false)
-        return response.data.data
+      .catch((error) => {
+        manageError(error, 'failed to get media', strings.SAD)
+        emptyLists()
+        return []
       })
-      .catch((error) => manageError(error, 'failed to get media', strings.SAD))
   }
 
-  async function getFilteredMediaByUser(user: string, reload: boolean, page?: number): Promise<any> {
-    if (reload) setLoading(true)
-    let filter: string = `&filters[user][$eq]=${user}`
-    if (filters.value?.categ) {
-      filter += `&filters[categ][$eq]=${filters.value.categ}`
-    }
-    if (filters.value?.status) {
-      filter += `&filters[action][$eq]=${filters.value.status}`
-    }
-    if (filters.value?.like) {
-      filter += `&filters[like][$eq]=${filters.value.like}`
-    }
-    if (filters.value?.tag) {
-      filter += `&filters[tags][$contains]=${filters.value.tag}`
-    }
-    if (page) {
-      filter += `&pagination[page]=${page}`
-    }
-
-    const sort = filters?.value!.sort ? `?sort=${filters.value.sort}:${filters.value.order}` : ''
-    const filterSort = sort + filter ?? ''
-
-    return http
-      .get<Array<any>>('medias' + filterSort, headers)
-      .then((response: any) => {
-        if (reload) setLoading(false)
-        filteredList.value = response.data.data
-        filteredCount.value = response.data?.meta?.pagination?.total
-        pagination.value.pageCount = response.data?.meta?.pagination?.pageCount
-        if (pagination.value.pageCount === 1) {
-          pagination.value.page = 1
-        }
-        return response.data.data
+  function getMediaByTitle(title: string): MediaModel[] {
+    return allMedia.value
+      .filter((media) => {
+        if (media.title === undefined) return false
+        return media.title.toLowerCase().includes(title.toLowerCase())
       })
-      .catch((error) => manageError(error, 'failed to get media', strings.SAD))
   }
 
-  async function addUserMedia(media: any): Promise<any> {
-    return http
-      .post(`medias`, { data: media }, headers)
-      .then(() => updateUserMedia('media added', strings.HAPPY))
-      .catch((error) => manageError(error, 'failed to add media', strings.SAD))
+  async function addMedia(media: MediaModel): Promise<number | null> {
+    return await db.medias.add(setNewMediaProperties(media))
+      .then(data => {
+        updateMedia('media added', strings.HAPPY)
+        return data
+      })
+      .catch((error) => {
+        manageError(error, 'failed to add media', strings.SAD)
+        return null
+      })
   }
 
-  async function editUserMedia(media: any): Promise<any> {
-    return http
-      .put(`medias/${media.id}`, { data: media }, headers)
-      .then(() => updateUserMedia('media edited', strings.HAPPY))
-      .catch((error) => manageError(error, 'failed to edit media', strings.SAD))
+  async function editMedia(media: MediaModel): Promise<number | null> {
+    if (media.status === 'planning') media.score = 0
+    media.updatedAt = new Date()
+    // toRaw is used because Dexie doesn't like the proxy returned by vue :'(
+    return await db.medias.update(media.id, { ...toRaw(media) })
+      .then(data => {
+        updateMedia('media edited', strings.HAPPY)
+        return data ?? null
+      })
+      .catch((error) => {
+        manageError(error, 'failed to edit media', strings.SAD)
+        return null
+      })
   }
 
-  async function deleteUserMedia(id: number): Promise<any> {
-    return http
-      .delete(`medias/${id}`, headers)
-      .then(() => updateUserMedia('media deleted', strings.HAPPY))
+  async function deleteMedia(id: number): Promise<void> {
+    return db.medias.delete(id)
+      .then(() => updateMedia('media deleted', strings.HAPPY))
       .catch((error) => manageError(error, "failed to delete media", strings.SAD))
   }
 
-  async function updateFilters(newFilters: FilterModel, user: string): Promise<any> {
+  async function updateMediaFilters(newFilters: FilterModel): Promise<void> {
     filters.value = newFilters
-    getFilteredMediaByUser(user, true)
+    getMedia()
   }
 
-  async function resetFilters(user: string): Promise<any> {
-    filters.value.action = null
+  async function resetFilters(): Promise<void> {
+    filters.value.status = null
     filters.value.categ = null
     filters.value.like = null
     filters.value.tag = null
-    pagination.value.page = 1
-    getFilteredMediaByUser(user, true)
+    getMedia()
   }
 
-  function manageError(error: any, message: string, kao: string): void {
-    notification.addNotification(message, kao)
-    errorsMessages(error).length ?
-      notification.addErrorsNotifications(errorsMessages(error)) :
-      notification.addErrorNotification(errorMessage(error))
+  function applyMediaFilters(media: MediaModel[]): MediaModel[] {
+    let filtered = media
+    if (filters.value.status) {
+      filtered = filtered.filter((m) => m.status === filters.value.status)
+    }
+    if (filters.value.categ) {
+      filtered = filtered.filter((m) => m.categ === filters.value.categ)
+    }
+    if (filters.value.like) {
+      filtered = filtered.filter((m) => m.like === filters.value.like)
+    }
+    if (filters.value.tag) {
+      filtered = filtered.filter((m) => m.tags && filters.value.tag && m.tags.includes(filters.value.tag))
+    }
+
+    filteredList.value = sortMedia(filtered, filters.value)
+    return filtered
   }
 
-  function updateUserMedia(message: string, kao: string): void {
-    notification.addNotification(message, kao)
-    getFilteredMediaByUser(user.connectedUser!.username, false)
+  function manageError(error: string, message: string, kao: string): void {
+    addNotification(message, kao)
+    addErrorNotification(error)
   }
+
+  function updateMedia(message: string, kao: string): void {
+    addNotification(message, kao)
+    getMedia()
+  }
+
+  async function emptyLists(): Promise<void> {
+    allMedia.value = filteredList.value = []
+  }
+
+  async function exportMediaDB(): Promise<void> {
+    const options = { prettyJson: true }
+    return await db.export(options)
+      .then((blob) => downloadBlob(blob, 'mediaDB.json'))
+      .then(() => addNotification('Database exported successfully', strings.HAPPY))
+      .catch(() => addErrorNotification('Failed to export database.' + strings.SAD))
+  }
+
+  async function importMediaDB(file: File): Promise<void> {
+    if (!db.isOpen()) db.open()
+
+    const blob = createBlob(file, 'application/json')
+    return await db.import(blob)
+      .then(() => getMedia())
+      .then(() => addNotification('Database imported successfully', strings.HAPPY))
+      .catch(() => addErrorNotification('Failed to import database.' + strings.SAD))
+  }
+
+  const deleteMediaDB = useThrottleFn(async () => {
+    return await confirmOrCancel('Are you sure you want to delete the database? This action cannot be undone.')
+      .then((confirm: boolean) => confirm ? db.delete() : Promise.reject())
+      .then(() => {
+        addNotification('Database deleted successfully', strings.HAPPY)
+        emptyLists()
+      })
+      .catch((err) => err ? addErrorNotification('Failed to delete database' + strings.SAD) : null)
+  }, 500)
 
   return {
-    pagination,
     count,
     filteredCount,
     filteredList,
+    allMedia,
+    getMedia,
+    getMediaByTitle,
     filters,
-    updateFilters,
+    updateMediaFilters,
     resetFilters,
-    getFilteredMediaByUser,
-    getMediaByUser,
-    getMediaByUserAndName,
-    addUserMedia,
-    editUserMedia,
-    deleteUserMedia,
+    addMedia,
+    editMedia,
+    deleteMedia,
     mediaSearch,
+    importMediaDB,
+    exportMediaDB,
+    deleteMediaDB
   }
 })

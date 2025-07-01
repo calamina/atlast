@@ -1,40 +1,42 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { useUserStore } from '@/stores/user'
 
 import { useMediaStore } from '@/stores/media'
 import { useStateStore } from '@/stores/state'
-import { useTooltipStore } from '@/stores/tooltip'
 
-import UserMenu from './UserMenu.vue'
+import DatabaseMenu from './DatabaseMenu.vue'
 import MenuLink from './atomic/MenuLink.vue'
-import IconUser from '@/components/icons/IconUser.vue'
 import IconBook from './icons/IconBook.vue'
 import IconLayout from './icons/IconLayout.vue'
+import IconCharts from './icons/IconCharts.vue'
+import { ref } from 'vue'
+import { onClickOutside } from '@vueuse/core'
 
-const { connectedUser } = storeToRefs(useUserStore())
 const { mediaSearch } = storeToRefs(useMediaStore())
-const { displayActions } = storeToRefs(useStateStore())
-const { toggleActions } = useStateStore();
-const { setTooltip, resetTooltip } = useTooltipStore()
+const { toggleOptions } = useStateStore();
+const { displayOptions } = storeToRefs(useStateStore())
+
+const options = ref(null)
+onClickOutside(options, _event => displayOptions.value = false)
 </script>
 
 <template>
-  <nav v-if="connectedUser">
+  <nav>
     <div class="submenu">
       <div class="types" :class="{ mask: mediaSearch.length }">
-        <MenuLink :route="'media'" :icon="IconBook" :name="'library'" />
-        <MenuLink :route="'user'" :icon="IconUser" :name="'users'" />
-        <!-- <MenuLink :route="'links'" :icon="IconLink" :name="'links'" /> -->
+        <MenuLink route="home" :icon="IconBook" name="library" />
+        <MenuLink route="data" :icon="IconCharts" name="data" />
       </div>
     </div>
-    <div class="sep" :class="{ mask: mediaSearch.length }">
-      <button class="button-icon" @click="toggleActions" @mouseover="setTooltip('Show Options')" @mouseleave="resetTooltip()">
-          <IconLayout />
-        </button>
+    <div class="options" ref="options" :class="{ mask: mediaSearch.length }">
+      <button class="button-icon" @click="toggleOptions" v-tooltip="'Show Options'" aria-label="Show Options"
+        :aria-pressed="displayOptions">
+        <IconLayout />
+      </button>
+      <div id="menu-options"></div>
     </div>
     <div id="menu-search"></div>
-    <UserMenu :class="{ mask: mediaSearch.length }" />
+    <DatabaseMenu :class="{ mask: mediaSearch.length }" />
   </nav>
 </template>
 
@@ -44,13 +46,15 @@ nav {
   top: 0;
   z-index: 500;
   width: 100vw;
+  height: fit-content;
   margin: 0 auto;
   padding: 0;
   padding-top: 1rem;
   display: flex;
   align-items: center;
   display: grid;
-  grid-template-columns: 1fr 5.5rem 1fr 5.5rem 1fr;
+  grid-template-columns: subgrid;
+  grid-column: span 5;
   background-color: var(--background);
   border-bottom: 1px solid var(--border);
   transition: 0.3s;
@@ -74,16 +78,12 @@ nav {
   border-radius: 100%;
 }
 
-.sep {
-  border-right: 1px solid var(--border);
+.options {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
-
-  .button-icon &:disabled {
-    color: var(--active-plus);
-  }
 }
 
 .mask {
@@ -91,11 +91,25 @@ nav {
   pointer-events: none;
 }
 
+#menu-options {
+  position: fixed;
+  top: var(--fixed);
+  display: flex;
+  flex-flow: column;
+  gap: 0.5rem;
+  height: fit-content;
+  border-radius: 2rem;
+  background-color: var(--background-darker);
+}
+
 #menu-search {
   display: flex;
   min-width: 40vw;
-  padding: 0 1rem;
 }
 
-@media (max-width: 1250px) {}
+@media (max-width: 1250px) {
+  #menu-search {
+    min-width: 0;
+  }
+}
 </style>

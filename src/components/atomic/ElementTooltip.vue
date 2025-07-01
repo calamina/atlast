@@ -8,7 +8,7 @@ const { x, y } = useMouse()
 </script>
 
 <template>
-    <p>{{ tooltip}}</p>
+    <p>{{ tooltip }}</p>
 </template>
 
 <style scoped lang="scss">

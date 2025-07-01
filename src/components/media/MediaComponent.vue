@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
-import { useThrottleFn } from '@vueuse/core'
+import { computed, ref, type ComputedRef, type Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
-import { useTooltipStore } from '@/stores/tooltip'
 import { useStateStore } from '@/stores/state'
 
 import type { MediaModel } from '@/models/media.model'
@@ -19,46 +17,35 @@ import ItemStatus from '@/components/atomic/ItemStatus.vue'
 import ItemActions from '../atomic/ItemActions.vue'
 import ItemExtract from '../atomic/ItemExtract.vue'
 
-const { resetTooltip } = useTooltipStore()
 const { displaySmall, displayImages } = storeToRefs(useStateStore())
-
-const emits = defineEmits(['enableEdit'])
-const props = defineProps<{ media: MediaModel }>()
-
+const { media } = defineProps<{ media: MediaModel }>()
 const expanded: Ref<boolean | null> = ref(null)
-const displayActions: Ref<boolean | null> = ref(null)
-
-const toggleEdit = useThrottleFn(() => {
-  resetTooltip()
-  emits('enableEdit')
-}, 500)
+const showDescription: ComputedRef<boolean> = computed(() => !displaySmall || expanded && !displaySmall.value)
 </script>
 
 <template>
-  <div class="media" :class="{ mediaSmall: displaySmall }" v-if="props.media.id" @click="expanded = !expanded"
-    @mouseenter="displayActions = true" @mouseleave="displayActions = false">
-    <ItemPicture v-if="displayImages" :src="props.media.thumbnail ?? null" :small="displaySmall" />
+  <button class="media" :class="{ mediaSmall: displaySmall }" v-if="media.id" @click="expanded = !expanded">
+    <ItemPicture v-if="displayImages" :src="media.thumbnail" />
     <div class="content">
-      <ItemTitle :title="props.media.title ?? null" :like="props.media.like ?? null" :small="displaySmall" />
+      <ItemTitle v-if="media.title" :title="media.title" :like="media.like ?? false" />
       <Transition name="reveal">
-      <ItemDescription v-if="!displaySmall || expanded && displaySmall" :description="props.media.description ?? null" :small="displaySmall" />
+        <ItemDescription v-if="media.description && showDescription" :description="media.description" />
       </Transition>
       <TransitionGroup name="reveal">
-        <!-- <ItemDescription v-if="expanded && displaySmall" :description="props.media.description ?? null" :small="displaySmall" /> -->
-        <TagGroup v-if="expanded && props.media.tags?.length" :max-height="true">
-          <TagButton v-for="tag in props.media.tags" :key="tag" :name="tag" :selected="false" />
+        <TagGroup v-if="expanded && media.tags?.length" :max-height="true">
+          <TagButton v-for="tag in media.tags" :key="tag" :name="tag" :selected="false" />
         </TagGroup>
-        <ItemExtract v-if="expanded" :extract="props.media.extract!" :small="displaySmall"/>
+        <ItemExtract v-if="expanded" :extract="media.extract!" />
       </TransitionGroup>
       <div class="footer" :class="{ smallFooter: displaySmall }">
-        <ItemStatus :status="props.media.action!"
-          :dates="{ created: props.media.createdAt!, updated: props.media.updatedAt! }" :small="displaySmall" />
-        <ItemCateg :categ="props.media.categ" :small="displaySmall" />
-        <ItemRating :score="props.media.score!" :small="displaySmall" />
+        <ItemStatus :key="media.status ?? 1" :status="media.status" :updated="media.updatedAt"
+          :created="media.createdAt" />
+        <ItemCateg :categ="media.categ" />
+        <ItemRating :score="media.score!" />
       </div>
     </div>
-    <ItemActions v-if="displayActions" :url="media.url!" :user="media.user!" @enableEdit="toggleEdit()" />
-  </div>
+    <ItemActions class="actions" :url="media.url" :id="media.id" />
+  </button>
 </template>
 
 <style lang="scss" scoped>
@@ -67,20 +54,35 @@ const toggleEdit = useThrottleFn(() => {
   transform-origin: left;
   position: relative;
   display: flex;
+  width: 100%;
+  justify-content: flex-start;
   flex-flow: row;
   gap: 0.75rem;
   padding: 1rem;
   border-radius: 1.5rem;
-  cursor: pointer;
+  outline: none;
+
+  &:focus {
+    outline: none;
+  }
 
   &.mediaSmall {
     padding: 0.5rem;
     border-radius: 1rem;
   }
 
-  &:hover {
+  &:hover,
+  &:focus-within {
     background-color: var(--white);
+
+    .actions {
+      display: flex;
+    }
   }
+}
+
+.actions {
+  display: none;
 }
 
 .content {
@@ -105,9 +107,9 @@ const toggleEdit = useThrottleFn(() => {
 /* TRANSITIONS */
 .reveal-enter-active,
 .reveal-leave-active {
-  transition: max-height 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53),
-    opacity 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53),
-    padding 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
+  transition: max-height 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53),
+    opacity 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53),
+    padding 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53);
 }
 
 .reveal-enter-from,

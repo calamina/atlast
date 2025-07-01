@@ -1,24 +1,14 @@
 <script setup lang="ts">
-import { onKeyStroke } from '@vueuse/core'
 import type { Component } from 'vue'
 
-const emits = defineEmits(['exit'])
-
-const props = defineProps<{
+const { component } = defineProps<{
   component: Component
 }>()
-
-onKeyStroke(['Escape'], (e) => {
-  if (e.key === 'Escape') {
-    e.preventDefault()
-    emits('exit')
-  }
-})
 </script>
 
 <template>
   <div class="overlay-background">
-    <component :is="props.component" @exit="$emit('exit')"></component>
+    <component :is="component" @exit="$emit('exit')"></component>
   </div>
 </template>
 
