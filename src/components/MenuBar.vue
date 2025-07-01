@@ -9,10 +9,15 @@ import MenuLink from './atomic/MenuLink.vue'
 import IconBook from './icons/IconBook.vue'
 import IconLayout from './icons/IconLayout.vue'
 import IconCharts from './icons/IconCharts.vue'
+import { ref } from 'vue'
+import { onClickOutside } from '@vueuse/core'
 
 const { mediaSearch } = storeToRefs(useMediaStore())
 const { toggleOptions } = useStateStore();
 const { displayOptions } = storeToRefs(useStateStore())
+
+const options = ref(null)
+onClickOutside(options, _event => displayOptions.value = false)
 </script>
 
 <template>
@@ -23,11 +28,12 @@ const { displayOptions } = storeToRefs(useStateStore())
         <MenuLink route="data" :icon="IconCharts" name="data" />
       </div>
     </div>
-    <div class="sep" :class="{ mask: mediaSearch.length }">
+    <div class="options" ref="options" :class="{ mask: mediaSearch.length }">
       <button class="button-icon" @click="toggleOptions" v-tooltip="'Show Options'" aria-label="Show Options"
         :aria-pressed="displayOptions">
         <IconLayout />
       </button>
+      <div id="menu-options"></div>
     </div>
     <div id="menu-search"></div>
     <DatabaseMenu :class="{ mask: mediaSearch.length }" />
@@ -72,21 +78,28 @@ nav {
   border-radius: 100%;
 }
 
-.sep {
-  border-right: 1px solid var(--border);
+.options {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
-
-  .button-icon &:disabled {
-    color: var(--active-plus);
-  }
 }
 
 .mask {
   opacity: 0.3;
   pointer-events: none;
+}
+
+#menu-options {
+  position: fixed;
+  top: var(--fixed);
+  display: flex;
+  flex-flow: column;
+  gap: 0.5rem;
+  height: fit-content;
+  border-radius: 2rem;
+  background-color: var(--background-darker);
 }
 
 #menu-search {

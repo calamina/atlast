@@ -4,11 +4,11 @@ import { onClickOutside } from '@vueuse/core'
 
 import { useMediaStore } from '@/stores/media';
 import { useFileUtils } from '@/utils/file-utils';
-import IconUser from './icons/IconUser.vue';
 import IconDatabaseExport from './icons/IconDatabaseExport.vue';
 import IconDatabaseImport from './icons/IconDatabaseImport.vue';
 import IconDatabaseDelete from './icons/IconDatabaseDelete.vue';
 import OptionButton from './atomic/OptionButton.vue';
+import IconCube from './icons/IconCube.vue';
 
 const { importMediaDB, exportMediaDB, deleteMediaDB } = useMediaStore()
 const { checkJsonFile } = useFileUtils()
@@ -19,30 +19,30 @@ const isSubmenuVisible = ref(false)
 
 onClickOutside(menu, _event => isSubmenuVisible.value = false)
 
-function toggleUserMenu() {
+function toggleDataMenu() {
   isSubmenuVisible.value = !isSubmenuVisible.value
 }
 
 async function exportDB(): Promise<void> {
-  await exportMediaDB().finally(() => toggleUserMenu())
+  await exportMediaDB().finally(() => toggleDataMenu())
 }
 
 async function importDB(): Promise<void> {
   const file = fileInput.value?.files?.[0];
   await checkJsonFile(file)
     .then((resolvedFile) => importMediaDB(resolvedFile))
-    .then(() => toggleUserMenu())
+    .then(() => toggleDataMenu())
 }
 
 async function deleteDB(): Promise<void> {
-  await deleteMediaDB().finally(() => toggleUserMenu())
+  await deleteMediaDB().finally(() => toggleDataMenu())
 }
 </script>
 <template>
-  <div class="user" ref="menu">
+  <div class="data" ref="menu">
     <div class="menu-icon">
-      <OptionButton @click="toggleUserMenu()" info="User menu" background="dark">
-        <IconUser />
+      <OptionButton @click="toggleDataMenu()" info="Data menu" background="dark">
+        <IconCube />
       </OptionButton>
     </div>
     <div class="submenu" v-if="isSubmenuVisible">
@@ -62,7 +62,7 @@ async function deleteDB(): Promise<void> {
 </template>
 
 <style lang="scss" scoped>
-.user {
+.data {
   border-left: 1px solid var(--border);
   position: relative;
   display: flex;
