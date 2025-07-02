@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { computed, onMounted, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import { useMediaStore } from '@/stores/media'
 import { useLoadingStore } from '@/stores/loading'
+import { useMediaFormStore } from '@/stores/media.form'
+
+import { MediaActions } from '@/data/media-actions'
 
 import MediaComponent from '@/components/media/MediaComponent.vue'
 import MediaMock from '@/components/media/MediaMock.vue'
@@ -12,10 +15,8 @@ import MediaFilters from '@/components/media/MediaFilters.vue'
 import MediaSearchBar from '@/components/media/MediaSearchBar.vue'
 import MediaSearch from '@/components/media/MediaSearch.vue'
 import OptionBar from '@/components/OptionBar.vue'
-import strings from '@/utils/strings'
-import { MediaActions } from '@/data/media-actions'
-import { useMediaFormStore } from '@/stores/media.form'
-import { useOffsetPagination } from '@vueuse/core'
+import PaginationComponent from '@/components/PaginationComponent.vue'
+import MediaEmpty from '@/components/media/MediaEmpty.vue'
 
 const { filteredList, count, filteredCount, mediaSearch } = storeToRefs(useMediaStore())
 const { getMedia } = useMediaStore()
@@ -34,25 +35,11 @@ watch(mediaSearch, () => {
 
 watch(filteredList, () => resetActive())
 
+const currentPage = ref(1)
 const pageSize = 20
-const start = computed(() => currentPage.value === 1 ? 0 : (currentPage.value - 1) * pageSize)
-const end = computed(() => start.value + pageSize)
-const paginatedList = computed(() => filteredList.value.slice(start.value, end.value))
-
-const {
-  currentPage,
-  isFirstPage,
-  isLastPage,
-  prev,
-  next,
-  pageCount,
-  // currentPageSize,
-} = useOffsetPagination({
-  total: filteredCount,
-  page: 1,
-  pageSize,
-  onPageChange: (): void => window.scrollTo(0, 0),
-})
+const listStart = computed(() => currentPage.value === 1 ? 0 : (currentPage.value - 1) * pageSize)
+const listEnd = computed(() => listStart.value + pageSize)
+const paginatedList = computed(() => filteredList.value.slice(listStart.value, listEnd.value))
 </script>
 
 <template>
@@ -69,27 +56,10 @@ const {
           <MediaComponent v-if="mediaFormActive !== media.id" :media="media" :key="media.id" />
           <MediaUpdate v-else :media="media" :action="MediaActions.EDIT" :key="media.key" />
         </div>
-        <!-- pagination component -->
-        <div class="pagination" v-if="pageCount > 1">
-          <button class="pagination-button" type="button" :disabled="isFirstPage" @click="prev">Previous</button>
-          <button class="pagination-button" :class="{ activepage: currentPage === item }" v-for="item in pageCount"
-                  :key="item" :disabled="currentPage === item" @click="currentPage = item">
-            {{ item }}
-          </button>
-          <button class="pagination-button" type="button" :disabled="isLastPage" @click="next">Next</button>
-        </div>
-        <!-- pagination component end -->
+        <PaginationComponent :currentPage :filteredCount :pageSize @changePage="(page) => currentPage = page" />
       </div>
       <div class="medias" v-else>
-        <!-- TODO: Add component :) -->
-        <template v-if="count">
-          <p v-if="count">{{ "Empty for now" + strings.SAD }}</p>
-        </template>
-        <template v-else>
-          <MediaMock v-for="i of 2" :key="i" />
-          <p>{{ "Add some media by searching" + strings.HAPPY }}</p>
-        </template>
-        <!-- compoenent ned -->
+        <MediaEmpty :count />
       </div>
     </transition>
   </main>
@@ -103,38 +73,6 @@ main {
   grid-template-columns: subgrid;
   grid-column: span 5;
   transition: 0.3s;
-}
-
-.pagination {
-  padding: 1rem 0 2rem;
-  display: flex;
-  gap: 0.25rem;
-}
-
-.pagination-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--background-darker);
-  height: 2.5rem;
-  padding: 0 1rem;
-  border-radius: 2rem;
-
-  &:not(.activepage):disabled {
-    opacity: 0.5;
-  }
-
-  &:disabled {
-    cursor: default;
-  }
-
-  &:focus {
-    outline-color: var(--text);
-  }
-}
-
-.activepage {
-  background-color: var(--highlight);
 }
 
 .medias {
