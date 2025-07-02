@@ -57,7 +57,7 @@ const {
 
 <template>
   <main>
-    <MediaSearchBar v-model="mediaSearch" placeholder="Search medias (ctrl + s)" :component="MediaSearch" />
+    <MediaSearchBar v-model="mediaSearch" placeholder="Search medias" :component="MediaSearch" />
     <MediaFilters />
     <OptionBar />
     <transition name="fade" mode="out-in">
@@ -73,7 +73,7 @@ const {
         <div class="pagination" v-if="pageCount > 1">
           <button class="pagination-button" type="button" :disabled="isFirstPage" @click="prev">Previous</button>
           <button class="pagination-button" :class="{ activepage: currentPage === item }" v-for="item in pageCount"
-            :key="item" :disabled="currentPage === item" @click="currentPage = item">
+                  :key="item" :disabled="currentPage === item" @click="currentPage = item">
             {{ item }}
           </button>
           <button class="pagination-button" type="button" :disabled="isLastPage" @click="next">Next</button>

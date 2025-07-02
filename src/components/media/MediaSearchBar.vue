@@ -35,12 +35,13 @@ whenever(ctrl_s, () => {
 <template>
   <teleport to="#menu-search">
     <div class="media__search">
-      <!-- TODO : put icon in label inside input !!! -->
-      <!-- add shortcut keys -->
       <input ref="input" type="text" name="search" v-model="search" id="search" :placeholder="placeholder"
-        autocomplete="off" />
-      <IconSearch v-if="!search.length" class="button-icon" />
-      <IconCancel v-if="!!search.length" class="button-icon" @click="search = ''" />
+             autocomplete="off" />
+      <div class="input-info">
+        <span>ctrl + s</span>
+        <IconSearch v-if="!search.length" class="button-icon input-icon" />
+        <IconCancel v-if="!!search.length" class="button-icon input-icon" @click="search = ''" />
+      </div>
     </div>
   </teleport>
   <transition name="search" mode="out-in">
@@ -73,6 +74,17 @@ whenever(ctrl_s, () => {
       opacity: 0.8;
       color: var(--text-light);
     }
+
+    &:focus {
+      outline: 2px solid var(--background-darker);
+    }
+  }
+
+  .input-info {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 0;
   }
 
   span {
@@ -83,7 +95,7 @@ whenever(ctrl_s, () => {
     color: var(--text-light);
     padding-right: 0.25rem;
     padding-bottom: 0.15rem;
-    font-size: 1rem;
+    font-size: .9rem;
     opacity: 0.5;
   }
 
