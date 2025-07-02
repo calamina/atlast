@@ -82,7 +82,7 @@ const { displaySidebar } = storeToRefs(useStateStore())
     width: 100%;
     min-height: 0;
     z-index: 3;
-    padding: 0.25rem 0.5rem 0.25rem;
+    padding: 0.5rem 0.5rem 0.25rem;
     border-right: none;
   }
 
