@@ -45,19 +45,21 @@ async function deleteDB(): Promise<void> {
         <IconCube />
       </OptionButton>
     </div>
-    <div class="submenu" v-if="isSubmenuVisible">
-      <OptionButton @click="exportDB()" info="Export database">
-        <IconDatabaseExport />
-      </OptionButton>
-      <label for="file-upload" class="button-icon file-button" v-tooltip="'Import database'"
-        aria-label="Import database" tabindex="0">
-        <IconDatabaseImport />
-      </label>
-      <input type="file" ref="fileInput" id="file-upload" accept=".json" @change="importDB()" />
-      <OptionButton @click="deleteDB()" info="Delete database">
-        <IconDatabaseDelete />
-      </OptionButton>
-    </div>
+    <transition name="menu">
+      <div class="submenu" v-if="isSubmenuVisible">
+        <OptionButton @click="exportDB()" info="Export database">
+          <IconDatabaseExport />
+        </OptionButton>
+        <label for="file-upload" class="button-icon file-button" v-tooltip="'Import database'"
+               aria-label="Import database" tabindex="0">
+          <IconDatabaseImport />
+        </label>
+        <input type="file" ref="fileInput" id="file-upload" accept=".json" @change="importDB()" />
+        <OptionButton @click="deleteDB()" info="Delete database">
+          <IconDatabaseDelete />
+        </OptionButton>
+      </div>
+    </transition>
   </div>
 </template>
 

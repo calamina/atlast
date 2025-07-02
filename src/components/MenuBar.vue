@@ -30,7 +30,7 @@ onClickOutside(options, _event => displayOptions.value = false)
     </div>
     <div class="options" ref="options" :class="{ mask: mediaSearch.length }">
       <button class="button-icon" @click="toggleOptions" v-tooltip="'Show Options'" aria-label="Show Options"
-        :aria-pressed="displayOptions">
+              :aria-pressed="displayOptions">
         <IconLayout />
       </button>
       <div id="menu-options"></div>
@@ -94,12 +94,6 @@ nav {
 #menu-options {
   position: fixed;
   top: var(--fixed);
-  display: flex;
-  flex-flow: column;
-  gap: 0.5rem;
-  height: fit-content;
-  border-radius: 2rem;
-  background-color: var(--background-darker);
 }
 
 #menu-search {

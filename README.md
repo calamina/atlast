@@ -24,5 +24,4 @@ Personnal Knowledge Database made with Vue3, wikipedia API, and IndexedDB (brows
 - FILTERS : add common classes/components for groups and icons
 - menu buttons (icon / text / texticon)
 - clean & refactor css
-- Add transitions on menus
 - fix css color names

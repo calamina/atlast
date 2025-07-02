@@ -69,9 +69,7 @@
 
 
 .tooltip-enter-active,
-.tooltip-leave-active {
-  transition: opacity 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53), transform 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53);
-}
+.tooltip-leave-active {}
 
 .tooltip-enter-from {
   opacity: 0;
@@ -81,4 +79,19 @@
 .tooltip-leave-to {
   opacity: 0;
   transform: translateX(0.25rem);
+}
+
+
+.menu-enter-active,
+.menu-leave-active {
+  transition: opacity 0.1s cubic-bezier(0.81, 0.06, 0.14, 0.53), transform 0.1s cubic-bezier(0.81, 0.06, 0.14, 0.53);
+}
+
+.menu-enter-from {
+  opacity: 0;
+  transform: translateY(-1.5rem);
+}
+
+.menu-leave-to {
+  opacity: 0;
 }
