@@ -1,7 +1,7 @@
 # atlast
-Personnal Knowledge Database made with Vue3, wikipedia API, and IndexedDB (browser storage)
+Personnal Media Database made with Vue3, wikipedia API, and IndexedDB (local browser storage)
 
-[atlast.vercel.app](https://atlast.vercel.app)
+[atlast.calamina.cafe](https://atlast.calamina.cafe)
 
 ![atlast preview](atlast.png?raw=true "Atlast preview")
 ---
@@ -10,11 +10,12 @@ Personnal Knowledge Database made with Vue3, wikipedia API, and IndexedDB (brows
 ![atlast preview](atlast-search.png?raw=true "Atlast preview")
 
 # TODO
+- make update usable in mobile (too big atm)
 - highlight active options
 - DARK THEME
+- option to show borders
 - check how to lazy load images
 - add custom media option !
-- add filters to mobile !
 - focus capture in search + menus ?
 - add graphs and stats !!! with links ? 
 - graph showing categories > click on category to get to page with filters ?

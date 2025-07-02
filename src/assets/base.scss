@@ -29,7 +29,7 @@
   --background-transparent-plus: #efefef99;
   --background-darker: #ddd;
   --active: #ddd;
-  --border: #ddd;
+  // --border: #ddd;
   --border: transparent;
   --active-plus: #999;
   --text-light: #666;
@@ -158,6 +158,7 @@ input[type="date"] {
   }
 
   #app {
-    grid-template-columns: 0 5.5rem auto 5.5rem 0;
+    grid-template-columns: 0 3rem auto 3rem 0;
+    gap: 0 0.25rem;
   }
 }

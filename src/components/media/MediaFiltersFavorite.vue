@@ -18,7 +18,7 @@ function updateFilters() {
   <FilterGroup title="favorites">
     <div class="icon-group">
       <button class="icon-button button-like" :class="{ active: filters.like }" @click="updateFilters()"
-        aria-label="Favorite filter" v-tooltip="'Favorite filter'">
+              aria-label="Favorite filter" v-tooltip="'Favorite filter'">
         <IconLike v-if="!filters.like" class="icon" />
         <IconLikeFull v-else class="icon like" />
       </button>

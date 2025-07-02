@@ -8,27 +8,32 @@ import type { CategModel } from '@/models/categ.model'
 export const mediaCategs: CategModel[] = [
   {
     color: '#a4dc6366',
-    name: 'movie',
+    name: 'movies',
+    single: 'movie',
     component: IconMovie
   },
   {
     color: '#dca86366',
     name: 'series',
+    single: 'series',
     component: IconSeries
   },
   {
     color: '#63cedc66',
-    name: 'book',
+    name: 'books',
+    single: 'book',
     component: IconBook
   },
   {
     color: '#88888866',
-    name: 'comic',
+    name: 'comics',
+    single: 'comic',
     component: IconComic
   },
   {
     color: '#b6cccf66',
-    name: 'game',
+    name: 'games',
+    single: 'game',
     component: IconGame
   }
 ] 

@@ -26,4 +26,22 @@ h3 {
   color: var(--active-plus);
   padding: 0 1rem;
 }
+
+@media (max-width: 1250px) {
+  h3 {
+    width: 5rem;
+    padding: 0;
+    flex-shrink: 0;
+    display: none;
+  }
+
+  .filter-categ {
+    flex-flow: row;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0;
+    flex-wrap: wrap;
+    width: fit-content;
+  }
+}
 </style>

@@ -65,7 +65,6 @@ async function deleteDB(): Promise<void> {
 
 <style lang="scss" scoped>
 .data {
-  border-left: 1px solid var(--border);
   position: relative;
   display: flex;
   align-items: center;
@@ -88,5 +87,16 @@ async function deleteDB(): Promise<void> {
 label {
   border-radius: 100%;
   cursor: pointer;
+}
+
+@media (max-width: 1250px) {
+  .data {
+    padding: 0;
+  }
+
+  .submenu {
+    background-color: var(--white);
+    top: 4rem;
+  }
 }
 </style>

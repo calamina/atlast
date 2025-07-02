@@ -7,15 +7,14 @@ import { storeToRefs } from 'pinia';
 const { displaySmall } = storeToRefs(useStateStore())
 const { setCateg } = useMediaFormStore()
 const { mediaForm } = storeToRefs(useMediaFormStore())
-
-const categories = mediaCategs.map(categ => categ.name)
 </script>
 
 <template>
   <div class="choices">
-    <button v-for="category in categories" type="button" class="rating" :key="category ?? ''"
-      @click="setCateg(category)" :class="{ active: mediaForm.categ === category, smallButton: displaySmall }">
-      {{ category }}
+    <button v-for="category in mediaCategs" type="button" class="rating" :key="category.name ?? ''"
+            @click="setCateg(category.name)"
+            :class="{ active: mediaForm.categ === category.name, smallButton: displaySmall }">
+      {{ category.single }}
     </button>
   </div>
 </template>

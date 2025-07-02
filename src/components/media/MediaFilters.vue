@@ -8,6 +8,7 @@ import MediaFiltersFavorite from './MediaFiltersFavorite.vue'
 import MediaFiltersStatus from './MediaFiltersStatus.vue'
 import MediaFiltersSort from './MediaFiltersSort.vue'
 import MediaFiltersTags from './MediaFiltersTags.vue'
+import MediaFiltersAllFavorite from './MediaFiltersAllFavorite.vue'
 
 const { resetFilters } = useMediaStore()
 const { count, filteredCount } = storeToRefs(useMediaStore())
@@ -18,8 +19,11 @@ const { displaySidebar } = storeToRefs(useStateStore())
   <div class="filter-wrapper">
     <transition name="fade">
       <div class="filters" v-if="displaySidebar">
-        <FilterButton :selected="filteredCount === count" name="All" :info="count" @click="resetFilters()" />
-        <MediaFiltersFavorite />
+        <MediaFiltersAllFavorite />
+        <div class="widescreen-filters">
+          <FilterButton :selected="filteredCount === count" name="All" :info="count" @click="resetFilters()" />
+          <MediaFiltersFavorite />
+        </div>
         <MediaFiltersCateg />
         <MediaFiltersStatus />
         <MediaFiltersSort />
@@ -30,6 +34,13 @@ const { displaySidebar } = storeToRefs(useStateStore())
 </template>
 
 <style lang="scss" scoped>
+.widescreen-filters {
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  gap: 0.5rem;
+}
+
 .filter-wrapper {
   position: relative;
   display: flex;
@@ -39,6 +50,7 @@ const { displaySidebar } = storeToRefs(useStateStore())
   align-items: flex-end;
   min-height: 90vh;
   overflow-y: auto;
+  border-right: 1px solid var(--border);
 }
 
 .filters {
@@ -58,8 +70,30 @@ const { displaySidebar } = storeToRefs(useStateStore())
 }
 
 @media (max-width: 1250px) {
-  .filter-wrapper {
+  .widescreen-filters {
     display: none;
+  }
+
+  .filter-wrapper {
+    gap: 0.5rem;
+    height: fit-content;
+    grid-column: span 5;
+    align-items: center;
+    width: 100%;
+    min-height: 0;
+    z-index: 3;
+    padding: 0.25rem 0.5rem 0.25rem;
+    border-right: none;
+  }
+
+  .filters {
+    position: relative;
+    top: 0;
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    gap: 1rem;
+    background-color: var(--background-darker);
   }
 }
 </style>

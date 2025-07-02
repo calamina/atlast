@@ -105,5 +105,9 @@ nav {
   #menu-search {
     min-width: 0;
   }
+
+  #menu-options {
+    top: 4rem;
+  }
 }
 </style>

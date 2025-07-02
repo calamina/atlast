@@ -40,7 +40,7 @@ whenever(ctrl_s, () => {
       <div class="input-info">
         <span>ctrl + s</span>
         <IconSearch v-if="!search.length" class="button-icon" />
-        <IconCancel v-if="!!search.length" class="button-icon" @click="search = ''" />
+        <IconCancel v-if="!!search.length" class="button-icon button-close" @click="search = ''" />
       </div>
     </div>
   </teleport>
@@ -61,48 +61,58 @@ whenever(ctrl_s, () => {
   z-index: 800;
   background-color: var(--white);
 
-  input[type='text'] {
-    padding: 0 1rem;
-    text-align: center;
-    font-size: 1rem;
-    border-radius: 3rem;
-    height: 2.5rem;
-    font-family: var(--font-bold);
-    background-color: var(--white);
+}
 
-    &::placeholder {
-      opacity: 0.8;
-      color: var(--text-light);
-    }
+input[type='text'] {
+  padding: 0 1rem;
+  text-align: center;
+  font-size: 1rem;
+  border-radius: 3rem;
+  height: 2.5rem;
+  font-family: var(--font-bold);
+  background-color: var(--white);
 
-    &:focus {
-      outline: 2px solid var(--background-darker);
-    }
+  &::placeholder {
+    opacity: 0.8;
+    color: var(--text-light);
   }
 
-  .input-info {
-    display: flex;
-    align-items: center;
-    position: absolute;
-    right: 0;
+  &:focus {
+    outline: 2px solid var(--background-darker);
   }
+}
 
+.input-info {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 0;
+}
+
+span {
+  display: block;
+  width: fit-content;
+  white-space: nowrap;
+  font-family: var(--font-bold);
+  color: var(--text-light);
+  padding-right: 0.25rem;
+  padding-bottom: 0.15rem;
+  font-size: .9rem;
+  opacity: 0.5;
+}
+
+.button-icon {
+  color: var(--text-light);
+  padding: 0.6rem;
+}
+
+.button-close {
+  cursor: pointer;
+}
+
+@media (max-width: 1250px) {
   span {
-    display: block;
-    width: fit-content;
-    white-space: nowrap;
-    font-family: var(--font-bold);
-    color: var(--text-light);
-    padding-right: 0.25rem;
-    padding-bottom: 0.15rem;
-    font-size: .9rem;
-    opacity: 0.5;
-  }
-
-  .button-icon {
-    color: var(--text-light);
-    padding: 0.6rem;
-    // cursor: pointer;
+    display: none;
   }
 }
 </style>

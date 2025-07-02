@@ -15,7 +15,7 @@ const { name, info, selected, sort } = defineProps<{
 <template>
   <button class="filter" :class="{ selected: selected }">
     <p class="filter__name">{{ name }}</p>
-    <p class="filter__info">{{ info }}</p>
+    <p v-if="info" class="filter__info">{{ info }}</p>
     <template v-if="selected && sort">
       <IconSortAscending class="filter__icon" v-if="sort === 'asc'" />
       <IconSortDescending class="filter__icon" v-if="sort === 'desc'" />
@@ -26,7 +26,7 @@ const { name, info, selected, sort } = defineProps<{
 <style scoped lang="scss">
 .filter {
   padding: 0.35rem 1.25rem;
-  // width: 15rem;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -51,6 +51,15 @@ const { name, info, selected, sort } = defineProps<{
     height: 1rem;
     width: 1rem;
     opacity: 0.7;
+  }
+}
+
+@media (max-width: 1250px) {
+  .filter {
+    background-color: var(--background-transparent-plus);
+    gap: 0.75rem;
+    padding: 0.25rem 1rem;
+    width: fit-content;
   }
 }
 </style>

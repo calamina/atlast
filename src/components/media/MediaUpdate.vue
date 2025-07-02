@@ -87,6 +87,7 @@ onKeyStroke(['Escape'], (e) => {
   flex-flow: column;
   gap: 0.3rem;
   flex: 1;
+  overflow: hidden;
 }
 
 .form {
