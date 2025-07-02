@@ -70,10 +70,10 @@ const initCategs = () => {
           <div v-for="status of statusData" :key="status.name ?? ''" class="chart">
             <div class="chart-bar-wrapper">
               <div class="chart-bar"
-                :style="{ backgroundColor: mediaStatus.find((m) => m.name === status.name)?.color, height: getSize(status.total, statusMax) }">
+                   :style="{ backgroundColor: mediaStatus.find((m) => m.name === status.name)?.color, height: getSize(status.total, statusMax) }">
                 <span class="chart-bar-count"
-                  :style="{ backgroundColor: status.total === 0 ? 'var(--background-transparent-plus)' : 'transparent' }">{{
-                    status.total }}</span>
+                      :style="{ backgroundColor: status.total === 0 ? 'var(--background-transparent-plus)' : 'transparent' }">{{
+                        status.total }}</span>
               </div>
             </div>
             <component class="icon" :is="mediaStatus.find((m) => m.name === status.name)?.component" />
@@ -106,7 +106,7 @@ const initCategs = () => {
             <div class="chart-bar-wrapper">
               <span>{{ categ.total }}</span>
               <div class="chart-bar"
-                :style="{ backgroundColor: '#efefef', height: categ.total / categMax * 100 + '%' }">
+                   :style="{ backgroundColor: '#efefef', height: categ.total / categMax * 100 + '%' }">
               </div>
             </div>
             <component class="icon" :is="mediaCategs.find((m) => m.name === categ.name)?.component" />
@@ -138,11 +138,11 @@ main {
   flex-flow: column;
   align-items: center;
   width: 100%;
-  padding-top: 1rem;
   gap: 1rem;
   min-width: max(40vw, 45rem);
   grid-column: 3 / 4;
-  padding: 1rem;
+  padding: 1rem 0;
+  // padding-top: 1rem;
 }
 
 .KEK {
