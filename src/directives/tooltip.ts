@@ -10,7 +10,7 @@ export const tooltip: Directive = {
       () => setTooltip(binding.value))
 
     el.addEventListener(
-      "mouseout",
+      "mouseleave",
       () => resetTooltip())
   },
 }

@@ -120,6 +120,7 @@ export const useMediaStore = defineStore('media', () => {
   function updateMedia(message: string, kao: string): void {
     addNotification(message, kao)
     getMedia()
+    mediaSearch.value = ''
   }
 
   async function emptyLists(): Promise<void> {

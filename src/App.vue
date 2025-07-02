@@ -21,7 +21,9 @@ const { isRevealed } = storeToRefs(useConfirmStore())
   <router-view v-slot="{ Component }">
     <component :is="Component" />
   </router-view>
-  <ElementTooltip class="tooltip" v-if="tooltip" />
+  <transition name="tooltip">
+    <ElementTooltip class="tooltip" v-if="tooltip" />
+  </transition>
   <ConfirmationComponent v-if="isRevealed" />
 </template>
 
