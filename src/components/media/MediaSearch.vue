@@ -76,11 +76,11 @@ function upsertMedia(media: MediaModel, action: MediaActions) {
       <div class="results" v-if="!mediaFormActive">
         <div class="medias" v-if="mediaList.length">
           <MediaComponent v-for="media of mediaList" :media="media" :key="media.id"
-            @click="upsertMedia(media, MediaActions.EDIT)" />
+                          @click="upsertMedia(media, MediaActions.EDIT)" />
         </div>
         <div class="medias" v-if="wikiList.length">
           <MediaSimple v-for="(media, index) of wikiList" :key="index" :media="media"
-            @click="upsertMedia(media, MediaActions.CREATE)" />
+                       @click="upsertMedia(media, MediaActions.CREATE)" />
         </div>
       </div>
       <div class="results" v-else>
@@ -107,6 +107,7 @@ function upsertMedia(media: MediaModel, action: MediaActions) {
   gap: 0.5rem;
   padding-top: 0.25rem;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 0.25rem 1rem 1rem;
 }
 
@@ -132,7 +133,7 @@ function upsertMedia(media: MediaModel, action: MediaActions) {
 @media (max-width: 1250px) {
   .wrapper-search {
     width: 100%;
-    padding: 2rem 1rem 5rem;
+    padding: 0.25rem 0 0;
   }
 
   .medias {
