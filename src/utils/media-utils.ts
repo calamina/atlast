@@ -13,7 +13,7 @@ export const useMediaUtils = () => {
       thumbnail: wiki.thumbnail?.source,
       score: 0,
       status: 'completed',
-      categ: 'movie',
+      categ: 'movies',
       key: wiki.titles.canonical,
     }
   }
