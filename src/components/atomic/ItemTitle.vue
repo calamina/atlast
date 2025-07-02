@@ -20,14 +20,15 @@ const { title, like } = defineProps<{
 <style scoped lang="scss">
 .title {
   display: flex;
-  align-items: baseline;
+  align-items: center;
+  justify-content: start;
   gap: 0.5rem;
   width: fit-content;
   line-height: 1.55rem;
   margin-top: 0.1rem;
   margin-bottom: -0.25rem;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  width: 100%;
+  overflow: hidden;
   transition: margin-top 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53);
 }
 
@@ -53,5 +54,19 @@ h2 {
   width: 1.1rem;
   height: 1.1rem;
   color: var(--favorite);
+}
+
+@media (max-width: 1250px) {
+  .title {
+    flex-flow: row-reverse;
+  }
+
+  h2 {
+    // width: 100%;
+    font-size: 1.2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 </style>

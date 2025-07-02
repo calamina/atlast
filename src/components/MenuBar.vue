@@ -109,5 +109,11 @@ nav {
   #menu-options {
     top: 4rem;
   }
+
+  .button-icon {
+    height: 1.75rem;
+    width: 1.75rem;
+    padding: 0.25rem;
+  }
 }
 </style>

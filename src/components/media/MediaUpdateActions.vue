@@ -62,7 +62,7 @@ const deleteAction = useThrottleFn((id: number) => {
       <IconDelete />
     </FormButton>
     <FormButton type="submit" @click="action === MediaActions.CREATE ? addAction() : editAction()" info="Confirm"
-      accent>
+                accent>
       <IconCheck />
     </FormButton>
   </div>

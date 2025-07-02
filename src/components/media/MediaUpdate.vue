@@ -116,12 +116,13 @@ onKeyStroke(['Escape'], (e) => {
 }
 
 @media (max-width: 1250px) {
-  .media__form {
-    padding-top: 0.5rem;
-    gap: 1rem;
+  .media {
+    flex-flow: column;
+    padding: 0.5rem;
+    border-radius: 0.75rem;
   }
 
-  .media__footer {
+  .footer {
     gap: 1rem;
   }
 }

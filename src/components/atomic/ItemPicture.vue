@@ -46,4 +46,12 @@ const isSmall: ComputedRef<boolean> = computed(() => small === undefined ? displ
     font-size: 0.6rem;
   }
 }
+
+@media (max-width: 1250px) {
+  .image {
+    height: 3rem;
+    width: 3rem;
+    border-radius: 0.5rem;
+  }
+}
 </style>

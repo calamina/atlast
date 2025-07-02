@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import IconRating from '@/components/icons/IconRating.vue'
+import IconScore from '@/components/icons/IconScore.vue'
 import { useMediaFormStore } from '@/stores/media.form'
 import { useStateStore } from '@/stores/state'
 
@@ -11,10 +11,10 @@ const { mediaForm } = storeToRefs(useMediaFormStore())
 
 <template>
   <div class="choices" v-if="mediaForm.status !== 'planning'">
-    <button v-for="index in 10" type="button" class="rating-icon" :key="index" @click="setScore(index)"
-      :class="{ iconActive: mediaForm.score! >= index, smallButton: displaySmall }" v-tooltip="index + ' / 10'"
-      :aria-label="index + ' / 10'">
-      <IconRating />
+    <button v-for="index in 10" type="button" class="score-icon" :key="index" @click="setScore(index)"
+            :class="{ iconActive: mediaForm.score! >= index, smallButton: displaySmall }" v-tooltip="index + ' / 10'"
+            :aria-label="index + ' / 10'">
+      <IconScore />
     </button>
   </div>
 </template>
@@ -27,23 +27,7 @@ const { mediaForm } = storeToRefs(useMediaFormStore())
 
 }
 
-.rating {
-  font-family: var(--font-bold);
-  font-size: 1rem;
-  padding: 0.1rem 1rem;
-  padding: 0.1rem 1rem 0.2rem;
-  height: 2rem;
-  border-radius: 1rem;
-  color: var(--active-plus);
-  background-color: var(--background);
-}
-
-.active {
-  background-color: var(--highlight);
-  color: var(--text);
-}
-
-.rating-icon {
+.score-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -69,25 +53,14 @@ const { mediaForm } = storeToRefs(useMediaFormStore())
   font-size: 0.9rem;
 }
 
-// smol
-// .rating
-// {
-//   height: 2rem;
-// }
-
-// .rating-icon {
-//   width: 2rem;
-//   height: 2rem;
-// }
-
 @media (max-width: 1250px) {
-  .choices .rating {
-    height: 2.5rem;
-    border-radius: 2.5rem;
-  }
-
   .choices {
     flex-flow: row wrap;
+  }
+
+  .score-icon {
+    width: 2rem;
+    height: 2rem;
   }
 }
 </style>

@@ -11,7 +11,7 @@ import ItemDescription from '@/components/atomic/ItemDescription.vue'
 import ItemPicture from '@/components/atomic/ItemPicture.vue'
 import TagButton from '@/components/atomic/TagButton.vue'
 import TagGroup from '@/components/atomic/TagGroup.vue'
-import ItemRating from '@/components/atomic/ItemRating.vue'
+import ItemScore from '@/components/atomic/ItemScore.vue'
 import ItemCateg from '@/components/atomic/ItemCateg.vue'
 import ItemStatus from '@/components/atomic/ItemStatus.vue'
 import ItemActions from '../atomic/ItemActions.vue'
@@ -39,9 +39,9 @@ const showDescription: ComputedRef<boolean> = computed(() => !displaySmall || ex
       </TransitionGroup>
       <div class="footer" :class="{ smallFooter: displaySmall }">
         <ItemStatus :key="media.status ?? 1" :status="media.status" :updated="media.updatedAt"
-          :created="media.createdAt" />
+                    :created="media.createdAt" />
         <ItemCateg :categ="media.categ" />
-        <ItemRating :score="media.score!" />
+        <ItemScore :score="media.score!" />
       </div>
     </div>
     <ItemActions class="actions" :url="media.url" :id="media.id" />
@@ -117,5 +117,17 @@ const showDescription: ComputedRef<boolean> = computed(() => !displaySmall || ex
   max-height: 0;
   opacity: 0;
   padding: 0;
+}
+
+@media (max-width: 1250px) {
+  .media {
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+    // flex-flow: column;
+  }
+
+  .actions {
+    display: flex;
+  }
 }
 </style>

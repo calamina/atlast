@@ -15,9 +15,9 @@ const getBackground = (status: StatusModel) =>
 
 <template>
   <div class="choices">
-    <button v-for="s in mediaStatus" type="button" class="rating" :key="s.name ?? 1" @click="setStatus(s.name)"
-      :style="{ backgroundColor: getBackground(s) }"
-      :class="{ active: mediaForm.status === s.name, smallButton: displaySmall }">
+    <button v-for="s in mediaStatus" type="button" class="score" :key="s.name ?? 1" @click="setStatus(s.name)"
+            :style="{ backgroundColor: getBackground(s) }"
+            :class="{ active: mediaForm.status === s.name, smallButton: displaySmall }">
       {{ s.name }}
     </button>
   </div>
@@ -34,7 +34,7 @@ const getBackground = (status: StatusModel) =>
   }
 }
 
-.rating {
+.score {
   font-family: var(--font-bold);
   font-size: 1rem;
   padding: 0.1rem 1rem 0.2rem;
@@ -53,13 +53,14 @@ const getBackground = (status: StatusModel) =>
 }
 
 @media (max-width: 1250px) {
-  .choices .rating {
-    height: 2.5rem;
-    border-radius: 2.5rem;
-  }
-
   .choices {
     flex-flow: row wrap;
+  }
+
+  .score {
+    height: 2rem;
+    border-radius: 2rem;
+    padding: 0.1rem 0.75rem 0.2rem;
   }
 }
 </style>

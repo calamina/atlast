@@ -98,5 +98,11 @@ label {
     background-color: var(--white);
     top: 4rem;
   }
+
+  label {
+    height: 1.75rem;
+    width: 1.75rem;
+    padding: 0.25rem;
+  }
 }
 </style>

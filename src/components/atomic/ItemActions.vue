@@ -45,4 +45,17 @@ const openLink = (url: string | undefined) => window.open(url ?? '', "_blank")
   gap: 0.25rem;
   border-radius: 100%;
 }
+
+
+@media (max-width: 1250px) {
+  .actions {
+    // position: relative;
+    // flex-flow: column;
+    height: fit-content;
+    width: fit-content;
+    top: auto;
+    bottom: 1rem;
+    right: 1rem;
+  }
+}
 </style>

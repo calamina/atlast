@@ -8,7 +8,7 @@ const { displaySmall } = storeToRefs(useStateStore())
 
 <template>
   <input placeholder="tags (separate with space)" class="tags" type="text" v-model="mediaForm.tagstring"
-    :class="{ smallInput: displaySmall }" />
+         :class="{ smallInput: displaySmall }" />
 </template>
 
 <style lang="scss" scoped>
@@ -26,5 +26,11 @@ const { displaySmall } = storeToRefs(useStateStore())
 
 .smallInput {
   height: 1.75rem;
+}
+
+@media (max-width: 1250px) {
+  .tags {
+    height: 2rem
+  }
 }
 </style>

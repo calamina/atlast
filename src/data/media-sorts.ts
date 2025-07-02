@@ -11,6 +11,6 @@ export const filterSorts: SortModel[] = [
   },
   {
     name: 'score',
-    title: 'rating',
+    title: 'score',
   }
 ]  

@@ -34,4 +34,11 @@ p {
     height: 1.5rem;
   }
 }
+
+@media (max-width: 1250px) {
+  p {
+    padding-bottom: 0.1rem;
+    width: 4rem;
+  }
+}
 </style>

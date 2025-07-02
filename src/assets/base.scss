@@ -37,6 +37,7 @@
   --highlight: #dfcfe8;
   --favorite: #dc6389;
   --score: #b97749cc;
+  --score-text: #a7734e;
   --score-background: #dc956344;
   --fixed: 5.5rem;
 
@@ -158,7 +159,7 @@ input[type="date"] {
   }
 
   #app {
-    grid-template-columns: 0 3rem auto 3rem 0;
+    grid-template-columns: 0 2rem auto 2rem 0;
     gap: 0 0.25rem;
   }
 }
