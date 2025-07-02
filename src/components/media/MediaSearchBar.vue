@@ -39,8 +39,8 @@ whenever(ctrl_s, () => {
              autocomplete="off" />
       <div class="input-info">
         <span>ctrl + s</span>
-        <IconSearch v-if="!search.length" class="button-icon input-icon" />
-        <IconCancel v-if="!!search.length" class="button-icon input-icon" @click="search = ''" />
+        <IconSearch v-if="!search.length" class="button-icon" />
+        <IconCancel v-if="!!search.length" class="button-icon" @click="search = ''" />
       </div>
     </div>
   </teleport>
@@ -100,9 +100,9 @@ whenever(ctrl_s, () => {
   }
 
   .button-icon {
-    cursor: pointer;
     color: var(--text-light);
     padding: 0.6rem;
+    // cursor: pointer;
   }
 }
 </style>
