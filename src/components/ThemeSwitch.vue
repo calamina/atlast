@@ -26,7 +26,7 @@ function setMode(mode: 'light' | 'dark' | 'auto') {
 </script>
 <template>
   <div ref="theme" class="theme">
-    <OptionButton info="theme-picker" background="dark" :class="{ 'activetheme': themeOpen }"
+    <OptionButton info="Theme picker" background="dark" :class="{ 'activetheme': themeOpen }"
                   @click="themeOpen = !themeOpen">
       <IconMoon />
     </OptionButton>
