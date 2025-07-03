@@ -12,11 +12,10 @@ Personnal Media Database made with Vue3, wikipedia API, and IndexedDB (local bro
 # TODO
 - grid for media display to move around in mobile :x
 - fix mobile menus (too small) / one menu ?
-- highlight active options
-- DARK THEME
 - option to show borders
 - check how to lazy load images
-- add custom media option !
+- add custom media option (empty media / self filled) !
+- add custom categ
 - focus capture in search + menus ?
 - graph showing categories > click on category to get to page with filters ?
 - check if prop is better than service for filters ref

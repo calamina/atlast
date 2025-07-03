@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import type { CategNameModel } from '@/models/categ.model';
+import { mediaCategs } from '@/data/media-categs';
+import type { CategModel, CategNameModel } from '@/models/categ.model';
 import { useStateStore } from '@/stores/state';
 
 const { displaySmall } = useStateStore()
 const { categ } = defineProps<{
   categ: CategNameModel | undefined
 }>()
+
+const selectedCateg: CategModel | undefined = mediaCategs.find(s => s.name === categ)
 </script>
 
 <template>
   <p :class="{ smallCateg: displaySmall }">
-    {{ categ }}
+    {{ selectedCateg?.single }}
   </p>
 </template>
 

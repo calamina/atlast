@@ -9,20 +9,20 @@ import IconFilters from './icons/IconFilters.vue';
 import OptionButton from './atomic/OptionButton.vue';
 
 const { toggleSize, toggleSidebar, toggleImages } = useStateStore()
-const { displayOptions } = storeToRefs(useStateStore())
+const { displayOptions, displayImages, displaySidebar, displaySmall } = storeToRefs(useStateStore())
 </script>
 
 <template>
   <teleport to="#menu-options">
     <transition name="menu">
       <div class="optionBar" v-if="displayOptions">
-        <OptionButton @click="toggleSize()" info="Toggle size">
+        <OptionButton @click="toggleSize()" :active="displaySmall" info="Toggle compact">
           <IconDetail />
         </OptionButton>
-        <OptionButton @click="toggleImages()" info="Toggle images">
+        <OptionButton @click="toggleImages()" :active="displayImages" info="Toggle images">
           <IconImage />
         </OptionButton>
-        <OptionButton @click="toggleSidebar()" info="Toggle sidebar">
+        <OptionButton @click="toggleSidebar()" :active="displaySidebar" info="Toggle sidebar">
           <IconFilters />
         </OptionButton>
       </div>

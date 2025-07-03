@@ -44,17 +44,20 @@
   --font-italic: 'contax_pro_66_med_italicIt', Arial, sans-serif;
   --font-bold: 'contax_pro_75_boldregular', Arial, sans-serif;
 
-  /* DARK THEME */
-  // --white: #2d2d35;
-  // --background: #1E1E24;
-  // --background-transparent: #1E1E24dd;
-  // --background-darker: #2d2d35;
-  // --active: #2d2d35;
-  // --active-plus: #2d2d35;
-  // --text-light: #797983;
-  // --text: #a3a3b3;
-  // --highlight: #49497a;
-  // --border: #2d2d35;
+}
+
+.dark {
+  --white: hsl(240, 10%, 8%);
+  --background: hsl(240, 10%, 11%);
+  --background-transparent: hsl(240, 10%, 11%, 0.867);
+  --background-transparent-plus: hsl(240, 10%, 11%, 0.6);
+  --background-darker: hsl(240, 10%, 16%);
+  --active: hsl(240, 10%, 25%);
+  --active-plus: hsl(240, 10%, 30%);
+  --text-light: hsl(240, 10%, 50%);
+  --text: hsl(240, 10%, 55%);
+  --highlight: hsl(245, 20%, 25%);
+  --border: transparent;
 }
 
 p,

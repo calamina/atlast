@@ -11,6 +11,7 @@ import IconLayout from './icons/IconLayout.vue'
 import IconCharts from './icons/IconCharts.vue'
 import { ref } from 'vue'
 import { onClickOutside } from '@vueuse/core'
+import ThemeSwitch from './ThemeSwitch.vue'
 
 const { mediaSearch } = storeToRefs(useMediaStore())
 const { toggleOptions } = useStateStore();
@@ -36,7 +37,10 @@ onClickOutside(options, _event => displayOptions.value = false)
       <div id="menu-options"></div>
     </div>
     <div id="menu-search"></div>
-    <DatabaseMenu :class="{ mask: mediaSearch.length }" />
+    <div class="menus">
+      <ThemeSwitch />
+      <DatabaseMenu :class="{ mask: mediaSearch.length }" />
+    </div>
   </nav>
 </template>
 
@@ -89,6 +93,13 @@ nav {
 .mask {
   opacity: 0.3;
   pointer-events: none;
+}
+
+.menus {
+  display: flex;
+  align-items: center;
+  padding-left: 1.5rem;
+  gap: 0.5rem;
 }
 
 #menu-options {
