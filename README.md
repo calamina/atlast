@@ -10,9 +10,8 @@ Personnal Media Database made with Vue3, wikipedia API, and IndexedDB (local bro
 ![atlast preview](atlast-search.png?raw=true "Atlast preview")
 
 # TODO
-- grid for media display to move around in mobile :x
 - fix mobile menus (too small) / one menu ?
-- option to show borders
+- grid for media display to move around in mobile :x
 - check how to lazy load images
 - add custom media option (empty media / self filled) !
 - add custom categ
