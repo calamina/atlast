@@ -48,15 +48,12 @@ const { displaySidebar } = storeToRefs(useStateStore())
   width: 100%;
   justify-self: flex-start;
   align-items: flex-end;
-  min-height: 90vh;
-  overflow-y: auto;
   grid-column: 1;
 }
 
 .filters {
   padding: 2px;
   position: sticky;
-  position: fixed;
   top: var(--fixed);
   padding-left: 1rem;
   display: flex;
@@ -65,7 +62,7 @@ const { displaySidebar } = storeToRefs(useStateStore())
   gap: 0.5rem;
   height: fit-content;
   transition: opacity 0.3s cubic-bezier(0.81, 0.06, 0.14, 0.53);
-  max-height: 85vh;
+  max-height: calc(100vh - var(--fixed));
   overflow-y: auto;
 }
 
