@@ -14,7 +14,8 @@ const isSmall: ComputedRef<boolean> = computed(() => small === undefined ? displ
 </script>
 
 <template>
-  <img class="image" v-if="src" :src="src" :class="{ imagesmall: isSmall }" alt="Wikipedia entry image" />
+  <img class="image" v-if="src" :src="src" loading="lazy" :class="{ imagesmall: isSmall }"
+       alt="Wikipedia entry image" />
   <div class="image empty" v-else :class="{ imagesmall: displaySmall || small }">{{ strings.SAD }}</div>
 </template>
 

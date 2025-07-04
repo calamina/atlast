@@ -6,7 +6,7 @@ export const useStateStore = defineStore('state', () => {
   const displaySmall: Ref<boolean> = ref(useStorage('display-small', false))
   const displaySidebar: Ref<boolean> = ref(useStorage('display-sidebar', true))
   const displayImages: Ref<boolean> = ref(useStorage('display-images', true))
-  const displayOptions: Ref<boolean> = ref(useStorage('display-options', true))
+  const displayOptions: Ref<boolean> = ref(useStorage('display-options', false))
 
   function toggleSize() {
     displaySmall.value = !displaySmall.value

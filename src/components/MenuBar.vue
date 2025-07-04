@@ -88,7 +88,7 @@ nav {
 .menus {
   display: flex;
   align-items: center;
-  padding-left: 1.5rem;
+  justify-content: end;
   gap: 0.5rem;
 }
 
