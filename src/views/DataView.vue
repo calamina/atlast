@@ -9,7 +9,7 @@ import { mediaStatus } from '@/data/media-status'
 import type { StatusNameModel } from '@/models/status.model'
 import type { CategNameModel } from '@/models/categ.model'
 
-const { mediaSearch, allMedia } = storeToRefs(useMediaStore())
+const { allMedia } = storeToRefs(useMediaStore())
 const { getMedia } = useMediaStore()
 
 onMounted(() => getMedia().then(() => {
@@ -120,11 +120,10 @@ const initCategs = () => {
 <style lang="scss" scoped>
 main {
   width: 100vw;
-  scrollbar-width: none;
   justify-content: center;
   display: grid;
   grid-template-columns: subgrid;
-  grid-column: span 5;
+  grid-column: span 4;
   transition: 0.3s;
   min-height: 90vh;
   padding-bottom: 2rem;
@@ -139,7 +138,6 @@ main {
   min-width: max(40vw, 45rem);
   grid-column: 3 / 4;
   padding: 1rem 0;
-  // padding-top: 1rem;
 }
 
 .KEK {

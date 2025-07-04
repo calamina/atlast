@@ -10,9 +10,10 @@ Personnal Media Database made with Vue3, wikipedia API, and IndexedDB (local bro
 ![atlast preview](atlast-search.png?raw=true "Atlast preview")
 
 # TODO
+- menu buttons (icon / text / texticon)
 - fix mobile menus (too small) / one menu ?
 - grid for media display to move around in mobile :x
-- check how to lazy load images
+- check how to lazy load images with intersectionObserver
 - add custom media option (empty media / self filled) !
 - add custom categ
 - graph showing categories > click on category to get to page with filters ?
@@ -20,6 +21,5 @@ Personnal Media Database made with Vue3, wikipedia API, and IndexedDB (local bro
 - expand categories to other things (links ? / uncategorized / Nature / ...)
 - filter categs -> icons ???
 - FILTERS : add common classes/components for groups and icons
-- menu buttons (icon / text / texticon)
 - clean & refactor css
 - fix css color names
