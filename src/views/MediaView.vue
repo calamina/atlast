@@ -12,8 +12,6 @@ import MediaComponent from '@/components/media/MediaComponent.vue'
 import MediaMock from '@/components/media/MediaMock.vue'
 import MediaUpdate from '@/components/media/MediaUpdate.vue'
 import MediaFilters from '@/components/media/MediaFilters.vue'
-import MediaSearchBar from '@/components/media/MediaSearchBar.vue'
-import MediaSearch from '@/components/media/MediaSearch.vue'
 import OptionBar from '@/components/OptionBar.vue'
 import PaginationComponent from '@/components/PaginationComponent.vue'
 import MediaEmpty from '@/components/media/MediaEmpty.vue'
@@ -44,7 +42,6 @@ const paginatedList = computed(() => filteredList.value.slice(listStart.value, l
 
 <template>
   <main>
-    <MediaSearchBar v-model="mediaSearch" placeholder="Search medias" :component="MediaSearch" />
     <MediaFilters />
     <OptionBar />
     <transition name="fade" mode="out-in">

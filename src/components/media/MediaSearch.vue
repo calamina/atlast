@@ -30,10 +30,8 @@ const selectedWikiMedia: Ref<MediaModel | null> = ref(null)
 const selectedMedia: Ref<MediaModel | null> = computed(() => createOrUpdate.value === MediaActions.CREATE ? selectedWikiMedia.value : selectedLibraryMedia.value)
 
 watchDebounced(
-  mediaSearch, () => {
-    resetResults()
-    getResults(mediaSearch.value)
-  },
+  mediaSearch,
+  () => getResults(mediaSearch.value),
   { debounce: 600, maxWait: 1200 }
 )
 
@@ -45,6 +43,7 @@ function resetResults() {
 
 async function getResults(value: string): Promise<MediaModel[][] | null> {
   if (!value) return null
+  resetResults()
 
   return await getWikiByname(value).then((data: WikiSearchModel[] | null) => {
     getMediaByTitle(value).forEach((element) => mediaList.value.push(element))
@@ -54,12 +53,7 @@ async function getResults(value: string): Promise<MediaModel[][] | null> {
   })
 }
 
-onKeyStroke(['Escape'], (e) => {
-  if (e.key === 'Escape') {
-    e.preventDefault()
-    mediaSearch.value = ''
-  }
-})
+onKeyStroke('Escape', () => mediaSearch.value = '')
 
 function upsertMedia(media: MediaModel, action: MediaActions) {
   createOrUpdate.value = action
@@ -97,7 +91,7 @@ function upsertMedia(media: MediaModel, action: MediaActions) {
   width: 100%;
   display: flex;
   min-height: 100%;
-  padding: 1rem 0;
+  padding-bottom: 1rem;
 }
 
 .results {

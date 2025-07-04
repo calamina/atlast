@@ -10,6 +10,7 @@ import IconBook from './icons/IconBook.vue'
 import IconLayout from './icons/IconLayout.vue'
 import IconCharts from './icons/IconCharts.vue'
 import ThemeSwitch from './ThemeSwitch.vue'
+import MediaSearchBar from './media/MediaSearchBar.vue'
 
 const { mediaSearch } = storeToRefs(useMediaStore())
 const { toggleOptions } = useStateStore();
@@ -31,7 +32,7 @@ const { displayOptions } = storeToRefs(useStateStore())
       </button>
       <div id="menu-options"></div>
     </div>
-    <div id="menu-search"></div>
+    <MediaSearchBar v-model="mediaSearch" placeholder="Search medias" />
     <div class="menus" v-inactive="!!mediaSearch.length">
       <ThemeSwitch />
       <DatabaseMenu />
@@ -43,7 +44,7 @@ const { displayOptions } = storeToRefs(useStateStore())
 nav {
   position: sticky;
   top: 0;
-  z-index: 500;
+  z-index: 300;
   width: 100vw;
   height: fit-content;
   margin: 0 auto;

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { ref, type Component, type Ref } from 'vue';
+import { ref, type Ref } from 'vue';
 import { useMagicKeys, whenever } from '@vueuse/core'
 import ActionOverlay from '@/components/ActionOverlay.vue'
 import IconCancel from '@/components/icons/IconCancel.vue'
 import IconSearch from '@/components/icons/IconSearch.vue'
+import MediaSearch from './MediaSearch.vue';
 
 const search = defineModel<string>({ required: true })
-const { component, placeholder } = defineProps<{
-  component: Component
+const { placeholder } = defineProps<{
   placeholder: string
 }>()
 
@@ -33,19 +33,19 @@ whenever(ctrl_s, () => {
 </script>
 
 <template>
-  <teleport to="#menu-search">
-    <div class="media__search">
-      <input ref="input" type="text" name="search" v-model="search" id="search" :placeholder="placeholder"
-             autocomplete="off" />
-      <div class="input-info">
-        <span>ctrl + s</span>
-        <IconSearch v-if="!search.length" class="button-icon" />
-        <IconCancel v-if="!!search.length" class="button-icon button-close" @click="search = ''" />
-      </div>
+  <div class="media__search">
+    <input ref="input" type="text" name="search" v-model="search" id="search" :placeholder="placeholder"
+           autocomplete="off" />
+    <div class="input-info">
+      <span>ctrl + s</span>
+      <IconSearch v-if="!search.length" class="button-icon" />
+      <IconCancel v-if="!!search.length" class="button-icon button-close" @click="search = ''" />
     </div>
-  </teleport>
+  </div>
   <transition name="search" mode="out-in">
-    <ActionOverlay v-if="!!search.length" class="overlay" :component="component" />
+    <ActionOverlay v-if="!!search.length" class="overlay">
+      <MediaSearch />
+    </ActionOverlay>
   </transition>
 </template>
 

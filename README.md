@@ -14,8 +14,6 @@ Personnal Media Database made with Vue3, wikipedia API, and IndexedDB (local bro
 - grid for media display to move around in mobile :x
 - check how to lazy load images
 - add custom media option (empty media / self filled) !
-- simplify search, put in menu & move overlay to own component
-- add focus capture on confirmation component + :focus state on buttons
 - add custom categ
 - graph showing categories > click on category to get to page with filters ?
 - check if prop is better than service for filters ref
