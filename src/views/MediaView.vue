@@ -49,10 +49,12 @@ const paginatedList = computed(() => filteredList.value.slice(listStart.value, l
         <MediaMock v-for="i of 5" :key="i" />
       </div>
       <div class="medias" v-else-if="filteredList?.length !== 0">
+        <!-- MediaSwitchComponent -->
         <div class="media__switch" v-for="media of paginatedList" :key="media.id">
           <MediaComponent v-if="mediaFormActive !== media.id" :media="media" :key="media.id" />
           <MediaUpdate v-else :media="media" :action="MediaActions.EDIT" :key="media.key" />
         </div>
+        <!-- end of component -->
         <PaginationComponent :currentPage :filteredCount :pageSize @changePage="(page) => currentPage = page" />
       </div>
       <div class="medias" v-else>

@@ -49,6 +49,7 @@ const { displaySidebar } = storeToRefs(useStateStore())
   justify-self: flex-start;
   align-items: flex-end;
   grid-column: 1;
+  padding-top: 1.25rem;
 }
 
 .filters {
