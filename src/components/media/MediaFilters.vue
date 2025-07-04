@@ -46,11 +46,10 @@ const { displaySidebar } = storeToRefs(useStateStore())
   display: flex;
   flex-flow: column;
   width: 100%;
-  justify-self: flex-end;
+  justify-self: flex-start;
   align-items: flex-end;
   min-height: 90vh;
   overflow-y: auto;
-  border-right: 1px solid var(--border);
 }
 
 .filters {

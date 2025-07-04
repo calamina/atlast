@@ -82,7 +82,7 @@ main {
   gap: 0.25rem;
   flex: 1;
   min-width: max(40vw, 45rem);
-  padding-top: 1rem;
+  padding-top: 1.25rem;
   grid-column: 3 / 4;
 
   p {

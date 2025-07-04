@@ -23,14 +23,17 @@
 }
 
 :root {
+  --fixed: 5.5rem;
+  --fixed: 5rem;
+  --font-italic: 'contax_pro_66_med_italicIt', Arial, sans-serif;
+  --font-bold: 'contax_pro_75_boldregular', Arial, sans-serif;
+
   --white: #fff;
   --background: #efefef;
   --background-transparent: #efefefdd;
   --background-transparent-plus: #efefef99;
   --background-darker: #ddd;
   --active: #ddd;
-  // --border: #ddd;
-  --border: transparent;
   --active-plus: #999;
   --text-light: #777;
   --text-dim-light: #32323233;
@@ -41,11 +44,6 @@
   --score: #b97749cc;
   --score-text: #a7734e;
   --score-background: #dc956344;
-  --fixed: 5.5rem;
-
-  --font-italic: 'contax_pro_66_med_italicIt', Arial, sans-serif;
-  --font-bold: 'contax_pro_75_boldregular', Arial, sans-serif;
-
 }
 
 .dark {
@@ -59,7 +57,6 @@
   --text-light: hsl(240, 10%, 30%);
   --text: hsl(240, 10%, 55%);
   --highlight: hsl(245, 20%, 25%);
-  --border: transparent;
 }
 
 p,

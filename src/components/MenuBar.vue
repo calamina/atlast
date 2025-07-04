@@ -53,14 +53,13 @@ nav {
   height: fit-content;
   margin: 0 auto;
   padding: 0;
-  padding-top: 1rem;
+  padding-top: 1.25rem;
   display: flex;
   align-items: center;
   display: grid;
   grid-template-columns: subgrid;
   grid-column: span 5;
   background-color: var(--background);
-  border-bottom: 1px solid var(--border);
   transition: 0.3s;
 }
 
