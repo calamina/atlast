@@ -9,27 +9,22 @@ import MenuLink from './atomic/MenuLink.vue'
 import IconBook from './icons/IconBook.vue'
 import IconLayout from './icons/IconLayout.vue'
 import IconCharts from './icons/IconCharts.vue'
-import { ref } from 'vue'
-import { onClickOutside } from '@vueuse/core'
 import ThemeSwitch from './ThemeSwitch.vue'
 
 const { mediaSearch } = storeToRefs(useMediaStore())
 const { toggleOptions } = useStateStore();
 const { displayOptions } = storeToRefs(useStateStore())
-
-const options = ref(null)
-// onClickOutside(options, _event => displayOptions.value = false)
 </script>
 
 <template>
   <nav>
-    <div class="submenu">
-      <div class="types" :class="{ mask: mediaSearch.length }">
+    <div class="submenu" v-inactive="!!mediaSearch.length">
+      <div class="types">
         <MenuLink route="home" :icon="IconBook" name="library" />
         <MenuLink route="data" :icon="IconCharts" name="data" />
       </div>
     </div>
-    <div class="options" ref="options" :class="{ mask: mediaSearch.length }">
+    <div class="options" v-inactive="!!mediaSearch.length">
       <button class="button-icon" @click="toggleOptions" v-tooltip="'Show Options'" aria-label="Show Options"
               :aria-pressed="displayOptions">
         <IconLayout />
@@ -37,9 +32,9 @@ const options = ref(null)
       <div id="menu-options"></div>
     </div>
     <div id="menu-search"></div>
-    <div class="menus">
+    <div class="menus" v-inactive="!!mediaSearch.length">
       <ThemeSwitch />
-      <DatabaseMenu :class="{ mask: mediaSearch.length }" />
+      <DatabaseMenu />
     </div>
   </nav>
 </template>
@@ -87,11 +82,6 @@ nav {
   align-items: center;
   justify-content: center;
   height: 100%;
-}
-
-.mask {
-  opacity: 0.3;
-  pointer-events: none;
 }
 
 .menus {

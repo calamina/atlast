@@ -50,6 +50,7 @@ const { displaySidebar } = storeToRefs(useStateStore())
   align-items: flex-end;
   min-height: 90vh;
   overflow-y: auto;
+  grid-column: 1;
 }
 
 .filters {

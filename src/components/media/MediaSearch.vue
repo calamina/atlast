@@ -73,7 +73,7 @@ function upsertMedia(media: MediaModel, action: MediaActions) {
 <template>
   <transition name="fade">
     <div class="wrapper-search">
-      <div class="results" v-if="!mediaFormActive">
+      <div class="results" v-if="!mediaFormActive" tabindex=-1>
         <div class="medias" v-if="mediaList.length">
           <MediaComponent v-for="media of mediaList" :media="media" :key="media.id"
                           @click="upsertMedia(media, MediaActions.EDIT)" />
@@ -83,7 +83,7 @@ function upsertMedia(media: MediaModel, action: MediaActions) {
                        @click="upsertMedia(media, MediaActions.CREATE)" />
         </div>
       </div>
-      <div class="results" v-else>
+      <div class="results" tabindex=-1 v-else>
         <div class="medias">
           <MediaUpdate v-if="selectedMedia" :media="selectedMedia" :action="createOrUpdate" :key="mediaFormActive" />
         </div>
@@ -109,6 +109,10 @@ function upsertMedia(media: MediaModel, action: MediaActions) {
   overflow-y: auto;
   overflow-x: hidden;
   padding: 0.25rem 1rem 1rem;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .medias {

@@ -172,6 +172,9 @@ input[type="date"] {
   width: auto;
 }
 
+.mask {
+  opacity: 0.3;
+}
 
 @media (max-width: 1250px) {
   html {

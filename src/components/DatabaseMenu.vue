@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { ref, useTemplateRef } from 'vue';
-import { onClickOutside } from '@vueuse/core'
+import { ref, useTemplateRef, watch } from 'vue';
+import { onClickOutside, onKeyStroke } from '@vueuse/core'
+import { useFocusTrap } from '@vueuse/integrations/useFocusTrap';
 
 import { useMediaStore } from '@/stores/media';
 import { useFileUtils } from '@/utils/file-utils';
+
+import OptionButton from './atomic/OptionButton.vue';
 import IconDatabaseExport from './icons/IconDatabaseExport.vue';
 import IconDatabaseImport from './icons/IconDatabaseImport.vue';
 import IconDatabaseDelete from './icons/IconDatabaseDelete.vue';
-import OptionButton from './atomic/OptionButton.vue';
 import IconCube from './icons/IconCube.vue';
 
 const { importMediaDB, exportMediaDB, deleteMediaDB } = useMediaStore()
@@ -15,13 +17,16 @@ const { checkJsonFile } = useFileUtils()
 
 const menu = ref(null)
 const fileInput = useTemplateRef('fileInput')
-const isSubmenuVisible = ref(false)
+const menuOpen = ref(false)
 
-onClickOutside(menu, _event => isSubmenuVisible.value = false)
+onClickOutside(menu, () => closeMenu())
+onKeyStroke('Escape', () => closeMenu())
 
-function toggleDataMenu() {
-  isSubmenuVisible.value = !isSubmenuVisible.value
-}
+const { activate, deactivate } = useFocusTrap(menu)
+watch(menuOpen, () => menuOpen.value ? activate() : deactivate())
+
+const closeMenu = () => menuOpen.value = false
+const toggleDataMenu = () => menuOpen.value = !menuOpen.value
 
 async function exportDB(): Promise<void> {
   await exportMediaDB().finally(() => toggleDataMenu())
@@ -46,7 +51,7 @@ async function deleteDB(): Promise<void> {
       </OptionButton>
     </div>
     <transition name="menu">
-      <div class="submenu" v-if="isSubmenuVisible">
+      <div class="submenu" v-if="menuOpen">
         <OptionButton @click="exportDB()" info="Export database">
           <IconDatabaseExport />
         </OptionButton>

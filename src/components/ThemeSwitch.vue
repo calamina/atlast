@@ -55,13 +55,11 @@ function setMode(mode: 'light' | 'dark' | 'auto') {
 }
 
 .theme-menu {
-  z-index: 200;
   background-color: var(--background-darker);
   position: fixed;
   top: var(--fixed);
   display: flex;
   flex-flow: column;
-  // gap: 0.5rem;
   border-radius: 2rem;
 }
 </style>
