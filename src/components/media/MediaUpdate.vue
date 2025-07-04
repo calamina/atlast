@@ -48,10 +48,12 @@ onKeyStroke(['Escape'], (e) => {
   <button ref="form" class="media" :class="{ mediaSmall: displaySmall }" v-if="mediaForm">
     <ItemPicture v-if="displayImages" :src="mediaForm.image" :small="displaySmall" />
     <form class="content" @submit.prevent>
-      <ItemTitle v-if="mediaForm.title" :title="mediaForm.title" />
-      <ItemDescription v-if="mediaForm.description" :description="mediaForm.description" />
-      <ItemExtract v-if="mediaForm.extract" :extract="mediaForm.extract" />
-      <MediaUpdateFavorite />
+      <div class="info">
+        <ItemTitle v-if="mediaForm.title" :title="mediaForm.title" />
+        <ItemDescription v-if="mediaForm.description" :description="mediaForm.description" />
+        <ItemExtract v-if="mediaForm.extract" :extract="mediaForm.extract" />
+        <MediaUpdateFavorite />
+      </div>
       <div class="form">
         <MediaUpdateStatus />
         <MediaUpdateCateg />
@@ -87,7 +89,15 @@ onKeyStroke(['Escape'], (e) => {
   flex-flow: column;
   gap: 0.3rem;
   flex: 1;
+}
+
+.info {
+  display: flex;
+  flex-flow: column;
+  gap: 0.3rem;
+  flex: 1;
   overflow: hidden;
+
 }
 
 .form {

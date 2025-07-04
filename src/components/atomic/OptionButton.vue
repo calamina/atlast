@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-const { onClick, info, background } = defineProps<{
+const { onClick, info, background, active = true } = defineProps<{
   onClick: ((...args: any[]) => void)
   info: string
   background?: 'clear' | 'dark'
@@ -24,10 +24,8 @@ const { onClick, info, background } = defineProps<{
   background-color: var(--background-darker);
 }
 
-.activeButton {
-  // outline: 2px solid var(--background-darker);
-  background-color: var(--white);
-  // background-color: var(--active-plus);
+button:not(.activeButton) {
+  color: var(--text-light);
 }
 
 @media (max-width: 1250px) {

@@ -18,7 +18,7 @@ const { toggleOptions } = useStateStore();
 const { displayOptions } = storeToRefs(useStateStore())
 
 const options = ref(null)
-onClickOutside(options, _event => displayOptions.value = false)
+// onClickOutside(options, _event => displayOptions.value = false)
 </script>
 
 <template>

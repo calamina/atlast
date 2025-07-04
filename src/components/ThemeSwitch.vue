@@ -63,11 +63,5 @@ function setMode(mode: 'light' | 'dark' | 'auto') {
   flex-flow: column;
   // gap: 0.5rem;
   border-radius: 2rem;
-
-  button {
-    &:hover {
-      outline: 2px solid var(--text);
-    }
-  }
 }
 </style>

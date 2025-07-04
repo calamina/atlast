@@ -48,8 +48,6 @@ const { route, name, icon } = defineProps<{
 
 .type:focus-visible {
   outline: 2px solid var(--text);
-  // outline-color: red;
-  border: none;
 }
 
 .button-icon {

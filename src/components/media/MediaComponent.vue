@@ -32,6 +32,7 @@ const showDescription: ComputedRef<boolean> = computed(() => !displaySmall || ex
         <ItemDescription v-if="media.description && showDescription" :description="media.description" />
       </Transition>
       <TransitionGroup name="reveal">
+        <ItemDescription v-if="expanded && media.description && !showDescription" :description="media.description" />
         <TagGroup v-if="expanded && media.tags?.length" :max-height="true">
           <TagButton v-for="tag in media.tags" :key="tag" :name="tag" :selected="false" />
         </TagGroup>
