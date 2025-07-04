@@ -4,7 +4,7 @@ import { useMagicKeys, whenever } from '@vueuse/core'
 import ActionOverlay from '@/components/ActionOverlay.vue'
 import IconCancel from '@/components/icons/IconCancel.vue'
 import IconSearch from '@/components/icons/IconSearch.vue'
-import MediaSearch from './MediaSearch.vue';
+import MediaSearchList from './MediaSearchList.vue';
 
 const search = defineModel<string>({ required: true })
 const { placeholder } = defineProps<{
@@ -44,7 +44,7 @@ whenever(ctrl_s, () => {
   </div>
   <transition name="search" mode="out-in">
     <ActionOverlay v-if="!!search.length" class="overlay">
-      <MediaSearch />
+      <MediaSearchList />
     </ActionOverlay>
   </transition>
 </template>

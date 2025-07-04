@@ -4,8 +4,6 @@ import { storeToRefs } from 'pinia'
 
 import { useMediaStore } from '@/stores/media'
 
-import MediaSearchBar from '@/components/media/MediaSearchBar.vue'
-import MediaSearch from '@/components/media/MediaSearch.vue'
 import { mediaCategs } from '@/data/media-categs'
 import { mediaStatus } from '@/data/media-status'
 import type { StatusNameModel } from '@/models/status.model'
@@ -62,7 +60,6 @@ const initCategs = () => {
 
 <template>
   <main>
-    <MediaSearchBar v-model="mediaSearch" placeholder="Search medias" :component="MediaSearch" />
     <div class="charts">
 
       <div class="KEK">
