@@ -9,8 +9,8 @@ const { onClick, info, background, active = true } = defineProps<{
 
 <template>
   <button class="button-icon"
-          :class="{ clearButton: background === 'clear', darkButton: background === 'dark', activeButton: active }"
-          @click="onClick" v-tooltip="info" :aria-label="info">
+    :class="{ clearButton: background === 'clear', darkButton: background === 'dark', activeButton: active }"
+    @click="onClick" v-tooltip="info" :aria-label="info">
     <slot />
   </button>
 </template>

@@ -56,7 +56,7 @@ async function deleteDB(): Promise<void> {
           <IconDatabaseExport />
         </OptionButton>
         <label for="file-upload" class="button-icon file-button" v-tooltip="'Import database'"
-               aria-label="Import database" tabindex="0">
+          aria-label="Import database" tabindex="0">
           <IconDatabaseImport />
         </label>
         <input type="file" ref="fileInput" id="file-upload" accept=".json" @change="importDB()" />

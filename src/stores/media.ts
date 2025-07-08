@@ -129,9 +129,9 @@ export const useMediaStore = defineStore('media', () => {
 
   async function exportMediaDB(): Promise<void> {
     const options = { prettyJson: true }
-    return await db.export(options)
+    db.export(options)
       .then((blob) => downloadBlob(blob, 'mediaDB.json'))
-      .then(() => addNotification('Database exported successfully', strings.HAPPY))
+      .then(() => addNotification('Database download started', strings.HAPPY))
       .catch(() => addErrorNotification('Failed to export database.' + strings.SAD))
   }
 

@@ -12,6 +12,7 @@ Personnal Media Database made with Vue3, wikipedia API, and IndexedDB (local bro
 # TODO
 
 ## FIXES // REFACTORS // UPGRADES
+- fix some colors in dark mode
 - lazyload media(switch?) when in view
 - menu buttons (icon / text / texticon)
 - FILTERS : add common classes/components for groups and icons
