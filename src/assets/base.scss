@@ -23,11 +23,17 @@
 }
 
 :root {
-  --fixed: 5.5rem;
   --fixed: 5rem;
   --font-italic: 'contax_pro_66_med_italicIt', Arial, sans-serif;
   --font-bold: 'contax_pro_75_boldregular', Arial, sans-serif;
 
+  --favorite: #dc6389;
+  --score: #b97749cc;
+  --score-text: #a7734e;
+  --score-background: #dc956344;
+}
+
+[data-theme="light"] {
   --white: #fff;
   --background: #efefef;
   --background-transparent: #efefefdd;
@@ -40,13 +46,9 @@
   --text-dim: #32323277;
   --text: #323232;
   --highlight: #dfcfe8;
-  --favorite: #dc6389;
-  --score: #b97749cc;
-  --score-text: #a7734e;
-  --score-background: #dc956344;
 }
 
-.dark {
+[data-theme="dark"] {
   --white: hsl(240, 10%, 8%);
   --background: hsl(240, 10%, 11%);
   --background-transparent: hsl(240, 10%, 11%, 0.867);
@@ -142,8 +144,6 @@ label:focus {
     outline-color: var(--text);
   }
 }
-
-
 
 input:autofill {
   background: transparent;

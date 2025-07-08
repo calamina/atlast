@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useMediaStore } from '@/stores/media'
 import { storeToRefs } from 'pinia'
 import { useStateStore } from '@/stores/state'
@@ -13,6 +14,8 @@ import MediaFiltersAllFavorite from './MediaFiltersAllFavorite.vue'
 const { resetFilters } = useMediaStore()
 const { count, filteredCount } = storeToRefs(useMediaStore())
 const { displaySidebar } = storeToRefs(useStateStore())
+
+const selected = computed(() => count.value === filteredCount.value)
 </script>
 
 <template>
@@ -21,7 +24,7 @@ const { displaySidebar } = storeToRefs(useStateStore())
       <div class="filters" v-if="displaySidebar">
         <MediaFiltersAllFavorite />
         <div class="widescreen-filters">
-          <FilterButton :selected="filteredCount === count" name="All" :info="count" @click="resetFilters()" />
+          <FilterButton :selected name="All" :info="count" @click="resetFilters()" />
           <MediaFiltersFavorite />
         </div>
         <MediaFiltersCateg />

@@ -12,6 +12,7 @@ import OptionBar from '@/components/OptionBar.vue'
 import PaginationComponent from '@/components/PaginationComponent.vue'
 import MediaEmpty from '@/components/media/MediaEmpty.vue'
 import MediaSwitch from '@/components/media/MediaSwitch.vue'
+// import AsyncComponent from '@/components/AsyncComponent.vue'
 
 const { filteredList, count, filteredCount, mediaSearch } = storeToRefs(useMediaStore())
 const { getMedia } = useMediaStore()
@@ -45,6 +46,7 @@ const paginatedList = computed(() => filteredList.value.slice(listStart.value, l
         <MediaMock v-for="i of 5" :key="i" />
       </div>
       <div class="medias" v-else-if="filteredList?.length !== 0">
+        <!-- <AsyncComponent v-for="media of paginatedList" :media :key="media.id" /> -->
         <MediaSwitch v-for="media of paginatedList" :media :key="media.id" />
         <PaginationComponent :currentPage :filteredCount :pageSize @changePage="(page) => currentPage = page" />
       </div>

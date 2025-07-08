@@ -8,7 +8,7 @@ import IconMoonStars from './icons/IconMoonStars.vue'
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 import OptionButton from './atomic/OptionButton.vue'
 
-const colorMode = useColorMode({ emitAuto: true })
+const colorMode = useColorMode({ emitAuto: true, attribute: 'data-theme' })
 const themeOpen = ref(false)
 const theme = ref(null)
 onClickOutside(theme, () => closeTheme())

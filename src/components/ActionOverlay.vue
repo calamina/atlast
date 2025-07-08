@@ -6,16 +6,16 @@
 
 <style lang="scss" scoped>
 .overlay-background {
-  top: 0;
+  top: calc(var(--fixed) + 2px - 1.25rem);
+  height: calc(100vh - 3rem);
   background-color: var(--background);
   position: fixed;
   display: flex;
   justify-content: center;
   width: 100vw;
-  height: 100vh;
-  padding-top: calc(var(--fixed) + 2px - 1.25rem);
   padding-right: 1.5rem;
-  overflow-y: auto;
-  z-index: -1;
+  // top: 0;
+  // padding-top: calc(var(--fixed) + 2px - 1.25rem);
+  // z-index: -1;
 }
 </style>
