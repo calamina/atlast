@@ -92,6 +92,7 @@ function upsertMedia(media: MediaModel, action: MediaActions) {
   display: flex;
   min-height: 100%;
   padding-bottom: 1rem;
+  overflow-y: auto;
 }
 
 .results {
@@ -99,10 +100,9 @@ function upsertMedia(media: MediaModel, action: MediaActions) {
   display: flex;
   justify-content: center;
   gap: 0.5rem;
-  padding-top: 0.25rem;
+  padding: 1rem;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 0.25rem 1rem 1rem;
 
   &:focus {
     outline: none;

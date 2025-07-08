@@ -6,21 +6,17 @@ import { useMediaStore } from '@/stores/media'
 import { useLoadingStore } from '@/stores/loading'
 import { useMediaFormStore } from '@/stores/media.form'
 
-import { MediaActions } from '@/data/media-actions'
-
-import MediaComponent from '@/components/media/MediaComponent.vue'
 import MediaMock from '@/components/media/MediaMock.vue'
-import MediaUpdate from '@/components/media/MediaUpdate.vue'
 import MediaFilters from '@/components/media/MediaFilters.vue'
 import OptionBar from '@/components/OptionBar.vue'
 import PaginationComponent from '@/components/PaginationComponent.vue'
 import MediaEmpty from '@/components/media/MediaEmpty.vue'
+import MediaSwitch from '@/components/media/MediaSwitch.vue'
 
 const { filteredList, count, filteredCount, mediaSearch } = storeToRefs(useMediaStore())
 const { getMedia } = useMediaStore()
 const { loading } = storeToRefs(useLoadingStore())
 const { resetActive } = useMediaFormStore()
-const { mediaFormActive } = storeToRefs(useMediaFormStore())
 
 onMounted(() => getMedia())
 
@@ -49,12 +45,7 @@ const paginatedList = computed(() => filteredList.value.slice(listStart.value, l
         <MediaMock v-for="i of 5" :key="i" />
       </div>
       <div class="medias" v-else-if="filteredList?.length !== 0">
-        <!-- MediaSwitchComponent -->
-        <div class="media__switch" v-for="media of paginatedList" :key="media.id">
-          <MediaComponent v-if="mediaFormActive !== media.id" :media="media" :key="media.id" />
-          <MediaUpdate v-else :media="media" :action="MediaActions.EDIT" :key="media.key" />
-        </div>
-        <!-- end of component -->
+        <MediaSwitch v-for="media of paginatedList" :media :key="media.id" />
         <PaginationComponent :currentPage :filteredCount :pageSize @changePage="(page) => currentPage = page" />
       </div>
       <div class="medias" v-else>
@@ -91,17 +82,7 @@ main {
   }
 }
 
-.media__switch {
-  display: flex;
-  flex-flow: column;
-  align-items: start;
-  width: 100%;
-  gap: 0.25rem;
-}
-
 @media (max-width: 1250px) {
-
-  .media__switch,
   .medias {
     max-width: 50rem;
     margin: 0 auto;
