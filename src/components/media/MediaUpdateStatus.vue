@@ -16,8 +16,8 @@ const getBackground = (status: StatusModel) =>
 <template>
   <div class="choices">
     <button v-for="s in mediaStatus" type="button" class="score" :key="s.name ?? 1" @click="setStatus(s.name)"
-            :style="{ backgroundColor: getBackground(s) }"
-            :class="{ active: mediaForm.status === s.name, smallButton: displaySmall }">
+      :style="{ backgroundColor: getBackground(s) }"
+      :class="{ active: mediaForm.status === s.name, smallButton: displaySmall }">
       {{ s.name }}
     </button>
   </div>
@@ -57,10 +57,10 @@ const getBackground = (status: StatusModel) =>
     flex-flow: row wrap;
   }
 
-  .score {
-    height: 2rem;
-    border-radius: 2rem;
-    padding: 0.1rem 0.75rem 0.2rem;
-  }
+  // .score {
+  //   height: 2rem;
+  //   border-radius: 2rem;
+  //   padding: 0.1rem 0.75rem 0.2rem;
+  // }
 }
 </style>

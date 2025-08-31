@@ -18,10 +18,10 @@ function updateFilters(value: StatusNameModel) {
   <FilterGroup title="status">
     <div class="icon-group">
       <button class="icon-button" v-for="status in mediaStatus"
-              :class="{ activeStatus: filters.status === status.name }" @click="updateFilters(status.name)"
-              :aria-label="status + 'filter'" :key="status.name ?? 1">
+        :class="{ activeStatus: filters.status === status.name }" @click="updateFilters(status.name)"
+        :aria-label="status + 'filter'" :key="status.name ?? 1">
         <component class="icon" :is="status!.component" :style="{ backgroundColor: status!.color }"
-                   v-tooltip="status!.name" />
+          v-tooltip="status!.name" />
       </button>
     </div>
   </FilterGroup>
@@ -73,9 +73,9 @@ function updateFilters(value: StatusNameModel) {
     // padding: 0;
   }
 
-  .icon {
-    width: 1.25rem;
-    height: 1.25rem;
-  }
+  // .icon {
+  //   width: 1.25rem;
+  //   height: 1.25rem;
+  // }
 }
 </style>

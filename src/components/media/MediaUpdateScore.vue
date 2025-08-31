@@ -12,8 +12,8 @@ const { mediaForm } = storeToRefs(useMediaFormStore())
 <template>
   <div class="choices" v-if="mediaForm.status !== 'planning'">
     <button v-for="index in 10" type="button" class="score-icon" :key="index" @click="setScore(index)"
-            :class="{ iconActive: mediaForm.score! >= index, smallButton: displaySmall }" v-tooltip="index + ' / 10'"
-            :aria-label="index + ' / 10'">
+      :class="{ iconActive: mediaForm.score! >= index, smallButton: displaySmall }" v-tooltip="index + ' / 10'"
+      :aria-label="index + ' / 10'">
       <IconScore />
     </button>
   </div>
@@ -58,9 +58,9 @@ const { mediaForm } = storeToRefs(useMediaFormStore())
     flex-flow: row wrap;
   }
 
-  .score-icon {
-    width: 2rem;
-    height: 2rem;
-  }
+  // .score-icon {
+  //   width: 2rem;
+  //   height: 2rem;
+  // }
 }
 </style>

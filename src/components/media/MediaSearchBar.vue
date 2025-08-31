@@ -35,7 +35,7 @@ whenever(ctrl_s, () => {
 <template>
   <div class="media__search">
     <input ref="input" type="text" name="search" v-model="search" id="search" :placeholder="placeholder"
-           autocomplete="off" />
+      autocomplete="off" />
     <div class="input-info">
       <span>ctrl + s</span>
       <IconSearch v-if="!search.length" class="button-icon" />

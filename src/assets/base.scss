@@ -179,11 +179,11 @@ input[type="date"] {
 
 @media (max-width: 1250px) {
   html {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   #app {
-    grid-template-columns: 0 2rem auto 4rem 0;
+    grid-template-columns: 0 3rem auto 6rem 0;
     gap: 0 0.25rem;
   }
 }

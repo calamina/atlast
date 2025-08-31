@@ -10,11 +10,11 @@ const { score } = defineProps<{
 
 <template>
   <div class="widescreen-score" v-if="score" :class="{ smallScore: displaySmall }" v-tooltip="score + ' / 10'"
-       :aria-label="'Media score:' + score + ' / 10'">
+    :aria-label="'Media score:' + score + ' / 10'">
     <IconScore v-for="point in score" :key="point" class="icon" />
   </div>
   <div class="mobile-score" v-if="score" :class="{ smallScore: displaySmall }"
-       :aria-label="'Media score:' + score + ' / 10'">
+    :aria-label="'Media score:' + score + ' / 10'">
     <p>{{ score }}</p>
     <IconScore class="icon" />
   </div>
@@ -69,9 +69,9 @@ p {
     display: flex;
   }
 
-  .icon {
-    width: 1.1rem;
-    height: 1.1rem;
-  }
+  // .icon {
+  //   width: 1.1rem;
+  //   height: 1.1rem;
+  // }
 }
 </style>

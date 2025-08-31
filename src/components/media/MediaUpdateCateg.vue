@@ -12,8 +12,8 @@ const { mediaForm } = storeToRefs(useMediaFormStore())
 <template>
   <div class="choices">
     <button v-for="category in mediaCategs" type="button" class="score" :key="category.name ?? ''"
-            @click="setCateg(category.name)"
-            :class="{ active: mediaForm.categ === category.name, smallButton: displaySmall }">
+      @click="setCateg(category.name)"
+      :class="{ active: mediaForm.categ === category.name, smallButton: displaySmall }">
       {{ category.single }}
     </button>
   </div>
@@ -54,10 +54,10 @@ const { mediaForm } = storeToRefs(useMediaFormStore())
     flex-flow: row wrap;
   }
 
-  .score {
-    height: 2rem;
-    border-radius: 2rem;
-    padding: 0.1rem 0.75rem 0.2rem;
-  }
+  // .score {
+  //   height: 2rem;
+  //   border-radius: 2rem;
+  //   padding: 0.1rem 0.75rem 0.2rem;
+  // }
 }
 </style>

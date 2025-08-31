@@ -13,7 +13,7 @@ const { displaySmall } = storeToRefs(useStateStore())
 
 <template>
   <button class="button-icon" :class="{ accent: accent, small: displaySmall }" :type v-tooltip="info"
-          :aria-label="info">
+    :aria-label="info">
     <slot />
   </button>
 </template>
@@ -36,10 +36,10 @@ button {
 
 
 @media (max-width: 1250px) {
-  button {
-    height: 1.75rem;
-    width: 1.75rem;
-    padding: 0.25rem
-  }
+  // button {
+  //   height: 1.75rem;
+  //   width: 1.75rem;
+  //   padding: 0.25rem
+  // }
 }
 </style>

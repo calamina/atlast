@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useMediaStore } from '@/stores/media'
 import { storeToRefs } from 'pinia'
-import FilterGroup from '@/components/atomic/FilterGroup.vue'
 import IconLike from '../icons/IconLike.vue'
 import IconLikeFull from '../icons/IconLikeFull.vue'
 import FilterButton from '../atomic/FilterButton.vue'
@@ -19,7 +18,7 @@ function updateFilters() {
   <div class="icon-group">
     <FilterButton class="all" :selected="filteredCount === count" name="All" :info="count" @click="resetFilters()" />
     <button class="icon-button button-like" :class="{ active: filters.like }" @click="updateFilters()"
-            aria-label="Favorite filter" v-tooltip="'Favorite filter'">
+      aria-label="Favorite filter" v-tooltip="'Favorite filter'">
       <IconLike v-if="!filters.like" class="icon" />
       <IconLikeFull v-else class="icon like" />
     </button>
@@ -72,7 +71,7 @@ function updateFilters() {
 
   .icon-button {
     background-color: var(--background-transparent-plus);
-    padding: 0.35rem;
+    // padding: 0.35rem;
 
     &.active {
       background-color: var(--white);

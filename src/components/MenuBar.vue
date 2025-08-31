@@ -27,7 +27,7 @@ const { displayOptions } = storeToRefs(useStateStore())
     </div>
     <div class="options" v-inactive="!!mediaSearch.length">
       <button class="button-icon" @click="toggleOptions" v-tooltip="'Show Options'" aria-label="Show Options"
-              :aria-pressed="displayOptions">
+        :aria-pressed="displayOptions">
         <IconLayout />
       </button>
       <div id="menu-options"></div>
@@ -111,10 +111,10 @@ nav {
     top: 4rem;
   }
 
-  .button-icon {
-    height: 1.75rem;
-    width: 1.75rem;
-    padding: 0.25rem;
-  }
+  // .button-icon {
+  //   height: 1.75rem;
+  //   width: 1.75rem;
+  //   padding: 0.25rem;
+  // }
 }
 </style>

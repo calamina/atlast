@@ -23,6 +23,7 @@ const { media } = defineProps<{
 
 <style lang="scss" scoped>
 .media__switch {
+  position: relative;
   display: flex;
   flex-flow: column;
   align-items: start;
@@ -35,7 +36,7 @@ const { media } = defineProps<{
     max-width: 50rem;
     margin: 0 auto;
     width: 100%;
-    padding: 0.25rem;
+    // padding: 0.25rem;
     min-width: 0;
     grid-column: span 5;
   }

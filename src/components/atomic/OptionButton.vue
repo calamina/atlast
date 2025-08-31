@@ -29,11 +29,11 @@ button:not(.activeButton) {
 }
 
 @media (max-width: 1250px) {
-  .button-icon {
-    height: 1.75rem;
-    width: 1.75rem;
-    padding: 0.25rem;
-  }
+  // .button-icon {
+  //   height: 1.75rem;
+  //   width: 1.75rem;
+  //   padding: 0.25rem;
+  // }
 
   .clear {
     background-color: var(--background-darker);

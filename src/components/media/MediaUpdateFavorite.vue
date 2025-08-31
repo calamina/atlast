@@ -42,10 +42,10 @@ const { mediaForm } = storeToRefs(useMediaFormStore())
 }
 
 @media (max-width: 1250px) {
-  .favorite {
-    width: 1.75rem;
-    height: 1.75rem;
-    padding: 0.25rem;
-  }
+  // .favorite {
+  //   width: 1.75rem;
+  //   height: 1.75rem;
+  //   padding: 0.25rem;
+  // }
 }
 </style>

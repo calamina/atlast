@@ -40,7 +40,7 @@ const showDescription: ComputedRef<boolean> = computed(() => !displaySmall || ex
       </TransitionGroup>
       <div class="footer" :class="{ smallFooter: displaySmall }">
         <ItemStatus :key="media.status ?? 1" :status="media.status" :updated="media.updatedAt"
-                    :created="media.createdAt" />
+          :created="media.createdAt" />
         <ItemCateg :categ="media.categ" :key="media.categ ?? ''" />
         <ItemScore :score="media.score!" />
       </div>

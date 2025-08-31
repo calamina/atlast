@@ -61,12 +61,12 @@ h2 {
     flex-flow: row-reverse;
   }
 
-  h2 {
-    // width: 100%;
-    font-size: 1.2rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+  // h2 {
+  //   // width: 100%;
+  //   font-size: 1.2rem;
+  //   white-space: nowrap;
+  //   overflow: hidden;
+  //   text-overflow: ellipsis;
+  // }
 }
 </style>

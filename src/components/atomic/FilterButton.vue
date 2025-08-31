@@ -32,6 +32,13 @@ const { name, info, selected, sort } = defineProps<{
   justify-content: space-between;
   border-radius: 2rem;
 
+  @media (max-width: 1250px) {
+    background-color: var(--background-transparent-plus);
+    gap: 0.75rem;
+    // padding: 0.25rem 1rem;
+    width: fit-content;
+  }
+
   &.selected {
     background-color: var(--white);
   }
@@ -51,15 +58,6 @@ const { name, info, selected, sort } = defineProps<{
     height: 1rem;
     width: 1rem;
     opacity: 0.7;
-  }
-}
-
-@media (max-width: 1250px) {
-  .filter {
-    background-color: var(--background-transparent-plus);
-    gap: 0.75rem;
-    padding: 0.25rem 1rem;
-    width: fit-content;
   }
 }
 </style>
