@@ -54,8 +54,8 @@ const openLink = (url: string | undefined) => window.open(url ?? '', "_blank")
     height: fit-content;
     width: fit-content;
     top: auto;
-    bottom: 1rem;
-    right: 1rem;
+    bottom: 0.25rem;
+    right: 0.25rem;
   }
 }
 </style>

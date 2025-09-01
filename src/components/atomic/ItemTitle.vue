@@ -48,6 +48,7 @@ h2 {
   text-decoration: none;
   color: var(--text);
   transition: font-size 0.2s cubic-bezier(0.81, 0.06, 0.14, 0.53);
+  text-align: start;
 }
 
 .like {

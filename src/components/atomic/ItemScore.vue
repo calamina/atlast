@@ -67,6 +67,7 @@ p {
 
   .mobile-score {
     display: flex;
+    height: 2rem;
   }
 
   // .icon {

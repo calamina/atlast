@@ -27,7 +27,7 @@ function updateFilters() {
 
 <style lang="scss" scoped>
 .icon-group {
-  display: none;
+  display: flex;
   padding: 0.25rem 0.75rem;
   width: 100%;
 }
@@ -58,15 +58,14 @@ function updateFilters() {
 }
 
 @media (max-width: 1250px) {
-  .all {
-    width: 100%;
-  }
-
   .icon-group {
-    display: flex;
     padding: 0;
     width: 100%;
     gap: 0.25rem;
+  }
+
+  .all {
+    width: 100%;
   }
 
   .icon-button {

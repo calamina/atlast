@@ -42,6 +42,7 @@ p {
   p {
     padding-bottom: 0.1rem;
     width: 4rem;
+    height: 2rem;
   }
 }
 </style>

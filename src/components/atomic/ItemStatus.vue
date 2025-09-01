@@ -36,4 +36,10 @@ function formatDate(created?: Date | undefined, updated?: Date | undefined): str
     height: 1.5rem;
   }
 }
+
+@media (max-width: 1250px) {
+  .status {
+    height: 2rem;
+  }
+}
 </style>

@@ -103,12 +103,28 @@ nav {
 }
 
 @media (max-width: 1250px) {
+  nav {
+    position: fixed;
+    top: 0;
+    padding: 0.5rem;
+
+    grid-column: span 4;
+    display: flex;
+  }
+
   #menu-search {
     min-width: 0;
+    grid-column: span all;
   }
 
   #menu-options {
     top: 4rem;
+  }
+
+  .submenu,
+  .options,
+  .menus {
+    display: none;
   }
 
   // .button-icon {

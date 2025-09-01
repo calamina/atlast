@@ -85,17 +85,16 @@ main {
 }
 
 @media (max-width: 1250px) {
-  .medias {
-    max-width: 50rem;
-    margin: 0 auto;
-    width: 100%;
-    padding: 0.25rem;
-    min-width: 0;
-    grid-column: span 5;
+  main {
+    padding-top: 3.5rem;
   }
 
-  .media__search {
+  .medias {
+    padding: 0.5rem;
+    margin: 0 auto;
     width: 100%;
+    min-width: 0;
+    grid-column: span 5;
   }
 }
 </style>

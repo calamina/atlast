@@ -46,4 +46,10 @@ const { displayImages } = storeToRefs(useStateStore())
     gap: 0.25rem;
   }
 }
+
+@media (max-width: 1250px) {
+  .media {
+    padding: 0;
+  }
+}
 </style>

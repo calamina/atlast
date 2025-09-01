@@ -111,6 +111,10 @@ span {
 }
 
 @media (max-width: 1250px) {
+  input[type='text'] {
+    text-align: start;
+  }
+
   span {
     display: none;
   }
