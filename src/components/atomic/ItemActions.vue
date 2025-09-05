@@ -49,8 +49,7 @@ const openLink = (url: string | undefined) => window.open(url ?? '', "_blank")
 
 @media (max-width: 1250px) {
   .actions {
-    // position: relative;
-    // flex-flow: column;
+    z-index: 2;
     height: fit-content;
     width: fit-content;
     top: auto;
